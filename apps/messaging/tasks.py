@@ -102,3 +102,23 @@ def send_ticket_reply_email(self, *, message_id):
     else:
         message.delivery_status = Message.DeliveryStatus.SENT
         message.save(update_fields=["delivery_status"])
+
+
+@shared_task
+def collect_inbound_email():
+    """
+    Scheduled collection of inbound mail (Celery Beat).
+
+    The adapter behind this is decided with the deployment target (ADR-006): a provider
+    webhook where one exists, otherwise IMAP polling. Until that is settled, this task is the
+    seam — `apps.messaging.services.inbound.ingest` is what either adapter calls, and it is
+    fully tested independently of how the mail arrives.
+    """
+    from django.conf import settings
+
+    if not getattr(settings, "INBOUND_EMAIL_ENABLED", False):
+        return {"collected": 0, "reason": "inbound collection not configured (ADR-006)"}
+
+    raise NotImplementedError(
+        "Inbound mail adapter is pending the deployment decision in ADR-006 (T145)."
+    )

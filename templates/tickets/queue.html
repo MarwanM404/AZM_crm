@@ -1,0 +1,43 @@
+{% extends "shell.html" %}
+{% load i18n %}
+{% block title %}{% trans "Ticket queue" %}{% endblock %}
+{% block main %}
+  <header class="page-head">
+    <h1>{% trans "Ticket queue" %}</h1>
+    <p class="page-head__sub">
+      {% blocktrans with department=request.user.department branch=request.user.branch %}All tickets in {{ department }} · {{ branch }}{% endblocktrans %}
+    </p>
+  </header>
+
+  <form class="filters" hx-get="{% url 'tickets:queue' %}" hx-target="#queue-list"
+        hx-trigger="change, keyup delay:300ms from:input[name='q']" hx-push-url="true">
+    <select name="status" aria-label="{% trans 'Status' %}">
+      <option value="">{% trans "Status: Any" %}</option>
+      {% for value, label in statuses %}
+        <option value="{{ value }}" {% if filters.status == value %}selected{% endif %}>{{ label }}</option>
+      {% endfor %}
+    </select>
+    <select name="priority" aria-label="{% trans 'Priority' %}">
+      <option value="">{% trans "Priority: Any" %}</option>
+      {% for value, label in priorities %}
+        <option value="{{ value }}" {% if filters.priority == value %}selected{% endif %}>{{ label }}</option>
+      {% endfor %}
+    </select>
+    <select name="category" aria-label="{% trans 'Category' %}">
+      <option value="">{% trans "Category: Any" %}</option>
+      {% for category in categories %}
+        <option value="{{ category.pk }}" {% if filters.category == category.pk|stringformat:"s" %}selected{% endif %}>{{ category.name }}</option>
+      {% endfor %}
+    </select>
+    <label class="toggle">
+      <input type="checkbox" name="assigned" value="me" {% if filters.assigned == 'me' %}checked{% endif %}>
+      {% trans "Assigned to me" %}
+    </label>
+    <input type="search" name="q" value="{{ filters.q|default:'' }}"
+           placeholder="{% trans 'Search reference, subject or contact' %}">
+  </form>
+
+  <div id="queue-list">
+    {% include "tickets/partials/queue_list.html" %}
+  </div>
+{% endblock %}

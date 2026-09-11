@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-11 18:29+0000\n"
+"POT-Creation-Date: 2026-09-11 19:43+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,6 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
 #: apps/accounts/forms.py:7 apps/customers/models.py:70
 #: apps/tickets/models.py:51
 msgid "Email"
@@ -80,11 +81,12 @@ msgstr "Email address"
 msgid "Phone number"
 msgstr "Phone number"
 
-#: apps/intake/forms.py:24
+#: apps/intake/forms.py:24 templates/tickets/partials/ticket_pane.html:127
+#: templates/tickets/queue.html:26
 msgid "Category"
 msgstr "Category"
 
-#: apps/intake/forms.py:26
+#: apps/intake/forms.py:26 templates/tickets/partials/queue_list.html:5
 msgid "Subject"
 msgstr "Subject"
 
@@ -178,12 +180,37 @@ msgstr "Failed"
 msgid "Not applicable"
 msgstr "Not applicable"
 
+#: apps/tickets/views.py:124
+msgid "This ticket is already assigned to another agent."
+msgstr "This ticket is already assigned to another agent."
+
+#: apps/tickets/views.py:142
+msgid "Unknown agent."
+msgstr "Unknown agent."
+
+#: apps/tickets/views.py:156
+#, python-format
+msgid "A ticket cannot move from %(current)s to %(requested)s."
+msgstr "A ticket cannot move from %(current)s to %(requested)s."
+
+#: apps/tickets/views.py:177
+msgid "Unknown category."
+msgstr "Unknown category."
+
+#: apps/tickets/views.py:190
+msgid "A reply cannot be empty."
+msgstr "A reply cannot be empty."
+
+#: apps/tickets/views.py:225
+msgid "A note cannot be empty."
+msgstr "A note cannot be empty."
+
 #: templates/accounts/sign_in.html:3 templates/accounts/sign_in.html:6
 #: templates/accounts/sign_in.html:17
 msgid "Sign in"
 msgstr "Sign in"
 
-#: templates/base.html:7
+#: templates/base.html:7 templates/shell.html:9
 msgid "AZM Support"
 msgstr "AZM Support"
 
@@ -206,3 +233,169 @@ msgstr "Your reference number is"
 #: templates/intake/submitted.html:8
 msgid "Please quote this reference in any further correspondence."
 msgstr "Please quote this reference in any further correspondence."
+
+#: templates/shell.html:13 templates/tickets/partials/ticket_pane.html:3
+#: templates/tickets/queue.html:3 templates/tickets/queue.html:6
+msgid "Ticket queue"
+msgstr "Ticket queue"
+
+#: templates/shell.html:30
+#, fuzzy
+#| msgid "Sign in"
+msgid "Sign out"
+msgstr "Sign in"
+
+#: templates/tickets/partials/queue_list.html:4
+#, fuzzy
+#| msgid "Re: %(reference)s"
+msgid "Reference"
+msgstr "Re: %(reference)s"
+
+#: templates/tickets/partials/queue_list.html:6
+#: templates/tickets/partials/ticket_pane.html:106
+msgid "Organization"
+msgstr "Organization"
+
+#: templates/tickets/partials/queue_list.html:7
+#: templates/tickets/partials/ticket_pane.html:134
+#: templates/tickets/queue.html:20
+msgid "Priority"
+msgstr "Priority"
+
+#: templates/tickets/partials/queue_list.html:8 templates/tickets/queue.html:14
+msgid "Status"
+msgstr "Status"
+
+#: templates/tickets/partials/queue_list.html:9
+#: templates/tickets/partials/ticket_pane.html:143
+msgid "Assigned"
+msgstr "Assigned"
+
+#: templates/tickets/partials/queue_list.html:17
+msgid "No organization"
+msgstr "No organization"
+
+#: templates/tickets/partials/queue_list.html:26
+#: templates/tickets/partials/ticket_pane.html:19
+msgid "Take"
+msgstr "Take"
+
+#: templates/tickets/partials/queue_list.html:31
+msgid "No tickets match these filters."
+msgstr "No tickets match these filters."
+
+#: templates/tickets/partials/queue_list.html:34
+#, python-format
+msgid "Showing %(counter)s ticket"
+msgid_plural "Showing %(counter)s tickets"
+msgstr[0] ""
+msgstr[1] ""
+
+#: templates/tickets/partials/ticket_pane.html:40
+msgid "Internal note — not visible to the customer"
+msgstr "Internal note — not visible to the customer"
+
+#: templates/tickets/partials/ticket_pane.html:43
+msgid "System"
+msgstr "System"
+
+#: templates/tickets/partials/ticket_pane.html:60
+msgid "Not delivered."
+msgstr "Not delivered."
+
+#: templates/tickets/partials/ticket_pane.html:63
+msgid "Delivered by email"
+msgstr "Delivered by email"
+
+#: templates/tickets/partials/ticket_pane.html:68
+msgid "No messages on this ticket yet."
+msgstr "No messages on this ticket yet."
+
+#: templates/tickets/partials/ticket_pane.html:76
+#, fuzzy
+#| msgid "Pending customer"
+msgid "Reply to customer"
+msgstr "Pending customer"
+
+#: templates/tickets/partials/ticket_pane.html:78
+#, fuzzy
+#| msgid "Internal"
+msgid "Internal note"
+msgstr "Internal"
+
+#: templates/tickets/partials/ticket_pane.html:84
+msgid "Write your reply…"
+msgstr "Write your reply…"
+
+#: templates/tickets/partials/ticket_pane.html:86
+msgid "Will be emailed to the contact on this ticket."
+msgstr "Will be emailed to the contact on this ticket."
+
+#: templates/tickets/partials/ticket_pane.html:87
+msgid "Send reply"
+msgstr "Send reply"
+
+#: templates/tickets/partials/ticket_pane.html:95
+msgid "Write a note for the team…"
+msgstr "Write a note for the team…"
+
+#: templates/tickets/partials/ticket_pane.html:97
+msgid "Staff only. The customer never sees this."
+msgstr "Staff only. The customer never sees this."
+
+#: templates/tickets/partials/ticket_pane.html:98
+msgid "Save note"
+msgstr "Save note"
+
+#: templates/tickets/partials/ticket_pane.html:110
+msgid "Not linked yet"
+msgstr "Not linked yet"
+
+#: templates/tickets/partials/ticket_pane.html:115
+msgid "Contact"
+msgstr "Contact"
+
+#: templates/tickets/partials/ticket_pane.html:123
+msgid "Properties"
+msgstr "Properties"
+
+#: templates/tickets/partials/ticket_pane.html:144
+msgid "Unassigned"
+msgstr "Unassigned"
+
+#: templates/tickets/partials/ticket_pane.html:145
+msgid "Channel"
+msgstr "Channel"
+
+#: templates/tickets/partials/ticket_pane.html:147
+#, fuzzy
+#| msgid "Open"
+msgid "Opened"
+msgstr "Open"
+
+#: templates/tickets/queue.html:8
+#, python-format
+msgid "All tickets in %(department)s · %(branch)s"
+msgstr "All tickets in %(department)s · %(branch)s"
+
+#: templates/tickets/queue.html:15
+msgid "Status: Any"
+msgstr "Status: Any"
+
+#: templates/tickets/queue.html:21
+msgid "Priority: Any"
+msgstr "Priority: Any"
+
+#: templates/tickets/queue.html:27
+#, fuzzy
+#| msgid "Category"
+msgid "Category: Any"
+msgstr "Category"
+
+#: templates/tickets/queue.html:34
+msgid "Assigned to me"
+msgstr "Assigned to me"
+
+#: templates/tickets/queue.html:37
+msgid "Search reference, subject or contact"
+msgstr "Search reference, subject or contact"

@@ -93,7 +93,7 @@ Django cannot switch `AUTH_USER_MODEL` after initial migrations without a destru
 - [X] T030 Register `auditlog` in `config/settings/base.py` and create the registration module `apps/core/audit.py`
 - [X] T031 Configure structured logging with a PII and secret redaction filter in `config/settings/base.py` and `apps/core/logging.py`
 - [X] T032 [P] Implement sign-in, sign-out, and language-switch views in `apps/accounts/views.py` and `apps/accounts/urls.py` per [contracts/http-endpoints.md](contracts/http-endpoints.md)
-- [ ] T033 [P] Create the authenticated shell template `templates/components/shell.html` with navigation and the language switcher — deferred: no authenticated screen exists to navigate between until Phase 4's queue view lands
+- [X] T033 [P] Authenticated shell at `templates/shell.html` (a base other pages extend, rather than an include — Django includes cannot wrap a block) with navigation and the language switcher
 - [X] T034 Extract and compile the initial translation catalogs into `locale/ar/LC_MESSAGES/` and `locale/en/LC_MESSAGES/`
 
 **Checkpoint**: A user can sign in, the language switcher works, out-of-scope access returns 404,
@@ -151,35 +151,35 @@ The customer receives the reply and the history shows both events with actor and
 
 ### Tests for User Story 2
 
-- [ ] T057 [P] [US2] Write `apps/tickets/tests/test_queue_contract.py` asserting the queue lists **all** department tickets, paginates, sorts by priority then age, and filters per [contracts/http-endpoints.md](contracts/http-endpoints.md)
-- [ ] T058 [P] [US2] Write `apps/tickets/tests/test_take_concurrency.py` asserting two simultaneous takes produce exactly one 200 and one 409
-- [ ] T059 [P] [US2] Write `apps/tickets/tests/test_status_lifecycle.py` asserting permitted transitions succeed and all others return 422
-- [ ] T060 [P] [US2] Write `apps/tickets/tests/test_field_changes.py` asserting category and priority changes record before and after values on the history
-- [ ] T061 [P] [US2] Write `apps/tickets/tests/test_reply.py` asserting a reply is queued, appears on the thread attributed to the agent, and returns the thread fragment to htmx callers
-- [ ] T062 [P] [US2] Write `apps/messaging/tests/test_inbound_threading.py` covering all four threading rules in [contracts/email.md](contracts/email.md) in priority order, including the no-match case creating a new ticket
-- [ ] T063 [P] [US2] Write `apps/messaging/tests/test_reopen_on_reply.py` asserting an inbound message on a resolved or closed ticket returns it to `OPEN`
-- [ ] T064 [P] [US2] Write `apps/messaging/tests/test_delivery_failure.py` asserting a permanent send failure is visible on the ticket and the message stays on the thread
-- [ ] T065 [P] [US2] Write `tests/test_internal_visibility.py` asserting no message with `visibility=INTERNAL` appears in any customer-facing output, including quoted email history
+- [X] T057 [P] [US2] Write `apps/tickets/tests/test_queue_contract.py` asserting the queue lists **all** department tickets, paginates, sorts by priority then age, and filters per [contracts/http-endpoints.md](contracts/http-endpoints.md)
+- [X] T058 [P] [US2] Write `apps/tickets/tests/test_take_concurrency.py` asserting two simultaneous takes produce exactly one 200 and one 409
+- [X] T059 [P] [US2] Write `apps/tickets/tests/test_status_lifecycle.py` asserting permitted transitions succeed and all others return 422
+- [X] T060 [P] [US2] Write `apps/tickets/tests/test_field_changes.py` asserting category and priority changes record before and after values on the history
+- [X] T061 [P] [US2] Write `apps/tickets/tests/test_reply.py` asserting a reply is queued, appears on the thread attributed to the agent, and returns the thread fragment to htmx callers
+- [X] T062 [P] [US2] Write `apps/messaging/tests/test_inbound_threading.py` covering all four threading rules in [contracts/email.md](contracts/email.md) in priority order, including the no-match case creating a new ticket
+- [X] T063 [P] [US2] Write `apps/messaging/tests/test_reopen_on_reply.py` asserting an inbound message on a resolved or closed ticket returns it to `OPEN`
+- [X] T064 [P] [US2] Write `apps/messaging/tests/test_delivery_failure.py` asserting a permanent send failure is visible on the ticket and the message stays on the thread
+- [X] T065 [P] [US2] Write `tests/test_internal_visibility.py` asserting no message with `visibility=INTERNAL` appears in any customer-facing output, including quoted email history
 
 ### Implementation for User Story 2
 
-- [ ] T066 [US2] Implement `Message` in `apps/tickets/models.py` with `direction`, `visibility`, `channel`, `delivery_status`, `delivery_error`, and `external_id`
-- [ ] T067 [US2] Implement `InboundMessageLog` in `apps/messaging/models.py` with `match_method` and `processing_error`
-- [ ] T068 [US2] Implement the status lifecycle and transition guard in `apps/tickets/services/lifecycle.py`
-- [ ] T069 [US2] Generate and review migrations for `tickets` and `messaging`
-- [ ] T070 [US2] Implement the queue view with filters in `apps/tickets/views.py`, using `for_user()` and returning list fragments for htmx requests
-- [ ] T071 [US2] Implement the ticket detail view with thread, customer context, and history in `apps/tickets/views.py`
-- [ ] T072 [US2] Implement the `take` endpoint with a row-level lock returning 409 when already assigned, in `apps/tickets/views.py`
-- [ ] T073 [US2] Implement the status and field-change endpoints in `apps/tickets/views.py`
-- [ ] T074 [US2] Implement the public reply endpoint in `apps/tickets/views.py`, queueing the outbound message and returning the appended thread fragment
-- [ ] T075 [US2] Implement inbound ingestion in `apps/messaging/services/inbound.py` applying the four threading rules and recording `match_method`
-- [ ] T076 [US2] Implement the inbound collection task in `apps/messaging/tasks.py` behind an adapter, with the polling schedule registered in Celery Beat
-- [ ] T077 [US2] Implement delivery-status callbacks and failure surfacing in `apps/messaging/services/outbound.py`
-- [ ] T078 [P] [US2] Create `templates/tickets/queue.html` and `templates/tickets/partials/queue_list.html`
-- [ ] T079 [P] [US2] Create `templates/tickets/detail.html` with thread, history, and reply form, plus `templates/tickets/partials/thread.html`
-- [ ] T080 [P] [US2] Create bilingual agent reply email templates in `templates/messaging/email/reply.{ar,en}.txt`, filtering on `visibility=PUBLIC`
-- [ ] T081 [US2] Register `Message` for audit and add it to the invariant registries
-- [ ] T082 [US2] Extract and compile translations for this phase into `locale/ar/LC_MESSAGES/django.po` and `locale/en/LC_MESSAGES/django.po`
+- [X] T066 [US2] Implement `Message` in `apps/tickets/models.py` with `direction`, `visibility`, `channel`, `delivery_status`, `delivery_error`, and `external_id`
+- [X] T067 [US2] Implement `InboundMessageLog` in `apps/messaging/models.py` with `match_method` and `processing_error`
+- [X] T068 [US2] Implement the status lifecycle and transition guard in `apps/tickets/services/lifecycle.py`
+- [X] T069 [US2] Generate and review migrations for `tickets` and `messaging`
+- [X] T070 [US2] Implement the queue view with filters in `apps/tickets/views.py`, using `for_user()` and returning list fragments for htmx requests
+- [X] T071 [US2] Implement the ticket detail view with thread, customer context, and history in `apps/tickets/views.py`
+- [X] T072 [US2] Implement the `take` endpoint with a row-level lock returning 409 when already assigned, in `apps/tickets/views.py`
+- [X] T073 [US2] Implement the status and field-change endpoints in `apps/tickets/views.py`
+- [X] T074 [US2] Implement the public reply endpoint in `apps/tickets/views.py`, queueing the outbound message and returning the appended thread fragment
+- [X] T075 [US2] Implement inbound ingestion in `apps/messaging/services/inbound.py` applying the four threading rules and recording `match_method`
+- [X] T076 [US2] Inbound collection task seam in `apps/messaging/tasks.py`; the adapter itself (provider webhook vs IMAP) is blocked on ADR-006 and raises explicitly rather than pretending to poll — `services/inbound.py` is fully tested independently of transport
+- [X] T077 [US2] Implement delivery-status callbacks and failure surfacing in `apps/messaging/services/outbound.py`
+- [X] T078 [P] [US2] Create `templates/tickets/queue.html` and `templates/tickets/partials/queue_list.html`
+- [X] T079 [P] [US2] Create `templates/tickets/detail.html` with thread, history, and reply form, plus `templates/tickets/partials/thread.html`
+- [X] T080 [P] [US2] Create bilingual agent reply email templates in `templates/messaging/email/reply.{ar,en}.txt`, filtering on `visibility=PUBLIC`
+- [X] T081 [US2] Register `Message` for audit and add it to the invariant registries
+- [X] T082 [US2] Extract and compile translations for this phase into `locale/ar/LC_MESSAGES/django.po` and `locale/en/LC_MESSAGES/django.po`
 
 **Checkpoint**: Quickstart scenarios 3, 4, 5, and 11 pass. The core support loop works.
 

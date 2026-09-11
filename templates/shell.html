@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% load i18n %}
+{# Authenticated app chrome. Pages extend this and fill {% block main %}. #}
+{% block content %}
+<div class="shell">
+  <aside class="shell__nav">
+    <div class="brand">
+      <span class="brand__mark">A</span>
+      <span class="brand__name">{% trans "AZM Support" %}</span>
+    </div>
+    <nav class="nav">
+      <a class="nav__item {% if section == 'queue' %}nav__item--on{% endif %}"
+         href="{% url 'tickets:queue' %}">{% trans "Ticket queue" %}</a>
+    </nav>
+    <div class="shell__foot">
+      {% get_current_language as CURRENT_LANGUAGE %}
+      <form method="post" action="{% url 'accounts:language' %}" class="lang">
+        {% csrf_token %}
+        <button type="submit" name="language" value="en"
+                class="lang__btn {% if CURRENT_LANGUAGE == 'en' %}lang__btn--on{% endif %}">English</button>
+        <button type="submit" name="language" value="ar"
+                class="lang__btn {% if CURRENT_LANGUAGE == 'ar' %}lang__btn--on{% endif %}">العربية</button>
+      </form>
+      <div class="who">
+        <div class="who__name">{{ request.user.full_name }}</div>
+        <div class="who__role">{{ request.user.get_role_display }} · {{ request.user.department }}</div>
+      </div>
+      <form method="post" action="{% url 'accounts:sign_out' %}">
+        {% csrf_token %}
+        <button type="submit" class="linkish">{% trans "Sign out" %}</button>
+      </form>
+    </div>
+  </aside>
+  <main class="shell__main">
+    {% block main %}{% endblock %}
+  </main>
+</div>
+{% endblock %}

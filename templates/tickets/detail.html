@@ -1,0 +1,8 @@
+{% extends "shell.html" %}
+{% load i18n %}
+{% block title %}{{ ticket.reference }} · {{ ticket.subject }}{% endblock %}
+{% block main %}
+  <div id="ticket-pane">
+    {% include "tickets/partials/ticket_pane.html" %}
+  </div>
+{% endblock %}

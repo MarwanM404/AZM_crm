@@ -1,0 +1,36 @@
+{% load i18n %}
+<section class="card table">
+  <div class="table__row table__row--head">
+    <span>{% trans "Reference" %}</span>
+    <span>{% trans "Subject" %}</span>
+    <span>{% trans "Organization" %}</span>
+    <span>{% trans "Priority" %}</span>
+    <span>{% trans "Status" %}</span>
+    <span>{% trans "Assigned" %}</span>
+  </div>
+  {% for ticket in tickets %}
+    <div class="table__row">
+      <span><a class="ref" href="{% url 'tickets:detail' ticket.reference %}">{{ ticket.reference }}</a></span>
+      <span class="trunc">{{ ticket.subject }}</span>
+      <span class="trunc muted">
+        {% if ticket.organization %}{{ ticket.organization.name }}
+        {% else %}<em>{% trans "No organization" %}</em>{% endif %}
+      </span>
+      <span><span class="pill pill--{{ ticket.priority|lower }}">{{ ticket.get_priority_display }}</span></span>
+      <span><span class="pill pill--{{ ticket.status|lower }}">{{ ticket.get_status_display }}</span></span>
+      <span>
+        {% if ticket.assigned_to %}
+          <span class="trunc">{{ ticket.assigned_to.full_name }}</span>
+        {% else %}
+          <button class="btn btn--small" hx-post="{% url 'tickets:take' ticket.reference %}"
+                  hx-target="closest .table__row" hx-swap="outerHTML">{% trans "Take" %}</button>
+        {% endif %}
+      </span>
+    </div>
+  {% empty %}
+    <div class="table__empty">{% trans "No tickets match these filters." %}</div>
+  {% endfor %}
+  <div class="table__foot">
+    {% blocktrans count counter=total %}Showing {{ counter }} ticket{% plural %}Showing {{ counter }} tickets{% endblocktrans %}
+  </div>
+</section>

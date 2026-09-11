@@ -1,0 +1,152 @@
+{% load i18n %}
+<nav class="crumbs">
+  <a href="{% url 'tickets:queue' %}">{% trans "Ticket queue" %}</a>
+  <span class="crumbs__sep">/</span>
+  <span class="ref">{{ ticket.reference }}</span>
+</nav>
+
+<header class="page-head page-head--split">
+  <div>
+    <h1>{{ ticket.subject }}</h1>
+    <div class="pills">
+      <span class="pill pill--{{ ticket.status|lower }}">{{ ticket.get_status_display }}</span>
+      <span class="pill pill--{{ ticket.priority|lower }}">{{ ticket.get_priority_display }}</span>
+    </div>
+  </div>
+  <div class="actions">
+    {% if not ticket.assigned_to %}
+      <button class="btn" hx-post="{% url 'tickets:take' ticket.reference %}"
+              hx-target="#ticket-pane">{% trans "Take" %}</button>
+    {% endif %}
+    {% for value, label in statuses %}
+      {% if value in allowed_statuses %}
+        <button class="btn {% if value == 'RESOLVED' %}btn--primary{% endif %}"
+                hx-post="{% url 'tickets:status' ticket.reference %}"
+                hx-vals='{"status": "{{ value }}"}'
+                hx-target="#ticket-pane">{{ label }}</button>
+      {% endif %}
+    {% endfor %}
+  </div>
+</header>
+
+<div class="detail">
+  <section class="detail__thread">
+    {% for message in messages_ %}
+      {% if message.visibility == 'INTERNAL' %}
+        <article class="msg msg--internal">
+          {# FR-015 / T133: marked by wash, edge, icon AND words — never colour alone. #}
+          <div class="msg__banner">
+            <span class="msg__lock" aria-hidden="true">&#128274;</span>
+            {% trans "Internal note — not visible to the customer" %}
+          </div>
+          <div class="msg__meta">
+            <strong>{{ message.author.full_name|default:_("System") }}</strong>
+            <span class="muted">{{ message.created_at }}</span>
+          </div>
+          <p class="msg__body">{{ message.body|linebreaksbr }}</p>
+        </article>
+      {% else %}
+        <article class="msg msg--{{ message.direction|lower }}">
+          <div class="msg__meta">
+            <strong>
+              {% if message.author %}{{ message.author.full_name }}
+              {% else %}{{ ticket.contact.full_name }}{% endif %}
+            </strong>
+            <span class="muted">{{ message.created_at }}</span>
+          </div>
+          <p class="msg__body">{{ message.body|linebreaksbr }}</p>
+          {% if message.delivery_status == 'FAILED' %}
+            <p class="msg__failed">
+              {% trans "Not delivered." %} {{ message.delivery_error }}
+            </p>
+          {% elif message.delivery_status == 'SENT' %}
+            <p class="msg__sent">{% trans "Delivered by email" %}</p>
+          {% endif %}
+        </article>
+      {% endif %}
+    {% empty %}
+      <p class="muted">{% trans "No messages on this ticket yet." %}</p>
+    {% endfor %}
+
+    {# Two separate forms, not one box with a checkbox: the dangerous action cannot be
+       reached by forgetting to tick something. #}
+    <div class="card composer" x-data="{ tab: 'reply' }">
+      <div class="composer__tabs">
+        <button type="button" class="composer__tab" :class="tab === 'reply' && 'composer__tab--on'"
+                @click="tab = 'reply'">{% trans "Reply to customer" %}</button>
+        <button type="button" class="composer__tab" :class="tab === 'note' && 'composer__tab--on'"
+                @click="tab = 'note'">{% trans "Internal note" %}</button>
+      </div>
+
+      <form x-show="tab === 'reply'" hx-post="{% url 'tickets:reply' ticket.reference %}"
+            hx-target="#ticket-pane" class="composer__form">
+        {% csrf_token %}
+        <textarea name="body" rows="4" placeholder="{% trans 'Write your reply…' %}"></textarea>
+        <div class="composer__foot">
+          <span class="muted">{% trans "Will be emailed to the contact on this ticket." %}</span>
+          <button type="submit" class="btn btn--primary">{% trans "Send reply" %}</button>
+        </div>
+      </form>
+
+      <form x-show="tab === 'note'" x-cloak
+            hx-post="{% url 'tickets:note' ticket.reference %}"
+            hx-target="#ticket-pane" class="composer__form composer__form--internal">
+        {% csrf_token %}
+        <textarea name="body" rows="4" placeholder="{% trans 'Write a note for the team…' %}"></textarea>
+        <div class="composer__foot">
+          <span class="muted">{% trans "Staff only. The customer never sees this." %}</span>
+          <button type="submit" class="btn">{% trans "Save note" %}</button>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <aside class="detail__side">
+    <div class="card side-card">
+      <div class="label">{% trans "Organization" %}</div>
+      {% if ticket.organization %}
+        <div class="side-card__strong">{{ ticket.organization.name }}</div>
+      {% else %}
+        <div class="muted"><em>{% trans "Not linked yet" %}</em></div>
+      {% endif %}
+    </div>
+
+    <div class="card side-card">
+      <div class="label">{% trans "Contact" %}</div>
+      <div class="side-card__strong">{{ ticket.contact.full_name }}</div>
+      {% for detail in ticket.contact.details.all %}
+        <div class="ltr muted">{{ detail.value }}</div>
+      {% endfor %}
+    </div>
+
+    <div class="card side-card">
+      <div class="label">{% trans "Properties" %}</div>
+      <form hx-post="{% url 'tickets:fields' ticket.reference %}" hx-target="#ticket-pane"
+            hx-trigger="change" class="side-card__form">
+        {% csrf_token %}
+        <label>{% trans "Category" %}
+          <select name="category">
+            {% for category in categories %}
+              <option value="{{ category.pk }}" {% if category == ticket.category %}selected{% endif %}>{{ category.name }}</option>
+            {% endfor %}
+          </select>
+        </label>
+        <label>{% trans "Priority" %}
+          <select name="priority">
+            {% for value, label in priorities %}
+              <option value="{{ value }}" {% if value == ticket.priority %}selected{% endif %}>{{ label }}</option>
+            {% endfor %}
+          </select>
+        </label>
+      </form>
+      <dl class="props">
+        <dt>{% trans "Assigned" %}</dt>
+        <dd>{{ ticket.assigned_to.full_name|default:_("Unassigned") }}</dd>
+        <dt>{% trans "Channel" %}</dt>
+        <dd>{{ ticket.get_origin_channel_display }}</dd>
+        <dt>{% trans "Opened" %}</dt>
+        <dd>{{ ticket.created_at }}</dd>
+      </dl>
+    </div>
+  </aside>
+</div>

@@ -70,3 +70,74 @@ def administrator(db, department, branch):
         branch=branch,
         is_staff=True,
     )
+
+
+@pytest.fixture
+def contact(db, department, branch):
+    from apps.customers.services.matching import find_or_create_contact
+
+    contact, _ = find_or_create_contact(
+        full_name="Sara Ahmed",
+        email="sara@najd-trading.example",
+        department=department,
+        branch=branch,
+    )
+    return contact
+
+
+@pytest.fixture
+def ticket(db, department, branch, category, contact):
+    from apps.tickets.models import Ticket
+
+    return Ticket.objects.create(
+        contact=contact,
+        organization=contact.organization,
+        subject="Shipment marked delivered but not received",
+        description="Nothing arrived at our office.",
+        category=category,
+        origin_channel=Ticket.Channel.WEB_FORM,
+        department=department,
+        branch=branch,
+    )
+
+
+@pytest.fixture
+def other_department_ticket(db, other_department, branch, contact):
+    from apps.tickets.models import Category, Ticket
+
+    other_category = Category.objects.create(name="Billing", department=other_department)
+    return Ticket.objects.create(
+        contact=contact,
+        subject="Invoice query from another department",
+        description="...",
+        category=other_category,
+        origin_channel=Ticket.Channel.WEB_FORM,
+        department=other_department,
+        branch=branch,
+    )
+
+
+@pytest.fixture
+def agent_client(client, agent):
+    client.force_login(agent)
+    return client
+
+
+@pytest.fixture
+def admin_client_(client, administrator):
+    client.force_login(administrator)
+    return client
+
+
+@pytest.fixture
+def other_agent(db, department, branch):
+    """A colleague in the SAME department — FR-038 gives them the same ticket visibility,
+    which is what makes the shared pull queue contested and the 409 on take meaningful."""
+    return User.objects.create_user(
+        email="colleague@example.com",
+        password="pw",
+        full_name="Omar Saleh",
+        role=User.Role.AGENT,
+        department=department,
+        branch=branch,
+    )

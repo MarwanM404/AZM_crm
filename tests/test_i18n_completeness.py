@@ -1,45 +1,54 @@
 """
 FR-031 to FR-035: every screen is bilingual, and RTL layout follows CSS logical properties.
 
-Two checks, both real and running, with known scope limits documented inline rather than
-silently assumed:
+Two checks, both real and running:
 
 1. No stylesheet uses `left:`/`right:` as a CSS property (logical properties only), so RTL
    follows document direction automatically.
 2. No template renders bare, untranslated user-facing text outside a `{% trans %}` /
    `{% blocktrans %}` tag or a `{{ variable }}`.
 
-The template scanner is line-based and intentionally conservative: it flags a line only when
-it finds 2+ consecutive Latin or Arabic letters that survive stripping every Django template
-tag, variable, and HTML tag. It will not catch text split across lines or built by string
-concatenation in a view; those need a runtime check (T116's Playwright pass) to close.
+The template scanner blanks out everything that is legitimately not translatable copy —
+Django comments and tags, blocktrans bodies, and HTML tags *across line boundaries* — while
+preserving line numbers, then flags whatever prose survives. Stripping tags per-line (an
+earlier version of this test) produced false positives on every multi-line tag, because half
+an `<a class="..."` reads as prose once its closing `>` is on the next line.
+
+Known limit: text split across lines or assembled in a view is invisible here; the Playwright
+pass in T116 is what closes that.
 """
 
 import re
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
+
 CSS_LEFT_RIGHT = re.compile(r"[{;]\s*(left|right)\s*:", re.IGNORECASE)
 
-# {% blocktrans %}...{% endblocktrans %} wraps its ENTIRE body as translatable content —
-# strip the whole block (tags and inner text together), not just the tags, or every
-# blocktrans string in the project reads as "untranslated" to this scanner.
+DJANGO_COMMENT = re.compile(r"\{#.*?#\}", re.DOTALL)
+# blocktrans wraps its whole body as translatable content — blank the body with the tags.
 BLOCKTRANS_BLOCK = re.compile(r"\{%\s*blocktrans[^%]*%\}.*?\{%\s*endblocktrans\s*%\}", re.DOTALL)
 TAG_OR_VAR = re.compile(r"\{%.*?%\}|\{\{.*?\}\}", re.DOTALL)
-HTML_TAG = re.compile(r"<[^>]+>")
 HTML_COMMENT = re.compile(r"<!--.*?-->", re.DOTALL)
+HTML_TAG = re.compile(r"<[^>]*>", re.DOTALL)
 LETTERS = re.compile(r"[A-Za-z؀-ۿ]{2,}")
 
-# Attributes and boilerplate that legitimately carry untranslated literal text.
-ALLOWED_LINE_SUBSTRINGS = ("DOCTYPE", "charset", "viewport", "csrf_token")
+# Language names are always written in their own language — "English" is never translated
+# into Arabic, and العربية is never translated into English. That is correct, not a gap.
+ALLOWED_LITERALS = {"English", "العربية"}
+
+
+def _blank_out(pattern, text):
+    """Replace each match with as many newlines as it spanned, so line numbers survive."""
+    return pattern.sub(lambda m: "\n" * m.group(0).count("\n"), text)
 
 
 def _css_files():
-    return list((BASE_DIR / "static" / "css").glob("*.css"))
+    return sorted((BASE_DIR / "static" / "css").glob("*.css"))
 
 
 def _template_files():
-    return list((BASE_DIR / "templates").rglob("*.html"))
+    return sorted((BASE_DIR / "templates").rglob("*.html"))
 
 
 def test_no_css_uses_left_right_properties():
@@ -58,15 +67,15 @@ def test_no_untranslated_text_in_templates():
     offenders = []
     for path in _template_files():
         text = path.read_text(encoding="utf-8")
-        text = HTML_COMMENT.sub("", text)
-        text = BLOCKTRANS_BLOCK.sub("", text)
-        text = TAG_OR_VAR.sub("", text)
+        for pattern in (HTML_COMMENT, DJANGO_COMMENT, BLOCKTRANS_BLOCK, TAG_OR_VAR, HTML_TAG):
+            text = _blank_out(pattern, text)
+
         for lineno, line in enumerate(text.splitlines(), start=1):
-            if any(marker in line for marker in ALLOWED_LINE_SUBSTRINGS):
+            stripped = line.strip()
+            if not stripped or stripped in ALLOWED_LITERALS:
                 continue
-            stripped = HTML_TAG.sub("", line).strip()
             if LETTERS.search(stripped):
                 offenders.append(f"{path.relative_to(BASE_DIR)}:{lineno}: {stripped}")
-    assert not offenders, "Untranslated text found outside {% trans %}/{{ }}:\n" + "\n".join(
-        offenders
-    )
+
+    message = "Untranslated text found outside {% trans %}/{{ }}:\n" + "\n".join(offenders)
+    assert not offenders, message

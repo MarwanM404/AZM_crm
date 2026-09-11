@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-11 18:29+0000\n"
+"POT-Creation-Date: 2026-09-11 19:43+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,6 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
 "&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
+
 #: apps/accounts/forms.py:7 apps/customers/models.py:70
 #: apps/tickets/models.py:51
 msgid "Email"
@@ -81,11 +82,12 @@ msgstr "البريد الإلكتروني"
 msgid "Phone number"
 msgstr "رقم الهاتف"
 
-#: apps/intake/forms.py:24
+#: apps/intake/forms.py:24 templates/tickets/partials/ticket_pane.html:127
+#: templates/tickets/queue.html:26
 msgid "Category"
 msgstr "التصنيف"
 
-#: apps/intake/forms.py:26
+#: apps/intake/forms.py:26 templates/tickets/partials/queue_list.html:5
 msgid "Subject"
 msgstr "الموضوع"
 
@@ -179,12 +181,37 @@ msgstr "فشل"
 msgid "Not applicable"
 msgstr "لا ينطبق"
 
+#: apps/tickets/views.py:124
+msgid "This ticket is already assigned to another agent."
+msgstr "هذه التذكرة مُسنَدة بالفعل إلى موظف آخر."
+
+#: apps/tickets/views.py:142
+msgid "Unknown agent."
+msgstr "موظف غير معروف."
+
+#: apps/tickets/views.py:156
+#, python-format
+msgid "A ticket cannot move from %(current)s to %(requested)s."
+msgstr "لا يمكن نقل التذكرة من %(current)s إلى %(requested)s."
+
+#: apps/tickets/views.py:177
+msgid "Unknown category."
+msgstr "تصنيف غير معروف."
+
+#: apps/tickets/views.py:190
+msgid "A reply cannot be empty."
+msgstr "لا يمكن إرسال رد فارغ."
+
+#: apps/tickets/views.py:225
+msgid "A note cannot be empty."
+msgstr "لا يمكن حفظ ملاحظة فارغة."
+
 #: templates/accounts/sign_in.html:3 templates/accounts/sign_in.html:6
 #: templates/accounts/sign_in.html:17
 msgid "Sign in"
 msgstr "تسجيل الدخول"
 
-#: templates/base.html:7
+#: templates/base.html:7 templates/shell.html:9
 msgid "AZM Support"
 msgstr "دعم AZM"
 
@@ -207,3 +234,173 @@ msgstr "رقم طلبك هو"
 #: templates/intake/submitted.html:8
 msgid "Please quote this reference in any further correspondence."
 msgstr "يرجى ذكر هذا الرقم في أي مراسلات لاحقة."
+
+#: templates/shell.html:13 templates/tickets/partials/ticket_pane.html:3
+#: templates/tickets/queue.html:3 templates/tickets/queue.html:6
+msgid "Ticket queue"
+msgstr "قائمة التذاكر"
+
+#: templates/shell.html:30
+#, fuzzy
+#| msgid "Sign in"
+msgid "Sign out"
+msgstr "تسجيل الدخول"
+
+#: templates/tickets/partials/queue_list.html:4
+#, fuzzy
+#| msgid "Re: %(reference)s"
+msgid "Reference"
+msgstr "رد: %(reference)s"
+
+#: templates/tickets/partials/queue_list.html:6
+#: templates/tickets/partials/ticket_pane.html:106
+msgid "Organization"
+msgstr "المنشأة"
+
+#: templates/tickets/partials/queue_list.html:7
+#: templates/tickets/partials/ticket_pane.html:134
+#: templates/tickets/queue.html:20
+msgid "Priority"
+msgstr "الأولوية"
+
+#: templates/tickets/partials/queue_list.html:8 templates/tickets/queue.html:14
+msgid "Status"
+msgstr "الحالة"
+
+#: templates/tickets/partials/queue_list.html:9
+#: templates/tickets/partials/ticket_pane.html:143
+msgid "Assigned"
+msgstr "المُسنَدة إلى"
+
+#: templates/tickets/partials/queue_list.html:17
+msgid "No organization"
+msgstr "بلا منشأة"
+
+#: templates/tickets/partials/queue_list.html:26
+#: templates/tickets/partials/ticket_pane.html:19
+msgid "Take"
+msgstr "استلام"
+
+#: templates/tickets/partials/queue_list.html:31
+msgid "No tickets match these filters."
+msgstr "لا توجد تذاكر مطابقة لهذه المرشحات."
+
+#: templates/tickets/partials/queue_list.html:34
+#, python-format
+msgid "Showing %(counter)s ticket"
+msgid_plural "Showing %(counter)s tickets"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+msgstr[4] ""
+msgstr[5] ""
+
+#: templates/tickets/partials/ticket_pane.html:40
+msgid "Internal note — not visible to the customer"
+msgstr "ملاحظة داخلية — غير ظاهرة للعميل"
+
+#: templates/tickets/partials/ticket_pane.html:43
+msgid "System"
+msgstr "النظام"
+
+#: templates/tickets/partials/ticket_pane.html:60
+msgid "Not delivered."
+msgstr "لم يتم التسليم."
+
+#: templates/tickets/partials/ticket_pane.html:63
+msgid "Delivered by email"
+msgstr "أُرسلت بالبريد الإلكتروني"
+
+#: templates/tickets/partials/ticket_pane.html:68
+msgid "No messages on this ticket yet."
+msgstr "لا توجد رسائل على هذه التذكرة بعد."
+
+#: templates/tickets/partials/ticket_pane.html:76
+#, fuzzy
+#| msgid "Pending customer"
+msgid "Reply to customer"
+msgstr "بانتظار العميل"
+
+#: templates/tickets/partials/ticket_pane.html:78
+#, fuzzy
+#| msgid "Internal"
+msgid "Internal note"
+msgstr "داخلي"
+
+#: templates/tickets/partials/ticket_pane.html:84
+msgid "Write your reply…"
+msgstr "اكتب ردّك…"
+
+#: templates/tickets/partials/ticket_pane.html:86
+msgid "Will be emailed to the contact on this ticket."
+msgstr "سيُرسل بالبريد الإلكتروني إلى جهة الاتصال المرتبطة بهذه التذكرة."
+
+#: templates/tickets/partials/ticket_pane.html:87
+msgid "Send reply"
+msgstr "إرسال الرد"
+
+#: templates/tickets/partials/ticket_pane.html:95
+msgid "Write a note for the team…"
+msgstr "اكتب ملاحظة لفريق العمل…"
+
+#: templates/tickets/partials/ticket_pane.html:97
+msgid "Staff only. The customer never sees this."
+msgstr "للموظفين فقط. لا يراها العميل إطلاقًا."
+
+#: templates/tickets/partials/ticket_pane.html:98
+msgid "Save note"
+msgstr "حفظ الملاحظة"
+
+#: templates/tickets/partials/ticket_pane.html:110
+msgid "Not linked yet"
+msgstr "غير مرتبطة بعد"
+
+#: templates/tickets/partials/ticket_pane.html:115
+msgid "Contact"
+msgstr "جهة الاتصال"
+
+#: templates/tickets/partials/ticket_pane.html:123
+msgid "Properties"
+msgstr "الخصائص"
+
+#: templates/tickets/partials/ticket_pane.html:144
+msgid "Unassigned"
+msgstr "غير مُسنَدة"
+
+#: templates/tickets/partials/ticket_pane.html:145
+msgid "Channel"
+msgstr "القناة"
+
+#: templates/tickets/partials/ticket_pane.html:147
+#, fuzzy
+#| msgid "Open"
+msgid "Opened"
+msgstr "مفتوحة"
+
+#: templates/tickets/queue.html:8
+#, python-format
+msgid "All tickets in %(department)s · %(branch)s"
+msgstr "كل تذاكر %(department)s · %(branch)s"
+
+#: templates/tickets/queue.html:15
+msgid "Status: Any"
+msgstr "الحالة: الكل"
+
+#: templates/tickets/queue.html:21
+msgid "Priority: Any"
+msgstr "الأولوية: الكل"
+
+#: templates/tickets/queue.html:27
+#, fuzzy
+#| msgid "Category"
+msgid "Category: Any"
+msgstr "التصنيف"
+
+#: templates/tickets/queue.html:34
+msgid "Assigned to me"
+msgstr "المُسنَدة إليّ"
+
+#: templates/tickets/queue.html:37
+msgid "Search reference, subject or contact"
+msgstr "ابحث برقم الطلب أو الموضوع أو جهة الاتصال"
