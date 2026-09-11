@@ -220,7 +220,7 @@ def reply(request, reference):
     # FR-016: a delivery failure is recorded on the message and shown on the ticket; it must
     # not fail the request that created it, or the agent loses the reply they just wrote.
     try:
-        send_ticket_reply_email.delay(message_id=message.pk)
+        send_ticket_reply_email.delay(message_id=message.pk, actor_id=request.user.pk)
     except Exception:
         logger.exception("Queueing the reply email failed for message %s", message.pk)
 

@@ -254,17 +254,17 @@ actor, UTC timestamp, field, and both values. Editing the entry is refused.
 
 ### Tests for User Story 5
 
-- [ ] T107 [P] [US5] Write `apps/core/tests/test_audit_content.py` asserting entries capture actor, UTC timestamp, entity, action, and before and after values for each changed field
-- [ ] T108 [P] [US5] Write `apps/core/tests/test_audit_immutability.py` asserting no role, including administrator, can edit or delete an audit entry
-- [ ] T109 [P] [US5] Write `apps/core/tests/test_audit_filters.py` asserting the log filters correctly by entity, actor, and date range
-- [ ] T110 [P] [US5] Write `apps/core/tests/test_audit_redaction.py` asserting audit entries never store credentials or secret material in readable form
-- [ ] T111 [P] [US5] Write `apps/core/tests/test_background_actor.py` asserting a Celery task writing to a customer record records the initiating human, not a system user
+- [X] T107 [P] [US5] Write `apps/core/tests/test_audit_content.py` asserting entries capture actor, UTC timestamp, entity, action, and before and after values for each changed field
+- [X] T108 [P] [US5] Write `apps/core/tests/test_audit_immutability.py` asserting no role, including administrator, can edit or delete an audit entry
+- [X] T109 [P] [US5] Write `apps/core/tests/test_audit_filters.py` asserting the log filters correctly by entity, actor, and date range
+- [X] T110 [P] [US5] Write `apps/core/tests/test_audit_redaction.py` asserting audit entries never store credentials or secret material in readable form
+- [X] T111 [P] [US5] Write `apps/core/tests/test_background_actor.py` asserting a Celery task writing to a customer record records the initiating human, not a system user
 
 ### Implementation for User Story 5
 
-- [ ] T112 [US5] Implement the audit log view with entity, actor, and date filters in `apps/core/views.py`, read-only and administrator-only
-- [ ] T113 [P] [US5] Create `templates/core/audit_log.html` with filters and pagination
-- [ ] T114 [US5] Enforce immutability in `apps/core/admin.py` by registering the audit model read-only and removing any update or delete path, then compile translations into `locale/*/LC_MESSAGES/django.po`
+- [X] T112 [US5] Audit log view with entity, actor, and date filters in `apps/core/views.py`, read-only and administrator-only, routed at `/admin/audit/` per the contract
+- [X] T113 [P] [US5] Create `templates/core/audit_log.html` with filters and pagination
+- [X] T114 [US5] Enforce immutability in `apps/core/admin.py` by registering the audit model read-only and removing any update or delete path, then compile translations into `locale/*/LC_MESSAGES/django.po`
 
 **Checkpoint**: Quickstart scenario 9 passes. Disputes are answerable from evidence.
 

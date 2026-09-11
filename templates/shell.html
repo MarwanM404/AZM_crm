@@ -18,6 +18,8 @@
       {% if request.user.role == 'ADMINISTRATOR' %}
         <a class="nav__item {% if section == 'administration' %}nav__item--on{% endif %}"
            href="{% url 'administration:users' %}">{% trans "Staff accounts" %}</a>
+        <a class="nav__item {% if section == 'audit' %}nav__item--on{% endif %}"
+           href="{% url 'administration:audit' %}">{% trans "Audit log" %}</a>
       {% endif %}
     </nav>
     <div class="shell__foot">

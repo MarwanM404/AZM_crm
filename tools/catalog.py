@@ -9,8 +9,10 @@ Usage:
     python tools/catalog.py status              # what is missing or fuzzy, per language
     python tools/catalog.py sync-english        # msgstr = msgid for the source language
     python tools/catalog.py clear-fuzzy ar      # accept guesses you have REVIEWED
+    python tools/catalog.py fill ar < map.json  # apply reviewed translations
 """
 
+import json
 import re
 import sys
 from pathlib import Path
@@ -129,6 +131,33 @@ def clear_fuzzy(language):
     print(f"{language}: fuzzy flags cleared")
 
 
+def fill(language, translations):
+    """Apply a reviewed {msgid: msgstr} mapping, clearing the fuzzy flag on anything it
+    touches. Handles gettext's wrapped form, which is where hand-rolled regex kept failing."""
+    path = catalog_path(language)
+    out, applied = [], 0
+    for block in _blocks(path):
+        if "Project-Id-Version" in block:
+            out.append(block)
+            continue
+        lines = block.split("\n")
+        msgid = _string_parts(lines, "msgid ")
+        if msgid in translations:
+            value = translations[msgid].replace("\\", "\\\\").replace('"', '\\"')
+            msgstr_at = next((i for i, line in enumerate(lines) if line.startswith("msgstr")), None)
+            if msgstr_at is not None:
+                head = [
+                    line
+                    for line in lines[:msgstr_at]
+                    if not line.startswith("#,") and not line.startswith("#|")
+                ]
+                block = "\n".join(head + [f'msgstr "{value}"'])
+                applied += 1
+        out.append(block)
+    _write(path, out)
+    print(f"{language}: {applied} translation(s) applied")
+
+
 if __name__ == "__main__":
     command = sys.argv[1] if len(sys.argv) > 1 else "status"
     if command == "status":
@@ -137,6 +166,8 @@ if __name__ == "__main__":
         sync_english()
     elif command == "clear-fuzzy":
         clear_fuzzy(sys.argv[2])
+    elif command == "fill":
+        fill(sys.argv[2], json.load(sys.stdin))
     else:
         print(__doc__)
         sys.exit(1)

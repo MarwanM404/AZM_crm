@@ -33,8 +33,17 @@ AUDITED_MODELS = [
     Branch,
 ]
 
+# FR-030: credentials must never reach an audit entry. django-auditlog records every field by
+# default, so without this the log keeps the password hash before AND after every change —
+# and because the log is immutable (FR-028), those hashes can never be removed. An
+# administrator with audit access would hold an offline-crackable history of every password
+# every user has ever had.
+EXCLUDED_FIELDS = {
+    User: ["password"],
+}
+
 
 def register_all():
     for model in AUDITED_MODELS:
         if not auditlog.contains(model):
-            auditlog.register(model)
+            auditlog.register(model, exclude_fields=EXCLUDED_FIELDS.get(model))

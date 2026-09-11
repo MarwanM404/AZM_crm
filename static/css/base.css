@@ -272,3 +272,11 @@ select:focus-visible, input:focus-visible, textarea:focus-visible {
 .form-card { max-inline-size: 480px; }
 .form-card .field input, .form-card .field select { block-size: 38px; }
 .table__row--users { grid-template-columns: minmax(0, 1fr) 240px 140px 120px 140px; }
+
+/* --- audit log --- */
+.table__row--audit { grid-template-columns: 180px 150px minmax(0, 1fr) 100px minmax(0, 1.4fr); }
+.audit-changes { display: flex; flex-direction: column; gap: 3px; min-inline-size: 0; }
+.audit-change { display: flex; align-items: baseline; gap: 8px; font-size: 12px; min-inline-size: 0; }
+.audit-change__field { color: var(--color-faint); flex: none; }
+.audit-change__from { color: var(--color-muted); text-decoration: line-through; }
+.audit-change__to { color: var(--color-text); font-weight: 500; }

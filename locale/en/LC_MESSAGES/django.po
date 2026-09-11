@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-11 20:34+0000\n"
+"POT-Creation-Date: 2026-09-11 20:53+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -68,23 +68,23 @@ msgstr "email address"
 msgid "full name"
 msgstr "full name"
 
-#: apps/accounts/views_admin.py:45
+#: apps/accounts/views_admin.py:48
 msgid "An email address and a name are required."
 msgstr "An email address and a name are required."
 
-#: apps/accounts/views_admin.py:47
+#: apps/accounts/views_admin.py:50
 msgid "Choose a role."
 msgstr "Choose a role."
 
-#: apps/accounts/views_admin.py:51 apps/accounts/views_admin.py:87
+#: apps/accounts/views_admin.py:54 apps/accounts/views_admin.py:90
 msgid "Choose a department and a branch."
 msgstr "Choose a department and a branch."
 
-#: apps/accounts/views_admin.py:53
+#: apps/accounts/views_admin.py:56
 msgid "An account with that email already exists."
 msgstr "An account with that email already exists."
 
-#: apps/accounts/views_admin.py:102
+#: apps/accounts/views_admin.py:105
 msgid "You cannot deactivate your own account."
 msgstr "You cannot deactivate your own account."
 
@@ -137,12 +137,12 @@ msgstr "Description"
 msgid "Submission rejected."
 msgstr "Submission rejected."
 
-#: apps/messaging/tasks.py:27
+#: apps/messaging/tasks.py:45
 #, python-format
 msgid "Your request has been received: %(reference)s"
 msgstr "Your request has been received: %(reference)s"
 
-#: apps/messaging/tasks.py:81
+#: apps/messaging/tasks.py:104
 #, python-format
 msgid "Re: %(reference)s"
 msgstr "Re: %(reference)s"
@@ -281,7 +281,7 @@ msgid "Create account"
 msgstr "Create account"
 
 #: templates/accounts/users.html:9
-#| msgid "All tickets in %(department)s · %(branch)s"
+#, python-format
 msgid "Accounts in %(department)s · %(branch)s"
 msgstr "Accounts in %(department)s · %(branch)s"
 
@@ -307,13 +307,74 @@ msgid "Deactivate"
 msgstr "Deactivate"
 
 #: templates/accounts/users.html:47
-#| msgid "No messages on this ticket yet."
 msgid "No staff accounts in this department yet."
 msgstr "No staff accounts in this department yet."
 
 #: templates/base.html:7 templates/shell.html:9
 msgid "AZM Support"
 msgstr "AZM Support"
+
+#: templates/core/audit_log.html:3 templates/core/audit_log.html:6
+#: templates/shell.html:22
+msgid "Audit log"
+msgstr "Audit log"
+
+#: templates/core/audit_log.html:8
+msgid ""
+"Every change to a customer, ticket, message or account. Entries cannot be "
+"edited or deleted."
+msgstr ""
+"Every change to a customer, ticket, message or account. Entries cannot be "
+"edited or deleted."
+
+#: templates/core/audit_log.html:13 templates/core/audit_log.html:38
+msgid "Entity"
+msgstr "Entity"
+
+#: templates/core/audit_log.html:14
+msgid "Entity: Any"
+msgstr "Entity: Any"
+
+#: templates/core/audit_log.html:19 templates/core/audit_log.html:37
+msgid "Actor"
+msgstr "Actor"
+
+#: templates/core/audit_log.html:20
+msgid "Actor: Anyone"
+msgstr "Actor: Anyone"
+
+#: templates/core/audit_log.html:25
+msgid "From"
+msgstr "From"
+
+#: templates/core/audit_log.html:28
+msgid "To"
+msgstr "To"
+
+#: templates/core/audit_log.html:31
+msgid "Apply"
+msgstr "Apply"
+
+#: templates/core/audit_log.html:36
+msgid "When"
+msgstr "When"
+
+#: templates/core/audit_log.html:39
+msgid "Action"
+msgstr "Action"
+
+#: templates/core/audit_log.html:40
+msgid "Changes"
+msgstr "Changes"
+
+#: templates/core/audit_log.html:45
+#: templates/tickets/partials/ticket_pane.html:43
+msgid "System"
+msgstr "System"
+
+#: templates/core/audit_log.html:59
+msgid "No entries match these filters."
+msgstr "No entries match these filters."
 
 #: templates/customers/contact_edit.html:3
 #: templates/customers/contact_edit.html:6 templates/customers/detail.html:66
@@ -491,7 +552,7 @@ msgstr "Please quote this reference in any further correspondence."
 msgid "Ticket queue"
 msgstr "Ticket queue"
 
-#: templates/shell.html:38
+#: templates/shell.html:40
 msgid "Sign out"
 msgstr "Sign out"
 
@@ -529,10 +590,6 @@ msgstr[1] "Showing %(counter)s tickets"
 #: templates/tickets/partials/ticket_pane.html:40
 msgid "Internal note — not visible to the customer"
 msgstr "Internal note — not visible to the customer"
-
-#: templates/tickets/partials/ticket_pane.html:43
-msgid "System"
-msgstr "System"
 
 #: templates/tickets/partials/ticket_pane.html:60
 msgid "Not delivered."

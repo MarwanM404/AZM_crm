@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-11 20:34+0000\n"
+"POT-Creation-Date: 2026-09-11 20:53+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -69,23 +69,23 @@ msgstr "البريد الإلكتروني"
 msgid "full name"
 msgstr "الاسم الكامل"
 
-#: apps/accounts/views_admin.py:45
+#: apps/accounts/views_admin.py:48
 msgid "An email address and a name are required."
 msgstr "البريد الإلكتروني والاسم مطلوبان."
 
-#: apps/accounts/views_admin.py:47
+#: apps/accounts/views_admin.py:50
 msgid "Choose a role."
 msgstr "اختر دورًا."
 
-#: apps/accounts/views_admin.py:51 apps/accounts/views_admin.py:87
+#: apps/accounts/views_admin.py:54 apps/accounts/views_admin.py:90
 msgid "Choose a department and a branch."
 msgstr "اختر القسم والفرع."
 
-#: apps/accounts/views_admin.py:53
+#: apps/accounts/views_admin.py:56
 msgid "An account with that email already exists."
 msgstr "يوجد حساب بهذا البريد الإلكتروني بالفعل."
 
-#: apps/accounts/views_admin.py:102
+#: apps/accounts/views_admin.py:105
 msgid "You cannot deactivate your own account."
 msgstr "لا يمكنك تعطيل حسابك الخاص."
 
@@ -138,12 +138,12 @@ msgstr "الوصف"
 msgid "Submission rejected."
 msgstr "تم رفض الطلب."
 
-#: apps/messaging/tasks.py:27
+#: apps/messaging/tasks.py:45
 #, python-format
 msgid "Your request has been received: %(reference)s"
 msgstr "تم استلام طلبك: %(reference)s"
 
-#: apps/messaging/tasks.py:81
+#: apps/messaging/tasks.py:104
 #, python-format
 msgid "Re: %(reference)s"
 msgstr "رد: %(reference)s"
@@ -282,6 +282,7 @@ msgid "Create account"
 msgstr "إنشاء الحساب"
 
 #: templates/accounts/users.html:9
+#, python-format
 msgid "Accounts in %(department)s · %(branch)s"
 msgstr "حسابات %(department)s · %(branch)s"
 
@@ -313,6 +314,66 @@ msgstr "لا توجد حسابات موظفين في هذا القسم بعد."
 #: templates/base.html:7 templates/shell.html:9
 msgid "AZM Support"
 msgstr "دعم AZM"
+
+#: templates/core/audit_log.html:3 templates/core/audit_log.html:6
+#: templates/shell.html:22
+msgid "Audit log"
+msgstr "سجل التدقيق"
+
+#: templates/core/audit_log.html:8
+msgid ""
+"Every change to a customer, ticket, message or account. Entries cannot be "
+"edited or deleted."
+msgstr "كل تغيير يطرأ على عميل أو تذكرة أو رسالة أو حساب. لا يمكن تعديل القيود أو حذفها."
+
+#: templates/core/audit_log.html:13 templates/core/audit_log.html:38
+msgid "Entity"
+msgstr "الكيان"
+
+#: templates/core/audit_log.html:14
+msgid "Entity: Any"
+msgstr "الكيان: الكل"
+
+#: templates/core/audit_log.html:19 templates/core/audit_log.html:37
+msgid "Actor"
+msgstr "المنفِّذ"
+
+#: templates/core/audit_log.html:20
+msgid "Actor: Anyone"
+msgstr "المنفِّذ: الجميع"
+
+#: templates/core/audit_log.html:25
+msgid "From"
+msgstr "من"
+
+#: templates/core/audit_log.html:28
+msgid "To"
+msgstr "إلى"
+
+#: templates/core/audit_log.html:31
+msgid "Apply"
+msgstr "تطبيق"
+
+#: templates/core/audit_log.html:36
+msgid "When"
+msgstr "التاريخ"
+
+#: templates/core/audit_log.html:39
+msgid "Action"
+msgstr "الإجراء"
+
+#: templates/core/audit_log.html:40
+msgid "Changes"
+msgstr "التغييرات"
+
+#: templates/core/audit_log.html:45
+#: templates/tickets/partials/ticket_pane.html:43
+msgid "System"
+msgstr "النظام"
+
+#: templates/core/audit_log.html:59
+msgid "No entries match these filters."
+msgstr "لا توجد قيود مطابقة لهذه المرشحات."
 
 #: templates/customers/contact_edit.html:3
 #: templates/customers/contact_edit.html:6 templates/customers/detail.html:66
@@ -487,7 +548,7 @@ msgstr "يرجى ذكر هذا الرقم في أي مراسلات لاحقة."
 msgid "Ticket queue"
 msgstr "قائمة التذاكر"
 
-#: templates/shell.html:38
+#: templates/shell.html:40
 msgid "Sign out"
 msgstr "تسجيل الدخول"
 
@@ -529,10 +590,6 @@ msgstr[5] "عرض %(counter)s تذكرة"
 #: templates/tickets/partials/ticket_pane.html:40
 msgid "Internal note — not visible to the customer"
 msgstr "ملاحظة داخلية — غير ظاهرة للعميل"
-
-#: templates/tickets/partials/ticket_pane.html:43
-msgid "System"
-msgstr "النظام"
 
 #: templates/tickets/partials/ticket_pane.html:60
 msgid "Not delivered."

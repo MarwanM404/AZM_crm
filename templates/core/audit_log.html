@@ -1,0 +1,62 @@
+{% extends "shell.html" %}
+{% load i18n %}
+{% block title %}{% trans "Audit log" %}{% endblock %}
+{% block main %}
+  <header class="page-head">
+    <h1>{% trans "Audit log" %}</h1>
+    <p class="page-head__sub">
+      {% trans "Every change to a customer, ticket, message or account. Entries cannot be edited or deleted." %}
+    </p>
+  </header>
+
+  <form class="filters" method="get">
+    <select name="entity" aria-label="{% trans 'Entity' %}">
+      <option value="">{% trans "Entity: Any" %}</option>
+      {% for entity in entities %}
+        <option value="{{ entity }}" {% if filters.entity == entity %}selected{% endif %}>{{ entity }}</option>
+      {% endfor %}
+    </select>
+    <select name="actor" aria-label="{% trans 'Actor' %}">
+      <option value="">{% trans "Actor: Anyone" %}</option>
+      {% for actor in actors %}
+        <option value="{{ actor.pk }}" {% if filters.actor == actor.pk|stringformat:"s" %}selected{% endif %}>{{ actor.full_name }}</option>
+      {% endfor %}
+    </select>
+    <label class="toggle">{% trans "From" %}
+      <input type="date" name="from" value="{{ filters.from|default:'' }}">
+    </label>
+    <label class="toggle">{% trans "To" %}
+      <input type="date" name="to" value="{{ filters.to|default:'' }}">
+    </label>
+    <button type="submit" class="btn btn--small">{% trans "Apply" %}</button>
+  </form>
+
+  <section class="card table">
+    <div class="table__row table__row--audit table__row--head">
+      <span>{% trans "When" %}</span>
+      <span>{% trans "Actor" %}</span>
+      <span>{% trans "Entity" %}</span>
+      <span>{% trans "Action" %}</span>
+      <span>{% trans "Changes" %}</span>
+    </div>
+    {% for entry in entries %}
+      <div class="table__row table__row--audit">
+        <span class="muted">{{ entry.timestamp }}</span>
+        <span class="trunc">{{ entry.actor.full_name|default:_("System") }}</span>
+        <span class="trunc">{{ entry.content_type.model }} · {{ entry.object_repr }}</span>
+        <span class="muted">{{ entry.get_action_display }}</span>
+        <span class="audit-changes">
+          {% for field, values in entry.changes_dict.items %}
+            <div class="audit-change">
+              <span class="audit-change__field">{{ field }}</span>
+              <span class="audit-change__from">{{ values.0|truncatechars:40 }}</span>
+              <span class="audit-change__to">{{ values.1|truncatechars:40 }}</span>
+            </div>
+          {% endfor %}
+        </span>
+      </div>
+    {% empty %}
+      <div class="table__empty">{% trans "No entries match these filters." %}</div>
+    {% endfor %}
+  </section>
+{% endblock %}
