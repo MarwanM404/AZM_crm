@@ -1,0 +1,50 @@
+{% extends "shell.html" %}
+{% load i18n %}
+{% block title %}{% trans "Staff accounts" %}{% endblock %}
+{% block main %}
+  <header class="page-head page-head--split">
+    <div>
+      <h1>{% trans "Staff accounts" %}</h1>
+      <p class="page-head__sub">
+        {% blocktrans with department=request.user.department branch=request.user.branch %}Accounts in {{ department }} · {{ branch }}{% endblocktrans %}
+      </p>
+    </div>
+    <div class="actions">
+      <a class="btn btn--primary" href="{% url 'administration:user_new' %}">{% trans "Add account" %}</a>
+    </div>
+  </header>
+
+  <section class="card table">
+    <div class="table__row table__row--users table__row--head">
+      <span>{% trans "Name" %}</span>
+      <span>{% trans "Email" %}</span>
+      <span>{% trans "Role" %}</span>
+      <span>{% trans "Status" %}</span>
+      <span></span>
+    </div>
+    {% for user in users %}
+      <div class="table__row table__row--users">
+        <span class="trunc">{{ user.full_name }}</span>
+        <span class="ltr trunc">{{ user.email }}</span>
+        <span class="muted">{{ user.get_role_display }}</span>
+        <span>
+          {% if user.is_active %}
+            <span class="pill pill--open">{% trans "Active" %}</span>
+          {% else %}
+            <span class="pill">{% trans "Deactivated" %}</span>
+          {% endif %}
+        </span>
+        <span>
+          {% if user.is_active and user != request.user %}
+            <form method="post" action="{% url 'administration:user_deactivate' user.pk %}">
+              {% csrf_token %}
+              <button type="submit" class="btn btn--small">{% trans "Deactivate" %}</button>
+            </form>
+          {% endif %}
+        </span>
+      </div>
+    {% empty %}
+      <div class="table__empty">{% trans "No staff accounts in this department yet." %}</div>
+    {% endfor %}
+  </section>
+{% endblock %}

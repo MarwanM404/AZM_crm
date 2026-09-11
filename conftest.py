@@ -118,15 +118,28 @@ def other_department_ticket(db, other_department, branch, contact):
 
 
 @pytest.fixture
-def agent_client(client, agent):
-    client.force_login(agent)
-    return client
+def agent_client(db, agent):
+    """Its OWN Client, not pytest-django's shared `client`.
+
+    Several tests need two people signed in at once — an administrator deactivating an agent
+    who still holds a live session is the whole point of FR-026. Sharing one client makes the
+    second force_login silently replace the first, and the test then asserts something it is
+    not actually exercising.
+    """
+    from django.test import Client
+
+    own = Client()
+    own.force_login(agent)
+    return own
 
 
 @pytest.fixture
-def admin_client_(client, administrator):
-    client.force_login(administrator)
-    return client
+def admin_client_(db, administrator):
+    from django.test import Client
+
+    own = Client()
+    own.force_login(administrator)
+    return own
 
 
 @pytest.fixture

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-11 20:00+0000\n"
+"POT-Creation-Date: 2026-09-11 20:34+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,7 +20,8 @@ msgstr ""
 "&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
 
 #: apps/accounts/forms.py:7 apps/customers/models.py:70
-#: apps/tickets/models.py:51 templates/customers/unlinked.html:19
+#: apps/tickets/models.py:51 templates/accounts/users.html:20
+#: templates/customers/unlinked.html:19
 msgid "Email"
 msgstr "البريد الإلكتروني"
 
@@ -68,24 +69,43 @@ msgstr "البريد الإلكتروني"
 msgid "full name"
 msgstr "الاسم الكامل"
 
+#: apps/accounts/views_admin.py:45
+msgid "An email address and a name are required."
+msgstr "البريد الإلكتروني والاسم مطلوبان."
+
+#: apps/accounts/views_admin.py:47
+msgid "Choose a role."
+msgstr "اختر دورًا."
+
+#: apps/accounts/views_admin.py:51 apps/accounts/views_admin.py:87
+msgid "Choose a department and a branch."
+msgstr "اختر القسم والفرع."
+
+#: apps/accounts/views_admin.py:53
+msgid "An account with that email already exists."
+msgstr "يوجد حساب بهذا البريد الإلكتروني بالفعل."
+
+#: apps/accounts/views_admin.py:102
+msgid "You cannot deactivate your own account."
+msgstr "لا يمكنك تعطيل حسابك الخاص."
+
 #: apps/customers/models.py:71
 msgid "Phone"
 msgstr "الهاتف"
 
-#: apps/customers/views.py:55 apps/tickets/views.py:237
+#: apps/customers/views.py:54 apps/tickets/views.py:237
 msgid "A note cannot be empty."
 msgstr "لا يمكن حفظ ملاحظة فارغة."
 
-#: apps/customers/views.py:72 apps/customers/views.py:150
+#: apps/customers/views.py:71 apps/customers/views.py:149
 msgid "A name is required."
 msgstr "الاسم مطلوب."
 
-#: apps/customers/views.py:133
-#| msgid "No organization"
+#: apps/customers/views.py:132
 msgid "Unknown organization."
 msgstr "بلا منشأة"
 
-#: apps/customers/views.py:139
+#: apps/customers/views.py:138
 msgid "Choose an organization, or name a new one."
 msgstr "اختر منشأة، أو أدخل اسم منشأة جديدة."
 
@@ -93,7 +113,7 @@ msgstr "اختر منشأة، أو أدخل اسم منشأة جديدة."
 msgid "Your name"
 msgstr "اسمك"
 
-#: apps/intake/forms.py:21
+#: apps/intake/forms.py:21 templates/accounts/user_form.html:25
 msgid "Email address"
 msgstr "البريد الإلكتروني"
 
@@ -226,27 +246,84 @@ msgstr "لا يمكن إرسال رد فارغ."
 msgid "Sign in"
 msgstr "تسجيل الدخول"
 
+#: templates/accounts/user_form.html:3 templates/accounts/user_form.html:8
+#: templates/accounts/user_form.html:12 templates/accounts/users.html:13
+msgid "Add account"
+msgstr "إضافة حساب"
+
+#: templates/accounts/user_form.html:6 templates/accounts/users.html:3
+#: templates/accounts/users.html:7 templates/shell.html:20
+msgid "Staff accounts"
+msgstr "حسابات الموظفين"
+
+#: templates/accounts/user_form.html:14
+msgid "The account cannot sign in until a password is set for it."
+msgstr "لا يمكن للحساب تسجيل الدخول حتى تُعيَّن له كلمة مرور."
+
+#: templates/accounts/user_form.html:21
+#: templates/customers/contact_edit.html:11
+msgid "Full name"
+msgstr "الاسم الكامل"
+
+#: templates/accounts/user_form.html:29 templates/accounts/users.html:21
+msgid "Role"
+msgstr "الدور"
+
+#: templates/accounts/user_form.html:37
+msgid "Department"
+msgstr "القسم"
+
+#: templates/accounts/user_form.html:45
+msgid "Branch"
+msgstr "الفرع"
+
+#: templates/accounts/user_form.html:52
+msgid "Create account"
+msgstr "إنشاء الحساب"
+
+#: templates/accounts/users.html:9
+msgid "Accounts in %(department)s · %(branch)s"
+msgstr "حسابات %(department)s · %(branch)s"
+
+#: templates/accounts/users.html:19 templates/customers/edit.html:11
+msgid "Name"
+msgstr "الاسم"
+
+#: templates/accounts/users.html:22
+#: templates/tickets/partials/queue_list.html:8 templates/tickets/queue.html:14
+msgid "Status"
+msgstr "الحالة"
+
+#: templates/accounts/users.html:32
+msgid "Active"
+msgstr "نشط"
+
+#: templates/accounts/users.html:34
+msgid "Deactivated"
+msgstr "معطَّل"
+
+#: templates/accounts/users.html:41
+msgid "Deactivate"
+msgstr "تعطيل"
+
+#: templates/accounts/users.html:47
+msgid "No staff accounts in this department yet."
+msgstr "لا توجد حسابات موظفين في هذا القسم بعد."
+
 #: templates/base.html:7 templates/shell.html:9
 msgid "AZM Support"
 msgstr "دعم AZM"
 
 #: templates/customers/contact_edit.html:3
 #: templates/customers/contact_edit.html:6 templates/customers/detail.html:66
-#| msgid "Contact"
 msgid "Edit contact"
 msgstr "جهة الاتصال"
-
-#: templates/customers/contact_edit.html:11
-#| msgid "full name"
-msgid "Full name"
-msgstr "الاسم الكامل"
 
 #: templates/customers/contact_edit.html:15
 msgid "Preferred language"
 msgstr "اللغة المفضّلة"
 
 #: templates/customers/contact_edit.html:21 templates/customers/edit.html:18
-#| msgid "Save note"
 msgid "Save"
 msgstr "حفظ الملاحظة"
 
@@ -268,7 +345,6 @@ msgid "Filter by contact"
 msgstr "التصفية حسب جهة الاتصال"
 
 #: templates/customers/detail.html:34
-#| msgid "Contact"
 msgid "All contacts"
 msgstr "جهة الاتصال"
 
@@ -287,26 +363,18 @@ msgid "Save note"
 msgstr "حفظ الملاحظة"
 
 #: templates/customers/detail.html:59 templates/customers/list.html:14
-#| msgid "Contact"
 msgid "Contacts"
 msgstr "جهات الاتصال"
 
 #: templates/customers/detail.html:69
-#| msgid "Not linked yet"
 msgid "No contacts linked yet."
 msgstr "غير مرتبطة بعد"
 
 #: templates/customers/edit.html:3 templates/customers/edit.html:6
-#| msgid "Pending customer"
 msgid "Edit customer"
 msgstr "بانتظار العميل"
 
-#: templates/customers/edit.html:11
-msgid "Name"
-msgstr "الاسم"
-
 #: templates/customers/edit.html:15
-#| msgid "name (Arabic)"
 msgid "Name (Arabic)"
 msgstr "الاسم (بالعربية)"
 
@@ -322,12 +390,10 @@ msgstr "المنشأة"
 
 #: templates/customers/list.html:13
 #: templates/tickets/partials/queue_list.html:4
-#| msgid "Re: %(reference)s"
 msgid "Reference"
 msgstr "رد: %(reference)s"
 
 #: templates/customers/list.html:15
-#| msgid "Ticket queue"
 msgid "Tickets"
 msgstr "قائمة التذاكر"
 
@@ -344,12 +410,10 @@ msgstr "بواسطة %(name)s"
 
 #: templates/customers/partials/timeline.html:22
 #: templates/tickets/partials/ticket_pane.html:78
-#| msgid "Internal"
 msgid "Internal note"
 msgstr "داخلي"
 
 #: templates/customers/partials/timeline.html:30
-#| msgid "No messages on this ticket yet."
 msgid "Nothing has happened on this customer yet."
 msgstr "لا توجد رسائل على هذه التذكرة بعد."
 
@@ -367,7 +431,10 @@ msgid ""
 "A request form cannot tell us who someone works for, so a new contact starts "
 "with no organization. Contacts sharing an email domain are shown together as "
 "a hint — nothing is linked automatically."
-msgstr "لا يمكن لنموذج الطلب أن يخبرنا بجهة عمل الشخص، لذا تبدأ جهة الاتصال الجديدة بلا منشأة. تُعرض جهات الاتصال التي تتشارك نطاق البريد الإلكتروني معًا كتلميح — ولا يتم الربط تلقائيًا."
+msgstr ""
+"لا يمكن لنموذج الطلب أن يخبرنا بجهة عمل الشخص، لذا تبدأ جهة الاتصال الجديدة "
+"بلا منشأة. تُعرض جهات الاتصال التي تتشارك نطاق البريد الإلكتروني معًا كتلميح — "
+"ولا يتم الربط تلقائيًا."
 
 #: templates/customers/unlinked.html:18
 #: templates/tickets/partials/ticket_pane.html:115
@@ -379,7 +446,6 @@ msgid "Shared domain"
 msgstr "نطاق مشترك"
 
 #: templates/customers/unlinked.html:21
-#| msgid "No organization"
 msgid "Link to organization"
 msgstr "بلا منشأة"
 
@@ -421,8 +487,7 @@ msgstr "يرجى ذكر هذا الرقم في أي مراسلات لاحقة."
 msgid "Ticket queue"
 msgstr "قائمة التذاكر"
 
-#: templates/shell.html:34
-#| msgid "Sign in"
+#: templates/shell.html:38
 msgid "Sign out"
 msgstr "تسجيل الدخول"
 
@@ -431,10 +496,6 @@ msgstr "تسجيل الدخول"
 #: templates/tickets/queue.html:20
 msgid "Priority"
 msgstr "الأولوية"
-
-#: templates/tickets/partials/queue_list.html:8 templates/tickets/queue.html:14
-msgid "Status"
-msgstr "الحالة"
 
 #: templates/tickets/partials/queue_list.html:9
 #: templates/tickets/partials/ticket_pane.html:143
@@ -486,7 +547,6 @@ msgid "No messages on this ticket yet."
 msgstr "لا توجد رسائل على هذه التذكرة بعد."
 
 #: templates/tickets/partials/ticket_pane.html:76
-#| msgid "Pending customer"
 msgid "Reply to customer"
 msgstr "بانتظار العميل"
 
@@ -523,7 +583,6 @@ msgid "Channel"
 msgstr "القناة"
 
 #: templates/tickets/partials/ticket_pane.html:147
-#| msgid "Open"
 msgid "Opened"
 msgstr "مفتوحة"
 
@@ -541,7 +600,6 @@ msgid "Priority: Any"
 msgstr "الأولوية: الكل"
 
 #: templates/tickets/queue.html:27
-#| msgid "Category"
 msgid "Category: Any"
 msgstr "التصنيف"
 

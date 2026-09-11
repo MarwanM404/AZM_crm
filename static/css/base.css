@@ -271,3 +271,4 @@ select:focus-visible, input:focus-visible, textarea:focus-visible {
 .side-card__contact:last-child { border-block-end: 0; }
 .form-card { max-inline-size: 480px; }
 .form-card .field input, .form-card .field select { block-size: 38px; }
+.table__row--users { grid-template-columns: minmax(0, 1fr) 240px 140px 120px 140px; }

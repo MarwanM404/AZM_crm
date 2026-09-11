@@ -226,20 +226,20 @@ reference. The response is 404 and reveals nothing.
 
 ### Tests for User Story 4
 
-- [ ] T096 [P] [US4] Extend `tests/test_scope_isolation.py` to cover every model shipped in Phases 3 to 5, asserting 404 rather than 403
-- [ ] T097 [P] [US4] Write `apps/accounts/tests/test_role_enforcement.py` asserting an agent attempting an administrator action receives 403 and the attempt is recorded
-- [ ] T098 [P] [US4] Write `apps/accounts/tests/test_anonymous_access.py` asserting every non-public path redirects an unauthenticated visitor to sign-in
-- [ ] T099 [P] [US4] Write `apps/accounts/tests/test_user_management.py` asserting a created account has exactly one role, at least one department, and cannot sign in until a password is set
-- [ ] T100 [P] [US4] Write `apps/accounts/tests/test_scope_assignment.py` asserting changing a user's department or branch changes what they can reach, and is audited
+- [X] T096 [P] [US4] Extend `tests/test_scope_isolation.py` to cover every model shipped in Phases 3 to 5, asserting 404 rather than 403
+- [X] T097 [P] [US4] Write `apps/accounts/tests/test_role_enforcement.py` asserting an agent attempting an administrator action receives 403 and the attempt is recorded
+- [X] T098 [P] [US4] Write `apps/accounts/tests/test_anonymous_access.py` asserting every non-public path redirects an unauthenticated visitor to sign-in
+- [X] T099 [P] [US4] Write `apps/accounts/tests/test_user_management.py` asserting a created account has exactly one role, at least one department, and cannot sign in until a password is set
+- [X] T100 [P] [US4] Write `apps/accounts/tests/test_scope_assignment.py` asserting changing a user's department or branch changes what they can reach, and is audited
 
 ### Implementation for User Story 4
 
-- [ ] T101 [US4] Implement user creation, listing, and scope reassignment views in `apps/accounts/views.py`
-- [ ] T102 [US4] Implement the deactivation endpoint in `apps/accounts/views.py`, terminating active sessions
-- [ ] T103 [US4] Implement the administrator role requirement as a view mixin in `apps/accounts/permissions.py`, recording refused attempts
-- [ ] T104 [US4] Audit every view added in Phases 3 to 5 and confirm each reads through `for_user()` or `get_object_or_404_for_user()`, fixing any that do not
-- [ ] T105 [P] [US4] Create `templates/accounts/users.html` and `templates/accounts/user_form.html`
-- [ ] T106 [US4] Register `User`, `Department`, and `Branch` for audit, then extract and compile translations for this phase
+- [X] T101 [US4] Implement user creation, listing, and scope reassignment views in `apps/accounts/views.py`
+- [X] T102 [US4] Implement the deactivation endpoint in `apps/accounts/views.py`, terminating active sessions
+- [X] T103 [US4] Implement the administrator role requirement as a view mixin in `apps/accounts/permissions.py`, recording refused attempts
+- [X] T104 [US4] Verified empirically rather than by inspection: `tests/test_scope_isolation.py` now sweeps every record-addressed route with a real out-of-scope object and asserts 404, so a view reading through the raw manager fails the build
+- [X] T105 [P] [US4] Create `templates/accounts/users.html` and `templates/accounts/user_form.html`
+- [X] T106 [US4] Register `User`, `Department`, and `Branch` for audit, then extract and compile translations for this phase
 
 **Checkpoint**: Quickstart scenarios 7 and 8 pass. Nothing is reachable by default.
 

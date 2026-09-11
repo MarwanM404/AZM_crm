@@ -1,0 +1,54 @@
+{% extends "shell.html" %}
+{% load i18n %}
+{% block title %}{% trans "Add account" %}{% endblock %}
+{% block main %}
+  <nav class="crumbs">
+    <a href="{% url 'administration:users' %}">{% trans "Staff accounts" %}</a>
+    <span class="crumbs__sep">/</span>
+    <span>{% trans "Add account" %}</span>
+  </nav>
+
+  <header class="page-head">
+    <h1>{% trans "Add account" %}</h1>
+    <p class="page-head__sub">
+      {% trans "The account cannot sign in until a password is set for it." %}
+    </p>
+  </header>
+
+  <form method="post" class="card side-card form-card">
+    {% csrf_token %}
+    <div class="field">
+      <label for="id_full_name">{% trans "Full name" %}</label>
+      <input id="id_full_name" type="text" name="full_name" required>
+    </div>
+    <div class="field">
+      <label for="id_email">{% trans "Email address" %}</label>
+      <input id="id_email" type="email" name="email" dir="ltr" required>
+    </div>
+    <div class="field">
+      <label for="id_role">{% trans "Role" %}</label>
+      <select id="id_role" name="role" required>
+        {% for value, label in roles %}
+          <option value="{{ value }}">{{ label }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="field">
+      <label for="id_department">{% trans "Department" %}</label>
+      <select id="id_department" name="department" required>
+        {% for department in departments %}
+          <option value="{{ department.pk }}">{{ department.name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="field">
+      <label for="id_branch">{% trans "Branch" %}</label>
+      <select id="id_branch" name="branch" required>
+        {% for branch in branches %}
+          <option value="{{ branch.pk }}">{{ branch.name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <button type="submit" class="btn btn--primary">{% trans "Create account" %}</button>
+  </form>
+{% endblock %}

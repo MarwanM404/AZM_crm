@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-11 20:00+0000\n"
+"POT-Creation-Date: 2026-09-11 20:34+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,7 +19,8 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: apps/accounts/forms.py:7 apps/customers/models.py:70
-#: apps/tickets/models.py:51 templates/customers/unlinked.html:19
+#: apps/tickets/models.py:51 templates/accounts/users.html:20
+#: templates/customers/unlinked.html:19
 msgid "Email"
 msgstr "Email"
 
@@ -67,24 +68,43 @@ msgstr "email address"
 msgid "full name"
 msgstr "full name"
 
+#: apps/accounts/views_admin.py:45
+msgid "An email address and a name are required."
+msgstr "An email address and a name are required."
+
+#: apps/accounts/views_admin.py:47
+msgid "Choose a role."
+msgstr "Choose a role."
+
+#: apps/accounts/views_admin.py:51 apps/accounts/views_admin.py:87
+msgid "Choose a department and a branch."
+msgstr "Choose a department and a branch."
+
+#: apps/accounts/views_admin.py:53
+msgid "An account with that email already exists."
+msgstr "An account with that email already exists."
+
+#: apps/accounts/views_admin.py:102
+msgid "You cannot deactivate your own account."
+msgstr "You cannot deactivate your own account."
+
 #: apps/customers/models.py:71
 msgid "Phone"
 msgstr "Phone"
 
-#: apps/customers/views.py:55 apps/tickets/views.py:237
+#: apps/customers/views.py:54 apps/tickets/views.py:237
 msgid "A note cannot be empty."
 msgstr "A note cannot be empty."
 
-#: apps/customers/views.py:72 apps/customers/views.py:150
+#: apps/customers/views.py:71 apps/customers/views.py:149
 msgid "A name is required."
 msgstr "A name is required."
 
-#: apps/customers/views.py:133
-#| msgid "No organization"
+#: apps/customers/views.py:132
 msgid "Unknown organization."
 msgstr "Unknown organization."
 
-#: apps/customers/views.py:139
+#: apps/customers/views.py:138
 msgid "Choose an organization, or name a new one."
 msgstr "Choose an organization, or name a new one."
 
@@ -92,7 +112,7 @@ msgstr "Choose an organization, or name a new one."
 msgid "Your name"
 msgstr "Your name"
 
-#: apps/intake/forms.py:21
+#: apps/intake/forms.py:21 templates/accounts/user_form.html:25
 msgid "Email address"
 msgstr "Email address"
 
@@ -225,27 +245,86 @@ msgstr "A reply cannot be empty."
 msgid "Sign in"
 msgstr "Sign in"
 
+#: templates/accounts/user_form.html:3 templates/accounts/user_form.html:8
+#: templates/accounts/user_form.html:12 templates/accounts/users.html:13
+msgid "Add account"
+msgstr "Add account"
+
+#: templates/accounts/user_form.html:6 templates/accounts/users.html:3
+#: templates/accounts/users.html:7 templates/shell.html:20
+msgid "Staff accounts"
+msgstr "Staff accounts"
+
+#: templates/accounts/user_form.html:14
+msgid "The account cannot sign in until a password is set for it."
+msgstr "The account cannot sign in until a password is set for it."
+
+#: templates/accounts/user_form.html:21
+#: templates/customers/contact_edit.html:11
+msgid "Full name"
+msgstr "Full name"
+
+#: templates/accounts/user_form.html:29 templates/accounts/users.html:21
+msgid "Role"
+msgstr "Role"
+
+#: templates/accounts/user_form.html:37
+msgid "Department"
+msgstr "Department"
+
+#: templates/accounts/user_form.html:45
+msgid "Branch"
+msgstr "Branch"
+
+#: templates/accounts/user_form.html:52
+msgid "Create account"
+msgstr "Create account"
+
+#: templates/accounts/users.html:9
+#| msgid "All tickets in %(department)s · %(branch)s"
+msgid "Accounts in %(department)s · %(branch)s"
+msgstr "Accounts in %(department)s · %(branch)s"
+
+#: templates/accounts/users.html:19 templates/customers/edit.html:11
+msgid "Name"
+msgstr "Name"
+
+#: templates/accounts/users.html:22
+#: templates/tickets/partials/queue_list.html:8 templates/tickets/queue.html:14
+msgid "Status"
+msgstr "Status"
+
+#: templates/accounts/users.html:32
+msgid "Active"
+msgstr "Active"
+
+#: templates/accounts/users.html:34
+msgid "Deactivated"
+msgstr "Deactivated"
+
+#: templates/accounts/users.html:41
+msgid "Deactivate"
+msgstr "Deactivate"
+
+#: templates/accounts/users.html:47
+#| msgid "No messages on this ticket yet."
+msgid "No staff accounts in this department yet."
+msgstr "No staff accounts in this department yet."
+
 #: templates/base.html:7 templates/shell.html:9
 msgid "AZM Support"
 msgstr "AZM Support"
 
 #: templates/customers/contact_edit.html:3
 #: templates/customers/contact_edit.html:6 templates/customers/detail.html:66
-#| msgid "Contact"
 msgid "Edit contact"
 msgstr "Edit contact"
-
-#: templates/customers/contact_edit.html:11
-#| msgid "full name"
-msgid "Full name"
-msgstr "Full name"
 
 #: templates/customers/contact_edit.html:15
 msgid "Preferred language"
 msgstr "Preferred language"
 
 #: templates/customers/contact_edit.html:21 templates/customers/edit.html:18
-#| msgid "Save note"
 msgid "Save"
 msgstr "Save"
 
@@ -267,7 +346,6 @@ msgid "Filter by contact"
 msgstr "Filter by contact"
 
 #: templates/customers/detail.html:34
-#| msgid "Contact"
 msgid "All contacts"
 msgstr "All contacts"
 
@@ -286,26 +364,18 @@ msgid "Save note"
 msgstr "Save note"
 
 #: templates/customers/detail.html:59 templates/customers/list.html:14
-#| msgid "Contact"
 msgid "Contacts"
 msgstr "Contacts"
 
 #: templates/customers/detail.html:69
-#| msgid "Not linked yet"
 msgid "No contacts linked yet."
 msgstr "No contacts linked yet."
 
 #: templates/customers/edit.html:3 templates/customers/edit.html:6
-#| msgid "Pending customer"
 msgid "Edit customer"
 msgstr "Edit customer"
 
-#: templates/customers/edit.html:11
-msgid "Name"
-msgstr "Name"
-
 #: templates/customers/edit.html:15
-#| msgid "name (Arabic)"
 msgid "Name (Arabic)"
 msgstr "Name (Arabic)"
 
@@ -321,12 +391,10 @@ msgstr "Organization"
 
 #: templates/customers/list.html:13
 #: templates/tickets/partials/queue_list.html:4
-#| msgid "Re: %(reference)s"
 msgid "Reference"
 msgstr "Reference"
 
 #: templates/customers/list.html:15
-#| msgid "Ticket queue"
 msgid "Tickets"
 msgstr "Tickets"
 
@@ -345,12 +413,10 @@ msgstr "Raised by %(name)s"
 
 #: templates/customers/partials/timeline.html:22
 #: templates/tickets/partials/ticket_pane.html:78
-#| msgid "Internal"
 msgid "Internal note"
 msgstr "Internal note"
 
 #: templates/customers/partials/timeline.html:30
-#| msgid "No messages on this ticket yet."
 msgid "Nothing has happened on this customer yet."
 msgstr "Nothing has happened on this customer yet."
 
@@ -383,7 +449,6 @@ msgid "Shared domain"
 msgstr "Shared domain"
 
 #: templates/customers/unlinked.html:21
-#| msgid "No organization"
 msgid "Link to organization"
 msgstr "Link to organization"
 
@@ -426,8 +491,7 @@ msgstr "Please quote this reference in any further correspondence."
 msgid "Ticket queue"
 msgstr "Ticket queue"
 
-#: templates/shell.html:34
-#| msgid "Sign in"
+#: templates/shell.html:38
 msgid "Sign out"
 msgstr "Sign out"
 
@@ -436,10 +500,6 @@ msgstr "Sign out"
 #: templates/tickets/queue.html:20
 msgid "Priority"
 msgstr "Priority"
-
-#: templates/tickets/partials/queue_list.html:8 templates/tickets/queue.html:14
-msgid "Status"
-msgstr "Status"
 
 #: templates/tickets/partials/queue_list.html:9
 #: templates/tickets/partials/ticket_pane.html:143
@@ -487,7 +547,6 @@ msgid "No messages on this ticket yet."
 msgstr "No messages on this ticket yet."
 
 #: templates/tickets/partials/ticket_pane.html:76
-#| msgid "Pending customer"
 msgid "Reply to customer"
 msgstr "Reply to customer"
 
@@ -524,7 +583,6 @@ msgid "Channel"
 msgstr "Channel"
 
 #: templates/tickets/partials/ticket_pane.html:147
-#| msgid "Open"
 msgid "Opened"
 msgstr "Opened"
 
@@ -542,7 +600,6 @@ msgid "Priority: Any"
 msgstr "Priority: Any"
 
 #: templates/tickets/queue.html:27
-#| msgid "Category"
 msgid "Category: Any"
 msgstr "Category: Any"
 
