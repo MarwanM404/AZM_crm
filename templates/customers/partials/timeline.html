@@ -1,0 +1,32 @@
+{% load i18n %}
+<div class="timeline">
+  {% for entry in entries %}
+    {% if entry.kind == 'ticket' %}
+      <article class="card timeline__entry">
+        <div class="timeline__meta">
+          <a class="ref" href="{% url 'tickets:detail' entry.obj.reference %}">{{ entry.obj.reference }}</a>
+          <span class="muted">{{ entry.at }}</span>
+        </div>
+        <div class="timeline__title">{{ entry.obj.subject }}</div>
+        <div class="pills">
+          <span class="pill pill--{{ entry.obj.priority|lower }}">{{ entry.obj.get_priority_display }}</span>
+          <span class="pill pill--{{ entry.obj.status|lower }}">{{ entry.obj.get_status_display }}</span>
+          <span class="muted">
+            {% blocktrans with name=entry.obj.contact.full_name %}Raised by {{ name }}{% endblocktrans %}
+          </span>
+        </div>
+      </article>
+    {% else %}
+      <article class="card timeline__entry timeline__entry--note">
+        <div class="timeline__meta">
+          <span class="timeline__tag">{% trans "Internal note" %}</span>
+          <span class="muted">{{ entry.obj.author.full_name }}</span>
+          <span class="muted">{{ entry.at }}</span>
+        </div>
+        <p class="msg__body">{{ entry.obj.body|linebreaksbr }}</p>
+      </article>
+    {% endif %}
+  {% empty %}
+    <p class="muted">{% trans "Nothing has happened on this customer yet." %}</p>
+  {% endfor %}
+</div>

@@ -1,0 +1,30 @@
+{% extends "shell.html" %}
+{% load i18n %}
+{% block title %}{% trans "Customers" %}{% endblock %}
+{% block main %}
+  <header class="page-head">
+    <h1>{% trans "Customers" %}</h1>
+    <p class="page-head__sub">{% trans "Organizations that have contacted support." %}</p>
+  </header>
+
+  <section class="card table">
+    <div class="table__row table__row--org table__row--head">
+      <span>{% trans "Organization" %}</span>
+      <span>{% trans "Reference" %}</span>
+      <span>{% trans "Contacts" %}</span>
+      <span>{% trans "Tickets" %}</span>
+    </div>
+    {% for organization in organizations %}
+      <div class="table__row table__row--org">
+        <span class="trunc"><a href="{% url 'customers:detail' organization.pk %}">{{ organization.name }}</a></span>
+        <span class="ref muted">{{ organization.reference }}</span>
+        <span class="muted">{{ organization.contacts.count }}</span>
+        <span class="muted">{{ organization.tickets.count }}</span>
+      </div>
+    {% empty %}
+      <div class="table__empty">
+        {% trans "No customer organizations yet. They appear here once a contact is linked to one." %}
+      </div>
+    {% endfor %}
+  </section>
+{% endblock %}

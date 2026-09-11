@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-11 19:43+0000\n"
+"POT-Creation-Date: 2026-09-11 20:00+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
 
 #: apps/accounts/forms.py:7 apps/customers/models.py:70
-#: apps/tickets/models.py:51
+#: apps/tickets/models.py:51 templates/customers/unlinked.html:19
 msgid "Email"
 msgstr "البريد الإلكتروني"
 
@@ -51,10 +51,12 @@ msgid "Administrator"
 msgstr "المسؤول"
 
 #: apps/accounts/models.py:78 apps/customers/models.py:53
+#: templates/customers/contact_edit.html:17
 msgid "Arabic"
 msgstr "العربية"
 
 #: apps/accounts/models.py:79 apps/customers/models.py:53
+#: templates/customers/contact_edit.html:18
 msgid "English"
 msgstr "الإنجليزية"
 
@@ -69,6 +71,23 @@ msgstr "الاسم الكامل"
 #: apps/customers/models.py:71
 msgid "Phone"
 msgstr "الهاتف"
+
+#: apps/customers/views.py:55 apps/tickets/views.py:237
+msgid "A note cannot be empty."
+msgstr "لا يمكن حفظ ملاحظة فارغة."
+
+#: apps/customers/views.py:72 apps/customers/views.py:150
+msgid "A name is required."
+msgstr "الاسم مطلوب."
+
+#: apps/customers/views.py:133
+#| msgid "No organization"
+msgid "Unknown organization."
+msgstr "بلا منشأة"
+
+#: apps/customers/views.py:139
+msgid "Choose an organization, or name a new one."
+msgstr "اختر منشأة، أو أدخل اسم منشأة جديدة."
 
 #: apps/intake/forms.py:20
 msgid "Your name"
@@ -181,30 +200,26 @@ msgstr "فشل"
 msgid "Not applicable"
 msgstr "لا ينطبق"
 
-#: apps/tickets/views.py:124
+#: apps/tickets/views.py:131
 msgid "This ticket is already assigned to another agent."
 msgstr "هذه التذكرة مُسنَدة بالفعل إلى موظف آخر."
 
-#: apps/tickets/views.py:142
+#: apps/tickets/views.py:150
 msgid "Unknown agent."
 msgstr "موظف غير معروف."
 
-#: apps/tickets/views.py:156
+#: apps/tickets/views.py:164
 #, python-format
 msgid "A ticket cannot move from %(current)s to %(requested)s."
 msgstr "لا يمكن نقل التذكرة من %(current)s إلى %(requested)s."
 
-#: apps/tickets/views.py:177
+#: apps/tickets/views.py:185
 msgid "Unknown category."
 msgstr "تصنيف غير معروف."
 
-#: apps/tickets/views.py:190
+#: apps/tickets/views.py:198
 msgid "A reply cannot be empty."
 msgstr "لا يمكن إرسال رد فارغ."
-
-#: apps/tickets/views.py:225
-msgid "A note cannot be empty."
-msgstr "لا يمكن حفظ ملاحظة فارغة."
 
 #: templates/accounts/sign_in.html:3 templates/accounts/sign_in.html:6
 #: templates/accounts/sign_in.html:17
@@ -214,6 +229,172 @@ msgstr "تسجيل الدخول"
 #: templates/base.html:7 templates/shell.html:9
 msgid "AZM Support"
 msgstr "دعم AZM"
+
+#: templates/customers/contact_edit.html:3
+#: templates/customers/contact_edit.html:6 templates/customers/detail.html:66
+#| msgid "Contact"
+msgid "Edit contact"
+msgstr "جهة الاتصال"
+
+#: templates/customers/contact_edit.html:11
+#| msgid "full name"
+msgid "Full name"
+msgstr "الاسم الكامل"
+
+#: templates/customers/contact_edit.html:15
+msgid "Preferred language"
+msgstr "اللغة المفضّلة"
+
+#: templates/customers/contact_edit.html:21 templates/customers/edit.html:18
+#| msgid "Save note"
+msgid "Save"
+msgstr "حفظ الملاحظة"
+
+#: templates/customers/detail.html:6 templates/customers/list.html:3
+#: templates/customers/list.html:6 templates/shell.html:15
+msgid "Customers"
+msgstr "العملاء"
+
+#: templates/customers/detail.html:19
+msgid "Edit"
+msgstr "تعديل"
+
+#: templates/customers/detail.html:23
+msgid "Delete"
+msgstr "حذف"
+
+#: templates/customers/detail.html:33
+msgid "Filter by contact"
+msgstr "التصفية حسب جهة الاتصال"
+
+#: templates/customers/detail.html:34
+#| msgid "Contact"
+msgid "All contacts"
+msgstr "جهة الاتصال"
+
+#: templates/customers/detail.html:48
+msgid "Add a note about this customer…"
+msgstr "أضف ملاحظة عن هذا العميل…"
+
+#: templates/customers/detail.html:50
+#: templates/tickets/partials/ticket_pane.html:97
+msgid "Staff only. The customer never sees this."
+msgstr "للموظفين فقط. لا يراها العميل إطلاقًا."
+
+#: templates/customers/detail.html:51
+#: templates/tickets/partials/ticket_pane.html:98
+msgid "Save note"
+msgstr "حفظ الملاحظة"
+
+#: templates/customers/detail.html:59 templates/customers/list.html:14
+#| msgid "Contact"
+msgid "Contacts"
+msgstr "جهات الاتصال"
+
+#: templates/customers/detail.html:69
+#| msgid "Not linked yet"
+msgid "No contacts linked yet."
+msgstr "غير مرتبطة بعد"
+
+#: templates/customers/edit.html:3 templates/customers/edit.html:6
+#| msgid "Pending customer"
+msgid "Edit customer"
+msgstr "بانتظار العميل"
+
+#: templates/customers/edit.html:11
+msgid "Name"
+msgstr "الاسم"
+
+#: templates/customers/edit.html:15
+#| msgid "name (Arabic)"
+msgid "Name (Arabic)"
+msgstr "الاسم (بالعربية)"
+
+#: templates/customers/list.html:7
+msgid "Organizations that have contacted support."
+msgstr "المنشآت التي تواصلت مع الدعم."
+
+#: templates/customers/list.html:12 templates/customers/unlinked.html:41
+#: templates/tickets/partials/queue_list.html:6
+#: templates/tickets/partials/ticket_pane.html:106
+msgid "Organization"
+msgstr "المنشأة"
+
+#: templates/customers/list.html:13
+#: templates/tickets/partials/queue_list.html:4
+#| msgid "Re: %(reference)s"
+msgid "Reference"
+msgstr "رد: %(reference)s"
+
+#: templates/customers/list.html:15
+#| msgid "Ticket queue"
+msgid "Tickets"
+msgstr "قائمة التذاكر"
+
+#: templates/customers/list.html:26
+msgid ""
+"No customer organizations yet. They appear here once a contact is linked to "
+"one."
+msgstr "لا توجد منشآت عملاء بعد. تظهر هنا بمجرد ربط جهة اتصال بإحداها."
+
+#: templates/customers/partials/timeline.html:15
+#, python-format
+msgid "Raised by %(name)s"
+msgstr "بواسطة %(name)s"
+
+#: templates/customers/partials/timeline.html:22
+#: templates/tickets/partials/ticket_pane.html:78
+#| msgid "Internal"
+msgid "Internal note"
+msgstr "داخلي"
+
+#: templates/customers/partials/timeline.html:30
+#| msgid "No messages on this ticket yet."
+msgid "Nothing has happened on this customer yet."
+msgstr "لا توجد رسائل على هذه التذكرة بعد."
+
+#: templates/customers/unlinked.html:3 templates/customers/unlinked.html:6
+#: templates/shell.html:17
+msgid "Unlinked contacts"
+msgstr "جهات اتصال غير مرتبطة"
+
+#: templates/customers/unlinked.html:7
+msgid "People who contacted us without a recognised employer."
+msgstr "أشخاص تواصلوا معنا دون جهة عمل معروفة."
+
+#: templates/customers/unlinked.html:12
+msgid ""
+"A request form cannot tell us who someone works for, so a new contact starts "
+"with no organization. Contacts sharing an email domain are shown together as "
+"a hint — nothing is linked automatically."
+msgstr "لا يمكن لنموذج الطلب أن يخبرنا بجهة عمل الشخص، لذا تبدأ جهة الاتصال الجديدة بلا منشأة. تُعرض جهات الاتصال التي تتشارك نطاق البريد الإلكتروني معًا كتلميح — ولا يتم الربط تلقائيًا."
+
+#: templates/customers/unlinked.html:18
+#: templates/tickets/partials/ticket_pane.html:115
+msgid "Contact"
+msgstr "جهة الاتصال"
+
+#: templates/customers/unlinked.html:20
+msgid "Shared domain"
+msgstr "نطاق مشترك"
+
+#: templates/customers/unlinked.html:21
+#| msgid "No organization"
+msgid "Link to organization"
+msgstr "بلا منشأة"
+
+#: templates/customers/unlinked.html:42
+msgid "Choose…"
+msgstr "اختر…"
+
+#: templates/customers/unlinked.html:47
+msgid "Link"
+msgstr "ربط"
+
+#: templates/customers/unlinked.html:53
+msgid ""
+"Every contact is linked to an organization. Nothing needs attention here."
+msgstr "كل جهات الاتصال مرتبطة بمنشآت. لا يوجد ما يتطلب انتباهك هنا."
 
 #: templates/intake/form.html:3 templates/intake/form.html:6
 msgid "Submit a request"
@@ -240,22 +421,10 @@ msgstr "يرجى ذكر هذا الرقم في أي مراسلات لاحقة."
 msgid "Ticket queue"
 msgstr "قائمة التذاكر"
 
-#: templates/shell.html:30
-#, fuzzy
+#: templates/shell.html:34
 #| msgid "Sign in"
 msgid "Sign out"
 msgstr "تسجيل الدخول"
-
-#: templates/tickets/partials/queue_list.html:4
-#, fuzzy
-#| msgid "Re: %(reference)s"
-msgid "Reference"
-msgstr "رد: %(reference)s"
-
-#: templates/tickets/partials/queue_list.html:6
-#: templates/tickets/partials/ticket_pane.html:106
-msgid "Organization"
-msgstr "المنشأة"
 
 #: templates/tickets/partials/queue_list.html:7
 #: templates/tickets/partials/ticket_pane.html:134
@@ -289,12 +458,12 @@ msgstr "لا توجد تذاكر مطابقة لهذه المرشحات."
 #, python-format
 msgid "Showing %(counter)s ticket"
 msgid_plural "Showing %(counter)s tickets"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
-msgstr[5] ""
+msgstr[0] "لا توجد تذاكر"
+msgstr[1] "عرض تذكرة واحدة"
+msgstr[2] "عرض تذكرتين"
+msgstr[3] "عرض %(counter)s تذاكر"
+msgstr[4] "عرض %(counter)s تذكرة"
+msgstr[5] "عرض %(counter)s تذكرة"
 
 #: templates/tickets/partials/ticket_pane.html:40
 msgid "Internal note — not visible to the customer"
@@ -317,16 +486,9 @@ msgid "No messages on this ticket yet."
 msgstr "لا توجد رسائل على هذه التذكرة بعد."
 
 #: templates/tickets/partials/ticket_pane.html:76
-#, fuzzy
 #| msgid "Pending customer"
 msgid "Reply to customer"
 msgstr "بانتظار العميل"
-
-#: templates/tickets/partials/ticket_pane.html:78
-#, fuzzy
-#| msgid "Internal"
-msgid "Internal note"
-msgstr "داخلي"
 
 #: templates/tickets/partials/ticket_pane.html:84
 msgid "Write your reply…"
@@ -344,21 +506,9 @@ msgstr "إرسال الرد"
 msgid "Write a note for the team…"
 msgstr "اكتب ملاحظة لفريق العمل…"
 
-#: templates/tickets/partials/ticket_pane.html:97
-msgid "Staff only. The customer never sees this."
-msgstr "للموظفين فقط. لا يراها العميل إطلاقًا."
-
-#: templates/tickets/partials/ticket_pane.html:98
-msgid "Save note"
-msgstr "حفظ الملاحظة"
-
 #: templates/tickets/partials/ticket_pane.html:110
 msgid "Not linked yet"
 msgstr "غير مرتبطة بعد"
-
-#: templates/tickets/partials/ticket_pane.html:115
-msgid "Contact"
-msgstr "جهة الاتصال"
 
 #: templates/tickets/partials/ticket_pane.html:123
 msgid "Properties"
@@ -373,7 +523,6 @@ msgid "Channel"
 msgstr "القناة"
 
 #: templates/tickets/partials/ticket_pane.html:147
-#, fuzzy
 #| msgid "Open"
 msgid "Opened"
 msgstr "مفتوحة"
@@ -392,7 +541,6 @@ msgid "Priority: Any"
 msgstr "الأولوية: الكل"
 
 #: templates/tickets/queue.html:27
-#, fuzzy
 #| msgid "Category"
 msgid "Category: Any"
 msgstr "التصنيف"

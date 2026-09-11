@@ -1,0 +1,23 @@
+{% extends "shell.html" %}
+{% load i18n %}
+{% block title %}{% trans "Edit contact" %}{% endblock %}
+{% block main %}
+  <header class="page-head">
+    <h1>{% trans "Edit contact" %}</h1>
+  </header>
+  <form method="post" class="card side-card form-card">
+    {% csrf_token %}
+    <div class="field">
+      <label for="id_full_name">{% trans "Full name" %}</label>
+      <input id="id_full_name" type="text" name="full_name" value="{{ contact.full_name }}" required>
+    </div>
+    <div class="field">
+      <label for="id_language">{% trans "Preferred language" %}</label>
+      <select id="id_language" name="preferred_language">
+        <option value="ar" {% if contact.preferred_language == 'ar' %}selected{% endif %}>{% trans "Arabic" %}</option>
+        <option value="en" {% if contact.preferred_language == 'en' %}selected{% endif %}>{% trans "English" %}</option>
+      </select>
+    </div>
+    <button type="submit" class="btn btn--primary">{% trans "Save" %}</button>
+  </form>
+{% endblock %}

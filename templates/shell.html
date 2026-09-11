@@ -11,6 +11,10 @@
     <nav class="nav">
       <a class="nav__item {% if section == 'queue' %}nav__item--on{% endif %}"
          href="{% url 'tickets:queue' %}">{% trans "Ticket queue" %}</a>
+      <a class="nav__item {% if section == 'customers' %}nav__item--on{% endif %}"
+         href="{% url 'customers:list' %}">{% trans "Customers" %}</a>
+      <a class="nav__item {% if section == 'unlinked' %}nav__item--on{% endif %}"
+         href="{% url 'customers:unlinked' %}">{% trans "Unlinked contacts" %}</a>
     </nav>
     <div class="shell__foot">
       {% get_current_language as CURRENT_LANGUAGE %}

@@ -1,0 +1,20 @@
+{% extends "shell.html" %}
+{% load i18n %}
+{% block title %}{% trans "Edit customer" %}{% endblock %}
+{% block main %}
+  <header class="page-head">
+    <h1>{% trans "Edit customer" %}</h1>
+  </header>
+  <form method="post" class="card side-card form-card">
+    {% csrf_token %}
+    <div class="field">
+      <label for="id_name">{% trans "Name" %}</label>
+      <input id="id_name" type="text" name="name" value="{{ organization.name }}" required>
+    </div>
+    <div class="field">
+      <label for="id_name_ar">{% trans "Name (Arabic)" %}</label>
+      <input id="id_name_ar" type="text" name="name_ar" value="{{ organization.name_ar }}">
+    </div>
+    <button type="submit" class="btn btn--primary">{% trans "Save" %}</button>
+  </form>
+{% endblock %}

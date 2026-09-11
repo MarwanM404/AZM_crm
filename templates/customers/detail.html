@@ -1,0 +1,74 @@
+{% extends "shell.html" %}
+{% load i18n %}
+{% block title %}{{ organization.name }}{% endblock %}
+{% block main %}
+  <nav class="crumbs">
+    <a href="{% url 'customers:list' %}">{% trans "Customers" %}</a>
+    <span class="crumbs__sep">/</span>
+    <span>{{ organization.name }}</span>
+  </nav>
+
+  <header class="page-head page-head--split">
+    <div>
+      <h1>{{ organization.name }}</h1>
+      <p class="page-head__sub">
+        <span class="ref">{{ organization.reference }}</span>
+      </p>
+    </div>
+    <div class="actions">
+      <a class="btn" href="{% url 'customers:edit' organization.pk %}">{% trans "Edit" %}</a>
+      {% if request.user.role == 'ADMINISTRATOR' %}
+        <form method="post" action="{% url 'customers:delete' organization.pk %}">
+          {% csrf_token %}
+          <button type="submit" class="btn">{% trans "Delete" %}</button>
+        </form>
+      {% endif %}
+    </div>
+  </header>
+
+  <div class="detail">
+    <section class="detail__thread">
+      <form class="filters" hx-get="{% url 'customers:detail' organization.pk %}"
+            hx-target="#timeline" hx-trigger="change">
+        <select name="contact" aria-label="{% trans 'Filter by contact' %}">
+          <option value="">{% trans "All contacts" %}</option>
+          {% for contact in contacts %}
+            <option value="{{ contact.pk }}" {% if narrowed_to == contact %}selected{% endif %}>{{ contact.full_name }}</option>
+          {% endfor %}
+        </select>
+      </form>
+
+      <div id="timeline">
+        {% include "customers/partials/timeline.html" %}
+      </div>
+
+      <form class="card composer" method="post" action="{% url 'customers:note' organization.pk %}">
+        {% csrf_token %}
+        <div class="composer__form">
+          <textarea name="body" rows="3" placeholder="{% trans 'Add a note about this customer…' %}"></textarea>
+          <div class="composer__foot">
+            <span class="muted">{% trans "Staff only. The customer never sees this." %}</span>
+            <button type="submit" class="btn">{% trans "Save note" %}</button>
+          </div>
+        </div>
+      </form>
+    </section>
+
+    <aside class="detail__side">
+      <div class="card side-card">
+        <div class="label">{% trans "Contacts" %}</div>
+        {% for contact in contacts %}
+          <div class="side-card__contact">
+            <div class="side-card__strong">{{ contact.full_name }}</div>
+            {% for detail in contact.details.all %}
+              <div class="ltr muted">{{ detail.value }}</div>
+            {% endfor %}
+            <a class="linkish" href="{% url 'customers:edit_contact' contact.pk %}">{% trans "Edit contact" %}</a>
+          </div>
+        {% empty %}
+          <p class="muted">{% trans "No contacts linked yet." %}</p>
+        {% endfor %}
+      </div>
+    </aside>
+  </div>
+{% endblock %}

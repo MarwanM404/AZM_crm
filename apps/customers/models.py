@@ -89,6 +89,14 @@ class ContactDetail(ScopedSoftDeleteModel):
             self.value = self.value.strip().lower()
         super().save(*args, **kwargs)
 
+    @property
+    def domain(self):
+        """The email domain, used to group unlinked contacts who may work together (FR-041).
+        A hint for staff only — the system never links on it."""
+        if self.kind == self.Kind.EMAIL and "@" in self.value:
+            return self.value.split("@", 1)[1]
+        return ""
+
     def __str__(self):
         return self.value
 

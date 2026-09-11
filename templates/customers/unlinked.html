@@ -1,0 +1,57 @@
+{% extends "shell.html" %}
+{% load i18n %}
+{% block title %}{% trans "Unlinked contacts" %}{% endblock %}
+{% block main %}
+  <header class="page-head">
+    <h1>{% trans "Unlinked contacts" %}</h1>
+    <p class="page-head__sub">{% trans "People who contacted us without a recognised employer." %}</p>
+  </header>
+
+  <div class="notice">
+    <p>
+      {% trans "A request form cannot tell us who someone works for, so a new contact starts with no organization. Contacts sharing an email domain are shown together as a hint — nothing is linked automatically." %}
+    </p>
+  </div>
+
+  <section class="card table">
+    <div class="table__row table__row--unlinked table__row--head">
+      <span>{% trans "Contact" %}</span>
+      <span>{% trans "Email" %}</span>
+      <span>{% trans "Shared domain" %}</span>
+      <span>{% trans "Link to organization" %}</span>
+    </div>
+    {% for contact in contacts %}
+      <div class="table__row table__row--unlinked">
+        <span class="trunc">{{ contact.full_name }}</span>
+        <span>
+          {% for detail in contact.details.all %}
+            <span class="ltr trunc">{{ detail.value }}</span>
+          {% endfor %}
+        </span>
+        <span>
+          {% for detail in contact.details.all %}
+            {% if detail.domain in shared_domains %}
+              <span class="pill pill--new ltr">{{ detail.domain }}</span>
+            {% endif %}
+          {% endfor %}
+        </span>
+        <span>
+          <form method="post" action="{% url 'customers:link_contact' contact.pk %}" class="link-form">
+            {% csrf_token %}
+            <select name="organization" aria-label="{% trans 'Organization' %}">
+              <option value="">{% trans "Choose…" %}</option>
+              {% for organization in organizations %}
+                <option value="{{ organization.pk }}">{{ organization.name }}</option>
+              {% endfor %}
+            </select>
+            <button type="submit" class="btn btn--small">{% trans "Link" %}</button>
+          </form>
+        </span>
+      </div>
+    {% empty %}
+      <div class="table__empty">
+        {% trans "Every contact is linked to an organization. Nothing needs attention here." %}
+      </div>
+    {% endfor %}
+  </section>
+{% endblock %}

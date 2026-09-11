@@ -195,22 +195,22 @@ see both of its tickets and a note on one timeline.
 
 ### Tests for User Story 3
 
-- [ ] T083 [P] [US3] Write `apps/customers/tests/test_organization_views.py` covering the customer endpoints in [contracts/http-endpoints.md](contracts/http-endpoints.md)
-- [ ] T084 [P] [US3] Write `apps/customers/tests/test_timeline.py` asserting the organization timeline combines tickets from every contact with notes in reverse chronological order, and narrows correctly to one contact
-- [ ] T085 [P] [US3] Write `apps/customers/tests/test_contact_linking.py` asserting linking an unlinked contact moves its tickets onto the organization timeline and is audited
-- [ ] T086 [P] [US3] Write `apps/customers/tests/test_contact_move.py` asserting moving a contact between organizations leaves each existing ticket's own organization reference unchanged
-- [ ] T087 [P] [US3] Write `apps/customers/tests/test_soft_delete.py` asserting a deleted organization disappears from listings, stays recoverable, is audited, and does not block reuse of its contacts' email addresses
-- [ ] T088 [P] [US3] Write `apps/customers/tests/test_empty_states.py` asserting an organization with no tickets renders an explanatory empty timeline
+- [X] T083 [P] [US3] Write `apps/customers/tests/test_organization_views.py` covering the customer endpoints in [contracts/http-endpoints.md](contracts/http-endpoints.md)
+- [X] T084 [P] [US3] Write `apps/customers/tests/test_timeline.py` asserting the organization timeline combines tickets from every contact with notes in reverse chronological order, and narrows correctly to one contact
+- [X] T085 [P] [US3] Write `apps/customers/tests/test_contact_linking.py` asserting linking an unlinked contact moves its tickets onto the organization timeline and is audited
+- [X] T086 [P] [US3] Write `apps/customers/tests/test_contact_move.py` asserting moving a contact between organizations leaves each existing ticket's own organization reference unchanged
+- [X] T087 [P] [US3] Write `apps/customers/tests/test_soft_delete.py` asserting a deleted organization disappears from listings, stays recoverable, is audited, and does not block reuse of its contacts' email addresses
+- [X] T088 [P] [US3] Write `apps/customers/tests/test_empty_states.py` asserting an organization with no tickets renders an explanatory empty timeline
 
 ### Implementation for User Story 3
 
-- [ ] T089 [US3] Implement `Note` in `apps/customers/models.py`, scoped and soft-deletable, and generate its migration
-- [ ] T090 [US3] Implement the timeline aggregation service in `apps/customers/services/timeline.py`, paginated and indexed for the SC-009 volumes
-- [ ] T091 [US3] Implement organization list, detail, timeline, edit, and note endpoints in `apps/customers/views.py`
-- [ ] T092 [US3] Implement the unlinked contacts list and the contact link endpoint in `apps/customers/views.py`
-- [ ] T093 [US3] Implement contact and contact-detail editing, and administrator soft deletion, in `apps/customers/views.py`
-- [ ] T094 [P] [US3] Create `templates/customers/list.html`, `detail.html`, `unlinked.html`, and `templates/customers/partials/timeline.html`
-- [ ] T095 [US3] Register `Note` for audit, add it to the invariant registries, then extract and compile translations for this phase
+- [X] T089 [US3] Implement `Note` in `apps/customers/models.py`, scoped and soft-deletable, and generate its migration
+- [X] T090 [US3] Implement the timeline aggregation service in `apps/customers/services/timeline.py`, paginated and indexed for the SC-009 volumes
+- [X] T091 [US3] Implement organization list, detail, timeline, edit, and note endpoints in `apps/customers/views.py`
+- [X] T092 [US3] Implement the unlinked contacts list and the contact link endpoint in `apps/customers/views.py`
+- [X] T093 [US3] Implement contact and contact-detail editing, and administrator soft deletion, in `apps/customers/views.py`
+- [X] T094 [P] [US3] Create `templates/customers/list.html`, `detail.html`, `unlinked.html`, and `templates/customers/partials/timeline.html`
+- [X] T095 [US3] Register `Note` for audit, add it to the invariant registries, then extract and compile translations for this phase
 
 **Checkpoint**: Quickstart scenario 6 passes. Context is available to agents.
 
