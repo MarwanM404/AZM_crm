@@ -172,14 +172,14 @@ These block Phase 0 exit. Each becomes a short architecture decision record in
 
 | # | Decision | Notes |
 |---|----------|-------|
-| 1 | Web framework | Django (batteries, admin, i18n, auth) vs FastAPI (lighter, API-first) |
-| 2 | Database engine | Constitution requires relational with enforced foreign keys |
-| 3 | Frontend approach | Server-rendered templates vs separate SPA against the API |
-| 4 | Tenancy model | How department and branch scope rows, and whether branches ever share data |
-| 5 | Background jobs | Required by SLA timers, escalation, and channel polling |
+| 1 | Web framework | **Decided**: Django. See [ADR-001](decisions/001-web-framework.md) |
+| 2 | Database engine | **Proposed**: PostgreSQL. See [ADR-002](decisions/002-database.md) |
+| 3 | Frontend approach | **Decided**: server-rendered Django with htmx and Alpine.js. See [ADR-003](decisions/003-frontend-approach.md) |
+| 4 | Tenancy model | **Proposed**: department and branch columns with explicit scoping. See [ADR-004](decisions/004-tenancy-scoping.md). Open: do branches ever share data? |
+| 5 | Background jobs | **Proposed**: Celery with Redis. See [ADR-005](decisions/005-background-jobs.md) |
 | 6 | WhatsApp and SMS providers | Determines Phase 5 cost, effort, and approval lead time |
 | 7 | AI provider and data policy | What customer data may leave the system, and under what contract |
-| 8 | Deployment target | Drives configuration, secret management, and CI delivery |
+| 8 | Deployment target | **Open**. Drives configuration, secret management, and CI delivery. See [ADR-006](decisions/006-deployment-target.md) |
 
 ## Unknowns to confirm with stakeholders
 
