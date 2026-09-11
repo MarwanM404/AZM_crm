@@ -41,10 +41,20 @@ celery -A config beat -l info
 ## Tests
 
 ```bash
-pytest                 # full suite
+pytest                 # full suite, including the browser checks
+pytest -m "not e2e"    # skip the browser checks
 ruff check . && ruff format --check .
 mypy .
 python manage.py makemigrations --check --dry-run   # fails if a model change has no migration
+```
+
+The `e2e` tests drive a real Chromium through Playwright to verify right-to-left layout —
+that the sidebar actually mirrors, that no page overflows sideways, and that the internal
+note's warning edge lands on the reading-start side. Those defects are invisible to unit
+tests, which can only confirm that `dir="rtl"` is present. Install the browser once with:
+
+```bash
+python -m playwright install chromium
 ```
 
 ## A note on this sandbox's environment

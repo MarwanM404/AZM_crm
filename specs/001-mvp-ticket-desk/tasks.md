@@ -279,21 +279,21 @@ and control renders in Arabic, right to left.
 
 ### Tests for User Story 6
 
-- [ ] T115 [P] [US6] Extend `tests/test_i18n_completeness.py` to fail on any untranslated user-facing string across every template shipped so far
-- [ ] T116 [P] [US6] Write `tests/e2e/test_rtl_layout.py` using Playwright to assert `dir="rtl"` and correct layout on the queue, ticket detail, customer detail, and intake form
-- [ ] T117 [P] [US6] Write `apps/accounts/tests/test_language_persistence.py` asserting the language choice survives reload and subsequent sign-ins
-- [ ] T118 [P] [US6] Write `apps/core/tests/test_formatting.py` asserting dates, times, and numbers format per the active language
-- [ ] T119 [P] [US6] Write `apps/messaging/tests/test_email_language.py` asserting outbound email uses the contact's recorded language, defaulting to Arabic when unknown
-- [ ] T120 [P] [US6] Write `apps/tickets/tests/test_mixed_script.py` asserting Arabic ticket content renders correctly inside the English interface
+- [X] T115 [P] [US6] Extend `tests/test_i18n_completeness.py` to fail on any untranslated user-facing string across every template shipped so far
+- [X] T116 [P] [US6] `tests/e2e/test_rtl_layout.py` drives a real Chromium and measures rendered geometry — the sidebar mirrors, no page overflows sideways, the internal note's edge is on the inline-start, references stay LTR. Both layout assertions were proven to fail against a deliberately introduced physical `left`/`border-left` rule
+- [X] T117 [P] [US6] Write `apps/accounts/tests/test_language_persistence.py` asserting the language choice survives reload and subsequent sign-ins
+- [X] T118 [P] [US6] Write `apps/core/tests/test_formatting.py` asserting dates, times, and numbers format per the active language
+- [X] T119 [P] [US6] Write `apps/messaging/tests/test_email_language.py` asserting outbound email uses the contact's recorded language, defaulting to Arabic when unknown
+- [X] T120 [P] [US6] Write `apps/tickets/tests/test_mixed_script.py` asserting Arabic ticket content renders correctly inside the English interface
 
 ### Implementation for User Story 6
 
-- [ ] T121 [US6] Complete the Arabic translation catalog in `locale/ar/LC_MESSAGES/django.po` for every string in the MVP, including plural forms
-- [ ] T122 [US6] Complete the English catalog in `locale/en/LC_MESSAGES/django.po`
-- [ ] T123 [US6] Fix every right-to-left layout defect found by T116 in `static/css/base.css` and the affected templates, using logical properties only
-- [ ] T124 [US6] Implement locale-aware date, time, and number formatting helpers in `apps/core/templatetags/formatting.py`
-- [ ] T125 [US6] Implement recipient-language selection for outbound email in `apps/messaging/services/outbound.py`
-- [ ] T126 [P] [US6] Add Arabic content to the `seed_demo` fixtures in `apps/core/management/commands/seed_demo.py` so encoding and direction problems surface in every test run
+- [X] T121 [US6] Complete the Arabic translation catalog in `locale/ar/LC_MESSAGES/django.po` for every string in the MVP, including plural forms
+- [X] T122 [US6] Complete the English catalog in `locale/en/LC_MESSAGES/django.po`
+- [X] T123 [US6] Fix every right-to-left layout defect found by T116 in `static/css/base.css` and the affected templates, using logical properties only
+- [X] T124 [US6] Implement locale-aware date, time, and number formatting helpers in `apps/core/templatetags/formatting.py`
+- [X] T125 [US6] Implement recipient-language selection for outbound email in `apps/messaging/services/outbound.py`
+- [X] T126 [P] [US6] Add Arabic content to the `seed_demo` fixtures in `apps/core/management/commands/seed_demo.py` so encoding and direction problems surface in every test run
 
 **Checkpoint**: Quickstart scenario 10 passes. SC-007 is verifiable rather than an opinion.
 

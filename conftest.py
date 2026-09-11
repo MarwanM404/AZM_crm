@@ -154,3 +154,20 @@ def other_agent(db, department, branch):
         department=department,
         branch=branch,
     )
+
+
+@pytest.fixture
+def english_agent_client(db, agent):
+    """An agent whose interface language is English.
+
+    The default User language is Arabic, which is correct for this business — so any test
+    asserting English interface copy must say so, rather than depending on the preference
+    not being applied. Tests about behaviour rather than wording should prefer `agent_client`.
+    """
+    from django.test import Client
+
+    agent.language = "en"
+    agent.save(update_fields=["language"])
+    own = Client()
+    own.force_login(agent)
+    return own

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-11 20:53+0000\n"
+"POT-Creation-Date: 2026-09-11 22:06+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -137,12 +137,12 @@ msgstr "Description"
 msgid "Submission rejected."
 msgstr "Submission rejected."
 
-#: apps/messaging/tasks.py:45
+#: apps/messaging/tasks.py:46
 #, python-format
 msgid "Your request has been received: %(reference)s"
 msgstr "Your request has been received: %(reference)s"
 
-#: apps/messaging/tasks.py:104
+#: apps/messaging/tasks.py:105
 #, python-format
 msgid "Re: %(reference)s"
 msgstr "Re: %(reference)s"

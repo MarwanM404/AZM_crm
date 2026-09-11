@@ -60,6 +60,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "django_htmx.middleware.HtmxMiddleware",
     "auditlog.middleware.AuditlogMiddleware",  # sets the audit actor from request.user
+    "apps.core.middleware.UserLanguageMiddleware",  # user's stored language beats the header
     "apps.core.middleware.LoginRequiredMiddleware",  # deny-by-default; last, sees resolved user
 ]
 

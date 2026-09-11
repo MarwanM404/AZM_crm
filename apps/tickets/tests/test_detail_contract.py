@@ -50,11 +50,13 @@ def test_detail_shows_both_public_and_internal_messages_to_staff(agent_client, a
 
 
 @pytest.mark.django_db
-def test_detail_shows_ticket_history(agent_client, agent, ticket):
+def test_detail_shows_ticket_history(english_agent_client, agent, ticket):
     from apps.tickets.models import Ticket
     from apps.tickets.services.lifecycle import apply_transition
 
     apply_transition(ticket, Ticket.Status.OPEN, actor=agent)
 
-    body = agent_client.get(reverse("tickets:detail", args=[ticket.reference])).content.decode()
-    assert "Open" in body
+    body = english_agent_client.get(
+        reverse("tickets:detail", args=[ticket.reference])
+    ).content.decode()
+    assert "Open" in body  # the English status label; the default account language is Arabic

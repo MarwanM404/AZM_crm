@@ -27,3 +27,6 @@ DJANGO_SETTINGS_MODULE = "config.settings.test"
 python_files = ["test_*.py"]
 testpaths = ["apps", "tests"]
 addopts = "-ra"
+markers = [
+    "e2e: browser-based checks needing Playwright's browsers (run: -m 'not e2e' to skip)",
+]

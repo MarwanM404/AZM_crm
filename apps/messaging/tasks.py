@@ -98,7 +98,9 @@ def _deliver_reply(task, message_id):
         message.save(update_fields=["delivery_status", "delivery_error"])
         return
 
-    language = message.ticket.contact.preferred_language
+    from apps.messaging.services.outbound import language_for_contact
+
+    language = language_for_contact(message.ticket.contact)
     with translation.override(language):
         subject = translation.gettext("Re: %(reference)s") % {"reference": message.ticket.reference}
         body = render_to_string(
