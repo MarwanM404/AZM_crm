@@ -103,9 +103,13 @@ def _deliver_reply(task, message_id):
     language = language_for_contact(message.ticket.contact)
     with translation.override(language):
         subject = translation.gettext("Re: %(reference)s") % {"reference": message.ticket.reference}
+        from apps.tickets.services.visibility import customer_facing_context
+
+        # The context a customer-facing template may see is built in one place and cannot
+        # contain an internal message (FR-015).
         body = render_to_string(
             f"messaging/email/reply.{language}.txt",
-            {"reference": message.ticket.reference, "body": message.body},
+            customer_facing_context(message.ticket, body=message.body),
         )
 
     try:

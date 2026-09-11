@@ -309,17 +309,17 @@ customer-facing output including quoted email history.
 
 ### Tests for User Story 7
 
-- [ ] T127 [P] [US7] Extend `tests/test_internal_visibility.py` to enumerate every customer-facing output path and assert none can emit an internal message
-- [ ] T128 [P] [US7] Write `apps/tickets/tests/test_internal_note_endpoint.py` covering the internal note endpoint in [contracts/http-endpoints.md](contracts/http-endpoints.md)
-- [ ] T129 [P] [US7] Write `apps/messaging/tests/test_quoted_history.py` asserting quoted history in outbound email contains public messages only
-- [ ] T130 [P] [US7] Write `apps/tickets/tests/test_thread_distinction.py` asserting internal and public messages are unambiguously distinct in the rendered thread
+- [X] T127 [P] [US7] Extend `tests/test_internal_visibility.py` to enumerate every customer-facing output path and assert none can emit an internal message
+- [X] T128 [P] [US7] Write `apps/tickets/tests/test_internal_note_endpoint.py` covering the internal note endpoint in [contracts/http-endpoints.md](contracts/http-endpoints.md)
+- [X] T129 [P] [US7] `apps/messaging/tests/test_quoted_history.py` — the MVP reply template does not quote history, so the guard is structural: the context a customer-facing template receives cannot reach an internal message. A test renders a template that DOES quote and stays clean; its counterpart shows the same template leaking when handed the ticket object instead
+- [X] T130 [P] [US7] Write `apps/tickets/tests/test_thread_distinction.py` asserting internal and public messages are unambiguously distinct in the rendered thread
 
 ### Implementation for User Story 7
 
-- [ ] T131 [US7] Implement the internal note endpoint in `apps/tickets/views.py`
-- [ ] T132 [US7] Implement a single customer-facing message filter in `apps/tickets/services/visibility.py` and route every customer-facing path through it
-- [ ] T133 [P] [US7] Update `templates/tickets/partials/thread.html` to render internal messages distinctly, using more than colour alone
-- [ ] T134 [US7] Extract and compile translations for this phase into `locale/ar/LC_MESSAGES/django.po` and `locale/en/LC_MESSAGES/django.po`
+- [X] T131 [US7] Implement the internal note endpoint in `apps/tickets/views.py`
+- [X] T132 [US7] Implement a single customer-facing message filter in `apps/tickets/services/visibility.py` and route every customer-facing path through it
+- [X] T133 [P] [US7] Update `templates/tickets/partials/thread.html` to render internal messages distinctly, using more than colour alone
+- [X] T134 [US7] Extract and compile translations for this phase into `locale/ar/LC_MESSAGES/django.po` and `locale/en/LC_MESSAGES/django.po`
 
 **Checkpoint**: The privacy boundary live chat will depend on is in place and proven.
 
