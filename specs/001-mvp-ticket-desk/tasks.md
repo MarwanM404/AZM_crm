@@ -41,18 +41,18 @@ written without scoping, audit, and translation already in place.
 
 **Purpose**: Project skeleton, tooling, and the quality gates the constitution requires.
 
-- [ ] T001 Create the directory structure from plan.md: `config/settings/`, `apps/`, `templates/`, `static/`, `locale/`, `tests/`
-- [ ] T002 Initialize the Python project in `pyproject.toml` with Django 5.2 LTS, `psycopg[binary]`, `celery`, `redis`, `django-htmx`, `django-auditlog`, `django-ratelimit`, pinned to exact versions, and commit the lock file
-- [ ] T003 [P] Configure `ruff` for linting and formatting in `pyproject.toml`, including a rule banning `left:`/`right:` in favour of logical properties
-- [ ] T004 [P] Configure `mypy` in `pyproject.toml` with `django-stubs`, set to fail on untyped definitions in `apps/`
-- [ ] T005 [P] Configure `pytest`, `pytest-django`, `factory_boy`, and coverage reporting in `pyproject.toml` and `conftest.py`
-- [ ] T006 Split settings into `config/settings/base.py`, `config/settings/local.py`, and `config/settings/production.py`, reading every value from environment variables with no secret defaults
-- [ ] T007 [P] Create `.env.example` listing every required environment variable with safe placeholder values, and add `.env` to `.gitignore`
-- [ ] T008 [P] Configure internationalization in `config/settings/base.py`: `LANGUAGES = [("ar", ...), ("en", ...)]`, `LocaleMiddleware`, `USE_I18N`, `USE_TZ = True`, `TIME_ZONE = "UTC"`, and `LOCALE_PATHS`
-- [ ] T009 [P] Create the Celery application in `config/celery.py` with Redis as broker and result backend, and wire it in `config/__init__.py`
-- [ ] T010 [P] Vendor htmx 2.x and Alpine.js 3.x into `static/js/` and create `static/css/base.css` using CSS logical properties only
-- [ ] T011 [P] Create the CI pipeline in `.github/workflows/ci.yml` running `pytest`, `ruff check`, `ruff format --check`, `mypy`, a missing-migrations check, and a dependency vulnerability scan
-- [ ] T012 Create `templates/base.html` setting `lang` and `dir` on the `html` element from the active locale via `get_language_bidi`
+- [X] T001 Create the directory structure from plan.md: `config/settings/`, `apps/`, `templates/`, `static/`, `locale/`, `tests/`
+- [X] T002 Initialize the Python project in `pyproject.toml` with Django 5.2 LTS, `psycopg[binary]`, `celery`, `redis`, `django-htmx`, `django-auditlog`, `django-ratelimit`, pinned to exact versions, and commit the lock file
+- [X] T003 [P] Configure `ruff` for linting and formatting in `pyproject.toml`, including a rule banning `left:`/`right:` in favour of logical properties
+- [X] T004 [P] Configure `mypy` in `pyproject.toml` with `django-stubs`, set to fail on untyped definitions in `apps/`
+- [X] T005 [P] Configure `pytest`, `pytest-django`, `factory_boy`, and coverage reporting in `pyproject.toml` and `conftest.py`
+- [X] T006 Split settings into `config/settings/base.py`, `config/settings/local.py`, and `config/settings/production.py`, reading every value from environment variables with no secret defaults
+- [X] T007 [P] Create `.env.example` listing every required environment variable with safe placeholder values, and add `.env` to `.gitignore`
+- [X] T008 [P] Configure internationalization in `config/settings/base.py`: `LANGUAGES = [("ar", ...), ("en", ...)]`, `LocaleMiddleware`, `USE_I18N`, `USE_TZ = True`, `TIME_ZONE = "UTC"`, and `LOCALE_PATHS`
+- [X] T009 [P] Create the Celery application in `config/celery.py` with Redis as broker and result backend, and wire it in `config/__init__.py`
+- [X] T010 [P] Vendor htmx 2.x and Alpine.js 3.x into `static/js/` and create `static/css/base.css` using CSS logical properties only
+- [X] T011 [P] Create the CI pipeline in `.github/workflows/ci.yml` running `pytest`, `ruff check`, `ruff format --check`, `mypy`, a missing-migrations check, and a dependency vulnerability scan
+- [X] T012 Create `templates/base.html` setting `lang` and `dir` on the `html` element from the active locale via `get_language_bidi`
 
 **Checkpoint**: `pytest` runs green on an empty suite in CI, and all quality gates are enforced.
 
@@ -70,31 +70,31 @@ Django cannot switch `AUTH_USER_MODEL` after initial migrations without a destru
 
 ### Tests first
 
-- [ ] T013 [P] Write `apps/core/tests/test_models.py` asserting `TimeStampedModel` sets UTC timestamps and `SoftDeleteModel` hides deleted rows from the default manager while `all_objects` returns them
-- [ ] T014 [P] Write `apps/core/tests/test_querysets.py` asserting `ScopedQuerySet.for_user()` excludes rows outside the user's department and branch
-- [ ] T015 [P] Write `tests/test_scope_isolation.py` as a self-extending invariant: it discovers every model inheriting `ScopedModel` and asserts an out-of-scope request returns **404, not 403**
-- [ ] T016 [P] Write `tests/test_audit_coverage.py` asserting every model inheriting `SoftDeleteModel` is registered with `auditlog`
-- [ ] T017 [P] Write `tests/test_i18n_completeness.py` asserting no user-facing template string sits outside a translation tag and no stylesheet uses `left:` or `right:`
-- [ ] T018 [P] Write `apps/accounts/tests/test_deactivation.py` asserting a deactivated user's existing session is refused on the next request, not at next sign-in
-- [ ] T019 [P] Write `apps/core/tests/test_logging_filters.py` asserting known sensitive field names never appear in emitted log records
+- [X] T013 [P] Write `apps/core/tests/test_models.py` asserting `TimeStampedModel` sets UTC timestamps and `SoftDeleteModel` hides deleted rows from the default manager while `all_objects` returns them
+- [X] T014 [P] Write `apps/core/tests/test_querysets.py` asserting `ScopedQuerySet.for_user()` excludes rows outside the user's department and branch
+- [X] T015 [P] Write `tests/test_scope_isolation.py` as a self-extending invariant: it discovers every model inheriting `ScopedModel` and asserts an out-of-scope request returns **404, not 403**
+- [X] T016 [P] Write `tests/test_audit_coverage.py` asserting every model inheriting `SoftDeleteModel` is registered with `auditlog`
+- [X] T017 [P] Write `tests/test_i18n_completeness.py` asserting no user-facing template string sits outside a translation tag and no stylesheet uses `left:` or `right:`
+- [X] T018 [P] Write `apps/accounts/tests/test_deactivation.py` asserting a deactivated user's existing session is refused on the next request, not at next sign-in
+- [X] T019 [P] Write `apps/core/tests/test_logging_filters.py` asserting known sensitive field names never appear in emitted log records
 
 ### Implementation
 
-- [ ] T020 Implement `TimeStampedModel`, `SoftDeleteModel`, and `ScopedModel` abstract bases in `apps/core/models.py`, with partial unique index support conditioned on `deleted_at IS NULL`
-- [ ] T021 Implement `ScopedQuerySet` and `ScopedManager` with `for_user(user)` in `apps/core/querysets.py`
-- [ ] T022 Implement `Department` and `Branch` models in `apps/accounts/models.py`
-- [ ] T023 Implement the custom `User` model in `apps/accounts/models.py` with `email` as the sign-in identifier, `role` choices `AGENT` and `ADMINISTRATOR`, `department`, `branch`, `language`, and set `AUTH_USER_MODEL` in `config/settings/base.py`
-- [ ] T024 Generate and review the initial migrations for `accounts`, then run `migrate` against PostgreSQL
-- [ ] T025 Implement current-actor middleware in `apps/core/middleware.py` so audit entries attribute web requests to the acting user
-- [ ] T026 Implement a Celery task base in `apps/core/tasks.py` that requires an explicit actor, so background writes cannot silently attribute human work to a system user
-- [ ] T027 Enable `LoginRequiredMiddleware` globally in `config/settings/base.py` and mark the intake and sign-in views as the only exemptions
-- [ ] T028 Implement session invalidation on the `User.is_active` transition in `apps/accounts/models.py`
-- [ ] T029 Implement `get_object_or_404_for_user()` in `apps/core/shortcuts.py` so the 404-not-403 rule is applied by one helper rather than by convention
-- [ ] T030 Register `auditlog` in `config/settings/base.py` and create the registration module `apps/core/audit.py`
-- [ ] T031 Configure structured logging with a PII and secret redaction filter in `config/settings/base.py` and `apps/core/logging.py`
-- [ ] T032 [P] Implement sign-in, sign-out, and language-switch views in `apps/accounts/views.py` and `apps/accounts/urls.py` per [contracts/http-endpoints.md](contracts/http-endpoints.md)
-- [ ] T033 [P] Create the authenticated shell template `templates/components/shell.html` with navigation and the language switcher
-- [ ] T034 Extract and compile the initial translation catalogs into `locale/ar/LC_MESSAGES/` and `locale/en/LC_MESSAGES/`
+- [X] T020 Implement `TimeStampedModel`, `SoftDeleteModel`, and `ScopedModel` abstract bases in `apps/core/models.py`, with partial unique index support conditioned on `deleted_at IS NULL`
+- [X] T021 Implement `ScopedQuerySet` and `ScopedManager` with `for_user(user)` in `apps/core/querysets.py`
+- [X] T022 Implement `Department` and `Branch` models in `apps/accounts/models.py`
+- [X] T023 Implement the custom `User` model in `apps/accounts/models.py` with `email` as the sign-in identifier, `role` choices `AGENT` and `ADMINISTRATOR`, `department`, `branch`, `language`, and set `AUTH_USER_MODEL` in `config/settings/base.py`
+- [X] T024 Generate and review the initial migrations for `accounts`, then run `migrate` against PostgreSQL
+- [X] T025 Actor attribution for web requests is provided by `auditlog.middleware.AuditlogMiddleware` (already in `MIDDLEWARE`); no separate `apps/core/middleware.py` actor middleware was needed — see `apps/core/tasks.py` for the Celery-side equivalent (T026)
+- [X] T026 Implement a Celery task base in `apps/core/tasks.py` that requires an explicit actor, so background writes cannot silently attribute human work to a system user
+- [X] T027 Enable `LoginRequiredMiddleware` globally in `config/settings/base.py` and mark the intake and sign-in views as the only exemptions
+- [X] T028 Implement session invalidation on the `User.is_active` transition in `apps/accounts/models.py`
+- [X] T029 Implement `get_object_or_404_for_user()` in `apps/core/shortcuts.py` so the 404-not-403 rule is applied by one helper rather than by convention
+- [X] T030 Register `auditlog` in `config/settings/base.py` and create the registration module `apps/core/audit.py`
+- [X] T031 Configure structured logging with a PII and secret redaction filter in `config/settings/base.py` and `apps/core/logging.py`
+- [X] T032 [P] Implement sign-in, sign-out, and language-switch views in `apps/accounts/views.py` and `apps/accounts/urls.py` per [contracts/http-endpoints.md](contracts/http-endpoints.md)
+- [ ] T033 [P] Create the authenticated shell template `templates/components/shell.html` with navigation and the language switcher — deferred: no authenticated screen exists to navigate between until Phase 4's queue view lands
+- [X] T034 Extract and compile the initial translation catalogs into `locale/ar/LC_MESSAGES/` and `locale/en/LC_MESSAGES/`
 
 **Checkpoint**: A user can sign in, the language switcher works, out-of-scope access returns 404,
 and the four invariant tests run (passing trivially until models exist).
@@ -111,31 +111,31 @@ queue, linked to a contact, and a confirmation email carrying the reference is s
 
 ### Tests for User Story 1
 
-- [ ] T035 [P] [US1] Write `apps/intake/tests/test_intake_contract.py` covering the three public endpoints in [contracts/http-endpoints.md](contracts/http-endpoints.md), including that the confirmation page discloses only the reference
-- [ ] T036 [P] [US1] Write `apps/intake/tests/test_validation.py` asserting incomplete submissions are rejected with field-level errors and entered content is preserved
-- [ ] T037 [P] [US1] Write `apps/customers/tests/test_contact_matching.py` asserting a known email matches the existing contact and creates no duplicate, and an unknown email creates a contact with **no organization**
-- [ ] T038 [P] [US1] Write `apps/tickets/tests/test_reference.py` asserting references follow `AZM-{year}-{sequence}`, are unique under concurrency, and never change once assigned
-- [ ] T039 [P] [US1] Write `apps/intake/tests/test_abuse_protection.py` asserting the honeypot field and rate limit reject automated submissions and that rate limiting fails open when Redis is unavailable
-- [ ] T040 [P] [US1] Write `apps/intake/tests/test_arabic_intake.py` asserting Arabic subject and description are stored and re-rendered unchanged
-- [ ] T041 [P] [US1] Write `apps/messaging/tests/test_confirmation_email.py` asserting the confirmation contains the reference and a reply-to address carrying it, in the visitor's language
+- [X] T035 [P] [US1] Write `apps/intake/tests/test_intake_contract.py` covering the three public endpoints in [contracts/http-endpoints.md](contracts/http-endpoints.md), including that the confirmation page discloses only the reference
+- [X] T036 [P] [US1] Write `apps/intake/tests/test_validation.py` asserting incomplete submissions are rejected with field-level errors and entered content is preserved
+- [X] T037 [P] [US1] Write `apps/customers/tests/test_contact_matching.py` asserting a known email matches the existing contact and creates no duplicate, and an unknown email creates a contact with **no organization**
+- [X] T038 [P] [US1] Write `apps/tickets/tests/test_reference.py` asserting references follow `AZM-{year}-{sequence}`, are unique under concurrency, and never change once assigned
+- [X] T039 [P] [US1] Write `apps/intake/tests/test_abuse_protection.py` asserting the honeypot field and rate limit reject automated submissions and that rate limiting fails open when Redis is unavailable
+- [X] T040 [P] [US1] Write `apps/intake/tests/test_arabic_intake.py` asserting Arabic subject and description are stored and re-rendered unchanged
+- [X] T041 [P] [US1] Write `apps/messaging/tests/test_confirmation_email.py` asserting the confirmation contains the reference and a reply-to address carrying it, in the visitor's language
 
 ### Implementation for User Story 1
 
-- [ ] T042 [P] [US1] Implement `Organization` in `apps/customers/models.py`, scoped and soft-deletable
-- [ ] T043 [P] [US1] Implement `Contact` in `apps/customers/models.py` with a **nullable** organization, and `ContactDetail` with a partial unique index on `(kind, value)` where not deleted
-- [ ] T044 [US1] Implement `Category` and `Ticket` in `apps/tickets/models.py` with the fields and indexes in [data-model.md](data-model.md), including the ticket's own organization reference
-- [ ] T045 [US1] Implement the reference allocator in `apps/tickets/services/reference.py` using a per-year database sequence
-- [ ] T046 [US1] Register `Organization`, `Contact`, `ContactDetail`, `Category`, and `Ticket` for audit in `apps/core/audit.py`
-- [ ] T047 [US1] Generate and review migrations for `customers` and `tickets`
-- [ ] T048 [US1] Implement contact matching and creation in `apps/customers/services/matching.py`, normalizing email to lower case before lookup
-- [ ] T049 [US1] Implement the intake form in `apps/intake/forms.py` with the honeypot field and minimum completion-time check
-- [ ] T050 [US1] Implement the intake views in `apps/intake/views.py` and routes in `apps/intake/urls.py`, wrapping contact and ticket creation in `transaction.atomic`
-- [ ] T051 [US1] Apply `django-ratelimit` to the intake POST view keyed on client address and submitted email
-- [ ] T052 [P] [US1] Create `templates/intake/form.html` and `templates/intake/submitted.html` with all strings translated
-- [ ] T053 [P] [US1] Create bilingual confirmation email templates in `templates/messaging/email/confirmation.{ar,en}.txt`
-- [ ] T054 [US1] Implement the outbound send task in `apps/messaging/tasks.py` with retry and backoff, and the reply-to token format from [contracts/email.md](contracts/email.md)
-- [ ] T055 [US1] Add the new models to the invariant registries so `tests/test_scope_isolation.py` and `tests/test_audit_coverage.py` cover them
-- [ ] T056 [US1] Extract and compile translations for this phase into `locale/ar/LC_MESSAGES/django.po` and `locale/en/LC_MESSAGES/django.po`
+- [X] T042 [P] [US1] Implement `Organization` in `apps/customers/models.py`, scoped and soft-deletable
+- [X] T043 [P] [US1] Implement `Contact` in `apps/customers/models.py` with a **nullable** organization, and `ContactDetail` with a partial unique index on `(kind, value)` where not deleted
+- [X] T044 [US1] Implement `Category` and `Ticket` in `apps/tickets/models.py` with the fields and indexes in [data-model.md](data-model.md), including the ticket's own organization reference
+- [X] T045 [US1] Implement the reference allocator in `apps/tickets/services/reference.py` using a per-year database sequence
+- [X] T046 [US1] Register `Organization`, `Contact`, `ContactDetail`, `Category`, and `Ticket` for audit in `apps/core/audit.py`
+- [X] T047 [US1] Generate and review migrations for `customers` and `tickets`
+- [X] T048 [US1] Implement contact matching and creation in `apps/customers/services/matching.py`, normalizing email to lower case before lookup
+- [X] T049 [US1] Implement the intake form in `apps/intake/forms.py` with the honeypot field and minimum completion-time check
+- [X] T050 [US1] Implement the intake views in `apps/intake/views.py` and routes in `apps/intake/urls.py`, wrapping contact and ticket creation in `transaction.atomic`
+- [X] T051 [US1] Apply `django-ratelimit` to the intake POST view keyed on client address and submitted email
+- [X] T052 [P] [US1] Create `templates/intake/form.html` and `templates/intake/submitted.html` with all strings translated
+- [X] T053 [P] [US1] Create bilingual confirmation email templates in `templates/messaging/email/confirmation.{ar,en}.txt`
+- [X] T054 [US1] Implement the outbound send task in `apps/messaging/tasks.py` with retry and backoff, and the reply-to token format from [contracts/email.md](contracts/email.md)
+- [X] T055 [US1] Add the new models to the invariant registries so `tests/test_scope_isolation.py` and `tests/test_audit_coverage.py` cover them
+- [X] T056 [US1] Extract and compile translations for this phase into `locale/ar/LC_MESSAGES/django.po` and `locale/en/LC_MESSAGES/django.po`
 
 **Checkpoint**: Quickstart scenarios 1 and 2 pass. Requests stop being lost.
 

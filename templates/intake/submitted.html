@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Request received" %}{% endblock %}
+{% block content %}
+<main class="shell__main">
+  <h1>{% trans "Request received" %}</h1>
+  <p>{% blocktrans %}Your reference number is{% endblocktrans %}: <strong>{{ reference }}</strong></p>
+  <p>{% trans "Please quote this reference in any further correspondence." %}</p>
+</main>
+{% endblock %}

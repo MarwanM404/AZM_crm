@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Submit a request" %}{% endblock %}
+{% block content %}
+<main class="shell__main">
+  <h1>{% trans "Submit a request" %}</h1>
+  <form method="post" novalidate>
+    {% csrf_token %}
+    {% for field in form %}
+      {% if field.name == "company_website" %}
+        <div class="honeypot-field" aria-hidden="true">{{ field }}</div>
+      {% else %}
+        <div class="field">
+          {% if field.name != "rendered_at" %}<label for="{{ field.id_for_label }}">{{ field.label }}</label>{% endif %}
+          {{ field }}
+          {% for error in field.errors %}<div class="error">{{ error }}</div>{% endfor %}
+        </div>
+      {% endif %}
+    {% endfor %}
+    <button type="submit">{% trans "Submit" %}</button>
+  </form>
+</main>
+{% endblock %}

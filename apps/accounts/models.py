@@ -1,0 +1,117 @@
+"""
+Department, Branch, and the custom User model.
+
+FR-022: two fixed roles, Agent and Administrator, not user-configurable in the MVP.
+FR-025: administrators manage accounts, each with exactly one role and at least one
+department/branch.
+FR-026: deactivation MUST terminate access immediately, not merely at next sign-in.
+"""
+
+from django.contrib.auth.base_user import BaseUserManager
+from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
+from django.contrib.sessions.models import Session
+from django.db import models
+from django.db.models.functions import Now
+from django.utils.translation import gettext_lazy as _
+
+from apps.core.models import TimeStampedModel
+
+
+class Department(TimeStampedModel):
+    """Organizational unit that scopes visibility (FR-023)."""
+
+    name = models.CharField(_("name"), max_length=150)
+    name_ar = models.CharField(_("name (Arabic)"), max_length=150, blank=True)
+    is_active = models.BooleanField(default=True)
+
+    class Meta:
+        ordering = ["name"]
+
+    def __str__(self):
+        return self.name
+
+
+class Branch(TimeStampedModel):
+    """Location that scopes visibility (FR-023). One row at launch; the model supports many."""
+
+    name = models.CharField(_("name"), max_length=150)
+    name_ar = models.CharField(_("name (Arabic)"), max_length=150, blank=True)
+    is_active = models.BooleanField(default=True)
+
+    class Meta:
+        ordering = ["name"]
+
+    def __str__(self):
+        return self.name
+
+
+class UserManager(BaseUserManager):
+    use_in_migrations = True
+
+    def _create_user(self, email, password, **extra_fields):
+        if not email:
+            raise ValueError("Users must have an email address")
+        email = self.normalize_email(email)
+        user = self.model(email=email, **extra_fields)
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+
+    def create_user(self, email, password=None, **extra_fields):
+        extra_fields.setdefault("is_staff", False)
+        extra_fields.setdefault("is_superuser", False)
+        return self._create_user(email, password, **extra_fields)
+
+    def create_superuser(self, email, password=None, **extra_fields):
+        extra_fields.setdefault("is_staff", True)
+        extra_fields.setdefault("is_superuser", True)
+        extra_fields.setdefault("role", User.Role.ADMINISTRATOR)
+        return self._create_user(email, password, **extra_fields)
+
+
+class User(AbstractBaseUser, PermissionsMixin, TimeStampedModel):
+    class Role(models.TextChoices):
+        AGENT = "AGENT", _("Agent")
+        ADMINISTRATOR = "ADMINISTRATOR", _("Administrator")
+
+    class Language(models.TextChoices):
+        ARABIC = "ar", _("Arabic")
+        ENGLISH = "en", _("English")
+
+    email = models.EmailField(_("email address"), unique=True)
+    full_name = models.CharField(_("full name"), max_length=200)
+    role = models.CharField(max_length=20, choices=Role.choices, default=Role.AGENT)
+    department = models.ForeignKey(
+        Department, on_delete=models.PROTECT, related_name="users", null=True
+    )
+    branch = models.ForeignKey(Branch, on_delete=models.PROTECT, related_name="users", null=True)
+    language = models.CharField(max_length=2, choices=Language.choices, default=Language.ARABIC)
+    is_active = models.BooleanField(default=True)
+    is_staff = models.BooleanField(default=False)
+
+    objects = UserManager()
+
+    USERNAME_FIELD = "email"
+    REQUIRED_FIELDS = ["full_name"]
+
+    class Meta:
+        ordering = ["full_name"]
+
+    def __str__(self):
+        return self.full_name or self.email
+
+    def terminate_sessions(self):
+        """FR-026: deactivation ends access immediately, not at next sign-in. Django sessions
+        do not index by user, so this scans; acceptable at MVP staff-account volumes."""
+        for session in Session.objects.filter(expire_date__gte=Now()):
+            data = session.get_decoded()
+            if str(data.get("_auth_user_id")) == str(self.pk):
+                session.delete()
+
+    def save(self, *args, **kwargs):
+        was_active = None
+        if self.pk:
+            was_active = User.objects.filter(pk=self.pk).values_list("is_active", flat=True).first()
+        super().save(*args, **kwargs)
+        if was_active and not self.is_active:
+            self.terminate_sessions()

@@ -1,0 +1,209 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-11 18:29+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
+"&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
+#: apps/accounts/forms.py:7 apps/customers/models.py:70
+#: apps/tickets/models.py:51
+msgid "Email"
+msgstr "البريد الإلكتروني"
+
+#: apps/accounts/forms.py:8
+msgid "Password"
+msgstr "كلمة المرور"
+
+#: apps/accounts/forms.py:17
+msgid "Invalid email or password."
+msgstr "البريد الإلكتروني أو كلمة المرور غير صحيحة."
+
+#: apps/accounts/models.py:23 apps/accounts/models.py:37
+#: apps/customers/models.py:18 apps/tickets/models.py:20
+msgid "name"
+msgstr "الاسم"
+
+#: apps/accounts/models.py:24 apps/accounts/models.py:38
+#: apps/customers/models.py:19 apps/tickets/models.py:21
+msgid "name (Arabic)"
+msgstr "الاسم (بالعربية)"
+
+#: apps/accounts/models.py:74
+msgid "Agent"
+msgstr "موظف الدعم"
+
+#: apps/accounts/models.py:75
+msgid "Administrator"
+msgstr "المسؤول"
+
+#: apps/accounts/models.py:78 apps/customers/models.py:53
+msgid "Arabic"
+msgstr "العربية"
+
+#: apps/accounts/models.py:79 apps/customers/models.py:53
+msgid "English"
+msgstr "الإنجليزية"
+
+#: apps/accounts/models.py:81
+msgid "email address"
+msgstr "البريد الإلكتروني"
+
+#: apps/accounts/models.py:82 apps/customers/models.py:50
+msgid "full name"
+msgstr "الاسم الكامل"
+
+#: apps/customers/models.py:71
+msgid "Phone"
+msgstr "الهاتف"
+
+#: apps/intake/forms.py:20
+msgid "Your name"
+msgstr "اسمك"
+
+#: apps/intake/forms.py:21
+msgid "Email address"
+msgstr "البريد الإلكتروني"
+
+#: apps/intake/forms.py:22
+msgid "Phone number"
+msgstr "رقم الهاتف"
+
+#: apps/intake/forms.py:24
+msgid "Category"
+msgstr "التصنيف"
+
+#: apps/intake/forms.py:26
+msgid "Subject"
+msgstr "الموضوع"
+
+#: apps/intake/forms.py:27
+msgid "Description"
+msgstr "الوصف"
+
+#: apps/intake/forms.py:39 apps/intake/forms.py:45
+msgid "Submission rejected."
+msgstr "تم رفض الطلب."
+
+#: apps/messaging/tasks.py:27
+#, python-format
+msgid "Your request has been received: %(reference)s"
+msgstr "تم استلام طلبك: %(reference)s"
+
+#: apps/messaging/tasks.py:81
+#, python-format
+msgid "Re: %(reference)s"
+msgstr "رد: %(reference)s"
+
+#: apps/tickets/models.py:37
+msgid "Low"
+msgstr "منخفضة"
+
+#: apps/tickets/models.py:38
+msgid "Normal"
+msgstr "عادية"
+
+#: apps/tickets/models.py:39
+msgid "High"
+msgstr "مرتفعة"
+
+#: apps/tickets/models.py:40
+msgid "Urgent"
+msgstr "عاجلة"
+
+#: apps/tickets/models.py:43
+msgid "New"
+msgstr "جديدة"
+
+#: apps/tickets/models.py:44
+msgid "Open"
+msgstr "مفتوحة"
+
+#: apps/tickets/models.py:45
+msgid "Pending customer"
+msgstr "بانتظار العميل"
+
+#: apps/tickets/models.py:46
+msgid "Resolved"
+msgstr "تم الحل"
+
+#: apps/tickets/models.py:47
+msgid "Closed"
+msgstr "مغلقة"
+
+#: apps/tickets/models.py:50
+msgid "Web form"
+msgstr "نموذج الويب"
+
+#: apps/tickets/models.py:118
+msgid "Inbound"
+msgstr "وارد"
+
+#: apps/tickets/models.py:119
+msgid "Outbound"
+msgstr "صادر"
+
+#: apps/tickets/models.py:122
+msgid "Public"
+msgstr "عام"
+
+#: apps/tickets/models.py:123
+msgid "Internal"
+msgstr "داخلي"
+
+#: apps/tickets/models.py:126
+msgid "Pending"
+msgstr "قيد الانتظار"
+
+#: apps/tickets/models.py:127
+msgid "Sent"
+msgstr "تم الإرسال"
+
+#: apps/tickets/models.py:128
+msgid "Failed"
+msgstr "فشل"
+
+#: apps/tickets/models.py:129
+msgid "Not applicable"
+msgstr "لا ينطبق"
+
+#: templates/accounts/sign_in.html:3 templates/accounts/sign_in.html:6
+#: templates/accounts/sign_in.html:17
+msgid "Sign in"
+msgstr "تسجيل الدخول"
+
+#: templates/base.html:7
+msgid "AZM Support"
+msgstr "دعم AZM"
+
+#: templates/intake/form.html:3 templates/intake/form.html:6
+msgid "Submit a request"
+msgstr "إرسال طلب"
+
+#: templates/intake/form.html:20
+msgid "Submit"
+msgstr "إرسال"
+
+#: templates/intake/submitted.html:3 templates/intake/submitted.html:6
+msgid "Request received"
+msgstr "تم استلام الطلب"
+
+#: templates/intake/submitted.html:7
+msgid "Your reference number is"
+msgstr "رقم طلبك هو"
+
+#: templates/intake/submitted.html:8
+msgid "Please quote this reference in any further correspondence."
+msgstr "يرجى ذكر هذا الرقم في أي مراسلات لاحقة."

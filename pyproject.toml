@@ -1,0 +1,29 @@
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+exclude = ["migrations", ".venv"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "DJ"]
+ignore = []
+
+[tool.ruff.lint.per-file-ignores]
+"**/migrations/*.py" = ["E501"]
+
+# Logical-properties-only CSS is enforced by tests/test_i18n_completeness.py,
+# not by ruff (ruff lints Python, not CSS).
+
+[tool.mypy]
+python_version = "3.10"
+plugins = ["mypy_django_plugin.main"]
+ignore_missing_imports = true
+exclude = ["migrations/", ".venv/"]
+
+[tool.django-stubs]
+django_settings_module = "config.settings.local"
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "config.settings.test"
+python_files = ["test_*.py"]
+testpaths = ["apps", "tests"]
+addopts = "-ra"

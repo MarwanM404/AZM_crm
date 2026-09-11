@@ -1,0 +1,38 @@
+/* Logical properties only — no left/right — so RTL (Arabic) follows document direction
+   automatically. Enforced by tests/test_i18n_completeness.py. */
+:root {
+  --color-bg: #ffffff;
+  --color-text: #1a1a1a;
+  --color-border: #d0d0d0;
+  --color-accent: #2c5f8a;
+  --color-danger: #a33;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, sans-serif;
+  background: var(--color-bg);
+  color: var(--color-text);
+}
+
+.shell { display: flex; min-height: 100vh; }
+.shell__nav { inline-size: 220px; padding: var(--spacing-md); border-inline-end: 1px solid var(--color-border); }
+.shell__main { flex: 1; padding: var(--spacing-md); }
+
+.field { margin-block-end: var(--spacing-md); }
+.field label { display: block; margin-block-end: var(--spacing-sm); }
+.field input, .field textarea, .field select {
+  inline-size: 100%;
+  padding: var(--spacing-sm);
+  border: 1px solid var(--color-border);
+}
+.field .error { color: var(--color-danger); font-size: 0.875em; }
+
+.message--internal { background: #fff7e0; border-inline-start: 4px solid #d9a300; padding: var(--spacing-sm); }
+.message--public { background: #f0f4f8; border-inline-start: 4px solid var(--color-accent); padding: var(--spacing-sm); }
+
+.honeypot-field { position: absolute; inset-inline-start: -9999px; }

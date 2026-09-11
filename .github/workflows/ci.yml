@@ -1,0 +1,35 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: pip install -r requirements/local.txt
+      - name: Lint
+        run: |
+          ruff check .
+          ruff format --check .
+      - name: Type check
+        run: mypy .
+      - name: Check for missing migrations
+        run: python manage.py makemigrations --check --dry-run
+        env:
+          DJANGO_SETTINGS_MODULE: config.settings.test
+      - name: Test
+        run: pytest --cov --cov-fail-under=80
+        env:
+          DJANGO_SETTINGS_MODULE: config.settings.test
+      - name: Dependency vulnerability scan
+        run: |
+          pip install pip-audit
+          pip-audit -r requirements/base.txt

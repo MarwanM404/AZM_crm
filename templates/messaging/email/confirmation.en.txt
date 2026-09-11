@@ -1,0 +1,8 @@
+Thank you for contacting AZM Support.
+
+Your reference number is: {{ reference }}
+
+Please quote this reference in any further correspondence. An agent will respond as soon as
+possible.
+
+— AZM Support
