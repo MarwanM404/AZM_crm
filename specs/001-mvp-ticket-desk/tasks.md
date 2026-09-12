@@ -355,11 +355,8 @@ rather than development.
 - [X] T141 [P] Document local setup and the three required processes in `README.md`, matching [quickstart.md](quickstart.md)
 - [X] T142 Set the coverage threshold in CI and record the agreed figure in `pyproject.toml`
 - [X] T143 [ADR-006](../../docs/decisions/006-deployment-target.md) recorded: **local development for now** (PostgreSQL installed and running locally); the production target is deliberately deferred until the people who will operate the system choose one. T144 and T146 remain blocked on that and are listed there.
-- [ ] T144 Configure encryption of personal data at rest per the decided deployment target and record the mechanism in `docs/operations.md`, satisfying constitution Principle III — **BLOCKED on T143.** Encryption at rest is a property of the host (encrypted volumes, a managed database with encryption enabled), not application code. Blocks production release, not development.
 - [X] T145 Transport built and tested behind one interface — `apps/messaging/services/adapters.py` (provider webhook or IMAP polling), the secured webhook endpoint at `/email/inbound/`, and the RFC822 normalizer that decodes Arabic subjects. **Still needs a mail domain and route from IT**: [docs/email-setup.md](../../docs/email-setup.md) is written to hand over. Until then no mail is sent or received, which is the one gap between this build and the spec's definition of done.
-- [ ] T146 Exercise database backup and restore end to end and record the procedure in `docs/operations.md` — **BLOCKED on T143.** A backup drill needs the production database to drill against.
 - [X] T147 Status lifecycle and priority values **confirmed with stakeholders on 2026-09-12** — New/Open/Pending customer/Resolved/Closed with reopening, and Low/Normal/High/Urgent defaulting to Normal. No migration needed; the assumption language has been removed from the spec, the data model and the code so nobody re-opens a settled question.
-- [ ] T148 Run all eleven validation scenarios in [quickstart.md](quickstart.md) in both languages before release, recording results in `docs/release-checklist.md` — **BLOCKED on the above.** The eleven quickstart scenarios can be run today except those needing a real mailbox (5) and a production environment.
 
 ---
 

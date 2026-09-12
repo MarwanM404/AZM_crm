@@ -188,6 +188,16 @@ and what each role may see; actual SLA target values per priority; expected tick
 and number of agents; data-retention and erasure obligations; which ERP system is in
 scope; and whether any existing customer or ticket data must be migrated in.
 
+## Status
+
+**Phase One (the MVP) is feature-complete** as of 2026-09-12. What stands between it and real
+customers is in [production-readiness.md](production-readiness.md) — all of it environment
+work rather than development.
+
+Live chat is next, per the decision on 2026-09-11, and lands on prepared ground: the message
+visibility boundary it needs for supervisor whisper is already built, tested and proven against
+every customer-facing output path, attachments included.
+
 ## Working method
 
 Each phase runs the Spec Kit loop: `/speckit-specify` to write the specification,

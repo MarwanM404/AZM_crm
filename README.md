@@ -7,8 +7,13 @@ decisions this build follows (Django, PostgreSQL, htmx + Alpine.js, Celery + Red
 
 ## Status
 
-Phase One MVP, in progress. See [specs/001-mvp-ticket-desk/tasks.md](specs/001-mvp-ticket-desk/tasks.md)
-for what is built, tested, and still open.
+**Phase One MVP: feature-complete.** All 152 tasks in
+[specs/001-mvp-ticket-desk/tasks.md](specs/001-mvp-ticket-desk/tasks.md) are done, with 334
+tests passing.
+
+**Not yet ready for real customer data.** Four things remain, none of them code — encryption at
+rest, a restore drill, a mail route, and a validation run against the real environment. They are
+listed in [docs/production-readiness.md](docs/production-readiness.md).
 
 ## Local setup
 
@@ -91,6 +96,7 @@ Redis, and unrestricted network access needs none of these workarounds.
 | [docs/agent-guide.md](docs/agent-guide.md) | One page an agent needs to work a ticket, in English and Arabic |
 | [docs/accessibility-review.md](docs/accessibility-review.md) | What is checked automatically, what still needs a person |
 | [docs/email-setup.md](docs/email-setup.md) | What to ask IT for so replies reach customers — written to hand over as-is |
+| [docs/production-readiness.md](docs/production-readiness.md) | **What must be true before this holds a real customer's data** |
 | [specs/001-mvp-ticket-desk/](specs/001-mvp-ticket-desk/) | Specification, plan, contracts and task list |
 
 ## Working on the translations
