@@ -280,3 +280,13 @@ select:focus-visible, input:focus-visible, textarea:focus-visible {
 .audit-change__field { color: var(--color-faint); flex: none; }
 .audit-change__from { color: var(--color-muted); text-decoration: line-through; }
 .audit-change__to { color: var(--color-text); font-weight: 500; }
+
+/* --- public pages (intake, sign-in): no app shell, so they size themselves --- */
+.shell__main:not(.shell *) { max-inline-size: 640px; margin-inline: auto; padding: 32px 20px; }
+
+@media (max-width: 480px) {
+  .shell__main { padding: 20px 16px; }
+  .filters { flex-direction: column; align-items: stretch; }
+  .filters select, .filters input[type="search"] { inline-size: 100%; }
+  .actions { flex-wrap: wrap; }
+}

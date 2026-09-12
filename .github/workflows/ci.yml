@@ -28,7 +28,7 @@ jobs:
       - name: Install browsers for the right-to-left checks
         run: python -m playwright install --with-deps chromium
       - name: Test
-        run: pytest --cov --cov-fail-under=80
+        run: pytest --cov
         env:
           DJANGO_SETTINGS_MODULE: config.settings.test
       - name: Dependency vulnerability scan

@@ -5,6 +5,7 @@ Every view reads through `for_user()` or `get_object_or_404_for_user()`, so an o
 record returns 404 rather than 403 (FR-024).
 """
 
+from django.db.models import Count
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.utils.translation import gettext as _
@@ -20,7 +21,16 @@ PAGE_SIZE = 50
 
 
 def organization_list(request):
-    organizations = Organization.objects.for_user(request.user).order_by("name")[:PAGE_SIZE]
+    # Counted in the database, not per row in the template: `organization.contacts.count`
+    # inside a loop is one query per organization (T136).
+    organizations = (
+        Organization.objects.for_user(request.user)
+        .annotate(
+            contact_count=Count("contacts", distinct=True),
+            ticket_count=Count("tickets", distinct=True),
+        )
+        .order_by("name")[:PAGE_SIZE]
+    )
     return render(
         request,
         "customers/list.html",
@@ -37,7 +47,9 @@ def organization_detail(request, pk):
     context = {
         "section": "customers",
         "organization": organization,
-        "contacts": organization.contacts.all(),
+        # Prefetched: the sidebar renders each contact's details, which is otherwise one
+        # query per contact (T136).
+        "contacts": organization.contacts.prefetch_related("details"),
         "entries": timeline_for(organization, contact=contact),
         "narrowed_to": contact,
     }

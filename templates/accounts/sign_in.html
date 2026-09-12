@@ -14,7 +14,7 @@
       </div>
     {% endfor %}
     {% for error in form.non_field_errors %}<div class="error">{{ error }}</div>{% endfor %}
-    <button type="submit">{% trans "Sign in" %}</button>
+    <button type="submit" class="btn btn--primary">{% trans "Sign in" %}</button>
   </form>
 </main>
 {% endblock %}

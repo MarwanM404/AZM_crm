@@ -82,6 +82,33 @@ None of this affects the design decisions in the ADRs; it affects only how this 
 session verified the code it wrote. A normal development or CI environment with real Postgres,
 Redis, and unrestricted network access needs none of these workarounds.
 
+## Documentation
+
+| Document | What it covers |
+|---|---|
+| [docs/roadmap.md](docs/roadmap.md) | Delivery phases and the MVP cut line |
+| [docs/decisions/](docs/decisions/) | Architecture decisions and why |
+| [docs/agent-guide.md](docs/agent-guide.md) | One page an agent needs to work a ticket, in English and Arabic |
+| [docs/accessibility-review.md](docs/accessibility-review.md) | What is checked automatically, what still needs a person |
+| [specs/001-mvp-ticket-desk/](specs/001-mvp-ticket-desk/) | Specification, plan, contracts and task list |
+
+## Working on the translations
+
+Both catalogs must be complete and free of fuzzy entries — Django silently ignores a fuzzy
+translation and falls back to English, so a fuzzy entry is an untranslated one that looks
+translated. `tests/test_translation_catalog.py` fails the build on either.
+
+```bash
+python manage.py makemessages -l ar -l en --ignore=.venv
+python tools/catalog.py status        # what is missing or guessed
+python tools/catalog.py sync-english  # English msgstr = its own msgid
+python manage.py compilemessages
+```
+
+Review every entry `msgmerge` marks fuzzy before clearing the flag. It guesses from similar
+strings and has been wrong more often than right on this project — "Action" became "Active",
+"Changes" became "Channel", and "Accounts in X" became "All tickets in X".
+
 ## What is verified vs. not yet built
 
 The Phase One MVP ships in vertical-slice order (see

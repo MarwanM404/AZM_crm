@@ -18,8 +18,8 @@
       <div class="table__row table__row--org">
         <span class="trunc"><a href="{% url 'customers:detail' organization.pk %}">{{ organization.name }}</a></span>
         <span class="ref muted">{{ organization.reference }}</span>
-        <span class="muted">{{ organization.contacts.count }}</span>
-        <span class="muted">{{ organization.tickets.count }}</span>
+        <span class="muted">{{ organization.contact_count }}</span>
+        <span class="muted">{{ organization.ticket_count }}</span>
       </div>
     {% empty %}
       <div class="table__empty">

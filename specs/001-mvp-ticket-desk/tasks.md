@@ -330,20 +330,20 @@ customer-facing output including quoted email history.
 **Purpose**: Performance, accessibility, operational readiness, and the decisions that block release
 rather than development.
 
-- [ ] T135 [P] Add database indexes and verify queue and timeline response times against a seeded dataset of 50,000 tickets and 10,000 organizations per SC-009, in `apps/tickets/migrations/` and `apps/customers/migrations/`
-- [ ] T136 [P] Profile and remove N+1 queries in `apps/tickets/views.py` and `apps/customers/services/timeline.py`, asserted by query-count tests in `tests/test_query_budget.py`
-- [ ] T137 [P] Write `tests/test_concurrent_agents.py` exercising the assumed 50 concurrent agents from [research.md](research.md#8-scale-assumptions)
-- [ ] T138 [P] Run an accessibility pass over `templates/` in both languages, covering keyboard navigation and screen-reader labels, and record findings in `docs/accessibility-review.md`
-- [ ] T139 [P] Verify mobile browser layout for every screen in `templates/` per FR-036, fixing defects in `static/css/base.css`
-- [ ] T140 [P] Write the one-page agent guide referenced by SC-008 in `docs/agent-guide.md`, in Arabic and English
-- [ ] T141 [P] Document local setup and the three required processes in `README.md`, matching [quickstart.md](quickstart.md)
-- [ ] T142 Set the coverage threshold in CI and record the agreed figure in `pyproject.toml`
-- [ ] T143 Complete [ADR-006](../../docs/decisions/006-deployment-target.md) with the deployment target, then move ADR-002 and ADR-005 from `Proposed` to `Accepted` or revise them
-- [ ] T144 Configure encryption of personal data at rest per the decided deployment target and record the mechanism in `docs/operations.md`, satisfying constitution Principle III
-- [ ] T145 Provision the outbound reply-to address and inbound mail route from [contracts/email.md](contracts/email.md), configure them in `config/settings/production.py`, then re-run `apps/messaging/tests/` against a real mailbox
-- [ ] T146 Exercise database backup and restore end to end and record the procedure in `docs/operations.md`
-- [ ] T147 Confirm the assumed status lifecycle and priority values with stakeholders, updating `apps/tickets/models.py` and [data-model.md](data-model.md) with a migration if they differ
-- [ ] T148 Run all eleven validation scenarios in [quickstart.md](quickstart.md) in both languages before release, recording results in `docs/release-checklist.md`
+- [X] T135 [P] Add database indexes and verify queue and timeline response times against a seeded dataset of 50,000 tickets and 10,000 organizations per SC-009, in `apps/tickets/migrations/` and `apps/customers/migrations/`
+- [X] T136 [P] Profile and remove N+1 queries in `apps/tickets/views.py` and `apps/customers/services/timeline.py`, asserted by query-count tests in `tests/test_query_budget.py`
+- [X] T137 [P] Write `tests/test_concurrent_agents.py` exercising the assumed 50 concurrent agents from [research.md](research.md#8-scale-assumptions)
+- [X] T138 [P] Run an accessibility pass over `templates/` in both languages, covering keyboard navigation and screen-reader labels, and record findings in `docs/accessibility-review.md`
+- [X] T139 [P] Verify mobile browser layout for every screen in `templates/` per FR-036, fixing defects in `static/css/base.css`
+- [X] T140 [P] Write the one-page agent guide referenced by SC-008 in `docs/agent-guide.md`, in Arabic and English
+- [X] T141 [P] Document local setup and the three required processes in `README.md`, matching [quickstart.md](quickstart.md)
+- [X] T142 Set the coverage threshold in CI and record the agreed figure in `pyproject.toml`
+- [ ] T143 Complete [ADR-006](../../docs/decisions/006-deployment-target.md) with the deployment target, then move ADR-002 and ADR-005 from `Proposed` to `Accepted` or revise them — **BLOCKED — needs your decision.** Nothing about this can be determined from the code: it depends on who operates the system, what hosting exists, and any data-residency obligation.
+- [ ] T144 Configure encryption of personal data at rest per the decided deployment target and record the mechanism in `docs/operations.md`, satisfying constitution Principle III — **BLOCKED on T143.** Encryption at rest is a property of the host (encrypted volumes, a managed database with encryption enabled), not application code. Blocks production release, not development.
+- [ ] T145 Provision the outbound reply-to address and inbound mail route from [contracts/email.md](contracts/email.md), configure them in `config/settings/production.py`, then re-run `apps/messaging/tests/` against a real mailbox — **BLOCKED on T143.** Needs a real deliverable address and inbound route. `apps/messaging/services/inbound.py` is fully tested against the four threading rules without one; only the transport adapter is missing.
+- [ ] T146 Exercise database backup and restore end to end and record the procedure in `docs/operations.md` — **BLOCKED on T143.** A backup drill needs the production database to drill against.
+- [ ] T147 Confirm the assumed status lifecycle and priority values with stakeholders, updating `apps/tickets/models.py` and [data-model.md](data-model.md) with a migration if they differ — **BLOCKED — needs a stakeholder.** The lifecycle (New/Open/Pending customer/Resolved/Closed) and priorities (Low/Normal/High/Urgent) are assumptions recorded in data-model.md. Confirming costs a conversation now and a migration later.
+- [ ] T148 Run all eleven validation scenarios in [quickstart.md](quickstart.md) in both languages before release, recording results in `docs/release-checklist.md` — **BLOCKED on the above.** The eleven quickstart scenarios can be run today except those needing a real mailbox (5) and a production environment.
 
 ---
 

@@ -1,0 +1,95 @@
+"""
+T138: accessibility checks that a browser can actually decide.
+
+These are not a substitute for a human pass with a screen reader — they cover the mechanical
+failures that are easy to introduce and easy to miss: an input with no accessible name, a
+control that keyboard users cannot reach, a focus state that is invisible, and text that does
+not survive being enlarged.
+"""
+
+import pytest
+
+pytestmark = [pytest.mark.e2e, pytest.mark.django_db]
+
+PAGES = ["/tickets/", "/customers/", "/customers/unlinked/"]
+
+
+@pytest.mark.parametrize("path", PAGES)
+def test_every_form_control_has_an_accessible_name(signed_in_page, live_server, path):
+    """A select or input with no label, aria-label or title is announced as just "edit text"."""
+    signed_in_page.goto(f"{live_server.url}{path}")
+    unnamed = signed_in_page.eval_on_selector_all(
+        "input:not([type=hidden]), select, textarea",
+        """els => els.filter(el => {
+            if (el.getAttribute('aria-label')) return false;
+            if (el.getAttribute('title')) return false;
+            if (el.id && document.querySelector(`label[for="${el.id}"]`)) return false;
+            if (el.closest('label')) return false;
+            return true;
+        }).map(el => el.outerHTML.slice(0, 90))""",
+    )
+    assert not unnamed, f"{path} has controls with no accessible name: {unnamed}"
+
+
+def test_every_page_has_exactly_one_h1(signed_in_page, live_server):
+    for path in PAGES:
+        signed_in_page.goto(f"{live_server.url}{path}")
+        count = signed_in_page.locator("h1").count()
+        assert count == 1, f"{path} has {count} level-one headings"
+
+
+def test_interactive_controls_are_keyboard_reachable(signed_in_page, live_server):
+    """Anything that acts on a click must be a real button or link — a clickable div is
+    invisible to keyboard and screen-reader users."""
+    signed_in_page.goto(f"{live_server.url}/tickets/")
+    unreachable = signed_in_page.eval_on_selector_all(
+        "[hx-post], [hx-get]",
+        """els => els.filter(el => {
+            const tag = el.tagName.toLowerCase();
+            if (['button', 'a', 'form', 'input', 'select'].includes(tag)) return false;
+            return el.tabIndex < 0;
+        }).map(el => el.outerHTML.slice(0, 90))""",
+    )
+    assert not unreachable, f"not keyboard reachable: {unreachable}"
+
+
+def test_focused_controls_have_a_visible_focus_style(signed_in_page, live_server):
+    """Removing the default outline without replacing it leaves keyboard users with no way
+    to tell where they are."""
+    signed_in_page.goto(f"{live_server.url}/tickets/")
+    signed_in_page.keyboard.press("Tab")
+
+    focus = signed_in_page.evaluate(
+        """() => {
+            const el = document.activeElement;
+            if (!el || el === document.body) return null;
+            const s = getComputedStyle(el);
+            return {outlineWidth: s.outlineWidth, outlineStyle: s.outlineStyle,
+                    boxShadow: s.boxShadow};
+        }"""
+    )
+    assert focus is not None, "tabbing reached nothing focusable"
+    has_outline = focus["outlineStyle"] != "none" and focus["outlineWidth"] != "0px"
+    has_shadow = focus["boxShadow"] not in ("none", "")
+    assert has_outline or has_shadow, f"the focused control shows no focus state: {focus}"
+
+
+def test_the_page_survives_200_percent_text_size(signed_in_page, live_server):
+    """WCAG 1.4.4: text must scale to 200% without content being lost. A layout pinned to
+    fixed pixel heights clips instead."""
+    signed_in_page.goto(f"{live_server.url}/tickets/")
+    signed_in_page.add_style_tag(content="html { font-size: 200% !important; }")
+
+    overflow = signed_in_page.evaluate(
+        "document.documentElement.scrollWidth - document.documentElement.clientWidth"
+    )
+    assert overflow <= 1, f"the page overflows sideways by {overflow}px at 200% text size"
+
+    h1_visible = signed_in_page.locator("h1").is_visible()
+    assert h1_visible
+
+
+def test_document_declares_its_language(signed_in_page, live_server):
+    """Without a lang attribute a screen reader reads Arabic with English pronunciation."""
+    signed_in_page.goto(f"{live_server.url}/tickets/")
+    assert signed_in_page.evaluate("document.documentElement.lang") in ("ar", "en")

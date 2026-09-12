@@ -34,6 +34,7 @@
       {% trans "Assigned to me" %}
     </label>
     <input type="search" name="q" value="{{ filters.q|default:'' }}"
+           aria-label="{% trans 'Search reference, subject or contact' %}"
            placeholder="{% trans 'Search reference, subject or contact' %}">
   </form>
 
