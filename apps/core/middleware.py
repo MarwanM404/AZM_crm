@@ -41,12 +41,15 @@ class LoginRequiredMiddleware:
         serves them, that leaves the public request form with no stylesheet for exactly the
         people it exists for — anonymous customers.
 
-        The prefixes are checked rather than trusted. Django's MEDIA_URL defaults to "/",
-        and a prefix of "/" matches every path on the site — exempting it would switch
-        authentication off entirely. Only a prefix that actually names a subdirectory is
-        usable here.
+        Only STATIC_URL. Uploaded media is deliberately NOT exempt and has no URL route at
+        all: the only way to read an attachment is apps.attachments.views.download, which
+        applies the scope check. Exempting media would hand out customer files to anyone.
+
+        The prefix is checked rather than trusted. Django's MEDIA_URL defaults to "/", and a
+        prefix of "/" matches every path on the site — accepting one would switch
+        authentication off entirely. Only a prefix naming a real subdirectory is usable.
         """
-        for prefix in (settings.STATIC_URL, getattr(settings, "MEDIA_URL", None)):
+        for prefix in (settings.STATIC_URL,):
             if prefix and prefix not in ("", "/") and path.startswith(prefix):
                 return True
         return False
@@ -75,8 +78,19 @@ class UserLanguageMiddleware:
         user = getattr(request, "user", None)
         language = getattr(user, "language", None) if user and user.is_authenticated else None
 
-        if language and language in dict(settings.LANGUAGES):
-            translation.activate(language)
-            request.LANGUAGE_CODE = language
+        if not language or language not in dict(settings.LANGUAGES):
+            return self.get_response(request)
 
-        return self.get_response(request)
+        # `activate` sets the language for the whole THREAD, not the request. Restoring it
+        # afterwards keeps it from leaking into whatever that thread handles next — a
+        # management command, a task running in-process, or, in the test suite, the next test.
+        previous = translation.get_language()
+        translation.activate(language)
+        request.LANGUAGE_CODE = language
+        try:
+            return self.get_response(request)
+        finally:
+            if previous:
+                translation.activate(previous)
+            else:
+                translation.deactivate()

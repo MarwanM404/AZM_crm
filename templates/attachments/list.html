@@ -1,0 +1,12 @@
+{% load i18n %}
+{% if attachments %}
+  <ul class="attachments">
+    {% for attachment in attachments %}
+      <li class="attachment">
+        <a href="{% url 'attachments:download' attachment.pk %}"
+           class="attachment__link">{{ attachment.original_filename }}</a>
+        <span class="attachment__size">{{ attachment.size_bytes|filesizeformat }}</span>
+      </li>
+    {% endfor %}
+  </ul>
+{% endif %}

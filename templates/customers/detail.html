@@ -42,10 +42,15 @@
         {% include "customers/partials/timeline.html" %}
       </div>
 
-      <form class="card composer" method="post" action="{% url 'customers:note' organization.pk %}">
+      <form class="card composer" method="post" enctype="multipart/form-data"
+            action="{% url 'customers:note' organization.pk %}">
         {% csrf_token %}
         <div class="composer__form">
           <textarea name="body" rows="3" placeholder="{% trans 'Add a note about this customer…' %}"></textarea>
+          <label class="attach">
+            <span>{% trans "Attach files" %}</span>
+            <input type="file" name="attachments" multiple>
+          </label>
           <div class="composer__foot">
             <span class="muted">{% trans "Staff only. The customer never sees this." %}</span>
             <button type="submit" class="btn">{% trans "Save note" %}</button>

@@ -325,6 +325,22 @@ customer-facing output including quoted email history.
 
 ---
 
+## Phase 11: File attachments (added 2026-09-12)
+
+The specification lists attachments as in scope ("File attachments on customer notes and
+tickets are in scope but are the first item to drop if the MVP schedule is at risk") but the
+original breakdown gave them no task — a genuine gap. Confirmed as wanted on 2026-09-12.
+
+- [X] T149 Write the security contract first in `apps/attachments/tests/test_download_security.py`: scope returns 404 not 403, uploaded content types are never echoed back, and the stored path is generated rather than taken from the filename
+- [X] T150 Implement `Attachment` in `apps/attachments/models.py`, scoped and soft-deletable, belonging to exactly one of a ticket message or a customer note
+- [X] T151 Implement upload validation in `apps/attachments/services/validation.py` — an extension allowlist (no .html, .svg or .xml), a size limit, and a refusal of empty files
+- [X] T152 Implement the download view in `apps/attachments/views.py` as the only route to a file: MEDIA_ROOT has no URL route at all
+- [X] T153 Wire uploads into the agent reply, the internal note, and the customer note; one refused file must not discard the message
+- [X] T154 Write `apps/attachments/tests/test_internal_boundary.py`: an attachment must not become a second route around FR-015 that the message-level filter cannot see
+- [X] T155 Register `Attachment` for audit and add the attachment strings to both catalogs
+
+---
+
 ## Phase 10: Polish & Cross-Cutting Concerns
 
 **Purpose**: Performance, accessibility, operational readiness, and the decisions that block release

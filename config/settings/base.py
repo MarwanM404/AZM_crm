@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     "apps.tickets",
     "apps.messaging",
     "apps.intake",
+    "apps.attachments",
 ]
 
 MIDDLEWARE = [
@@ -108,6 +109,17 @@ STATICFILES_DIRS = [BASE_DIR / "static"]
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# --- uploaded files ---
+# MEDIA_ROOT deliberately has NO url route: the only way to read a file is
+# apps.attachments.views.download, which applies the scope check. MEDIA_URL exists because
+# Django wants one, not because anything is served from it.
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"
+MAX_ATTACHMENT_BYTES = int(env("MAX_ATTACHMENT_BYTES", default=str(10 * 1024 * 1024)))
+# Refuse an oversized upload before it is buffered to disk rather than after.
+DATA_UPLOAD_MAX_MEMORY_SIZE = MAX_ATTACHMENT_BYTES + (1024 * 1024)
+FILE_UPLOAD_MAX_MEMORY_SIZE = 2 * 1024 * 1024
 
 # --- Celery (ADR-005) ---
 CELERY_BROKER_URL = env("REDIS_URL", default="redis://localhost:6379/0")

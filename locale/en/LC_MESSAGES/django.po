@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-12 15:05+0000\n"
+"POT-Creation-Date: 2026-09-12 15:21+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -88,23 +88,49 @@ msgstr "An account with that email already exists."
 msgid "You cannot deactivate your own account."
 msgstr "You cannot deactivate your own account."
 
+#: apps/attachments/models.py:45
+msgid "file name"
+msgstr "file name"
+
+#: apps/attachments/models.py:71
+msgid "An attachment must belong to either a message or a note, not both."
+msgstr "An attachment must belong to either a message or a note, not both."
+
+#: apps/attachments/services/validation.py:38
+msgid "That file is empty."
+msgstr "That file is empty."
+
+#: apps/attachments/services/validation.py:42
+#, python-format
+msgid "That file is %(size)s MB. The limit is %(limit)s MB."
+msgstr "That file is %(size)s MB. The limit is %(limit)s MB."
+
+#: apps/attachments/services/validation.py:52
+#, python-format
+msgid "%(kind)s files cannot be attached. Allowed: %(allowed)s."
+msgstr "%(kind)s files cannot be attached. Allowed: %(allowed)s."
+
+#: apps/attachments/services/validation.py:54
+msgid "Unnamed"
+msgstr "Unnamed"
+
 #: apps/customers/models.py:71
 msgid "Phone"
 msgstr "Phone"
 
-#: apps/customers/views.py:66 apps/tickets/views.py:237
+#: apps/customers/views.py:68 apps/tickets/views.py:247
 msgid "A note cannot be empty."
 msgstr "A note cannot be empty."
 
-#: apps/customers/views.py:83 apps/customers/views.py:161
+#: apps/customers/views.py:88 apps/customers/views.py:166
 msgid "A name is required."
 msgstr "A name is required."
 
-#: apps/customers/views.py:144
+#: apps/customers/views.py:149
 msgid "Unknown organization."
 msgstr "Unknown organization."
 
-#: apps/customers/views.py:150
+#: apps/customers/views.py:155
 msgid "Choose an organization, or name a new one."
 msgstr "Choose an organization, or name a new one."
 
@@ -120,7 +146,7 @@ msgstr "Email address"
 msgid "Phone number"
 msgstr "Phone number"
 
-#: apps/intake/forms.py:24 templates/tickets/partials/ticket_pane.html:130
+#: apps/intake/forms.py:24 templates/tickets/partials/ticket_pane.html:141
 #: templates/tickets/queue.html:26
 msgid "Category"
 msgstr "Category"
@@ -219,24 +245,24 @@ msgstr "Failed"
 msgid "Not applicable"
 msgstr "Not applicable"
 
-#: apps/tickets/views.py:131
+#: apps/tickets/views.py:135
 msgid "This ticket is already assigned to another agent."
 msgstr "This ticket is already assigned to another agent."
 
-#: apps/tickets/views.py:150
+#: apps/tickets/views.py:154
 msgid "Unknown agent."
 msgstr "Unknown agent."
 
-#: apps/tickets/views.py:164
+#: apps/tickets/views.py:168
 #, python-format
 msgid "A ticket cannot move from %(current)s to %(requested)s."
 msgstr "A ticket cannot move from %(current)s to %(requested)s."
 
-#: apps/tickets/views.py:185
+#: apps/tickets/views.py:189
 msgid "Unknown category."
 msgstr "Unknown category."
 
-#: apps/tickets/views.py:198
+#: apps/tickets/views.py:202
 msgid "A reply cannot be empty."
 msgstr "A reply cannot be empty."
 
@@ -377,7 +403,7 @@ msgid "No entries match these filters."
 msgstr "No entries match these filters."
 
 #: templates/customers/contact_edit.html:3
-#: templates/customers/contact_edit.html:6 templates/customers/detail.html:66
+#: templates/customers/contact_edit.html:6 templates/customers/detail.html:71
 msgid "Edit contact"
 msgstr "Edit contact"
 
@@ -410,25 +436,31 @@ msgstr "Filter by contact"
 msgid "All contacts"
 msgstr "All contacts"
 
-#: templates/customers/detail.html:48
+#: templates/customers/detail.html:49
 msgid "Add a note about this customer…"
 msgstr "Add a note about this customer…"
 
-#: templates/customers/detail.html:50
-#: templates/tickets/partials/ticket_pane.html:100
+#: templates/customers/detail.html:51
+#: templates/tickets/partials/ticket_pane.html:91
+#: templates/tickets/partials/ticket_pane.html:107
+msgid "Attach files"
+msgstr "Attach files"
+
+#: templates/customers/detail.html:55
+#: templates/tickets/partials/ticket_pane.html:111
 msgid "Staff only. The customer never sees this."
 msgstr "Staff only. The customer never sees this."
 
-#: templates/customers/detail.html:51
-#: templates/tickets/partials/ticket_pane.html:101
+#: templates/customers/detail.html:56
+#: templates/tickets/partials/ticket_pane.html:112
 msgid "Save note"
 msgstr "Save note"
 
-#: templates/customers/detail.html:59 templates/customers/list.html:14
+#: templates/customers/detail.html:64 templates/customers/list.html:14
 msgid "Contacts"
 msgstr "Contacts"
 
-#: templates/customers/detail.html:69
+#: templates/customers/detail.html:74
 msgid "No contacts linked yet."
 msgstr "No contacts linked yet."
 
@@ -446,7 +478,7 @@ msgstr "Organizations that have contacted support."
 
 #: templates/customers/list.html:12 templates/customers/unlinked.html:41
 #: templates/tickets/partials/queue_list.html:6
-#: templates/tickets/partials/ticket_pane.html:109
+#: templates/tickets/partials/ticket_pane.html:120
 msgid "Organization"
 msgstr "Organization"
 
@@ -473,11 +505,11 @@ msgid "Raised by %(name)s"
 msgstr "Raised by %(name)s"
 
 #: templates/customers/partials/timeline.html:22
-#: templates/tickets/partials/ticket_pane.html:81
+#: templates/tickets/partials/ticket_pane.html:83
 msgid "Internal note"
 msgstr "Internal note"
 
-#: templates/customers/partials/timeline.html:30
+#: templates/customers/partials/timeline.html:31
 msgid "Nothing has happened on this customer yet."
 msgstr "Nothing has happened on this customer yet."
 
@@ -501,7 +533,7 @@ msgstr ""
 "a hint — nothing is linked automatically."
 
 #: templates/customers/unlinked.html:18
-#: templates/tickets/partials/ticket_pane.html:118
+#: templates/tickets/partials/ticket_pane.html:129
 msgid "Contact"
 msgstr "Contact"
 
@@ -557,13 +589,13 @@ msgid "Sign out"
 msgstr "Sign out"
 
 #: templates/tickets/partials/queue_list.html:7
-#: templates/tickets/partials/ticket_pane.html:137
+#: templates/tickets/partials/ticket_pane.html:148
 #: templates/tickets/queue.html:20
 msgid "Priority"
 msgstr "Priority"
 
 #: templates/tickets/partials/queue_list.html:9
-#: templates/tickets/partials/ticket_pane.html:146
+#: templates/tickets/partials/ticket_pane.html:157
 msgid "Assigned"
 msgstr "Assigned"
 
@@ -591,55 +623,55 @@ msgstr[1] "Showing %(counter)s tickets"
 msgid "Internal note — not visible to the customer"
 msgstr "Internal note — not visible to the customer"
 
-#: templates/tickets/partials/ticket_pane.html:60
+#: templates/tickets/partials/ticket_pane.html:62
 msgid "Not delivered."
 msgstr "Not delivered."
 
-#: templates/tickets/partials/ticket_pane.html:63
+#: templates/tickets/partials/ticket_pane.html:65
 msgid "Delivered by email"
 msgstr "Delivered by email"
 
-#: templates/tickets/partials/ticket_pane.html:68
+#: templates/tickets/partials/ticket_pane.html:70
 msgid "No messages on this ticket yet."
 msgstr "No messages on this ticket yet."
 
-#: templates/tickets/partials/ticket_pane.html:79
+#: templates/tickets/partials/ticket_pane.html:81
 msgid "Reply to customer"
 msgstr "Reply to customer"
 
-#: templates/tickets/partials/ticket_pane.html:87
+#: templates/tickets/partials/ticket_pane.html:89
 msgid "Write your reply…"
 msgstr "Write your reply…"
 
-#: templates/tickets/partials/ticket_pane.html:89
+#: templates/tickets/partials/ticket_pane.html:95
 msgid "Will be emailed to the contact on this ticket."
 msgstr "Will be emailed to the contact on this ticket."
 
-#: templates/tickets/partials/ticket_pane.html:90
+#: templates/tickets/partials/ticket_pane.html:96
 msgid "Send reply"
 msgstr "Send reply"
 
-#: templates/tickets/partials/ticket_pane.html:98
+#: templates/tickets/partials/ticket_pane.html:105
 msgid "Write a note for the team…"
 msgstr "Write a note for the team…"
 
-#: templates/tickets/partials/ticket_pane.html:113
+#: templates/tickets/partials/ticket_pane.html:124
 msgid "Not linked yet"
 msgstr "Not linked yet"
 
-#: templates/tickets/partials/ticket_pane.html:126
+#: templates/tickets/partials/ticket_pane.html:137
 msgid "Properties"
 msgstr "Properties"
 
-#: templates/tickets/partials/ticket_pane.html:147
+#: templates/tickets/partials/ticket_pane.html:158
 msgid "Unassigned"
 msgstr "Unassigned"
 
-#: templates/tickets/partials/ticket_pane.html:148
+#: templates/tickets/partials/ticket_pane.html:159
 msgid "Channel"
 msgstr "Channel"
 
-#: templates/tickets/partials/ticket_pane.html:150
+#: templates/tickets/partials/ticket_pane.html:161
 msgid "Opened"
 msgstr "Opened"
 

@@ -290,3 +290,22 @@ select:focus-visible, input:focus-visible, textarea:focus-visible {
   .filters select, .filters input[type="search"] { inline-size: 100%; }
   .actions { flex-wrap: wrap; }
 }
+
+/* --- attachments --- */
+.attach {
+  display: flex; align-items: center; gap: 10px; margin-block-start: 10px;
+  font-size: 12.5px; color: var(--color-muted);
+}
+.attach input[type="file"] { font-family: inherit; font-size: 12px; min-inline-size: 0; }
+
+.attachments { list-style: none; margin: 11px 0 0; padding: 0; display: flex;
+  flex-direction: column; gap: 5px; }
+.attachment {
+  display: flex; align-items: center; gap: 9px; padding: 6px 10px;
+  border: 1px solid var(--color-line); border-radius: var(--radius);
+  background: var(--color-bg); font-size: 12.5px;
+}
+.attachment__link { font-weight: 500; overflow: hidden; text-overflow: ellipsis;
+  white-space: nowrap; }
+.attachment__size { margin-inline-start: auto; color: var(--color-faint); font-size: 11.5px;
+  flex: none; }

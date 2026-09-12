@@ -3,7 +3,7 @@ Centralized audit registration (T030).
 
 Every model FR-027 requires an audit trail for is registered here, in one place. This
 includes every SoftDeleteModel subclass (Organization, Contact, ContactDetail, Note,
-Category, Ticket, Message) plus User, Department, and Branch, which are audited without
+Category, Ticket, Message, Attachment) plus User, Department, and Branch, which are audited without
 being soft-deletable (accounts are deactivated, not deleted; FR-026).
 tests/test_audit_coverage.py discovers every SoftDeleteModel subclass via introspection and
 asserts each one appears in AUDITED_MODELS, so a new soft-deletable model cannot silently
@@ -17,10 +17,12 @@ entry (FR-028). See apps/core/admin.py.
 from auditlog.registry import auditlog
 
 from apps.accounts.models import Branch, Department, User
+from apps.attachments.models import Attachment
 from apps.customers.models import Contact, ContactDetail, Note, Organization
 from apps.tickets.models import Category, Message, Ticket
 
 AUDITED_MODELS = [
+    Attachment,
     Organization,
     Contact,
     ContactDetail,

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-12 15:05+0000\n"
+"POT-Creation-Date: 2026-09-12 15:21+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -89,23 +89,47 @@ msgstr "يوجد حساب بهذا البريد الإلكتروني بالفع�
 msgid "You cannot deactivate your own account."
 msgstr "لا يمكنك تعطيل حسابك الخاص."
 
+#: apps/attachments/models.py:45
+msgid "file name"
+msgstr "اسم الملف"
+
+#: apps/attachments/models.py:71
+msgid "An attachment must belong to either a message or a note, not both."
+msgstr "يجب أن يرتبط المرفق برسالة أو بملاحظة، لا بكليهما."
+
+#: apps/attachments/services/validation.py:38
+msgid "That file is empty."
+msgstr "هذا الملف فارغ."
+
+#: apps/attachments/services/validation.py:42
+msgid "That file is %(size)s MB. The limit is %(limit)s MB."
+msgstr "حجم الملف %(size)s ميغابايت، والحد الأقصى %(limit)s ميغابايت."
+
+#: apps/attachments/services/validation.py:52
+msgid "%(kind)s files cannot be attached. Allowed: %(allowed)s."
+msgstr "لا يمكن إرفاق ملفات %(kind)s. المسموح: %(allowed)s."
+
+#: apps/attachments/services/validation.py:54
+msgid "Unnamed"
+msgstr "بلا امتداد"
+
 #: apps/customers/models.py:71
 msgid "Phone"
 msgstr "الهاتف"
 
-#: apps/customers/views.py:66 apps/tickets/views.py:237
+#: apps/customers/views.py:68 apps/tickets/views.py:247
 msgid "A note cannot be empty."
 msgstr "لا يمكن حفظ ملاحظة فارغة."
 
-#: apps/customers/views.py:83 apps/customers/views.py:161
+#: apps/customers/views.py:88 apps/customers/views.py:166
 msgid "A name is required."
 msgstr "الاسم مطلوب."
 
-#: apps/customers/views.py:144
+#: apps/customers/views.py:149
 msgid "Unknown organization."
 msgstr "بلا منشأة"
 
-#: apps/customers/views.py:150
+#: apps/customers/views.py:155
 msgid "Choose an organization, or name a new one."
 msgstr "اختر منشأة، أو أدخل اسم منشأة جديدة."
 
@@ -121,7 +145,7 @@ msgstr "البريد الإلكتروني"
 msgid "Phone number"
 msgstr "رقم الهاتف"
 
-#: apps/intake/forms.py:24 templates/tickets/partials/ticket_pane.html:130
+#: apps/intake/forms.py:24 templates/tickets/partials/ticket_pane.html:141
 #: templates/tickets/queue.html:26
 msgid "Category"
 msgstr "التصنيف"
@@ -220,24 +244,24 @@ msgstr "فشل"
 msgid "Not applicable"
 msgstr "لا ينطبق"
 
-#: apps/tickets/views.py:131
+#: apps/tickets/views.py:135
 msgid "This ticket is already assigned to another agent."
 msgstr "هذه التذكرة مُسنَدة بالفعل إلى موظف آخر."
 
-#: apps/tickets/views.py:150
+#: apps/tickets/views.py:154
 msgid "Unknown agent."
 msgstr "موظف غير معروف."
 
-#: apps/tickets/views.py:164
+#: apps/tickets/views.py:168
 #, python-format
 msgid "A ticket cannot move from %(current)s to %(requested)s."
 msgstr "لا يمكن نقل التذكرة من %(current)s إلى %(requested)s."
 
-#: apps/tickets/views.py:185
+#: apps/tickets/views.py:189
 msgid "Unknown category."
 msgstr "تصنيف غير معروف."
 
-#: apps/tickets/views.py:198
+#: apps/tickets/views.py:202
 msgid "A reply cannot be empty."
 msgstr "لا يمكن إرسال رد فارغ."
 
@@ -378,7 +402,7 @@ msgid "No entries match these filters."
 msgstr "لا توجد قيود مطابقة لهذه المرشحات."
 
 #: templates/customers/contact_edit.html:3
-#: templates/customers/contact_edit.html:6 templates/customers/detail.html:66
+#: templates/customers/contact_edit.html:6 templates/customers/detail.html:71
 msgid "Edit contact"
 msgstr "جهة الاتصال"
 
@@ -411,25 +435,31 @@ msgstr "التصفية حسب جهة الاتصال"
 msgid "All contacts"
 msgstr "جهة الاتصال"
 
-#: templates/customers/detail.html:48
+#: templates/customers/detail.html:49
 msgid "Add a note about this customer…"
 msgstr "أضف ملاحظة عن هذا العميل…"
 
-#: templates/customers/detail.html:50
-#: templates/tickets/partials/ticket_pane.html:100
+#: templates/customers/detail.html:51
+#: templates/tickets/partials/ticket_pane.html:91
+#: templates/tickets/partials/ticket_pane.html:107
+msgid "Attach files"
+msgstr "إرفاق ملفات"
+
+#: templates/customers/detail.html:55
+#: templates/tickets/partials/ticket_pane.html:111
 msgid "Staff only. The customer never sees this."
 msgstr "للموظفين فقط. لا يراها العميل إطلاقًا."
 
-#: templates/customers/detail.html:51
-#: templates/tickets/partials/ticket_pane.html:101
+#: templates/customers/detail.html:56
+#: templates/tickets/partials/ticket_pane.html:112
 msgid "Save note"
 msgstr "حفظ الملاحظة"
 
-#: templates/customers/detail.html:59 templates/customers/list.html:14
+#: templates/customers/detail.html:64 templates/customers/list.html:14
 msgid "Contacts"
 msgstr "جهات الاتصال"
 
-#: templates/customers/detail.html:69
+#: templates/customers/detail.html:74
 msgid "No contacts linked yet."
 msgstr "غير مرتبطة بعد"
 
@@ -447,7 +477,7 @@ msgstr "المنشآت التي تواصلت مع الدعم."
 
 #: templates/customers/list.html:12 templates/customers/unlinked.html:41
 #: templates/tickets/partials/queue_list.html:6
-#: templates/tickets/partials/ticket_pane.html:109
+#: templates/tickets/partials/ticket_pane.html:120
 msgid "Organization"
 msgstr "المنشأة"
 
@@ -472,11 +502,11 @@ msgid "Raised by %(name)s"
 msgstr "بواسطة %(name)s"
 
 #: templates/customers/partials/timeline.html:22
-#: templates/tickets/partials/ticket_pane.html:81
+#: templates/tickets/partials/ticket_pane.html:83
 msgid "Internal note"
 msgstr "داخلي"
 
-#: templates/customers/partials/timeline.html:30
+#: templates/customers/partials/timeline.html:31
 msgid "Nothing has happened on this customer yet."
 msgstr "لا توجد رسائل على هذه التذكرة بعد."
 
@@ -500,7 +530,7 @@ msgstr ""
 "ولا يتم الربط تلقائيًا."
 
 #: templates/customers/unlinked.html:18
-#: templates/tickets/partials/ticket_pane.html:118
+#: templates/tickets/partials/ticket_pane.html:129
 msgid "Contact"
 msgstr "جهة الاتصال"
 
@@ -555,13 +585,13 @@ msgid "Sign out"
 msgstr "تسجيل الدخول"
 
 #: templates/tickets/partials/queue_list.html:7
-#: templates/tickets/partials/ticket_pane.html:137
+#: templates/tickets/partials/ticket_pane.html:148
 #: templates/tickets/queue.html:20
 msgid "Priority"
 msgstr "الأولوية"
 
 #: templates/tickets/partials/queue_list.html:9
-#: templates/tickets/partials/ticket_pane.html:146
+#: templates/tickets/partials/ticket_pane.html:157
 msgid "Assigned"
 msgstr "المُسنَدة إلى"
 
@@ -593,55 +623,55 @@ msgstr[5] "عرض %(counter)s تذكرة"
 msgid "Internal note — not visible to the customer"
 msgstr "ملاحظة داخلية — غير ظاهرة للعميل"
 
-#: templates/tickets/partials/ticket_pane.html:60
+#: templates/tickets/partials/ticket_pane.html:62
 msgid "Not delivered."
 msgstr "لم يتم التسليم."
 
-#: templates/tickets/partials/ticket_pane.html:63
+#: templates/tickets/partials/ticket_pane.html:65
 msgid "Delivered by email"
 msgstr "أُرسلت بالبريد الإلكتروني"
 
-#: templates/tickets/partials/ticket_pane.html:68
+#: templates/tickets/partials/ticket_pane.html:70
 msgid "No messages on this ticket yet."
 msgstr "لا توجد رسائل على هذه التذكرة بعد."
 
-#: templates/tickets/partials/ticket_pane.html:79
+#: templates/tickets/partials/ticket_pane.html:81
 msgid "Reply to customer"
 msgstr "بانتظار العميل"
 
-#: templates/tickets/partials/ticket_pane.html:87
+#: templates/tickets/partials/ticket_pane.html:89
 msgid "Write your reply…"
 msgstr "اكتب ردّك…"
 
-#: templates/tickets/partials/ticket_pane.html:89
+#: templates/tickets/partials/ticket_pane.html:95
 msgid "Will be emailed to the contact on this ticket."
 msgstr "سيُرسل بالبريد الإلكتروني إلى جهة الاتصال المرتبطة بهذه التذكرة."
 
-#: templates/tickets/partials/ticket_pane.html:90
+#: templates/tickets/partials/ticket_pane.html:96
 msgid "Send reply"
 msgstr "إرسال الرد"
 
-#: templates/tickets/partials/ticket_pane.html:98
+#: templates/tickets/partials/ticket_pane.html:105
 msgid "Write a note for the team…"
 msgstr "اكتب ملاحظة لفريق العمل…"
 
-#: templates/tickets/partials/ticket_pane.html:113
+#: templates/tickets/partials/ticket_pane.html:124
 msgid "Not linked yet"
 msgstr "غير مرتبطة بعد"
 
-#: templates/tickets/partials/ticket_pane.html:126
+#: templates/tickets/partials/ticket_pane.html:137
 msgid "Properties"
 msgstr "الخصائص"
 
-#: templates/tickets/partials/ticket_pane.html:147
+#: templates/tickets/partials/ticket_pane.html:158
 msgid "Unassigned"
 msgstr "غير مُسنَدة"
 
-#: templates/tickets/partials/ticket_pane.html:148
+#: templates/tickets/partials/ticket_pane.html:159
 msgid "Channel"
 msgstr "القناة"
 
-#: templates/tickets/partials/ticket_pane.html:150
+#: templates/tickets/partials/ticket_pane.html:161
 msgid "Opened"
 msgstr "مفتوحة"
 

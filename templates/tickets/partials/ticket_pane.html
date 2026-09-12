@@ -44,6 +44,7 @@
             <span class="muted">{{ message.created_at }}</span>
           </div>
           <p class="msg__body">{{ message.body|linebreaksbr }}</p>
+          {% include "attachments/list.html" with attachments=message.attachments.all %}
         </article>
       {% else %}
         <article class="msg msg--{{ message.direction|lower }}">
@@ -55,6 +56,7 @@
             <span class="muted">{{ message.created_at }}</span>
           </div>
           <p class="msg__body">{{ message.body|linebreaksbr }}</p>
+          {% include "attachments/list.html" with attachments=message.attachments.all %}
           {% if message.delivery_status == 'FAILED' %}
             <p class="msg__failed">
               {% trans "Not delivered." %} {{ message.delivery_error }}
@@ -81,9 +83,13 @@
       </div>
 
       <form x-show="tab === 'reply'" hx-post="{% url 'tickets:reply' ticket.reference %}"
-            hx-target="#ticket-pane" class="composer__form">
+            hx-target="#ticket-pane" hx-encoding="multipart/form-data" class="composer__form">
         {% csrf_token %}
         <textarea name="body" rows="4" placeholder="{% trans 'Write your reply…' %}"></textarea>
+        <label class="attach">
+          <span>{% trans "Attach files" %}</span>
+          <input type="file" name="attachments" multiple>
+        </label>
         <div class="composer__foot">
           <span class="muted">{% trans "Will be emailed to the contact on this ticket." %}</span>
           <button type="submit" class="btn btn--primary">{% trans "Send reply" %}</button>
@@ -92,9 +98,14 @@
 
       <form x-show="tab === 'note'" x-cloak
             hx-post="{% url 'tickets:note' ticket.reference %}"
-            hx-target="#ticket-pane" class="composer__form composer__form--internal">
+            hx-target="#ticket-pane" hx-encoding="multipart/form-data"
+            class="composer__form composer__form--internal">
         {% csrf_token %}
         <textarea name="body" rows="4" placeholder="{% trans 'Write a note for the team…' %}"></textarea>
+        <label class="attach">
+          <span>{% trans "Attach files" %}</span>
+          <input type="file" name="attachments" multiple>
+        </label>
         <div class="composer__foot">
           <span class="muted">{% trans "Staff only. The customer never sees this." %}</span>
           <button type="submit" class="btn">{% trans "Save note" %}</button>

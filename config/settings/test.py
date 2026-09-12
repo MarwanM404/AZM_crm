@@ -36,3 +36,9 @@ CELERY_TASK_EAGER_PROPAGATES = True
 EMAIL_BACKEND = "django.core.mail.backends.locmem.EmailBackend"
 
 PASSWORD_HASHERS = ["django.contrib.auth.hashers.MD5PasswordHasher"]  # fast tests only
+
+# Test uploads go to a throwaway directory, never the real media tree.
+import tempfile  # noqa: E402
+from pathlib import Path as _Path  # noqa: E402
+
+MEDIA_ROOT = _Path(tempfile.mkdtemp(prefix="azm-test-media-"))

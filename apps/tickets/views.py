@@ -8,6 +8,7 @@ htmx requests get the fragment they asked for; a full request gets the whole pag
 
 import logging
 
+from django.contrib import messages
 from django.db import transaction
 from django.http import HttpResponse
 from django.shortcuts import render
@@ -17,6 +18,7 @@ from django.views.decorators.http import require_POST
 
 from apps.accounts.models import User
 from apps.accounts.permissions import require_administrator
+from apps.attachments.services.uploads import attach_to_message
 from apps.core.shortcuts import get_object_or_404_for_user
 from apps.messaging.tasks import send_ticket_reply_email
 from apps.tickets.models import Category, Message, Ticket
@@ -99,7 +101,9 @@ def detail(request, reference):
 def _detail_context(request, ticket):
     return {
         "ticket": ticket,
-        "messages_": staff_messages_for(ticket).select_related("author"),
+        "messages_": staff_messages_for(ticket)
+        .select_related("author")
+        .prefetch_related("attachments"),
         "statuses": Ticket.Status.choices,
         "priorities": Ticket.Priority.choices,
         "categories": Category.objects.filter(department=ticket.department, is_active=True),
@@ -224,6 +228,12 @@ def reply(request, reference):
     except Exception:
         logger.exception("Queueing the reply email failed for message %s", message.pk)
 
+    _attached, upload_errors = attach_to_message(
+        request.FILES.getlist("attachments"), message, request.user
+    )
+    if upload_errors:
+        messages.warning(request, "; ".join(upload_errors))
+
     ticket.refresh_from_db()
     return _thread_response(request, ticket)
 
@@ -236,7 +246,7 @@ def note(request, reference):
     if not body:
         return HttpResponse(_("A note cannot be empty."), status=422)
 
-    Message.objects.create(
+    internal_note = Message.objects.create(
         ticket=ticket,
         author=request.user,
         direction=Message.Direction.OUTBOUND,
@@ -245,4 +255,9 @@ def note(request, reference):
         body=body,
         delivery_status=Message.DeliveryStatus.NOT_APPLICABLE,
     )
+    _attached, upload_errors = attach_to_message(
+        request.FILES.getlist("attachments"), internal_note, request.user
+    )
+    if upload_errors:
+        messages.warning(request, "; ".join(upload_errors))
     return _thread_response(request, ticket)

@@ -24,6 +24,7 @@
           <span class="muted">{{ entry.at }}</span>
         </div>
         <p class="msg__body">{{ entry.obj.body|linebreaksbr }}</p>
+        {% include "attachments/list.html" with attachments=entry.obj.attachments.all %}
       </article>
     {% endif %}
   {% empty %}

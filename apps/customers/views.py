@@ -5,6 +5,7 @@ Every view reads through `for_user()` or `get_object_or_404_for_user()`, so an o
 record returns 404 rather than 403 (FR-024).
 """
 
+from django.contrib import messages
 from django.db.models import Count
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
@@ -12,6 +13,7 @@ from django.utils.translation import gettext as _
 from django.views.decorators.http import require_POST
 
 from apps.accounts.permissions import require_administrator
+from apps.attachments.services.uploads import attach_to_note
 from apps.core.shortcuts import get_object_or_404_for_user
 from apps.customers.models import Contact, Note, Organization
 from apps.customers.services.linking import link_contact
@@ -65,13 +67,18 @@ def add_note(request, pk):
     if not body:
         return HttpResponse(_("A note cannot be empty."), status=422)
 
-    Note.objects.create(
+    note = Note.objects.create(
         organization=organization,
         author=request.user,
         body=body,
         department=organization.department,
         branch=organization.branch,
     )
+    _attached, upload_errors = attach_to_note(
+        request.FILES.getlist("attachments"), note, request.user
+    )
+    if upload_errors:
+        messages.warning(request, "; ".join(upload_errors))
     return redirect("customers:detail", pk=organization.pk)
 
 
