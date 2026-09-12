@@ -125,6 +125,16 @@ EMAIL_HOST_USER = env("EMAIL_HOST_USER", default="")
 EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD", default="")
 EMAIL_USE_TLS = env_bool("EMAIL_USE_TLS", default=True)
 
+# Inbound mail (FR-013). Empty until IT provides a domain and a route — see
+# docs/email-setup.md. An unset mode means inbound collection is off, which is a valid state,
+# not an error: the threading logic is tested independently of transport.
+INBOUND_EMAIL_MODE = env("INBOUND_EMAIL_MODE", default="")  # "webhook" | "imap" | ""
+INBOUND_EMAIL_HOST = env("INBOUND_EMAIL_HOST", default="")
+INBOUND_EMAIL_USER = env("INBOUND_EMAIL_USER", default="")
+INBOUND_EMAIL_PASSWORD = env("INBOUND_EMAIL_PASSWORD", default="")
+INBOUND_EMAIL_WEBHOOK_SECRET = env("INBOUND_EMAIL_WEBHOOK_SECRET", default="")
+INBOUND_EMAIL_ENABLED = bool(INBOUND_EMAIL_MODE)
+
 # --- Logging: no secrets or PII in logs (constitution: Security & Access Control) ---
 LOGGING = {
     "version": 1,
@@ -150,5 +160,8 @@ LOGIN_EXEMPT_URL_NAMES = {
     "intake:form",
     "intake:submitted",
     "accounts:sign_in",
+    # Authenticated by a shared secret rather than a session — the sender is a mail provider,
+    # not a person. See apps/messaging/views.py.
+    "messaging:inbound_webhook",
 }
 LOGIN_URL = "accounts:sign_in"

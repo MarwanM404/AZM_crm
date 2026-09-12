@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-11 22:06+0000\n"
+"POT-Creation-Date: 2026-09-12 15:05+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -92,19 +92,19 @@ msgstr "You cannot deactivate your own account."
 msgid "Phone"
 msgstr "Phone"
 
-#: apps/customers/views.py:54 apps/tickets/views.py:237
+#: apps/customers/views.py:66 apps/tickets/views.py:237
 msgid "A note cannot be empty."
 msgstr "A note cannot be empty."
 
-#: apps/customers/views.py:71 apps/customers/views.py:149
+#: apps/customers/views.py:83 apps/customers/views.py:161
 msgid "A name is required."
 msgstr "A name is required."
 
-#: apps/customers/views.py:132
+#: apps/customers/views.py:144
 msgid "Unknown organization."
 msgstr "Unknown organization."
 
-#: apps/customers/views.py:138
+#: apps/customers/views.py:150
 msgid "Choose an organization, or name a new one."
 msgstr "Choose an organization, or name a new one."
 
@@ -120,7 +120,7 @@ msgstr "Email address"
 msgid "Phone number"
 msgstr "Phone number"
 
-#: apps/intake/forms.py:24 templates/tickets/partials/ticket_pane.html:127
+#: apps/intake/forms.py:24 templates/tickets/partials/ticket_pane.html:130
 #: templates/tickets/queue.html:26
 msgid "Category"
 msgstr "Category"
@@ -187,35 +187,35 @@ msgstr "Closed"
 msgid "Web form"
 msgstr "Web form"
 
-#: apps/tickets/models.py:118
+#: apps/tickets/models.py:119
 msgid "Inbound"
 msgstr "Inbound"
 
-#: apps/tickets/models.py:119
+#: apps/tickets/models.py:120
 msgid "Outbound"
 msgstr "Outbound"
 
-#: apps/tickets/models.py:122
+#: apps/tickets/models.py:123
 msgid "Public"
 msgstr "Public"
 
-#: apps/tickets/models.py:123
+#: apps/tickets/models.py:124
 msgid "Internal"
 msgstr "Internal"
 
-#: apps/tickets/models.py:126
+#: apps/tickets/models.py:127
 msgid "Pending"
 msgstr "Pending"
 
-#: apps/tickets/models.py:127
+#: apps/tickets/models.py:128
 msgid "Sent"
 msgstr "Sent"
 
-#: apps/tickets/models.py:128
+#: apps/tickets/models.py:129
 msgid "Failed"
 msgstr "Failed"
 
-#: apps/tickets/models.py:129
+#: apps/tickets/models.py:130
 msgid "Not applicable"
 msgstr "Not applicable"
 
@@ -415,12 +415,12 @@ msgid "Add a note about this customer…"
 msgstr "Add a note about this customer…"
 
 #: templates/customers/detail.html:50
-#: templates/tickets/partials/ticket_pane.html:97
+#: templates/tickets/partials/ticket_pane.html:100
 msgid "Staff only. The customer never sees this."
 msgstr "Staff only. The customer never sees this."
 
 #: templates/customers/detail.html:51
-#: templates/tickets/partials/ticket_pane.html:98
+#: templates/tickets/partials/ticket_pane.html:101
 msgid "Save note"
 msgstr "Save note"
 
@@ -446,7 +446,7 @@ msgstr "Organizations that have contacted support."
 
 #: templates/customers/list.html:12 templates/customers/unlinked.html:41
 #: templates/tickets/partials/queue_list.html:6
-#: templates/tickets/partials/ticket_pane.html:106
+#: templates/tickets/partials/ticket_pane.html:109
 msgid "Organization"
 msgstr "Organization"
 
@@ -473,7 +473,7 @@ msgid "Raised by %(name)s"
 msgstr "Raised by %(name)s"
 
 #: templates/customers/partials/timeline.html:22
-#: templates/tickets/partials/ticket_pane.html:78
+#: templates/tickets/partials/ticket_pane.html:81
 msgid "Internal note"
 msgstr "Internal note"
 
@@ -501,7 +501,7 @@ msgstr ""
 "a hint — nothing is linked automatically."
 
 #: templates/customers/unlinked.html:18
-#: templates/tickets/partials/ticket_pane.html:115
+#: templates/tickets/partials/ticket_pane.html:118
 msgid "Contact"
 msgstr "Contact"
 
@@ -552,18 +552,18 @@ msgstr "Please quote this reference in any further correspondence."
 msgid "Ticket queue"
 msgstr "Ticket queue"
 
-#: templates/shell.html:40
+#: templates/shell.html:41
 msgid "Sign out"
 msgstr "Sign out"
 
 #: templates/tickets/partials/queue_list.html:7
-#: templates/tickets/partials/ticket_pane.html:134
+#: templates/tickets/partials/ticket_pane.html:137
 #: templates/tickets/queue.html:20
 msgid "Priority"
 msgstr "Priority"
 
 #: templates/tickets/partials/queue_list.html:9
-#: templates/tickets/partials/ticket_pane.html:143
+#: templates/tickets/partials/ticket_pane.html:146
 msgid "Assigned"
 msgstr "Assigned"
 
@@ -603,43 +603,43 @@ msgstr "Delivered by email"
 msgid "No messages on this ticket yet."
 msgstr "No messages on this ticket yet."
 
-#: templates/tickets/partials/ticket_pane.html:76
+#: templates/tickets/partials/ticket_pane.html:79
 msgid "Reply to customer"
 msgstr "Reply to customer"
 
-#: templates/tickets/partials/ticket_pane.html:84
+#: templates/tickets/partials/ticket_pane.html:87
 msgid "Write your reply…"
 msgstr "Write your reply…"
 
-#: templates/tickets/partials/ticket_pane.html:86
+#: templates/tickets/partials/ticket_pane.html:89
 msgid "Will be emailed to the contact on this ticket."
 msgstr "Will be emailed to the contact on this ticket."
 
-#: templates/tickets/partials/ticket_pane.html:87
+#: templates/tickets/partials/ticket_pane.html:90
 msgid "Send reply"
 msgstr "Send reply"
 
-#: templates/tickets/partials/ticket_pane.html:95
+#: templates/tickets/partials/ticket_pane.html:98
 msgid "Write a note for the team…"
 msgstr "Write a note for the team…"
 
-#: templates/tickets/partials/ticket_pane.html:110
+#: templates/tickets/partials/ticket_pane.html:113
 msgid "Not linked yet"
 msgstr "Not linked yet"
 
-#: templates/tickets/partials/ticket_pane.html:123
+#: templates/tickets/partials/ticket_pane.html:126
 msgid "Properties"
 msgstr "Properties"
 
-#: templates/tickets/partials/ticket_pane.html:144
+#: templates/tickets/partials/ticket_pane.html:147
 msgid "Unassigned"
 msgstr "Unassigned"
 
-#: templates/tickets/partials/ticket_pane.html:145
+#: templates/tickets/partials/ticket_pane.html:148
 msgid "Channel"
 msgstr "Channel"
 
-#: templates/tickets/partials/ticket_pane.html:147
+#: templates/tickets/partials/ticket_pane.html:150
 msgid "Opened"
 msgstr "Opened"
 
@@ -664,6 +664,6 @@ msgstr "Category: Any"
 msgid "Assigned to me"
 msgstr "Assigned to me"
 
-#: templates/tickets/queue.html:37
+#: templates/tickets/queue.html:37 templates/tickets/queue.html:38
 msgid "Search reference, subject or contact"
 msgstr "Search reference, subject or contact"

@@ -410,9 +410,9 @@ for that ticket and confirm the message is absent from all of them.
 - Phase 0 foundation work (project skeleton, continuous integration, quality gates, migrations, and
   architecture decisions 1 through 5 in the roadmap) is a prerequisite of this specification and is
   not itself specified here, having no user-facing behavior.
-- The ticket status lifecycle is assumed to be New, Open, Pending Customer, Resolved, Closed, with
-  reopening permitted from Resolved. Confirm with stakeholders before implementation.
-- Ticket priorities are assumed to be Low, Normal, High, Urgent, with Normal as the default.
+- The ticket status lifecycle is New, Open, Pending Customer, Resolved, Closed, with reopening
+  permitted from Resolved. Confirmed with stakeholders on 2026-09-12; no longer an assumption.
+- Ticket priorities are Low, Normal, High, Urgent, with Normal as the default. Confirmed 2026-09-12.
 - Ticket categories are assumed to be administrator-maintained values rather than fixed in code.
 - The public request form does not require the submitter to have an account. Self-service login for
   customers arrives with the customer portal in a later phase.

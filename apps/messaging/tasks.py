@@ -133,16 +133,34 @@ def _deliver_reply(task, message_id):
 @shared_task
 def collect_inbound_email():
     """
-    Scheduled collection of inbound mail (Celery Beat).
+    Scheduled collection of inbound mail (Celery Beat, FR-013).
 
-    The adapter behind this is decided with the deployment target (ADR-006): a provider
-    webhook where one exists, otherwise IMAP polling. Until that is settled, this task is the
-    seam — `apps.messaging.services.inbound.ingest` is what either adapter calls, and it is
-    fully tested independently of how the mail arrives.
+    Only used by the IMAP transport — a webhook needs no polling, since the provider posts to
+    us. Messages are marked seen only after they have been stored, so a crash mid-batch
+    redelivers rather than losing mail.
     """
-    if not getattr(settings, "INBOUND_EMAIL_ENABLED", False):
-        return {"collected": 0, "reason": "inbound collection not configured (ADR-006)"}
+    from apps.accounts.models import Branch, Department
+    from apps.messaging.services.adapters import ImapAdapter, get_adapter
+    from apps.messaging.services.inbound import ingest
 
-    raise NotImplementedError(
-        "Inbound mail adapter is pending the deployment decision in ADR-006 (T145)."
-    )
+    adapter = get_adapter()
+    if adapter is None:
+        return {"collected": 0, "reason": "inbound email is not configured (ADR-006)"}
+    if not isinstance(adapter, ImapAdapter):
+        return {"collected": 0, "reason": "webhook transport does not poll"}
+
+    department = Department.objects.filter(is_active=True).order_by("pk").first()
+    branch = Branch.objects.filter(is_active=True).order_by("pk").first()
+    if department is None or branch is None:
+        return {"collected": 0, "reason": "no active department or branch to file mail under"}
+
+    stored = []
+    for uid, message in adapter.fetch_unseen():
+        log = ingest(message, department, branch)
+        # Only mark seen once it is safely stored. A message retained with a processing error
+        # still counts as stored — it is in the log and can be inspected, not lost.
+        if log.pk:
+            stored.append(uid)
+
+    adapter.mark_seen(stored)
+    return {"collected": len(stored)}

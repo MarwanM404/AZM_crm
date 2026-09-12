@@ -6,7 +6,8 @@ applies one, so the guard cannot be bypassed by a view that forgets to check. Ev
 transition is saved with the side effects the status implies (resolved_at set on resolve,
 cleared on reopen), which keeps the SLA phase's future reporting honest.
 
-The lifecycle itself is an assumption pending stakeholder confirmation (T147).
+The lifecycle was confirmed with stakeholders on 2026-09-12 (T147); it is settled, not an
+assumption.
 """
 
 from django.utils import timezone

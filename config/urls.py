@@ -8,6 +8,7 @@ urlpatterns = [
     # no session-terminating deactivation — FR-021, FR-026).
     path("django-admin/", admin.site.urls),
     path("admin/", include("apps.accounts.urls_admin")),
+    path("email/", include("apps.messaging.urls")),
     path("", include("apps.intake.urls")),
     path("", include("apps.accounts.urls")),
     path("tickets/", include("apps.tickets.urls")),

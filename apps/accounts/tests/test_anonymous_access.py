@@ -64,9 +64,22 @@ def test_anonymous_visitor_is_denied_or_explicitly_public(client, name, kwargs):
 
 
 def test_exempt_list_is_small_and_deliberate():
-    """A growing exemption list is how deny-by-default quietly becomes allow-by-default."""
+    """A growing exemption list is how deny-by-default quietly becomes allow-by-default.
+
+    Pinning the exact set means adding one requires editing this test, which forces the
+    question "should this really be public?" to be answered rather than skipped. Each entry
+    below carries why it is here:
+
+    - intake:form / intake:submitted — the public request form. Its entire audience is people
+      who have no account and never will.
+    - accounts:sign_in — you cannot require a session to reach the page that creates one.
+    - messaging:inbound_webhook — the sender is a mail provider, not a person. It is
+      authenticated by a shared secret compared in constant time, refuses everything if that
+      secret is unset, and is covered by apps/messaging/tests/test_inbound_transport.py.
+    """
     assert settings.LOGIN_EXEMPT_URL_NAMES == {
         "intake:form",
         "intake:submitted",
         "accounts:sign_in",
+        "messaging:inbound_webhook",
     }

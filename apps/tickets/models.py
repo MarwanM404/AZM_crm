@@ -50,7 +50,8 @@ class Ticket(ScopedSoftDeleteModel):
         WEB_FORM = "WEB_FORM", _("Web form")
         EMAIL = "EMAIL", _("Email")
 
-    # Assumption pending stakeholder confirmation (data-model.md, T147).
+    # Confirmed with stakeholders 2026-09-12 (T147). Changing these now means migrating
+    # live ticket data, so treat an edit here as a schema change, not a tweak.
     ALLOWED_TRANSITIONS = {
         Status.NEW: {Status.OPEN, Status.RESOLVED},
         Status.OPEN: {Status.PENDING_CUSTOMER, Status.RESOLVED},

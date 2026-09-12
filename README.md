@@ -90,6 +90,7 @@ Redis, and unrestricted network access needs none of these workarounds.
 | [docs/decisions/](docs/decisions/) | Architecture decisions and why |
 | [docs/agent-guide.md](docs/agent-guide.md) | One page an agent needs to work a ticket, in English and Arabic |
 | [docs/accessibility-review.md](docs/accessibility-review.md) | What is checked automatically, what still needs a person |
+| [docs/email-setup.md](docs/email-setup.md) | What to ask IT for so replies reach customers — written to hand over as-is |
 | [specs/001-mvp-ticket-desk/](specs/001-mvp-ticket-desk/) | Specification, plan, contracts and task list |
 
 ## Working on the translations

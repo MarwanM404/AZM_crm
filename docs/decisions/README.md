@@ -14,7 +14,7 @@ record that supersedes the old one, rather than an edit that erases the history.
 | [003](003-frontend-approach.md) | Server-rendered Django with htmx and Alpine.js | Accepted | #3 |
 | [004](004-tenancy-scoping.md) | Explicit department and branch scoping | Proposed | #4 |
 | [005](005-background-jobs.md) | Celery with Redis | Proposed | #5 |
-| [006](006-deployment-target.md) | Deployment target | Draft | #8 |
+| [006](006-deployment-target.md) | Local for development; production target deferred | Accepted | #8 |
 
 Roadmap decisions #6 (WhatsApp and SMS providers) and #7 (AI provider and data policy) are
 deliberately deferred; both belong to phases outside the MVP.

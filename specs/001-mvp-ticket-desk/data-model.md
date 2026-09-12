@@ -78,7 +78,7 @@ One request for support. Scoped, soft-deletable.
 organization at creation), `contact` (required), `subject`, `description`, `category`, `priority`,
 `status`, `assigned_to` (nullable), `origin_channel`, `first_response_at`, `resolved_at`.
 
-- `priority`: `LOW`, `NORMAL`, `HIGH`, `URGENT`, default `NORMAL` (assumption, pending confirmation).
+- `priority`: `LOW`, `NORMAL`, `HIGH`, `URGENT`, default `NORMAL`. Confirmed 2026-09-12.
 - `origin_channel`: `WEB_FORM` or `EMAIL` in the MVP.
 - `assigned_to` transitions from null to an agent when taken (FR-039). A transition from one agent
   to another is a reassignment requiring administrator permission (FR-008).
@@ -87,7 +87,7 @@ organization at creation), `contact` (required), `subject`, `description`, `cate
 
 #### Status lifecycle
 
-Assumption pending stakeholder confirmation. Transitions outside this set are rejected (FR-009).
+Confirmed with stakeholders on 2026-09-12. Transitions outside this set are rejected (FR-009).
 
 ```text
 NEW ──────────▶ OPEN ──────────▶ PENDING_CUSTOMER
