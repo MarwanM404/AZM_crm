@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-12 18:56+0000\n"
+"POT-Creation-Date: 2026-09-12 19:28+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -180,6 +180,26 @@ msgstr "المحادثة المباشرة"
 #: apps/chat/services/lifecycle.py:96 templates/chat/widget.html:52
 msgid "This conversation has ended."
 msgstr "انتهت هذه المحادثة."
+
+#: apps/chat/services/transcript.py:97
+#, python-format
+msgid "Live chat %(reference)s attached (%(count)d message)."
+msgid_plural "Live chat %(reference)s attached (%(count)d messages)."
+msgstr[0] "تم إرفاق المحادثة المباشرة %(reference)s (%(count)d رسالة)."
+msgstr[1] "تم إرفاق المحادثة المباشرة %(reference)s (رسالة واحدة)."
+msgstr[2] "تم إرفاق المحادثة المباشرة %(reference)s (رسالتان)."
+msgstr[3] "تم إرفاق المحادثة المباشرة %(reference)s (%(count)d رسائل)."
+msgstr[4] "تم إرفاق المحادثة المباشرة %(reference)s (%(count)d رسالة)."
+msgstr[5] "تم إرفاق المحادثة المباشرة %(reference)s (%(count)d رسالة)."
+
+#: apps/chat/services/transcript.py:107
+#, python-format
+msgid "Transcript moved to %(reference)s."
+msgstr "تم نقل نص المحادثة إلى %(reference)s."
+
+#: apps/chat/views.py:210
+msgid "This conversation cannot be attached to that ticket."
+msgstr "لا يمكن إرفاق هذه المحادثة بتلك التذكرة."
 
 #: apps/customers/models.py:71
 msgid "Phone"
@@ -402,7 +422,8 @@ msgstr "الانتقال إلى متصل"
 msgid "Capacity"
 msgstr "السعة"
 
-#: templates/chat/console.html:37
+#: templates/chat/console.html:40
+#, python-format
 msgid "%(counter)s conversation free"
 msgid_plural "%(counter)s conversations free"
 msgstr[0] "لا توجد محادثات متاحة"
@@ -412,7 +433,7 @@ msgstr[3] "%(counter)s محادثات متاحة"
 msgstr[4] "%(counter)s محادثة متاحة"
 msgstr[5] "%(counter)s محادثة متاحة"
 
-#: templates/chat/console.html:40
+#: templates/chat/console.html:43
 msgid "You stop receiving new conversations when this reaches zero."
 msgstr "تتوقف عن استقبال محادثات جديدة عندما تصل هذه إلى صفر."
 
@@ -438,7 +459,11 @@ msgstr "غير مرتبطة بعد"
 msgid "Recent tickets"
 msgstr "التذاكر الأخيرة"
 
-#: templates/chat/conversation.html:58
+#: templates/chat/conversation.html:66
+msgid "Attach this chat"
+msgstr "إرفاق هذه المحادثة"
+
+#: templates/chat/conversation.html:71
 msgid "This is their first ticket."
 msgstr "هذه أول تذكرة لهم."
 

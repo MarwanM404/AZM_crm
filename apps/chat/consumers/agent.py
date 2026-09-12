@@ -65,6 +65,10 @@ class AgentConsumer(ChatConsumer):
             await self._offline_requested()
         elif kind == "focus":
             await self._focus(payload.get("conversation"))
+        elif kind == "close":
+            await self._close_conversation(
+                payload.get("conversation"), resolve=bool(payload.get("resolve"))
+            )
 
     # --- group membership ---
 
@@ -167,3 +171,27 @@ class AgentConsumer(ChatConsumer):
 
         if conversation_id is not None:
             unread.clear(self.user.pk, conversation_id)
+
+    async def _close_conversation(self, conversation_id, *, resolve: bool):
+        """End it, optionally marking the ticket resolved (FR-029).
+
+        Ending a chat and solving the problem are different events. A conversation that ends
+        because the customer had to leave should not quietly close their ticket, so resolving
+        is something the agent states, never something the ending implies.
+        """
+        conversation = await self._conversation_for(conversation_id)
+        if conversation is None:
+            return
+        await database_sync_to_async(self._end)(conversation, resolve)
+
+    def _end(self, conversation, resolve: bool):
+        from apps.chat.services import lifecycle
+
+        lifecycle.end(
+            conversation,
+            reason=Conversation.EndReason.RESOLVED
+            if resolve
+            else Conversation.EndReason.ENDED_BY_AGENT,
+            ended_by=self.user,
+            resolve=resolve,
+        )

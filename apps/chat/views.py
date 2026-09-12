@@ -5,16 +5,18 @@ The conversation itself happens over WebSocket; these are what opens it, and wha
 site asks before deciding whether to show a chat launcher at all.
 """
 
-from django.http import JsonResponse
-from django.shortcuts import render
+from django.http import Http404, HttpResponse, JsonResponse
+from django.shortcuts import redirect, render
+from django.utils.translation import gettext as _
 from django.views.decorators.http import require_GET, require_http_methods
 
 from apps.accounts.models import Branch, Department
 from apps.chat.forms import PreChatForm
 from apps.chat.models import Conversation
-from apps.chat.services import lifecycle, presence, queue, unread
+from apps.chat.services import lifecycle, presence, queue, transcript, unread
 from apps.core.shortcuts import get_object_or_404_for_user
 from apps.customers.services.matching import find_or_create_contact
+from apps.tickets.models import Ticket
 from apps.tickets.services.visibility import staff_messages_for
 
 
@@ -149,6 +151,20 @@ def console(request):
     )
 
 
+def _recent_tickets(conversation):
+    """The customer's other tickets, each marked with whether this chat may be attached to it.
+
+    Offering an "Attach" button that the policy will refuse with a 422 teaches agents to
+    distrust the button. The eligibility rule stays in one place — this only asks it.
+    """
+    tickets = list(
+        conversation.contact.tickets.exclude(pk=conversation.ticket_id).order_by("-created_at")[:5]
+    )
+    for ticket in tickets:
+        ticket.attachable = transcript.can_attach_to(conversation, ticket)
+    return tickets
+
+
 @require_GET
 def conversation_detail(request, pk):
     """One conversation with its history and the customer beside it.
@@ -166,8 +182,31 @@ def conversation_detail(request, pk):
             "section": "chat",
             "conversation": conversation,
             "messages_": staff_messages_for(conversation.ticket).select_related("author"),
-            "recent_tickets": conversation.contact.tickets.exclude(
-                pk=conversation.ticket_id
-            ).order_by("-created_at")[:5],
+            "recent_tickets": _recent_tickets(conversation),
         },
     )
+
+
+@require_http_methods(["POST"])
+def attach(request, pk):
+    """Move this conversation's transcript onto a ticket the customer already had (FR-041).
+
+    Both lookups go through the scope-aware helper, so a ticket in another department is
+    absent rather than forbidden — a 403 here would confirm that the reference the agent
+    guessed at exists somewhere (MVP FR-024).
+    """
+    conversation = get_object_or_404_for_user(Conversation, request.user, pk=pk)
+
+    try:
+        target_pk = int(request.POST.get("ticket", ""))
+    except (TypeError, ValueError):
+        # An unusable identifier is indistinguishable from an absent ticket.
+        raise Http404 from None
+    target = get_object_or_404_for_user(Ticket, request.user, pk=target_pk)
+
+    try:
+        transcript.move_to(conversation, target, actor=request.user)
+    except transcript.NotAttachable:
+        return HttpResponse(_("This conversation cannot be attached to that ticket."), status=422)
+
+    return redirect("chat:conversation", pk=conversation.pk)

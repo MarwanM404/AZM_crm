@@ -49,10 +49,22 @@
 
       <div class="card side-card">
         <div class="label">{% trans "Recent tickets" %}</div>
+        {% comment %}
+          Attaching moves this conversation's transcript onto a ticket the customer already
+          had, so the history stays in one place. The placeholder ticket is retired, not
+          destroyed — see apps/chat/services/transcript.py.
+        {% endcomment %}
         {% for ticket in recent_tickets %}
           <div class="side-card__contact">
             <a class="ref" href="{% url 'tickets:detail' ticket.reference %}">{{ ticket.reference }}</a>
             <div class="trunc muted">{{ ticket.subject }}</div>
+            {% if ticket.attachable and conversation.state != 'ENDED' %}
+              <form method="post" action="{% url 'chat:attach' conversation.pk %}">
+                {% csrf_token %}
+                <input type="hidden" name="ticket" value="{{ ticket.pk }}">
+                <button type="submit" class="btn btn--quiet btn--sm">{% trans "Attach this chat" %}</button>
+              </form>
+            {% endif %}
           </div>
         {% empty %}
           <p class="muted">{% trans "This is their first ticket." %}</p>

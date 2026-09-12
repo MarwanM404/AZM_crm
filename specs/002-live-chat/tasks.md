@@ -180,21 +180,21 @@ the exchange in order.
 
 ### Tests for User Story 3
 
-- [ ] T065 [P] [US3] Write `apps/chat/tests/test_transcript.py` asserting every message from both parties lands on the ticket in order, attributed and timestamped
-- [ ] T066 [P] [US3] Write `apps/chat/tests/test_ticket_creation.py` asserting a ticket exists from the moment the conversation starts, with `origin_channel=CHAT`
-- [ ] T067 [P] [US3] Write `apps/chat/tests/test_reference_timing.py` asserting the visitor is given **no** reference until the conversation ends (FR-040)
-- [ ] T068 [P] [US3] Write `apps/chat/tests/test_attach_ticket.py` asserting attaching to an existing ticket moves the transcript there, soft-deletes the placeholder, audits both, and refuses a ticket outside the agent's scope
-- [ ] T069 [P] [US3] Write `apps/chat/tests/test_resolution.py` asserting an unresolved conversation leaves its ticket open, and a resolved one resolves it and can be reopened by a later customer reply
-- [ ] T070 [P] [US3] Write `apps/chat/tests/test_timeline_parity.py` asserting a chat ticket appears on the organization timeline identically to an emailed one
+- [X] T065 [P] [US3] Write `apps/chat/tests/test_transcript.py` asserting every message from both parties lands on the ticket in order, attributed and timestamped
+- [X] T066 [P] [US3] Write `apps/chat/tests/test_ticket_creation.py` asserting a ticket exists from the moment the conversation starts, with `origin_channel=CHAT`
+- [X] T067 [P] [US3] Write `apps/chat/tests/test_reference_timing.py` asserting the visitor is given **no** reference until the conversation ends (FR-040)
+- [X] T068 [P] [US3] Write `apps/chat/tests/test_attach_ticket.py` asserting attaching to an existing ticket moves the transcript there, soft-deletes the placeholder, audits both, and refuses a ticket outside the agent's scope
+- [X] T069 [P] [US3] Write `apps/chat/tests/test_resolution.py` asserting an unresolved conversation leaves its ticket open, and a resolved one resolves it and can be reopened by a later customer reply
+- [X] T070 [P] [US3] Write `apps/chat/tests/test_timeline_parity.py` asserting a chat ticket appears on the organization timeline identically to an emailed one
 
 ### Implementation for User Story 3
 
-- [ ] T071 [US3] Implement `apps/chat/services/transcript.py`, writing the conversation onto its ticket when it ends
-- [ ] T072 [US3] Create the conversation's ticket at start in `apps/chat/services/lifecycle.py`, so a transcript can never be orphaned by an unexpected ending
-- [ ] T073 [US3] Implement `/chat/conversations/<id>/attach/` in `apps/chat/views.py`, soft-deleting the placeholder and auditing both actions
-- [ ] T074 [US3] Implement ending with optional resolution, reusing `apps/tickets/services/lifecycle.py` rather than a second state machine
-- [ ] T075 [US3] Show the reference to the visitor in the `ended` frame emitted by `apps/chat/consumers/visitor.py`, and only there (FR-040)
-- [ ] T076 [US3] Extract and compile translations for this phase into `locale/ar/LC_MESSAGES/django.po` and `locale/en/LC_MESSAGES/django.po`, then check with `tools/catalog.py status`
+- [X] T071 [US3] Implement `apps/chat/services/transcript.py`, writing the conversation onto its ticket when it ends
+- [X] T072 [US3] Create the conversation's ticket at start in `apps/chat/services/lifecycle.py`, so a transcript can never be orphaned by an unexpected ending
+- [X] T073 [US3] Implement `/chat/conversations/<id>/attach/` in `apps/chat/views.py`, soft-deleting the placeholder and auditing both actions
+- [X] T074 [US3] Implement ending with optional resolution, reusing `apps/tickets/services/lifecycle.py` rather than a second state machine
+- [X] T075 [US3] Show the reference to the visitor in the `ended` frame emitted by `apps/chat/consumers/visitor.py`, and only there (FR-040)
+- [X] T076 [US3] Extract and compile translations for this phase into `locale/ar/LC_MESSAGES/django.po` and `locale/en/LC_MESSAGES/django.po`, then check with `tools/catalog.py status`
 
 **Checkpoint**: quickstart scenarios 4 and 5 pass. Chat is part of the CRM, not a widget.
 
