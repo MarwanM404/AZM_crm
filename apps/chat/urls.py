@@ -8,4 +8,6 @@ urlpatterns = [
     path("widget/", views.widget, name="widget"),
     path("start/", views.start, name="start"),
     path("leave-queue/", views.leave_queue, name="leave_queue"),
+    path("console/", views.console, name="console"),
+    path("conversations/<int:pk>/", views.conversation_detail, name="conversation"),
 ]

@@ -171,3 +171,27 @@ def english_agent_client(db, agent):
     own = Client()
     own.force_login(agent)
     return own
+
+
+@pytest.fixture
+def supervisor(db, department, branch):
+    """A team lead: works tickets like an agent, and can observe and coach (live chat
+    FR-037). Cannot administer accounts or read the audit log."""
+    return User.objects.create_user(
+        email="supervisor@example.com",
+        password="pw",
+        full_name="Team Lead",
+        role=User.Role.SUPERVISOR,
+        department=department,
+        branch=branch,
+        language="en",
+    )
+
+
+@pytest.fixture
+def supervisor_client(db, supervisor):
+    from django.test import Client
+
+    own = Client()
+    own.force_login(supervisor)
+    return own

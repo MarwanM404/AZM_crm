@@ -148,23 +148,23 @@ reachable from one console with unread counts, and the fourth is not assigned.
 
 ### Tests for User Story 2
 
-- [ ] T051 [P] [US2] Write `apps/chat/tests/test_capacity.py` asserting a fourth conversation is not assigned to an agent already holding three
-- [ ] T052 [P] [US2] Write `apps/chat/tests/test_online_offline.py` asserting going offline is refused while conversations are open (FR-014), and that going offline stops new assignments
-- [ ] T053 [P] [US2] Write `apps/chat/tests/test_unread.py` asserting unread counts are per conversation and clear when that conversation is opened
-- [ ] T054 [P] [US2] Write `apps/chat/tests/test_console_context.py` asserting the console shows the customer's contact, organization and recent tickets beside each conversation
-- [ ] T055 [P] [US2] Write `apps/chat/tests/test_console_scope.py` asserting a conversation outside the agent's department is absent from the console and refused as not-found by its direct address
+- [X] T051 [P] [US2] Write `apps/chat/tests/test_capacity.py` asserting a fourth conversation is not assigned to an agent already holding three
+- [X] T052 [P] [US2] Write `apps/chat/tests/test_online_offline.py` asserting going offline is refused while conversations are open (FR-014), and that going offline stops new assignments
+- [X] T053 [P] [US2] Write `apps/chat/tests/test_unread.py` asserting unread counts are per conversation and clear when that conversation is opened
+- [X] T054 [P] [US2] Write `apps/chat/tests/test_console_context.py` asserting the console shows the customer's contact, organization and recent tickets beside each conversation
+- [X] T055 [P] [US2] Write `apps/chat/tests/test_console_scope.py` asserting a conversation outside the agent's department is absent from the console and refused as not-found by its direct address
 
 ### Implementation for User Story 2
 
-- [ ] T056 [US2] Implement the online/offline frames in `apps/chat/consumers/agent.py`, refusing offline while conversations are held
-- [ ] T057 [US2] Implement the heartbeat frame in `apps/chat/consumers/agent.py`, refreshing the presence key's TTL in `apps/chat/services/presence.py`
-- [ ] T058 [US2] Implement unread tracking in `apps/chat/services/unread.py`, per agent and per conversation
-- [ ] T059 [US2] Implement the console view in `apps/chat/views.py`, scoped with `for_user()` like every other list in the product
-- [ ] T060 [P] [US2] Create `templates/chat/console.html` — the multi-conversation console
-- [ ] T061 [P] [US2] Create `templates/chat/partials/conversation_list.html` with unread badges
-- [ ] T062 [US2] Implement the Alpine state holding unread counts across fragments in `static/js/chat-console.js`, updated by a JSON control frame — the one place [ADR-008](../../docs/decisions/008-chat-client.md) named as strained
-- [ ] T063 [US2] Add the customer context panel to `templates/chat/console.html`, reusing the markup from `templates/tickets/partials/ticket_pane.html` rather than writing a second version
-- [ ] T064 [US2] Extract and compile translations for this phase into `locale/ar/LC_MESSAGES/django.po` and `locale/en/LC_MESSAGES/django.po`, then check with `tools/catalog.py status`
+- [X] T056 [US2] Implement the online/offline frames in `apps/chat/consumers/agent.py`, refusing offline while conversations are held
+- [X] T057 [US2] Implement the heartbeat frame in `apps/chat/consumers/agent.py`, refreshing the presence key's TTL in `apps/chat/services/presence.py`
+- [X] T058 [US2] Implement unread tracking in `apps/chat/services/unread.py`, per agent and per conversation
+- [X] T059 [US2] Implement the console view in `apps/chat/views.py`, scoped with `for_user()` like every other list in the product
+- [X] T060 [P] [US2] Create `templates/chat/console.html` — the multi-conversation console
+- [X] T061 [P] [US2] Create `templates/chat/partials/conversation_list.html` with unread badges
+- [X] T062 [US2] Implement the Alpine state holding unread counts across fragments in `static/js/chat-console.js`, updated by a JSON control frame — the one place [ADR-008](../../docs/decisions/008-chat-client.md) named as strained
+- [X] T063 [US2] Add the customer context panel to `templates/chat/console.html`, reusing the markup from `templates/tickets/partials/ticket_pane.html` rather than writing a second version
+- [X] T064 [US2] Extract and compile translations for this phase into `locale/ar/LC_MESSAGES/django.po` and `locale/en/LC_MESSAGES/django.po`, then check with `tools/catalog.py status`
 
 **Checkpoint**: quickstart scenario 3 passes. An agent can work three conversations at once.
 

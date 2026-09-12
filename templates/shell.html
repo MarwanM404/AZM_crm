@@ -15,6 +15,8 @@
          href="{% url 'customers:list' %}">{% trans "Customers" %}</a>
       <a class="nav__item {% if section == 'unlinked' %}nav__item--on{% endif %}"
          href="{% url 'customers:unlinked' %}">{% trans "Unlinked contacts" %}</a>
+      <a class="nav__item {% if section == 'chat' %}nav__item--on{% endif %}"
+         href="{% url 'chat:console' %}">{% trans "Live chat" %}</a>
       {% if request.user.role == 'ADMINISTRATOR' %}
         <a class="nav__item {% if section == 'administration' %}nav__item--on{% endif %}"
            href="{% url 'administration:users' %}">{% trans "Staff accounts" %}</a>

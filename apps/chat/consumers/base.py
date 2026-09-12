@@ -61,6 +61,9 @@ class ChatConsumer(AsyncWebsocketConsumer):
     async def chat_typing(self, event):
         await self.send_event(type="typing", who=event["who"])
 
+    async def chat_unread(self, event):
+        await self.send_event(type="unread", counts=event["counts"])
+
     async def chat_state(self, event):
         await self.send_event(
             type="state", state=event.get("state"), position=event.get("position")

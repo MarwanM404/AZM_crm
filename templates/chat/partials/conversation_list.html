@@ -1,0 +1,31 @@
+{% load i18n %}
+<section class="card table">
+  <div class="table__row table__row--chat table__row--head">
+    <span>{% trans "Customer" %}</span>
+    <span>{% trans "Organization" %}</span>
+    <span>{% trans "Reference" %}</span>
+    <span>{% trans "Unread" %}</span>
+  </div>
+  {% for conversation in conversations %}
+    <div class="table__row table__row--chat">
+      <span class="trunc">
+        <a href="{% url 'chat:conversation' conversation.pk %}">{{ conversation.contact.full_name }}</a>
+      </span>
+      <span class="trunc muted">
+        {% if conversation.contact.organization %}{{ conversation.contact.organization.name }}
+        {% else %}<em>{% trans "No organization" %}</em>{% endif %}
+      </span>
+      <span class="ref muted">{{ conversation.ticket.reference }}</span>
+      <span>
+        {# Server-rendered for the first paint; Alpine keeps it current as messages arrive. #}
+        <span class="pill pill--urgent" x-show="unread[{{ conversation.pk }}]" x-cloak
+              x-text="unread[{{ conversation.pk }}]">{{ unread|default_if_none:"" }}</span>
+        {% with count=unread|default_if_none:"" %}{% endwith %}
+      </span>
+    </div>
+  {% empty %}
+    <div class="table__empty">
+      {% trans "No conversations assigned to you. Go online to start receiving them." %}
+    </div>
+  {% endfor %}
+</section>

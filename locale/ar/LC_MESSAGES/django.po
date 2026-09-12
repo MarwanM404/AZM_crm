@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-12 18:33+0000\n"
+"POT-Creation-Date: 2026-09-12 18:56+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -170,12 +170,14 @@ msgstr "انقطع اتصال الزائر"
 msgid "Closed after inactivity"
 msgstr "أُغلقت بسبب عدم النشاط"
 
-#: apps/chat/services/lifecycle.py:31 apps/tickets/models.py:52
-#: templates/chat/widget.html:3 templates/chat/widget.html:10
+#: apps/chat/services/lifecycle.py:39 apps/tickets/models.py:52
+#: templates/chat/console.html:3 templates/chat/console.html:11
+#: templates/chat/conversation.html:6 templates/chat/widget.html:3
+#: templates/chat/widget.html:10 templates/shell.html:19
 msgid "Live chat"
 msgstr "المحادثة المباشرة"
 
-#: apps/chat/services/lifecycle.py:85 templates/chat/widget.html:52
+#: apps/chat/services/lifecycle.py:96 templates/chat/widget.html:52
 msgid "This conversation has ended."
 msgstr "انتهت هذه المحادثة."
 
@@ -325,7 +327,7 @@ msgid "Add account"
 msgstr "إضافة حساب"
 
 #: templates/accounts/user_form.html:6 templates/accounts/users.html:3
-#: templates/accounts/users.html:7 templates/shell.html:20
+#: templates/accounts/users.html:7 templates/shell.html:22
 msgid "Staff accounts"
 msgstr "حسابات الموظفين"
 
@@ -384,6 +386,85 @@ msgstr "لا توجد حسابات موظفين في هذا القسم بعد."
 msgid "AZM Support"
 msgstr "دعم AZM"
 
+#: templates/chat/console.html:13
+msgid "Conversations assigned to you"
+msgstr "المحادثات المُسنَدة إليك"
+
+#: templates/chat/console.html:20
+msgid "Go offline"
+msgstr "الانتقال إلى غير متصل"
+
+#: templates/chat/console.html:20
+msgid "Go online"
+msgstr "الانتقال إلى متصل"
+
+#: templates/chat/console.html:33
+msgid "Capacity"
+msgstr "السعة"
+
+#: templates/chat/console.html:37
+msgid "%(counter)s conversation free"
+msgid_plural "%(counter)s conversations free"
+msgstr[0] "لا توجد محادثات متاحة"
+msgstr[1] "محادثة واحدة متاحة"
+msgstr[2] "محادثتان متاحتان"
+msgstr[3] "%(counter)s محادثات متاحة"
+msgstr[4] "%(counter)s محادثة متاحة"
+msgstr[5] "%(counter)s محادثة متاحة"
+
+#: templates/chat/console.html:40
+msgid "You stop receiving new conversations when this reaches zero."
+msgstr "تتوقف عن استقبال محادثات جديدة عندما تصل هذه إلى صفر."
+
+#: templates/chat/conversation.html:34 templates/customers/unlinked.html:18
+#: templates/tickets/partials/ticket_pane.html:129
+msgid "Contact"
+msgstr "جهة الاتصال"
+
+#: templates/chat/conversation.html:42
+#: templates/chat/partials/conversation_list.html:5
+#: templates/customers/list.html:12 templates/customers/unlinked.html:41
+#: templates/tickets/partials/queue_list.html:6
+#: templates/tickets/partials/ticket_pane.html:120
+msgid "Organization"
+msgstr "المنشأة"
+
+#: templates/chat/conversation.html:46
+#: templates/tickets/partials/ticket_pane.html:124
+msgid "Not linked yet"
+msgstr "غير مرتبطة بعد"
+
+#: templates/chat/conversation.html:51
+msgid "Recent tickets"
+msgstr "التذاكر الأخيرة"
+
+#: templates/chat/conversation.html:58
+msgid "This is their first ticket."
+msgstr "هذه أول تذكرة لهم."
+
+#: templates/chat/partials/conversation_list.html:4
+msgid "Customer"
+msgstr "العميل"
+
+#: templates/chat/partials/conversation_list.html:6
+#: templates/customers/list.html:13
+#: templates/tickets/partials/queue_list.html:4
+msgid "Reference"
+msgstr "رد: %(reference)s"
+
+#: templates/chat/partials/conversation_list.html:7
+msgid "Unread"
+msgstr "غير مقروءة"
+
+#: templates/chat/partials/conversation_list.html:16
+#: templates/tickets/partials/queue_list.html:17
+msgid "No organization"
+msgstr "بلا منشأة"
+
+#: templates/chat/partials/conversation_list.html:28
+msgid "No conversations assigned to you. Go online to start receiving them."
+msgstr "لا توجد محادثات مُسنَدة إليك. انتقل إلى وضع «متصل» لتبدأ في استقبالها."
+
 #: templates/chat/partials/whisper.html:14
 msgid "Private note — the customer cannot see this"
 msgstr "ملاحظة خاصة — لا يراها العميل"
@@ -432,7 +513,8 @@ msgstr "أرسل لنا طلبًا"
 msgid ""
 "Nobody is available to chat right now. Send a request and we will reply by "
 "email."
-msgstr "لا يوجد أحد متاح للمحادثة الآن. أرسل طلبًا وسنرد عليك بالبريد الإلكتروني."
+msgstr ""
+"لا يوجد أحد متاح للمحادثة الآن. أرسل طلبًا وسنرد عليك بالبريد الإلكتروني."
 
 #: templates/chat/widget.html:64 templates/intake/form.html:3
 #: templates/intake/form.html:6
@@ -440,7 +522,7 @@ msgid "Submit a request"
 msgstr "إرسال طلب"
 
 #: templates/core/audit_log.html:3 templates/core/audit_log.html:6
-#: templates/shell.html:22
+#: templates/shell.html:24
 msgid "Audit log"
 msgstr "سجل التدقيق"
 
@@ -575,17 +657,6 @@ msgstr "الاسم (بالعربية)"
 msgid "Organizations that have contacted support."
 msgstr "المنشآت التي تواصلت مع الدعم."
 
-#: templates/customers/list.html:12 templates/customers/unlinked.html:41
-#: templates/tickets/partials/queue_list.html:6
-#: templates/tickets/partials/ticket_pane.html:120
-msgid "Organization"
-msgstr "المنشأة"
-
-#: templates/customers/list.html:13
-#: templates/tickets/partials/queue_list.html:4
-msgid "Reference"
-msgstr "رد: %(reference)s"
-
 #: templates/customers/list.html:15
 msgid "Tickets"
 msgstr "قائمة التذاكر"
@@ -629,11 +700,6 @@ msgstr ""
 "بلا منشأة. تُعرض جهات الاتصال التي تتشارك نطاق البريد الإلكتروني معًا كتلميح — "
 "ولا يتم الربط تلقائيًا."
 
-#: templates/customers/unlinked.html:18
-#: templates/tickets/partials/ticket_pane.html:129
-msgid "Contact"
-msgstr "جهة الاتصال"
-
 #: templates/customers/unlinked.html:20
 msgid "Shared domain"
 msgstr "نطاق مشترك"
@@ -676,7 +742,7 @@ msgstr "يرجى ذكر هذا الرقم في أي مراسلات لاحقة."
 msgid "Ticket queue"
 msgstr "قائمة التذاكر"
 
-#: templates/shell.html:41
+#: templates/shell.html:43
 msgid "Sign out"
 msgstr "تسجيل الدخول"
 
@@ -690,10 +756,6 @@ msgstr "الأولوية"
 #: templates/tickets/partials/ticket_pane.html:157
 msgid "Assigned"
 msgstr "المُسنَدة إلى"
-
-#: templates/tickets/partials/queue_list.html:17
-msgid "No organization"
-msgstr "بلا منشأة"
 
 #: templates/tickets/partials/queue_list.html:26
 #: templates/tickets/partials/ticket_pane.html:19
@@ -750,10 +812,6 @@ msgstr "إرسال الرد"
 #: templates/tickets/partials/ticket_pane.html:105
 msgid "Write a note for the team…"
 msgstr "اكتب ملاحظة لفريق العمل…"
-
-#: templates/tickets/partials/ticket_pane.html:124
-msgid "Not linked yet"
-msgstr "غير مرتبطة بعد"
 
 #: templates/tickets/partials/ticket_pane.html:137
 msgid "Properties"

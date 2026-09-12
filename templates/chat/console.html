@@ -1,0 +1,48 @@
+{% extends "shell.html" %}
+{% load i18n static %}
+{% block title %}{% trans "Live chat" %}{% endblock %}
+{% block extra_head %}
+  <script src="{% static 'js/chat-console.js' %}" defer></script>
+{% endblock %}
+{% block main %}
+<div x-data="chatConsole({{ unread|safe }})">
+  <header class="page-head page-head--split">
+    <div>
+      <h1>{% trans "Live chat" %}</h1>
+      <p class="page-head__sub">
+        {% blocktrans %}Conversations assigned to you{% endblocktrans %}
+      </p>
+    </div>
+    <div class="actions chat-presence">
+      {# FR-014: going offline while holding conversations is refused, with the count. #}
+      <span class="pill {% if online %}pill--open{% endif %}" x-text="statusLabel"></span>
+      <button class="btn" @click="toggleOnline"
+              x-text="online ? '{% trans "Go offline" %}' : '{% trans "Go online" %}'"></button>
+    </div>
+  </header>
+
+  <p class="error" x-show="refusal" x-cloak x-text="refusal"></p>
+
+  <div class="detail">
+    <section class="detail__thread">
+      {% include "chat/partials/conversation_list.html" %}
+    </section>
+
+    <aside class="detail__side">
+      <div class="card side-card">
+        <div class="label">{% trans "Capacity" %}</div>
+        <div class="side-card__strong">
+          {% comment %}
+            A counted noun, so it needs plural forms — Arabic has six of them, and a single
+            string would read wrongly for one, two, and most other counts.
+          {% endcomment %}
+          {% blocktrans count counter=capacity %}{{ counter }} conversation free{% plural %}{{ counter }} conversations free{% endblocktrans %}
+        </div>
+        <p class="muted">
+          {% trans "You stop receiving new conversations when this reaches zero." %}
+        </p>
+      </div>
+    </aside>
+  </div>
+</div>
+{% endblock %}

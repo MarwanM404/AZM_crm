@@ -1,0 +1,63 @@
+{% extends "shell.html" %}
+{% load i18n %}
+{% block title %}{{ conversation.contact.full_name }}{% endblock %}
+{% block main %}
+  <nav class="crumbs">
+    <a href="{% url 'chat:console' %}">{% trans "Live chat" %}</a>
+    <span class="crumbs__sep">/</span>
+    <span>{{ conversation.contact.full_name }}</span>
+  </nav>
+
+  <header class="page-head">
+    <h1>{{ conversation.contact.full_name }}</h1>
+    <p class="page-head__sub">
+      <span class="ref">{{ conversation.ticket.reference }}</span>
+      <span class="pill pill--{{ conversation.state|lower }}">{{ conversation.get_state_display }}</span>
+    </p>
+  </header>
+
+  <div class="detail">
+    <section class="detail__thread">
+      <div id="chat-thread" class="chat-thread">
+        {% for message in messages_ %}
+          {% if message.visibility == 'INTERNAL' %}
+            {% include "chat/partials/whisper.html" %}
+          {% else %}
+            {% include "chat/partials/message.html" %}
+          {% endif %}
+        {% endfor %}
+      </div>
+    </section>
+
+    <aside class="detail__side">
+      <div class="card side-card">
+        <div class="label">{% trans "Contact" %}</div>
+        <div class="side-card__strong">{{ conversation.contact.full_name }}</div>
+        {% for detail in conversation.contact.details.all %}
+          <div class="ltr muted">{{ detail.value }}</div>
+        {% endfor %}
+      </div>
+
+      <div class="card side-card">
+        <div class="label">{% trans "Organization" %}</div>
+        {% if conversation.contact.organization %}
+          <div class="side-card__strong">{{ conversation.contact.organization.name }}</div>
+        {% else %}
+          <div class="muted"><em>{% trans "Not linked yet" %}</em></div>
+        {% endif %}
+      </div>
+
+      <div class="card side-card">
+        <div class="label">{% trans "Recent tickets" %}</div>
+        {% for ticket in recent_tickets %}
+          <div class="side-card__contact">
+            <a class="ref" href="{% url 'tickets:detail' ticket.reference %}">{{ ticket.reference }}</a>
+            <div class="trunc muted">{{ ticket.subject }}</div>
+          </div>
+        {% empty %}
+          <p class="muted">{% trans "This is their first ticket." %}</p>
+        {% endfor %}
+      </div>
+    </aside>
+  </div>
+{% endblock %}

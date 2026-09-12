@@ -14,7 +14,15 @@ from django.utils import timezone
 from django.utils.translation import gettext as _
 
 from apps.chat.models import Conversation
-from apps.chat.services import assignment, groups, messaging, presence, queue, tokens
+from apps.chat.services import (
+    assignment,
+    groups,
+    messaging,
+    presence,
+    queue,
+    tokens,
+    unread,
+)
 from apps.tickets.models import Ticket
 
 
@@ -67,6 +75,9 @@ def end(conversation, *, reason, ended_by=None, resolve: bool = False):
 
     assignment.release(conversation)
     queue.leave(str(conversation.pk), conversation.department_id, conversation.branch_id)
+    if conversation.assigned_to_id:
+        # An ended conversation still showing unread is a badge nobody can clear.
+        unread.forget(conversation.pk, [conversation.assigned_to_id])
 
     conversation.state = Conversation.State.ENDED
     conversation.ended_at = timezone.now()

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-12 18:33+0000\n"
+"POT-Creation-Date: 2026-09-12 18:56+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -169,12 +169,14 @@ msgstr "The visitor disconnected"
 msgid "Closed after inactivity"
 msgstr "Closed after inactivity"
 
-#: apps/chat/services/lifecycle.py:31 apps/tickets/models.py:52
-#: templates/chat/widget.html:3 templates/chat/widget.html:10
+#: apps/chat/services/lifecycle.py:39 apps/tickets/models.py:52
+#: templates/chat/console.html:3 templates/chat/console.html:11
+#: templates/chat/conversation.html:6 templates/chat/widget.html:3
+#: templates/chat/widget.html:10 templates/shell.html:19
 msgid "Live chat"
 msgstr "Live chat"
 
-#: apps/chat/services/lifecycle.py:85 templates/chat/widget.html:52
+#: apps/chat/services/lifecycle.py:96 templates/chat/widget.html:52
 msgid "This conversation has ended."
 msgstr "This conversation has ended."
 
@@ -324,7 +326,7 @@ msgid "Add account"
 msgstr "Add account"
 
 #: templates/accounts/user_form.html:6 templates/accounts/users.html:3
-#: templates/accounts/users.html:7 templates/shell.html:20
+#: templates/accounts/users.html:7 templates/shell.html:22
 msgid "Staff accounts"
 msgstr "Staff accounts"
 
@@ -382,6 +384,81 @@ msgstr "No staff accounts in this department yet."
 #: templates/base.html:7 templates/shell.html:9
 msgid "AZM Support"
 msgstr "AZM Support"
+
+#: templates/chat/console.html:13
+msgid "Conversations assigned to you"
+msgstr "Conversations assigned to you"
+
+#: templates/chat/console.html:20
+msgid "Go offline"
+msgstr "Go offline"
+
+#: templates/chat/console.html:20
+msgid "Go online"
+msgstr "Go online"
+
+#: templates/chat/console.html:33
+msgid "Capacity"
+msgstr "Capacity"
+
+#: templates/chat/console.html:37
+msgid "%(counter)s conversation free"
+msgid_plural "%(counter)s conversations free"
+msgstr[0] "%(counter)s conversation free"
+msgstr[1] "%(counter)s conversations free"
+
+#: templates/chat/console.html:40
+msgid "You stop receiving new conversations when this reaches zero."
+msgstr "You stop receiving new conversations when this reaches zero."
+
+#: templates/chat/conversation.html:34 templates/customers/unlinked.html:18
+#: templates/tickets/partials/ticket_pane.html:129
+msgid "Contact"
+msgstr "Contact"
+
+#: templates/chat/conversation.html:42
+#: templates/chat/partials/conversation_list.html:5
+#: templates/customers/list.html:12 templates/customers/unlinked.html:41
+#: templates/tickets/partials/queue_list.html:6
+#: templates/tickets/partials/ticket_pane.html:120
+msgid "Organization"
+msgstr "Organization"
+
+#: templates/chat/conversation.html:46
+#: templates/tickets/partials/ticket_pane.html:124
+msgid "Not linked yet"
+msgstr "Not linked yet"
+
+#: templates/chat/conversation.html:51
+msgid "Recent tickets"
+msgstr "Recent tickets"
+
+#: templates/chat/conversation.html:58
+msgid "This is their first ticket."
+msgstr "This is their first ticket."
+
+#: templates/chat/partials/conversation_list.html:4
+msgid "Customer"
+msgstr "Customer"
+
+#: templates/chat/partials/conversation_list.html:6
+#: templates/customers/list.html:13
+#: templates/tickets/partials/queue_list.html:4
+msgid "Reference"
+msgstr "Reference"
+
+#: templates/chat/partials/conversation_list.html:7
+msgid "Unread"
+msgstr "Unread"
+
+#: templates/chat/partials/conversation_list.html:16
+#: templates/tickets/partials/queue_list.html:17
+msgid "No organization"
+msgstr "No organization"
+
+#: templates/chat/partials/conversation_list.html:28
+msgid "No conversations assigned to you. Go online to start receiving them."
+msgstr "No conversations assigned to you. Go online to start receiving them."
 
 #: templates/chat/partials/whisper.html:14
 msgid "Private note — the customer cannot see this"
@@ -441,7 +518,7 @@ msgid "Submit a request"
 msgstr "Submit a request"
 
 #: templates/core/audit_log.html:3 templates/core/audit_log.html:6
-#: templates/shell.html:22
+#: templates/shell.html:24
 msgid "Audit log"
 msgstr "Audit log"
 
@@ -576,17 +653,6 @@ msgstr "Name (Arabic)"
 msgid "Organizations that have contacted support."
 msgstr "Organizations that have contacted support."
 
-#: templates/customers/list.html:12 templates/customers/unlinked.html:41
-#: templates/tickets/partials/queue_list.html:6
-#: templates/tickets/partials/ticket_pane.html:120
-msgid "Organization"
-msgstr "Organization"
-
-#: templates/customers/list.html:13
-#: templates/tickets/partials/queue_list.html:4
-msgid "Reference"
-msgstr "Reference"
-
 #: templates/customers/list.html:15
 msgid "Tickets"
 msgstr "Tickets"
@@ -632,11 +698,6 @@ msgstr ""
 "with no organization. Contacts sharing an email domain are shown together as "
 "a hint — nothing is linked automatically."
 
-#: templates/customers/unlinked.html:18
-#: templates/tickets/partials/ticket_pane.html:129
-msgid "Contact"
-msgstr "Contact"
-
 #: templates/customers/unlinked.html:20
 msgid "Shared domain"
 msgstr "Shared domain"
@@ -680,7 +741,7 @@ msgstr "Please quote this reference in any further correspondence."
 msgid "Ticket queue"
 msgstr "Ticket queue"
 
-#: templates/shell.html:41
+#: templates/shell.html:43
 msgid "Sign out"
 msgstr "Sign out"
 
@@ -694,10 +755,6 @@ msgstr "Priority"
 #: templates/tickets/partials/ticket_pane.html:157
 msgid "Assigned"
 msgstr "Assigned"
-
-#: templates/tickets/partials/queue_list.html:17
-msgid "No organization"
-msgstr "No organization"
 
 #: templates/tickets/partials/queue_list.html:26
 #: templates/tickets/partials/ticket_pane.html:19
@@ -750,10 +807,6 @@ msgstr "Send reply"
 #: templates/tickets/partials/ticket_pane.html:105
 msgid "Write a note for the team…"
 msgstr "Write a note for the team…"
-
-#: templates/tickets/partials/ticket_pane.html:124
-msgid "Not linked yet"
-msgstr "Not linked yet"
 
 #: templates/tickets/partials/ticket_pane.html:137
 msgid "Properties"

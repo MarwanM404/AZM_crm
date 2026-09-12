@@ -62,7 +62,9 @@ class AgentConsumer(ChatConsumer):
         elif kind == "online":
             await self._go_online()
         elif kind == "offline":
-            await self._go_offline()
+            await self._offline_requested()
+        elif kind == "focus":
+            await self._focus(payload.get("conversation"))
 
     # --- group membership ---
 
@@ -133,8 +135,35 @@ class AgentConsumer(ChatConsumer):
 
         presence.go_online(self.user.pk, capacity=lifecycle.default_capacity())
 
+    async def _offline_requested(self):
+        """FR-014: refuse while conversations are held.
+
+        Without this, "I am done for the day" silently abandons whoever is mid-sentence: the
+        customer keeps typing into a conversation nobody is reading, and nothing notices. The
+        count comes back with the refusal, because "you still have conversations open" is
+        unactionable and "you still have 2 open" is not.
+        """
+        still_open = await self._open_conversation_count()
+        if still_open:
+            await self.send_event(type="offline_refused", open=still_open)
+            return
+        await self._go_offline()
+        await self.send_event(type="offline")
+
+    @database_sync_to_async
+    def _open_conversation_count(self):
+        return Conversation.objects.filter(
+            assigned_to=self.user, state=Conversation.State.ACTIVE
+        ).count()
+
     @database_sync_to_async
     def _go_offline(self):
-        """FR-014 makes this refusable while conversations are held; the check lands with the
-        console in Phase 4, where the agent can actually see what is still open."""
         presence.go_offline(self.user.pk)
+
+    @database_sync_to_async
+    def _focus(self, conversation_id):
+        """The agent is looking at this conversation, so it is no longer unread."""
+        from apps.chat.services import unread
+
+        if conversation_id is not None:
+            unread.clear(self.user.pk, conversation_id)
