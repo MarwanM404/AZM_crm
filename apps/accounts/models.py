@@ -71,7 +71,20 @@ class UserManager(BaseUserManager):
 
 class User(AbstractBaseUser, PermissionsMixin, TimeStampedModel):
     class Role(models.TextChoices):
+        """Fixed in code and not configurable by users (MVP FR-022).
+
+        Live chat added SUPERVISOR (FR-037): a team lead who works tickets like an Agent and
+        additionally observes live conversations and coaches privately, within their own
+        department. They deliberately cannot administer accounts or read the audit log —
+        coaching an agent and administering the system are different jobs, and bundling them
+        to get the first was the wrong trade.
+
+        Permission checks must name the roles they ALLOW. A check phrased as "not an Agent"
+        silently admits Supervisors; `test_supervisor_role.py` fails the build on that shape.
+        """
+
         AGENT = "AGENT", _("Agent")
+        SUPERVISOR = "SUPERVISOR", _("Supervisor")
         ADMINISTRATOR = "ADMINISTRATOR", _("Administrator")
 
     class Language(models.TextChoices):

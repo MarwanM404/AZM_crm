@@ -49,6 +49,7 @@ class Ticket(ScopedSoftDeleteModel):
     class Channel(models.TextChoices):
         WEB_FORM = "WEB_FORM", _("Web form")
         EMAIL = "EMAIL", _("Email")
+        CHAT = "CHAT", _("Live chat")
 
     # Confirmed with stakeholders 2026-09-12 (T147). Changing these now means migrating
     # live ticket data, so treat an edit here as a schema change, not a tweak.

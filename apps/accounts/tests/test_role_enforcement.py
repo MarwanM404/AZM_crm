@@ -35,10 +35,21 @@ def test_agent_cannot_delete_an_organization(agent_client, department, branch):
 
 @pytest.mark.django_db
 def test_refused_attempt_is_recorded(agent_client, agent, caplog):
+    """The record has to say enough to act on.
+
+    With three roles, "someone was refused" is not useful on its own — the question is always
+    which role tried what, and whether the refusal was correct. So the line carries the actor,
+    their role, the path, and the roles that would have been allowed.
+    """
     import logging
 
     with caplog.at_level(logging.WARNING):
         agent_client.get(reverse("administration:users"))
 
-    assert any("Refused administrator action" in r.message for r in caplog.records)
-    assert any(str(agent.pk) in str(r.args) for r in caplog.records)
+    refusals = [r for r in caplog.records if "Refused action" in r.message]
+    assert refusals, "the refusal was not logged at all"
+
+    recorded = str(refusals[0].args)
+    assert str(agent.pk) in recorded, "the log does not say who was refused"
+    assert "AGENT" in recorded, "the log does not say what role they held"
+    assert "ADMINISTRATOR" in recorded, "the log does not say what would have been allowed"

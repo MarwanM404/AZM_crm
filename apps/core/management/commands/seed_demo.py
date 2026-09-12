@@ -39,6 +39,18 @@ class Command(BaseCommand):
                 department=support_dept,
                 branch=branch,
             )
+        if not User.objects.filter(email="supervisor@example.com").exists():
+            # Seeded so the third role is exercised in every development run rather than only
+            # in tests — a role nobody signs in as is a role whose screens rot.
+            User.objects.create_user(
+                email="supervisor@example.com",
+                password="demo-password-change-me",
+                full_name="Demo Supervisor",
+                role=User.Role.SUPERVISOR,
+                department=support_dept,
+                branch=branch,
+            )
+
         if not User.objects.filter(email="admin@example.com").exists():
             User.objects.create_user(
                 email="admin@example.com",

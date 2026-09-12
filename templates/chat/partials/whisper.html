@@ -1,0 +1,21 @@
+{% load i18n %}
+{% comment %}
+  A supervisor's private note, shown to staff only.
+
+  This template is rendered for the STAFF group. The visitor's socket is not a member of that
+  group, so a whisper does not reach them to be filtered — there is no route (FR-025).
+
+  Marked the way the ticket thread's internal note is: wash, edge, icon, and the restriction
+  written out, so it survives greyscale and colour blindness (FR-026).
+{% endcomment %}
+<div class="chat-msg chat-msg--whisper" id="chat-msg-{{ message.pk }}">
+  <div class="chat-msg__banner">
+    <span aria-hidden="true">&#128274;</span>
+    {% trans "Private note — the customer cannot see this" %}
+  </div>
+  <div class="chat-msg__meta">
+    <strong>{{ message.author.full_name }}</strong>
+    <span class="muted">{{ message.created_at }}</span>
+  </div>
+  <p class="chat-msg__body">{{ message.body|linebreaksbr }}</p>
+</div>

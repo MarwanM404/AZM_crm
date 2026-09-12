@@ -1,0 +1,16 @@
+{% load i18n %}
+{% comment %}
+  One message in a conversation. Pushed over the socket as rendered HTML (ADR-008), which is
+  why it carries no logic about who may see it: that decision is made by which group the
+  message was published to, before this template is ever reached.
+{% endcomment %}
+<div class="chat-msg chat-msg--{{ message.direction|lower }}" id="chat-msg-{{ message.pk }}">
+  <div class="chat-msg__meta">
+    <strong>
+      {% if message.author %}{{ message.author.full_name }}
+      {% else %}{{ conversation.contact.full_name }}{% endif %}
+    </strong>
+    <span class="muted">{{ message.created_at }}</span>
+  </div>
+  <p class="chat-msg__body">{{ message.body|linebreaksbr }}</p>
+</div>

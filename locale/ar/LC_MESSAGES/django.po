@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-12 15:21+0000\n"
+"POT-Creation-Date: 2026-09-12 18:07+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -43,29 +43,33 @@ msgstr "الاسم"
 msgid "name (Arabic)"
 msgstr "الاسم (بالعربية)"
 
-#: apps/accounts/models.py:74
+#: apps/accounts/models.py:86
 msgid "Agent"
 msgstr "موظف الدعم"
 
-#: apps/accounts/models.py:75
+#: apps/accounts/models.py:87
+msgid "Supervisor"
+msgstr "مشرف"
+
+#: apps/accounts/models.py:88
 msgid "Administrator"
 msgstr "المسؤول"
 
-#: apps/accounts/models.py:78 apps/customers/models.py:53
+#: apps/accounts/models.py:91 apps/customers/models.py:53
 #: templates/customers/contact_edit.html:17
 msgid "Arabic"
 msgstr "العربية"
 
-#: apps/accounts/models.py:79 apps/customers/models.py:53
+#: apps/accounts/models.py:92 apps/customers/models.py:53
 #: templates/customers/contact_edit.html:18
 msgid "English"
 msgstr "الإنجليزية"
 
-#: apps/accounts/models.py:81
+#: apps/accounts/models.py:94
 msgid "email address"
 msgstr "البريد الإلكتروني"
 
-#: apps/accounts/models.py:82 apps/customers/models.py:50
+#: apps/accounts/models.py:95 apps/customers/models.py:50
 msgid "full name"
 msgstr "الاسم الكامل"
 
@@ -89,29 +93,63 @@ msgstr "يوجد حساب بهذا البريد الإلكتروني بالفع�
 msgid "You cannot deactivate your own account."
 msgstr "لا يمكنك تعطيل حسابك الخاص."
 
-#: apps/attachments/models.py:45
+#: apps/attachments/models.py:52
 msgid "file name"
 msgstr "اسم الملف"
 
-#: apps/attachments/models.py:71
+#: apps/attachments/models.py:81
 msgid "An attachment must belong to either a message or a note, not both."
 msgstr "يجب أن يرتبط المرفق برسالة أو بملاحظة، لا بكليهما."
 
-#: apps/attachments/services/validation.py:38
+#: apps/attachments/services/validation.py:51
 msgid "That file is empty."
 msgstr "هذا الملف فارغ."
 
-#: apps/attachments/services/validation.py:42
+#: apps/attachments/services/validation.py:55
+#, python-format
 msgid "That file is %(size)s MB. The limit is %(limit)s MB."
 msgstr "حجم الملف %(size)s ميغابايت، والحد الأقصى %(limit)s ميغابايت."
 
-#: apps/attachments/services/validation.py:52
+#: apps/attachments/services/validation.py:65
+#, python-format
 msgid "%(kind)s files cannot be attached. Allowed: %(allowed)s."
 msgstr "لا يمكن إرفاق ملفات %(kind)s. المسموح: %(allowed)s."
 
-#: apps/attachments/services/validation.py:54
+#: apps/attachments/services/validation.py:67
 msgid "Unnamed"
 msgstr "بلا امتداد"
+
+#: apps/chat/models.py:21
+msgid "Waiting"
+msgstr "في الانتظار"
+
+#: apps/chat/models.py:22 templates/accounts/users.html:32
+msgid "Active"
+msgstr "نشط"
+
+#: apps/chat/models.py:23
+msgid "Ended"
+msgstr "منتهية"
+
+#: apps/chat/models.py:26 apps/tickets/models.py:46
+msgid "Resolved"
+msgstr "تم الحل"
+
+#: apps/chat/models.py:27
+msgid "Ended by the agent"
+msgstr "أنهاها الموظف"
+
+#: apps/chat/models.py:28
+msgid "Ended by the visitor"
+msgstr "أنهاها الزائر"
+
+#: apps/chat/models.py:29
+msgid "The visitor disconnected"
+msgstr "انقطع اتصال الزائر"
+
+#: apps/chat/models.py:30
+msgid "Closed after inactivity"
+msgstr "أُغلقت بسبب عدم النشاط"
 
 #: apps/customers/models.py:71
 msgid "Phone"
@@ -121,15 +159,15 @@ msgstr "الهاتف"
 msgid "A note cannot be empty."
 msgstr "لا يمكن حفظ ملاحظة فارغة."
 
-#: apps/customers/views.py:88 apps/customers/views.py:166
+#: apps/customers/views.py:90 apps/customers/views.py:168
 msgid "A name is required."
 msgstr "الاسم مطلوب."
 
-#: apps/customers/views.py:149
+#: apps/customers/views.py:151
 msgid "Unknown organization."
 msgstr "بلا منشأة"
 
-#: apps/customers/views.py:155
+#: apps/customers/views.py:157
 msgid "Choose an organization, or name a new one."
 msgstr "اختر منشأة، أو أدخل اسم منشأة جديدة."
 
@@ -200,10 +238,6 @@ msgstr "مفتوحة"
 msgid "Pending customer"
 msgstr "بانتظار العميل"
 
-#: apps/tickets/models.py:46
-msgid "Resolved"
-msgstr "تم الحل"
-
 #: apps/tickets/models.py:47
 msgid "Closed"
 msgstr "مغلقة"
@@ -212,35 +246,39 @@ msgstr "مغلقة"
 msgid "Web form"
 msgstr "نموذج الويب"
 
-#: apps/tickets/models.py:119
+#: apps/tickets/models.py:52
+msgid "Live chat"
+msgstr "المحادثة المباشرة"
+
+#: apps/tickets/models.py:120
 msgid "Inbound"
 msgstr "وارد"
 
-#: apps/tickets/models.py:120
+#: apps/tickets/models.py:121
 msgid "Outbound"
 msgstr "صادر"
 
-#: apps/tickets/models.py:123
+#: apps/tickets/models.py:124
 msgid "Public"
 msgstr "عام"
 
-#: apps/tickets/models.py:124
+#: apps/tickets/models.py:125
 msgid "Internal"
 msgstr "داخلي"
 
-#: apps/tickets/models.py:127
+#: apps/tickets/models.py:128
 msgid "Pending"
 msgstr "قيد الانتظار"
 
-#: apps/tickets/models.py:128
+#: apps/tickets/models.py:129
 msgid "Sent"
 msgstr "تم الإرسال"
 
-#: apps/tickets/models.py:129
+#: apps/tickets/models.py:130
 msgid "Failed"
 msgstr "فشل"
 
-#: apps/tickets/models.py:130
+#: apps/tickets/models.py:131
 msgid "Not applicable"
 msgstr "لا ينطبق"
 
@@ -319,10 +357,6 @@ msgstr "الاسم"
 msgid "Status"
 msgstr "الحالة"
 
-#: templates/accounts/users.html:32
-msgid "Active"
-msgstr "نشط"
-
 #: templates/accounts/users.html:34
 msgid "Deactivated"
 msgstr "معطَّل"
@@ -338,6 +372,10 @@ msgstr "لا توجد حسابات موظفين في هذا القسم بعد."
 #: templates/base.html:7 templates/shell.html:9
 msgid "AZM Support"
 msgstr "دعم AZM"
+
+#: templates/chat/partials/whisper.html:14
+msgid "Private note — the customer cannot see this"
+msgstr "ملاحظة خاصة — لا يراها العميل"
 
 #: templates/core/audit_log.html:3 templates/core/audit_log.html:6
 #: templates/shell.html:22

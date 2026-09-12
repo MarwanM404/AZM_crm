@@ -72,31 +72,31 @@ top of a silently broadened check would mean auditing every screen twice.
 
 ### Tests first
 
-- [ ] T011 [P] Write `apps/chat/tests/test_groups.py` asserting the public and staff group names for a conversation are distinct, derived only from its id, and that no function in the module can return the staff name for a visitor
-- [ ] T012 [P] Write `apps/chat/tests/test_presence.py` asserting an agent appears online only while heartbeating, disappears when the key expires, and that capacity is reported accurately
-- [ ] T013 [P] Write `apps/chat/tests/test_queue.py` asserting longest-waiting-first ordering, correct position reporting, removal on leave, and scoping by department and branch
-- [ ] T014 [P] Write `apps/chat/tests/test_assignment.py` asserting an agent is never assigned beyond capacity, and that two simultaneous assignments cannot both claim the same slot
-- [ ] T015 [P] Write `apps/accounts/tests/test_supervisor_role.py` asserting a Supervisor can do everything an Agent can, plus observe and whisper, and **cannot** create accounts, change scope, or read the audit log
-- [ ] T016 [P] Extend `apps/accounts/tests/test_role_enforcement.py` to assert every administrator-only route refuses a Supervisor, not merely an Agent
+- [X] T011 [P] Write `apps/chat/tests/test_groups.py` asserting the public and staff group names for a conversation are distinct, derived only from its id, and that no function in the module can return the staff name for a visitor
+- [X] T012 [P] Write `apps/chat/tests/test_presence.py` asserting an agent appears online only while heartbeating, disappears when the key expires, and that capacity is reported accurately
+- [X] T013 [P] Write `apps/chat/tests/test_queue.py` asserting longest-waiting-first ordering, correct position reporting, removal on leave, and scoping by department and branch
+- [X] T014 [P] Write `apps/chat/tests/test_assignment.py` asserting an agent is never assigned beyond capacity, and that two simultaneous assignments cannot both claim the same slot
+- [X] T015 [P] Write `apps/accounts/tests/test_supervisor_role.py` asserting a Supervisor can do everything an Agent can, plus observe and whisper, and **cannot** create accounts, change scope, or read the audit log
+- [X] T016 [P] Extend `apps/accounts/tests/test_role_enforcement.py` to assert every administrator-only route refuses a Supervisor, not merely an Agent
 
 ### Implementation
 
-- [ ] T017 Audit every permission check in `apps/` for the phrase "not an Agent" or its equivalent, and rewrite each to name the roles it allows; a check that excludes Agent now admits Supervisors to administrator screens (research.md #7)
-- [ ] T018 Add `SUPERVISOR` to `User.Role` in `apps/accounts/models.py` and generate its migration, leaving every existing account on its current role
-- [ ] T019 Add `supervisor_required` and `can_observe` to `apps/accounts/permissions.py`, recording refused attempts as the administrator check already does
-- [ ] T020 Implement `Conversation` in `apps/chat/models.py` — scoped, soft-deletable, with the state machine from [data-model.md](data-model.md) and `visitor_token_hash` storing a hash, never the token
-- [ ] T021 Implement `Observation` in `apps/chat/models.py`, audited and **not** soft-deletable: an observation is a fact about something that happened
-- [ ] T022 Add `CHAT` to `Message.channel` and `Ticket.Channel` in `apps/tickets/models.py`, extending the existing model rather than introducing a second one
-- [ ] T023 Generate and review migrations for `chat`, `accounts` and `tickets`
-- [ ] T024 Register `Conversation` and `Observation` in `apps/core/audit.py`, and confirm `tests/test_audit_coverage.py` passes without being edited
-- [ ] T025 Implement `apps/chat/services/groups.py` — the only place public and staff group names are computed, because a boundary derived in three consumers will eventually be derived three different ways
-- [ ] T026 Implement `apps/chat/services/presence.py` on Redis: a per-agent key with capacity, refreshed by heartbeat, expiring on its own so a crashed agent stops being online without anything having to notice
-- [ ] T027 Implement `apps/chat/services/queue.py` on a Redis sorted set, scoped per department and branch
-- [ ] T028 Implement `apps/chat/services/assignment.py`, claiming capacity and attaching the agent in one transaction with a locked row, as MVP T072 does for taking a ticket
-- [ ] T029 Implement the visitor token in `apps/chat/services/tokens.py` — signed, naming one conversation, carrying an expiry, and compared against a stored hash
-- [ ] T030 Implement `apps/chat/routing.py` with the three socket paths from [contracts/websocket.md](contracts/websocket.md)
-- [ ] T031 Create `templates/chat/` and the shared fragment partials the sockets will push, with every string translated from the start
-- [ ] T032 [P] Seed a Supervisor account in `apps/core/management/commands/seed_demo.py` so the role is exercised in every development run
+- [X] T017 Audited every role check in `apps/` and `templates/`: **no changes were needed**. Every one was already written as an allowlist (`role == ADMINISTRATOR`, `role != ADMINISTRATOR`), never as "not an Agent", which is why a third role changed none of them. The audit is now permanent rather than a one-time read — `test_no_permission_check_is_phrased_as_not_an_agent` in `apps/accounts/tests/test_supervisor_role.py` scans for that shape so the next one fails at the point it is written
+- [X] T018 Add `SUPERVISOR` to `User.Role` in `apps/accounts/models.py` and generate its migration, leaving every existing account on its current role
+- [X] T019 Add `supervisor_required` and `can_observe` to `apps/accounts/permissions.py`, recording refused attempts as the administrator check already does
+- [X] T020 Implement `Conversation` in `apps/chat/models.py` — scoped, soft-deletable, with the state machine from [data-model.md](data-model.md) and `visitor_token_hash` storing a hash, never the token
+- [X] T021 Implement `Observation` in `apps/chat/models.py`, audited and **not** soft-deletable: an observation is a fact about something that happened
+- [X] T022 Add `CHAT` to `Message.channel` and `Ticket.Channel` in `apps/tickets/models.py`, extending the existing model rather than introducing a second one
+- [X] T023 Generate and review migrations for `chat`, `accounts` and `tickets`
+- [X] T024 Register `Conversation` and `Observation` in `apps/core/audit.py`, and confirm `tests/test_audit_coverage.py` passes without being edited
+- [X] T025 Implement `apps/chat/services/groups.py` — the only place public and staff group names are computed, because a boundary derived in three consumers will eventually be derived three different ways
+- [X] T026 Implement `apps/chat/services/presence.py` on Redis: a per-agent key with capacity, refreshed by heartbeat, expiring on its own so a crashed agent stops being online without anything having to notice
+- [X] T027 Implement `apps/chat/services/queue.py` on a Redis sorted set, scoped per department and branch
+- [X] T028 Implement `apps/chat/services/assignment.py`, claiming capacity and attaching the agent in one transaction with a locked row, as MVP T072 does for taking a ticket
+- [X] T029 Implement the visitor token in `apps/chat/services/tokens.py` — signed, naming one conversation, carrying an expiry, and compared against a stored hash
+- [X] T030 Implement `apps/chat/routing.py` with the three socket paths from [contracts/websocket.md](contracts/websocket.md)
+- [X] T031 Create `templates/chat/` and the shared fragment partials the sockets will push, with every string translated from the start
+- [X] T032 [P] Seed a Supervisor account in `apps/core/management/commands/seed_demo.py` so the role is exercised in every development run
 
 **Checkpoint**: a socket can be opened and authorized, presence and the queue behave, and no
 existing permission check has been broadened by the new role.

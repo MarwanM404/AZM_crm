@@ -18,11 +18,14 @@ from auditlog.registry import auditlog
 
 from apps.accounts.models import Branch, Department, User
 from apps.attachments.models import Attachment
+from apps.chat.models import Conversation, Observation
 from apps.customers.models import Contact, ContactDetail, Note, Organization
 from apps.tickets.models import Category, Message, Ticket
 
 AUDITED_MODELS = [
     Attachment,
+    Conversation,
+    Observation,
     Organization,
     Contact,
     ContactDetail,

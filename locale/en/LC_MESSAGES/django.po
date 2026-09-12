@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-12 15:21+0000\n"
+"POT-Creation-Date: 2026-09-12 18:07+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -42,29 +42,33 @@ msgstr "name"
 msgid "name (Arabic)"
 msgstr "name (Arabic)"
 
-#: apps/accounts/models.py:74
+#: apps/accounts/models.py:86
 msgid "Agent"
 msgstr "Agent"
 
-#: apps/accounts/models.py:75
+#: apps/accounts/models.py:87
+msgid "Supervisor"
+msgstr "Supervisor"
+
+#: apps/accounts/models.py:88
 msgid "Administrator"
 msgstr "Administrator"
 
-#: apps/accounts/models.py:78 apps/customers/models.py:53
+#: apps/accounts/models.py:91 apps/customers/models.py:53
 #: templates/customers/contact_edit.html:17
 msgid "Arabic"
 msgstr "Arabic"
 
-#: apps/accounts/models.py:79 apps/customers/models.py:53
+#: apps/accounts/models.py:92 apps/customers/models.py:53
 #: templates/customers/contact_edit.html:18
 msgid "English"
 msgstr "English"
 
-#: apps/accounts/models.py:81
+#: apps/accounts/models.py:94
 msgid "email address"
 msgstr "email address"
 
-#: apps/accounts/models.py:82 apps/customers/models.py:50
+#: apps/accounts/models.py:95 apps/customers/models.py:50
 msgid "full name"
 msgstr "full name"
 
@@ -88,31 +92,63 @@ msgstr "An account with that email already exists."
 msgid "You cannot deactivate your own account."
 msgstr "You cannot deactivate your own account."
 
-#: apps/attachments/models.py:45
+#: apps/attachments/models.py:52
 msgid "file name"
 msgstr "file name"
 
-#: apps/attachments/models.py:71
+#: apps/attachments/models.py:81
 msgid "An attachment must belong to either a message or a note, not both."
 msgstr "An attachment must belong to either a message or a note, not both."
 
-#: apps/attachments/services/validation.py:38
+#: apps/attachments/services/validation.py:51
 msgid "That file is empty."
 msgstr "That file is empty."
 
-#: apps/attachments/services/validation.py:42
+#: apps/attachments/services/validation.py:55
 #, python-format
 msgid "That file is %(size)s MB. The limit is %(limit)s MB."
 msgstr "That file is %(size)s MB. The limit is %(limit)s MB."
 
-#: apps/attachments/services/validation.py:52
+#: apps/attachments/services/validation.py:65
 #, python-format
 msgid "%(kind)s files cannot be attached. Allowed: %(allowed)s."
 msgstr "%(kind)s files cannot be attached. Allowed: %(allowed)s."
 
-#: apps/attachments/services/validation.py:54
+#: apps/attachments/services/validation.py:67
 msgid "Unnamed"
 msgstr "Unnamed"
+
+#: apps/chat/models.py:21
+msgid "Waiting"
+msgstr "Waiting"
+
+#: apps/chat/models.py:22 templates/accounts/users.html:32
+msgid "Active"
+msgstr "Active"
+
+#: apps/chat/models.py:23
+msgid "Ended"
+msgstr "Ended"
+
+#: apps/chat/models.py:26 apps/tickets/models.py:46
+msgid "Resolved"
+msgstr "Resolved"
+
+#: apps/chat/models.py:27
+msgid "Ended by the agent"
+msgstr "Ended by the agent"
+
+#: apps/chat/models.py:28
+msgid "Ended by the visitor"
+msgstr "Ended by the visitor"
+
+#: apps/chat/models.py:29
+msgid "The visitor disconnected"
+msgstr "The visitor disconnected"
+
+#: apps/chat/models.py:30
+msgid "Closed after inactivity"
+msgstr "Closed after inactivity"
 
 #: apps/customers/models.py:71
 msgid "Phone"
@@ -122,15 +158,15 @@ msgstr "Phone"
 msgid "A note cannot be empty."
 msgstr "A note cannot be empty."
 
-#: apps/customers/views.py:88 apps/customers/views.py:166
+#: apps/customers/views.py:90 apps/customers/views.py:168
 msgid "A name is required."
 msgstr "A name is required."
 
-#: apps/customers/views.py:149
+#: apps/customers/views.py:151
 msgid "Unknown organization."
 msgstr "Unknown organization."
 
-#: apps/customers/views.py:155
+#: apps/customers/views.py:157
 msgid "Choose an organization, or name a new one."
 msgstr "Choose an organization, or name a new one."
 
@@ -201,10 +237,6 @@ msgstr "Open"
 msgid "Pending customer"
 msgstr "Pending customer"
 
-#: apps/tickets/models.py:46
-msgid "Resolved"
-msgstr "Resolved"
-
 #: apps/tickets/models.py:47
 msgid "Closed"
 msgstr "Closed"
@@ -213,35 +245,39 @@ msgstr "Closed"
 msgid "Web form"
 msgstr "Web form"
 
-#: apps/tickets/models.py:119
+#: apps/tickets/models.py:52
+msgid "Live chat"
+msgstr "Live chat"
+
+#: apps/tickets/models.py:120
 msgid "Inbound"
 msgstr "Inbound"
 
-#: apps/tickets/models.py:120
+#: apps/tickets/models.py:121
 msgid "Outbound"
 msgstr "Outbound"
 
-#: apps/tickets/models.py:123
+#: apps/tickets/models.py:124
 msgid "Public"
 msgstr "Public"
 
-#: apps/tickets/models.py:124
+#: apps/tickets/models.py:125
 msgid "Internal"
 msgstr "Internal"
 
-#: apps/tickets/models.py:127
+#: apps/tickets/models.py:128
 msgid "Pending"
 msgstr "Pending"
 
-#: apps/tickets/models.py:128
+#: apps/tickets/models.py:129
 msgid "Sent"
 msgstr "Sent"
 
-#: apps/tickets/models.py:129
+#: apps/tickets/models.py:130
 msgid "Failed"
 msgstr "Failed"
 
-#: apps/tickets/models.py:130
+#: apps/tickets/models.py:131
 msgid "Not applicable"
 msgstr "Not applicable"
 
@@ -320,10 +356,6 @@ msgstr "Name"
 msgid "Status"
 msgstr "Status"
 
-#: templates/accounts/users.html:32
-msgid "Active"
-msgstr "Active"
-
 #: templates/accounts/users.html:34
 msgid "Deactivated"
 msgstr "Deactivated"
@@ -339,6 +371,10 @@ msgstr "No staff accounts in this department yet."
 #: templates/base.html:7 templates/shell.html:9
 msgid "AZM Support"
 msgstr "AZM Support"
+
+#: templates/chat/partials/whisper.html:14
+msgid "Private note — the customer cannot see this"
+msgstr "Private note — the customer cannot see this"
 
 #: templates/core/audit_log.html:3 templates/core/audit_log.html:6
 #: templates/shell.html:22

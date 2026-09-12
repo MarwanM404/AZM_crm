@@ -35,6 +35,11 @@ CACHES = {
 # joins and what each socket therefore receives, and that is identical on either backend.
 CHANNEL_LAYERS = {"default": {"BACKEND": "channels.layers.InMemoryChannelLayer"}}
 
+# Presence and the queue use an in-process fake rather than a real Redis, so the behaviour
+# built on top of it — expiry correcting a crashed agent, queue ordering — is testable on a
+# machine with nothing installed. See apps/chat/services/redis_client.py.
+CHAT_USE_FAKE_REDIS = True
+
 CELERY_TASK_ALWAYS_EAGER = True
 CELERY_TASK_EAGER_PROPAGATES = True
 
