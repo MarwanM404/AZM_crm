@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-12 18:07+0000\n"
+"POT-Creation-Date: 2026-09-12 18:33+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -119,6 +119,25 @@ msgstr "لا يمكن إرفاق ملفات %(kind)s. المسموح: %(allowed)
 msgid "Unnamed"
 msgstr "بلا امتداد"
 
+#: apps/chat/forms.py:16 apps/intake/forms.py:20
+msgid "Your name"
+msgstr "اسمك"
+
+#: apps/chat/forms.py:17 apps/intake/forms.py:21
+#: templates/accounts/user_form.html:25
+msgid "Email address"
+msgstr "البريد الإلكتروني"
+
+#: apps/chat/forms.py:18
+msgid "What can we help with?"
+msgstr "بماذا يمكننا مساعدتك؟"
+
+#: apps/chat/forms.py:20 apps/intake/forms.py:24
+#: templates/tickets/partials/ticket_pane.html:141
+#: templates/tickets/queue.html:26
+msgid "Category"
+msgstr "التصنيف"
+
 #: apps/chat/models.py:21
 msgid "Waiting"
 msgstr "في الانتظار"
@@ -151,6 +170,15 @@ msgstr "انقطع اتصال الزائر"
 msgid "Closed after inactivity"
 msgstr "أُغلقت بسبب عدم النشاط"
 
+#: apps/chat/services/lifecycle.py:31 apps/tickets/models.py:52
+#: templates/chat/widget.html:3 templates/chat/widget.html:10
+msgid "Live chat"
+msgstr "المحادثة المباشرة"
+
+#: apps/chat/services/lifecycle.py:85 templates/chat/widget.html:52
+msgid "This conversation has ended."
+msgstr "انتهت هذه المحادثة."
+
 #: apps/customers/models.py:71
 msgid "Phone"
 msgstr "الهاتف"
@@ -171,22 +199,9 @@ msgstr "بلا منشأة"
 msgid "Choose an organization, or name a new one."
 msgstr "اختر منشأة، أو أدخل اسم منشأة جديدة."
 
-#: apps/intake/forms.py:20
-msgid "Your name"
-msgstr "اسمك"
-
-#: apps/intake/forms.py:21 templates/accounts/user_form.html:25
-msgid "Email address"
-msgstr "البريد الإلكتروني"
-
 #: apps/intake/forms.py:22
 msgid "Phone number"
 msgstr "رقم الهاتف"
-
-#: apps/intake/forms.py:24 templates/tickets/partials/ticket_pane.html:141
-#: templates/tickets/queue.html:26
-msgid "Category"
-msgstr "التصنيف"
 
 #: apps/intake/forms.py:26 templates/tickets/partials/queue_list.html:5
 msgid "Subject"
@@ -245,10 +260,6 @@ msgstr "مغلقة"
 #: apps/tickets/models.py:50
 msgid "Web form"
 msgstr "نموذج الويب"
-
-#: apps/tickets/models.py:52
-msgid "Live chat"
-msgstr "المحادثة المباشرة"
 
 #: apps/tickets/models.py:120
 msgid "Inbound"
@@ -376,6 +387,57 @@ msgstr "دعم AZM"
 #: templates/chat/partials/whisper.html:14
 msgid "Private note — the customer cannot see this"
 msgstr "ملاحظة خاصة — لا يراها العميل"
+
+#: templates/chat/widget.html:15
+msgid "Tell us who you are and we will connect you to someone now."
+msgstr "أخبرنا من أنت وسنوصلك بأحد موظفينا الآن."
+
+#: templates/chat/widget.html:26
+msgid "Start chatting"
+msgstr "ابدأ المحادثة"
+
+#: templates/chat/widget.html:30
+msgid "Connecting you to the next available person."
+msgstr "جارٍ توصيلك بأول موظف متاح."
+
+#: templates/chat/widget.html:32
+msgid "Your position"
+msgstr "ترتيبك في الانتظار"
+
+#: templates/chat/widget.html:41
+msgid "Typing…"
+msgstr "يكتب الآن…"
+
+#: templates/chat/widget.html:45
+msgid "Your message"
+msgstr "رسالتك"
+
+#: templates/chat/widget.html:47
+msgid "Write a message…"
+msgstr "اكتب رسالة…"
+
+#: templates/chat/widget.html:48
+msgid "Send"
+msgstr "إرسال"
+
+#: templates/chat/widget.html:54
+msgid "Your reference"
+msgstr "رقم طلبك"
+
+#: templates/chat/widget.html:60
+msgid "Send us a request"
+msgstr "أرسل لنا طلبًا"
+
+#: templates/chat/widget.html:62
+msgid ""
+"Nobody is available to chat right now. Send a request and we will reply by "
+"email."
+msgstr "لا يوجد أحد متاح للمحادثة الآن. أرسل طلبًا وسنرد عليك بالبريد الإلكتروني."
+
+#: templates/chat/widget.html:64 templates/intake/form.html:3
+#: templates/intake/form.html:6
+msgid "Submit a request"
+msgstr "إرسال طلب"
 
 #: templates/core/audit_log.html:3 templates/core/audit_log.html:6
 #: templates/shell.html:22
@@ -592,10 +654,6 @@ msgstr "ربط"
 msgid ""
 "Every contact is linked to an organization. Nothing needs attention here."
 msgstr "كل جهات الاتصال مرتبطة بمنشآت. لا يوجد ما يتطلب انتباهك هنا."
-
-#: templates/intake/form.html:3 templates/intake/form.html:6
-msgid "Submit a request"
-msgstr "إرسال طلب"
 
 #: templates/intake/form.html:20
 msgid "Submit"

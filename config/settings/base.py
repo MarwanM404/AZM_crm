@@ -201,5 +201,11 @@ LOGIN_EXEMPT_URL_NAMES = {
     # Authenticated by a shared secret rather than a session — the sender is a mail provider,
     # not a person. See apps/messaging/views.py.
     "messaging:inbound_webhook",
+    # The visitor is anonymous by design (FR-005): there is no customer login until the
+    # portal phase. The socket that follows is authorized by a signed token, not a session.
+    "chat:availability",
+    "chat:widget",
+    "chat:start",
+    "chat:leave_queue",
 }
 LOGIN_URL = "accounts:sign_in"

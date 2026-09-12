@@ -57,8 +57,13 @@ jobs:
           DJANGO_SETTINGS_MODULE: config.settings.ci
       - name: Install browsers for the right-to-left checks
         run: python -m playwright install --with-deps chromium
+      # Two sessions on purpose: pytest-playwright owns an event loop and pytest-asyncio
+      # manages its own, so the browser tests and the WebSocket consumer tests cannot share
+      # a session. Splitting them is the fix, not a workaround.
       - name: Test
-        run: pytest --cov
+        run: pytest -m "not e2e" --cov
+      - name: Browser tests
+        run: pytest -m e2e
         env:
           DJANGO_SETTINGS_MODULE: config.settings.ci
       - name: Dependency vulnerability scan

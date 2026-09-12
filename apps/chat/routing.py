@@ -1,10 +1,11 @@
-"""
-WebSocket routes for live chat.
+"""WebSocket routes for live chat (contracts/websocket.md)."""
 
-Empty until Phase 3 brings the consumers. It exists now so `config/asgi.py` has something
-real to point at, and so the ASGI migration can be verified on its own — a socket opened
-against this router is refused cleanly rather than erroring, which is the correct behaviour
-for a path that has no consumer.
-"""
+from django.urls import path
 
-websocket_urlpatterns: list = []
+from apps.chat.consumers.agent import AgentConsumer
+from apps.chat.consumers.visitor import VisitorConsumer
+
+websocket_urlpatterns = [
+    path("ws/chat/visitor/", VisitorConsumer.as_asgi()),
+    path("ws/chat/agent/", AgentConsumer.as_asgi()),
+]

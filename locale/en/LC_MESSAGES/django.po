@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-12 18:07+0000\n"
+"POT-Creation-Date: 2026-09-12 18:33+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -118,6 +118,25 @@ msgstr "%(kind)s files cannot be attached. Allowed: %(allowed)s."
 msgid "Unnamed"
 msgstr "Unnamed"
 
+#: apps/chat/forms.py:16 apps/intake/forms.py:20
+msgid "Your name"
+msgstr "Your name"
+
+#: apps/chat/forms.py:17 apps/intake/forms.py:21
+#: templates/accounts/user_form.html:25
+msgid "Email address"
+msgstr "Email address"
+
+#: apps/chat/forms.py:18
+msgid "What can we help with?"
+msgstr "What can we help with?"
+
+#: apps/chat/forms.py:20 apps/intake/forms.py:24
+#: templates/tickets/partials/ticket_pane.html:141
+#: templates/tickets/queue.html:26
+msgid "Category"
+msgstr "Category"
+
 #: apps/chat/models.py:21
 msgid "Waiting"
 msgstr "Waiting"
@@ -150,6 +169,15 @@ msgstr "The visitor disconnected"
 msgid "Closed after inactivity"
 msgstr "Closed after inactivity"
 
+#: apps/chat/services/lifecycle.py:31 apps/tickets/models.py:52
+#: templates/chat/widget.html:3 templates/chat/widget.html:10
+msgid "Live chat"
+msgstr "Live chat"
+
+#: apps/chat/services/lifecycle.py:85 templates/chat/widget.html:52
+msgid "This conversation has ended."
+msgstr "This conversation has ended."
+
 #: apps/customers/models.py:71
 msgid "Phone"
 msgstr "Phone"
@@ -170,22 +198,9 @@ msgstr "Unknown organization."
 msgid "Choose an organization, or name a new one."
 msgstr "Choose an organization, or name a new one."
 
-#: apps/intake/forms.py:20
-msgid "Your name"
-msgstr "Your name"
-
-#: apps/intake/forms.py:21 templates/accounts/user_form.html:25
-msgid "Email address"
-msgstr "Email address"
-
 #: apps/intake/forms.py:22
 msgid "Phone number"
 msgstr "Phone number"
-
-#: apps/intake/forms.py:24 templates/tickets/partials/ticket_pane.html:141
-#: templates/tickets/queue.html:26
-msgid "Category"
-msgstr "Category"
 
 #: apps/intake/forms.py:26 templates/tickets/partials/queue_list.html:5
 msgid "Subject"
@@ -244,10 +259,6 @@ msgstr "Closed"
 #: apps/tickets/models.py:50
 msgid "Web form"
 msgstr "Web form"
-
-#: apps/tickets/models.py:52
-msgid "Live chat"
-msgstr "Live chat"
 
 #: apps/tickets/models.py:120
 msgid "Inbound"
@@ -375,6 +386,59 @@ msgstr "AZM Support"
 #: templates/chat/partials/whisper.html:14
 msgid "Private note — the customer cannot see this"
 msgstr "Private note — the customer cannot see this"
+
+#: templates/chat/widget.html:15
+msgid "Tell us who you are and we will connect you to someone now."
+msgstr "Tell us who you are and we will connect you to someone now."
+
+#: templates/chat/widget.html:26
+msgid "Start chatting"
+msgstr "Start chatting"
+
+#: templates/chat/widget.html:30
+msgid "Connecting you to the next available person."
+msgstr "Connecting you to the next available person."
+
+#: templates/chat/widget.html:32
+msgid "Your position"
+msgstr "Your position"
+
+#: templates/chat/widget.html:41
+msgid "Typing…"
+msgstr "Typing…"
+
+#: templates/chat/widget.html:45
+msgid "Your message"
+msgstr "Your message"
+
+#: templates/chat/widget.html:47
+msgid "Write a message…"
+msgstr "Write a message…"
+
+#: templates/chat/widget.html:48
+msgid "Send"
+msgstr "Send"
+
+#: templates/chat/widget.html:54
+msgid "Your reference"
+msgstr "Your reference"
+
+#: templates/chat/widget.html:60
+msgid "Send us a request"
+msgstr "Send us a request"
+
+#: templates/chat/widget.html:62
+msgid ""
+"Nobody is available to chat right now. Send a request and we will reply by "
+"email."
+msgstr ""
+"Nobody is available to chat right now. Send a request and we will reply by "
+"email."
+
+#: templates/chat/widget.html:64 templates/intake/form.html:3
+#: templates/intake/form.html:6
+msgid "Submit a request"
+msgstr "Submit a request"
 
 #: templates/core/audit_log.html:3 templates/core/audit_log.html:6
 #: templates/shell.html:22
@@ -594,10 +658,6 @@ msgid ""
 "Every contact is linked to an organization. Nothing needs attention here."
 msgstr ""
 "Every contact is linked to an organization. Nothing needs attention here."
-
-#: templates/intake/form.html:3 templates/intake/form.html:6
-msgid "Submit a request"
-msgstr "Submit a request"
 
 #: templates/intake/form.html:20
 msgid "Submit"

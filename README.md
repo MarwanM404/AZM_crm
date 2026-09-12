@@ -46,12 +46,16 @@ celery -A config beat -l info
 ## Tests
 
 ```bash
-pytest                 # full suite, including the browser checks
-pytest -m "not e2e"    # skip the browser checks
+pytest -m "not e2e"    # everything except the browser checks
+pytest -m e2e          # the browser checks, in their own session
 ruff check . && ruff format --check .
 mypy .
 python manage.py makemigrations --check --dry-run   # fails if a model change has no migration
 ```
+
+The two must be separate commands. pytest-playwright drives the browser from a greenlet that
+owns an event loop, and pytest-asyncio manages its own for the WebSocket consumer tests; run
+together they collide with "This event loop is already running".
 
 The `e2e` tests drive a real Chromium through Playwright to verify right-to-left layout —
 that the sidebar actually mirrors, that no page overflows sideways, and that the internal

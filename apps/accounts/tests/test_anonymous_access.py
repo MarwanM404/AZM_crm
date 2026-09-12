@@ -76,10 +76,19 @@ def test_exempt_list_is_small_and_deliberate():
     - messaging:inbound_webhook — the sender is a mail provider, not a person. It is
       authenticated by a shared secret compared in constant time, refuses everything if that
       secret is unset, and is covered by apps/messaging/tests/test_inbound_transport.py.
+    - chat:availability / chat:widget / chat:start / chat:leave_queue — a chat visitor is
+      anonymous by design (live chat FR-005); there is no customer login until the portal
+      phase. None of these reads or writes anything belonging to an existing customer: they
+      report whether anyone is online, render a form, and create a new conversation. The
+      socket that follows is authorized by a signed token naming exactly one conversation.
     """
     assert settings.LOGIN_EXEMPT_URL_NAMES == {
         "intake:form",
         "intake:submitted",
         "accounts:sign_in",
         "messaging:inbound_webhook",
+        "chat:availability",
+        "chat:widget",
+        "chat:start",
+        "chat:leave_queue",
     }

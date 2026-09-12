@@ -30,7 +30,12 @@ python_files = ["test_*.py"]
 testpaths = ["apps", "tests"]
 addopts = "-ra"
 markers = [
-    "e2e: browser-based checks needing Playwright's browsers (run: -m 'not e2e' to skip)",
+    # The browser tests MUST run in their own pytest session. pytest-playwright drives the
+    # browser from a greenlet that owns an event loop, and pytest-asyncio manages its own for
+    # the WebSocket consumer tests; in one session they collide with "This event loop is
+    # already running". Two sessions, not one:
+    #     pytest -m "not e2e"   &&   pytest -m e2e
+    "e2e: browser-based checks; run in their own session (see note above)",
     "slow: volume checks that build thousands of rows (run: -m 'not slow' to skip)",
 ]
 

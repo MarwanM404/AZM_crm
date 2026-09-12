@@ -14,6 +14,7 @@ urlpatterns = [
     path("tickets/", include("apps.tickets.urls")),
     path("customers/", include("apps.customers.urls")),
     path("attachments/", include("apps.attachments.urls")),
+    path("chat/", include("apps.chat.urls")),
 ]
 
 if settings.DEBUG:

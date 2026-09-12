@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% load i18n static %}
+{% block title %}{% trans "Live chat" %}{% endblock %}
+{% block extra_head %}
+  <script src="{% static 'js/chat-widget.js' %}" defer></script>
+{% endblock %}
+{% block content %}
+<main class="shell__main chat-widget" x-data="chatWidget()">
+  {% if available %}
+    <h1>{% trans "Live chat" %}</h1>
+
+    <form class="card chat-prechat" x-show="stage === 'form'" @submit.prevent="start">
+      {% csrf_token %}
+      <p class="page-head__sub">
+        {% trans "Tell us who you are and we will connect you to someone now." %}
+      </p>
+      {% for field in form %}
+        <div class="field">
+          <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+          {{ field }}
+          <template x-if="errors['{{ field.name }}']">
+            <div class="error" x-text="errors['{{ field.name }}'][0]"></div>
+          </template>
+        </div>
+      {% endfor %}
+      <button type="submit" class="btn btn--primary">{% trans "Start chatting" %}</button>
+    </form>
+
+    <div class="card chat-waiting" x-show="stage === 'waiting'" x-cloak>
+      <p>{% trans "Connecting you to the next available person." %}</p>
+      <p class="muted">
+        {% trans "Your position" %}: <strong x-text="position"></strong>
+      </p>
+    </div>
+
+    <section class="card chat-panel" x-show="stage === 'chatting' || stage === 'ended'" x-cloak>
+      {# The socket delivers rendered HTML, which htmx appends here (ADR-008). #}
+      <div id="chat-thread" class="chat-thread"></div>
+
+      <p class="chat-typing" x-show="theyAreTyping" x-cloak>
+        {% trans "Typing…" %}
+      </p>
+
+      <form class="chat-composer" x-show="stage === 'chatting'" @submit.prevent="send">
+        <label class="visually-hidden" for="chat-input">{% trans "Your message" %}</label>
+        <textarea id="chat-input" rows="2" x-model="draft" @input="signalTyping"
+                  placeholder="{% trans 'Write a message…' %}"></textarea>
+        <button type="submit" class="btn btn--primary">{% trans "Send" %}</button>
+      </form>
+
+      <div class="chat-ended" x-show="stage === 'ended'" x-cloak>
+        <p>{% trans "This conversation has ended." %}</p>
+        <p class="muted" x-show="reference">
+          {% trans "Your reference" %}: <span class="ref" x-text="reference"></span>
+        </p>
+      </div>
+    </section>
+  {% else %}
+    {# FR-039: the desk is closed, so chat is not offered at all. #}
+    <h1>{% trans "Send us a request" %}</h1>
+    <p class="page-head__sub">
+      {% trans "Nobody is available to chat right now. Send a request and we will reply by email." %}
+    </p>
+    <p><a class="btn btn--primary" href="{% url 'intake:form' %}">{% trans "Submit a request" %}</a></p>
+  {% endif %}
+</main>
+{% endblock %}

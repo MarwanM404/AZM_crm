@@ -112,27 +112,27 @@ the agent receive it and reply — both within seconds and without a reload.
 
 ### Tests for User Story 1
 
-- [ ] T033 [P] [US1] Write `apps/chat/tests/test_visitor_consumer.py` covering the visitor socket's frames and refusals in [contracts/websocket.md](contracts/websocket.md), including a connection with no token, a bad signature, and a foreign origin
-- [ ] T034 [P] [US1] Write `apps/chat/tests/test_agent_consumer.py` covering the agent socket's frames, including refusal for an unauthenticated session and a conversation outside the agent's scope
-- [ ] T035 [P] [US1] Write `apps/chat/tests/test_message_delivery.py` asserting a message sent on one socket arrives on the other, and that it exists in the database **before** it appears on any socket (research.md #6)
-- [ ] T036 [P] [US1] Write `apps/chat/tests/test_typing.py` asserting a typing signal reaches the other party and stops
-- [ ] T037 [P] [US1] Write `apps/chat/tests/test_prechat_form.py` asserting a known email matches the existing contact, an unknown one creates a contact with no organization (MVP FR-040), and that neither creates a duplicate
-- [ ] T038 [P] [US1] Write `apps/chat/tests/test_arabic_chat.py` asserting Arabic message content survives the socket unchanged in both directions
-- [ ] T039 [P] [US1] Write `apps/chat/tests/test_rate_limit.py` asserting a flood of messages is throttled without the connection being dropped
+- [X] T033 [P] [US1] Write `apps/chat/tests/test_visitor_consumer.py` covering the visitor socket's frames and refusals in [contracts/websocket.md](contracts/websocket.md), including a connection with no token, a bad signature, and a foreign origin
+- [X] T034 [P] [US1] Write `apps/chat/tests/test_agent_consumer.py` covering the agent socket's frames, including refusal for an unauthenticated session and a conversation outside the agent's scope
+- [X] T035 [P] [US1] Write `apps/chat/tests/test_message_delivery.py` asserting a message sent on one socket arrives on the other, and that it exists in the database **before** it appears on any socket (research.md #6)
+- [X] T036 [P] [US1] Write `apps/chat/tests/test_typing.py` asserting a typing signal reaches the other party and stops
+- [X] T037 [P] [US1] Write `apps/chat/tests/test_prechat_form.py` asserting a known email matches the existing contact, an unknown one creates a contact with no organization (MVP FR-040), and that neither creates a duplicate
+- [X] T038 [P] [US1] Write `apps/chat/tests/test_arabic_chat.py` asserting Arabic message content survives the socket unchanged in both directions
+- [X] T039 [P] [US1] Write `apps/chat/tests/test_rate_limit.py` asserting a flood of messages is throttled without the connection being dropped
 
 ### Implementation for User Story 1
 
-- [ ] T040 [US1] Implement the pre-chat form and `/chat/start/` in `apps/chat/views.py`, reusing `apps/customers/services/matching.py` rather than matching contacts a second way
-- [ ] T041 [US1] Implement `apps/chat/consumers/visitor.py` — token authorization at connect, join the public group only, never the staff group
-- [ ] T042 [US1] Implement `apps/chat/consumers/agent.py` — session authorization, scope check, join both groups for each held conversation
-- [ ] T043 [US1] Implement `apps/chat/services/messaging.py`: persist the message, then broadcast it, in that order and never the reverse
-- [ ] T044 [US1] Implement typing signals in `apps/chat/consumers/agent.py` and `visitor.py` as transient frames that are never persisted — a typing indicator is not part of the transcript
-- [ ] T045 [US1] Apply rate limiting to inbound visitor frames in `apps/chat/consumers/visitor.py`, throttling rather than disconnecting
-- [ ] T046 [P] [US1] Create `templates/chat/widget.html` — the visitor panel, embeddable, with `dir` and `lang` from the active language
-- [ ] T047 [P] [US1] Create `templates/chat/partials/message.html`, the fragment pushed for every rendered message
-- [ ] T048 [US1] Wire `htmx-ext-ws` into the widget and the console so fragments swap into the thread as they arrive
-- [ ] T049 [US1] Ensure every database call inside both consumers goes through `database_sync_to_async`, with the logic itself in `services/`
-- [ ] T050 [US1] Extract and compile translations for this phase into `locale/*/LC_MESSAGES/django.po`
+- [X] T040 [US1] Implement the pre-chat form and `/chat/start/` in `apps/chat/views.py`, reusing `apps/customers/services/matching.py` rather than matching contacts a second way
+- [X] T041 [US1] Implement `apps/chat/consumers/visitor.py` — token authorization at connect, join the public group only, never the staff group
+- [X] T042 [US1] Implement `apps/chat/consumers/agent.py` — session authorization, scope check, join both groups for each held conversation
+- [X] T043 [US1] Implement `apps/chat/services/messaging.py`: persist the message, then broadcast it, in that order and never the reverse
+- [X] T044 [US1] Implement typing signals in `apps/chat/consumers/agent.py` and `visitor.py` as transient frames that are never persisted — a typing indicator is not part of the transcript
+- [X] T045 [US1] Apply rate limiting to inbound visitor frames in `apps/chat/consumers/visitor.py`, throttling rather than disconnecting
+- [X] T046 [P] [US1] Create `templates/chat/widget.html` — the visitor panel, embeddable, with `dir` and `lang` from the active language
+- [X] T047 [P] [US1] Create `templates/chat/partials/message.html`, the fragment pushed for every rendered message
+- [X] T048 [US1] Wire `htmx-ext-ws` into the widget and the console so fragments swap into the thread as they arrive
+- [X] T049 [US1] Ensure every database call inside both consumers goes through `database_sync_to_async`, with the logic itself in `services/`
+- [X] T050 [US1] Extract and compile translations for this phase into `locale/*/LC_MESSAGES/django.po`
 
 **Checkpoint**: quickstart scenarios 1, 2 and 11 pass. Two people can hold a conversation.
 
