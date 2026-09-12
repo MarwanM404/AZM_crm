@@ -59,8 +59,11 @@ Whoever makes it needs to answer four questions; each maps to work that is alrea
 waiting:
 
 1. **Who operates it** — your team, a client's IT department, or a managed platform.
-2. **Can it run persistent worker processes and Redis?** ADR-005 assumes both. Some
-   constrained hosting cannot, which would force background work to be rethought before
+2. **Can it run persistent worker processes, Redis, and an ASGI server?** ADR-005 assumes the
+   first two; [ADR-007](007-realtime-transport.md) added the third when live chat adopted
+   Django Channels, and it also made Redis required rather than merely important — without it
+   there is no chat at all. Some constrained hosting cannot run an ASGI process or hold
+   long-lived connections, which would force both decisions to be revisited before
    implementation rather than after.
 3. **Where may customer personal data physically reside?** Contractual or regulatory limits
    settle this, not convenience.

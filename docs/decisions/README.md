@@ -15,6 +15,11 @@ record that supersedes the old one, rather than an edit that erases the history.
 | [004](004-tenancy-scoping.md) | Explicit department and branch scoping | Proposed | #4 |
 | [005](005-background-jobs.md) | Celery with Redis | Proposed | #5 |
 | [006](006-deployment-target.md) | Local for development; production target deferred | Accepted | #8 |
+| [007](007-realtime-transport.md) | Django Channels over ASGI for real-time transport | Accepted | — |
+| [008](008-chat-client.md) | htmx over WebSocket for the chat client | Accepted | — |
 
 Roadmap decisions #6 (WhatsApp and SMS providers) and #7 (AI provider and data policy) are
 deliberately deferred; both belong to phases outside the MVP.
+
+ADR-007 and ADR-008 belong to [002-live-chat](../../specs/002-live-chat/spec.md) rather than to
+a roadmap decision. ADR-008 answers the question ADR-003 deliberately left open for this phase.
