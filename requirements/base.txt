@@ -6,3 +6,11 @@ psycopg[binary]==3.2.3
 celery==5.4.0
 redis==5.2.0
 django-redis==5.4.0
+
+# Real-time transport for live chat (ADR-007). Daphne is a development dependency in
+# practice — it replaces runserver with an ASGI one — but ships here because it is imported
+# from INSTALLED_APPS in every environment.
+channels==4.3.2
+channels-redis==4.3.0
+daphne==4.2.3
+uvicorn==0.52.4

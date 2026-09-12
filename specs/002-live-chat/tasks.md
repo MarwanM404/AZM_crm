@@ -45,16 +45,16 @@ consequences shape the ordering below.
 
 **Purpose**: Move the application to ASGI and stand up the machinery chat needs.
 
-- [ ] T001 Add `channels`, `channels-redis` and `uvicorn` at pinned versions to `requirements/base.txt`, and `pytest-asyncio` to `requirements/local.txt`
-- [ ] T002 Create the `apps/chat` package with `models.py`, `consumers/`, `services/`, `routing.py`, `views.py`, `urls.py`, `tests/`, and register it in `config/settings/base.py`
-- [ ] T003 Convert `config/asgi.py` to a `ProtocolTypeRouter`: HTTP to the Django application, WebSocket through `AllowedHostsOriginValidator` and `AuthMiddlewareStack` to the chat routing
-- [ ] T004 Configure `ASGI_APPLICATION` and `CHANNEL_LAYERS` (Redis) in `config/settings/base.py`, reading the Redis URL from the environment as everything else does
-- [ ] T005 [P] Configure an in-memory channel layer in `config/settings/test.py` so consumer tests need no Redis, and note why that is safe: the layer under test is Channels', not ours
-- [ ] T006 [P] Add the chat settings to `config/settings/base.py` and `.env.example` — agent capacity, reconnect grace, idle limit and warning — as configuration rather than constants (research.md, open question)
-- [ ] T007 [P] Vendor `htmx-ext-ws` into `static/js/` alongside htmx and Alpine, and load it in `templates/base.html`
-- [ ] T008 [P] Add a Redis service to `.github/workflows/ci.yml` so the channel layer and presence are exercised in CI rather than only locally
-- [ ] T009 [P] Document the ASGI server and the new Redis requirement in `README.md`, replacing the `runserver`-only instructions
-- [ ] T010 Run the whole existing suite under ASGI (`pytest` with `config/asgi.py` in place) before writing any chat code — the WSGI-to-ASGI move must be proved not to have broken the MVP, or every later failure is ambiguous
+- [X] T001 Pinned `channels`, `channels-redis`, `daphne` and `uvicorn` in `requirements/base.txt`, and `pytest-asyncio` plus `websockets` in `requirements/local.txt`. Also capped `pytest<9`: installing pytest-asyncio silently upgrades pytest and breaks every `pytest-playwright` browser test for a reason unrelated to any code change
+- [X] T002 Create the `apps/chat` package with `models.py`, `consumers/`, `services/`, `routing.py`, `views.py`, `urls.py`, `tests/`, and register it in `config/settings/base.py`
+- [X] T003 Convert `config/asgi.py` to a `ProtocolTypeRouter`: HTTP to the Django application, WebSocket through `AllowedHostsOriginValidator` and `AuthMiddlewareStack` to the chat routing
+- [X] T004 Configure `ASGI_APPLICATION` and `CHANNEL_LAYERS` (Redis) in `config/settings/base.py`, reading the Redis URL from the environment as everything else does
+- [X] T005 [P] Configure an in-memory channel layer in `config/settings/test.py` so consumer tests need no Redis, and note why that is safe: the layer under test is Channels', not ours
+- [X] T006 [P] Add the chat settings to `config/settings/base.py` and `.env.example` — agent capacity, reconnect grace, idle limit and warning — as configuration rather than constants (research.md, open question)
+- [X] T007 [P] Vendor `htmx-ext-ws` into `static/js/` alongside htmx and Alpine, and load it in `templates/base.html`
+- [X] T008 [P] Add a Redis service to `.github/workflows/ci.yml` so the channel layer and presence are exercised in CI rather than only locally
+- [X] T009 [P] Document the ASGI server and the new Redis requirement in `README.md`, replacing the `runserver`-only instructions
+- [X] T010 Run the whole existing suite under ASGI (`pytest` with `config/asgi.py` in place) before writing any chat code — the WSGI-to-ASGI move must be proved not to have broken the MVP, or every later failure is ambiguous
 
 **Checkpoint**: the application serves its existing pages through uvicorn, all existing tests
 pass, and a WebSocket connection is accepted and immediately closed.

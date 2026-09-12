@@ -24,6 +24,8 @@ django_settings_module = "config.settings.local"
 
 [tool.pytest.ini_options]
 DJANGO_SETTINGS_MODULE = "config.settings.test"
+# Consumer tests are async; "auto" saves a decorator on every one of them.
+asyncio_mode = "auto"
 python_files = ["test_*.py"]
 testpaths = ["apps", "tests"]
 addopts = "-ra"

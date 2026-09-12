@@ -30,6 +30,11 @@ CACHES = {
     }
 }
 
+# An in-memory channel layer: consumer tests need no Redis. This is safe because the layer
+# itself is Channels' code, not ours — what the tests exercise is which groups a consumer
+# joins and what each socket therefore receives, and that is identical on either backend.
+CHANNEL_LAYERS = {"default": {"BACKEND": "channels.layers.InMemoryChannelLayer"}}
+
 CELERY_TASK_ALWAYS_EAGER = True
 CELERY_TASK_EAGER_PROPAGATES = True
 

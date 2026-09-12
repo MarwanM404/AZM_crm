@@ -33,6 +33,10 @@ ALLOWED_HOSTS = [h.strip() for h in env("DJANGO_ALLOWED_HOSTS", default="").spli
 AUTH_USER_MODEL = "accounts.User"
 
 INSTALLED_APPS = [
+    # First on purpose: daphne replaces Django's WSGI-only runserver with an ASGI one, so
+    # `manage.py runserver` serves WebSockets in development too (ADR-007). Production runs
+    # uvicorn; this exists so developers do not need a second command.
+    "daphne",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -48,6 +52,7 @@ INSTALLED_APPS = [
     "apps.messaging",
     "apps.intake",
     "apps.attachments",
+    "apps.chat",
 ]
 
 MIDDLEWARE = [
@@ -85,6 +90,17 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "config.wsgi.application"
+ASGI_APPLICATION = "config.asgi.application"
+
+# --- real-time (ADR-007) ---
+# Redis is now REQUIRED rather than merely important: without it there is no chat at all,
+# where previously its loss only delayed background jobs.
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {"hosts": [env("REDIS_URL", default="redis://localhost:6379/0")]},
+    }
+}
 
 AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
@@ -117,6 +133,16 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 MAX_ATTACHMENT_BYTES = int(env("MAX_ATTACHMENT_BYTES", default=str(10 * 1024 * 1024)))
+
+# --- live chat ---
+# These are the numbers most likely to feel wrong once agents actually use the thing, so they
+# are settings rather than constants: changing one is an environment edit, not a deployment.
+CHAT_DEFAULT_AGENT_CAPACITY = int(env("CHAT_DEFAULT_AGENT_CAPACITY", default="3"))
+CHAT_PRESENCE_TTL_SECONDS = int(env("CHAT_PRESENCE_TTL_SECONDS", default="45"))
+CHAT_HEARTBEAT_SECONDS = int(env("CHAT_HEARTBEAT_SECONDS", default="20"))
+CHAT_RECONNECT_GRACE_SECONDS = int(env("CHAT_RECONNECT_GRACE_SECONDS", default="60"))
+CHAT_IDLE_WARNING_SECONDS = int(env("CHAT_IDLE_WARNING_SECONDS", default=str(8 * 60)))
+CHAT_IDLE_TIMEOUT_SECONDS = int(env("CHAT_IDLE_TIMEOUT_SECONDS", default=str(10 * 60)))
 # Refuse an oversized upload before it is buffered to disk rather than after.
 DATA_UPLOAD_MAX_MEMORY_SIZE = MAX_ATTACHMENT_BYTES + (1024 * 1024)
 FILE_UPLOAD_MAX_MEMORY_SIZE = 2 * 1024 * 1024

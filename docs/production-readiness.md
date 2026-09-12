@@ -47,6 +47,18 @@ All eleven can be run today except scenario 5, which needs a real mailbox. Run t
 languages against the production environment before the first real customer request, not
 against a developer machine.
 
+### 5. An ASGI server and a reachable Redis
+*Added 2026-09-12 with [ADR-007](decisions/007-realtime-transport.md).*
+
+Live chat moved the application from WSGI to ASGI. The deployment target must therefore run an
+ASGI process — uvicorn, or gunicorn with `UvicornWorker` — and hold long-lived connections
+through whatever proxy sits in front of it. A proxy that closes idle connections after 30
+seconds will disconnect every quiet conversation.
+
+Redis is no longer merely useful. Without it there is no chat: it carries the channel layer,
+agent presence and the waiting queue. A Redis outage now degrades a customer-facing feature
+rather than delaying a background job.
+
 ---
 
 ## Not blocking, but unverified by a person
