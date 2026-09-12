@@ -8,6 +8,26 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    # PostgreSQL, not SQLite: the take-race test needs row-level locking, which SQLite does
+    # not have. Without this service it is skipped here as well and the guarantee is never
+    # actually exercised anywhere.
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_DB: azm_crm
+          POSTGRES_USER: azm_crm
+          POSTGRES_PASSWORD: ci-password
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd pg_isready --health-interval 10s
+          --health-timeout 5s --health-retries 5
+    env:
+      DATABASE_NAME: azm_crm
+      DATABASE_USER: azm_crm
+      DATABASE_PASSWORD: ci-password
+      DATABASE_HOST: localhost
+      DATABASE_PORT: "5432"
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -24,13 +44,13 @@ jobs:
       - name: Check for missing migrations
         run: python manage.py makemigrations --check --dry-run
         env:
-          DJANGO_SETTINGS_MODULE: config.settings.test
+          DJANGO_SETTINGS_MODULE: config.settings.ci
       - name: Install browsers for the right-to-left checks
         run: python -m playwright install --with-deps chromium
       - name: Test
         run: pytest --cov
         env:
-          DJANGO_SETTINGS_MODULE: config.settings.test
+          DJANGO_SETTINGS_MODULE: config.settings.ci
       - name: Dependency vulnerability scan
         run: |
           pip install pip-audit

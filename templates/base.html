@@ -7,8 +7,10 @@
   <title>{% block title %}{% trans "AZM Support" %}{% endblock %}</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  {# IBM Plex Sans Arabic carries Latin and Arabic on matching metrics, so the two languages
-     share one type ramp rather than drifting apart (FR-031). #}
+  {% comment %}
+    IBM Plex Sans Arabic carries Latin and Arabic on matching metrics, so the two languages
+    share one type ramp rather than drifting apart (FR-031).
+  {% endcomment %}
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
   <link rel="stylesheet" href="{% static 'css/base.css' %}">
   <script src="{% static 'js/htmx.min.js' %}" defer></script>

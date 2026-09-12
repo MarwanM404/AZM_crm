@@ -98,9 +98,9 @@ def test_customer_facing_context_does_not_expose_the_ticket_object(ticket_with_b
 
     assert "ticket" not in context
     for value in context.values():
-        assert not hasattr(value, "messages"), (
-            f"A customer-facing context value exposes .messages: {value!r}"
-        )
+        assert not hasattr(
+            value, "messages"
+        ), f"A customer-facing context value exposes .messages: {value!r}"
 
 
 # --- every customer-facing template, rendered with an internal note present ---

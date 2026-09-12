@@ -27,9 +27,9 @@ def test_creating_a_user_does_not_audit_the_password(department, branch):
         branch=branch,
     )
     for entry in LogEntry.objects.get_for_object(user):
-        assert not (SENSITIVE_FIELDS & set(entry.changes_dict)), (
-            f"Audit entry recorded {SENSITIVE_FIELDS & set(entry.changes_dict)} for a user"
-        )
+        assert not (
+            SENSITIVE_FIELDS & set(entry.changes_dict)
+        ), f"Audit entry recorded {SENSITIVE_FIELDS & set(entry.changes_dict)} for a user"
 
 
 @pytest.mark.django_db

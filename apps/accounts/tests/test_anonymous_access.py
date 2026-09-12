@@ -45,13 +45,16 @@ def test_anonymous_visitor_is_denied_or_explicitly_public(client, name, kwargs):
     response = client.get(url)
 
     if name in settings.LOGIN_EXEMPT_URL_NAMES:
-        assert response.status_code in (200, 302, 404, 405), (
-            f"{name} is exempt but did not respond: {response.status_code}"
-        )
+        assert response.status_code in (
+            200,
+            302,
+            404,
+            405,
+        ), f"{name} is exempt but did not respond: {response.status_code}"
         if response.status_code == 302:
-            assert reverse("accounts:sign_in") not in response.url, (
-                f"{name} is listed as public but redirects to sign-in"
-            )
+            assert (
+                reverse("accounts:sign_in") not in response.url
+            ), f"{name} is listed as public but redirects to sign-in"
     else:
         assert response.status_code == 302, (
             f"{name} returned {response.status_code} to an anonymous visitor; "

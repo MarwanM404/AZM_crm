@@ -68,8 +68,10 @@
       <p class="muted">{% trans "No messages on this ticket yet." %}</p>
     {% endfor %}
 
-    {# Two separate forms, not one box with a checkbox: the dangerous action cannot be
-       reached by forgetting to tick something. #}
+    {% comment %}
+      Two separate forms, not one box with a checkbox: the dangerous action cannot be
+      reached by forgetting to tick something.
+    {% endcomment %}
     <div class="card composer" x-data="{ tab: 'reply' }">
       <div class="composer__tabs">
         <button type="button" class="composer__tab" :class="tab === 'reply' && 'composer__tab--on'"

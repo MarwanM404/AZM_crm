@@ -26,6 +26,7 @@
       {% get_current_language as CURRENT_LANGUAGE %}
       <form method="post" action="{% url 'accounts:language' %}" class="lang">
         {% csrf_token %}
+        <input type="hidden" name="next" value="{{ request.get_full_path }}">
         <button type="submit" name="language" value="en"
                 class="lang__btn {% if CURRENT_LANGUAGE == 'en' %}lang__btn--on{% endif %}">English</button>
         <button type="submit" name="language" value="ar"

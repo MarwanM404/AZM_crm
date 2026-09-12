@@ -15,7 +15,7 @@ from .base import BASE_DIR
 
 DEBUG = False
 SECRET_KEY = "test-secret-key-not-for-production-use"
-ALLOWED_HOSTS = ["testserver", "localhost"]
+ALLOWED_HOSTS = ["testserver", "localhost", "127.0.0.1"]
 
 DATABASES = {
     "default": {

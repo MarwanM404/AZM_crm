@@ -25,7 +25,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 CSS_LEFT_RIGHT = re.compile(r"[{;]\s*(left|right)\s*:", re.IGNORECASE)
 
-DJANGO_COMMENT = re.compile(r"\{#.*?#\}", re.DOTALL)
+# Deliberately NOT re.DOTALL: Django's {# #} comment is single-line only. A {# that does not
+# close on the same line is not a comment to Django at all — it renders the text verbatim.
+# Matching multi-line here would make this scanner more permissive than the template engine
+# and blind to exactly that bug, which is what shipped a stray comment onto every page.
+DJANGO_COMMENT = re.compile(r"\{#[^\n]*?#\}")
+UNCLOSED_COMMENT = re.compile(r"\{#(?![^\n]*#\})")
+# {% comment %} IS multi-line, unlike {# #} — strip the whole block, body included.
+COMMENT_BLOCK = re.compile(r"\{%\s*comment\s*%\}.*?\{%\s*endcomment\s*%\}", re.DOTALL)
 # blocktrans wraps its whole body as translatable content — blank the body with the tags.
 BLOCKTRANS_BLOCK = re.compile(r"\{%\s*blocktrans[^%]*%\}.*?\{%\s*endblocktrans\s*%\}", re.DOTALL)
 TAG_OR_VAR = re.compile(r"\{%.*?%\}|\{\{.*?\}\}", re.DOTALL)
@@ -67,7 +74,14 @@ def test_no_untranslated_text_in_templates():
     offenders = []
     for path in _template_files():
         text = path.read_text(encoding="utf-8")
-        for pattern in (HTML_COMMENT, DJANGO_COMMENT, BLOCKTRANS_BLOCK, TAG_OR_VAR, HTML_TAG):
+        for pattern in (
+            HTML_COMMENT,
+            COMMENT_BLOCK,
+            DJANGO_COMMENT,
+            BLOCKTRANS_BLOCK,
+            TAG_OR_VAR,
+            HTML_TAG,
+        ):
             text = _blank_out(pattern, text)
 
         for lineno, line in enumerate(text.splitlines(), start=1):
@@ -78,4 +92,24 @@ def test_no_untranslated_text_in_templates():
                 offenders.append(f"{path.relative_to(BASE_DIR)}:{lineno}: {stripped}")
 
     message = "Untranslated text found outside {% trans %}/{{ }}:\n" + "\n".join(offenders)
+    assert not offenders, message
+
+
+def test_no_multi_line_django_comments():
+    """`{# ... #}` is single-line in Django. Spanning two lines does not comment anything —
+    the text renders as page content, and in `<head>` the browser hoists it to the top of
+    every page. Use `{% comment %}...{% endcomment %}` for anything longer than one line.
+    """
+    offenders = []
+    for path in _template_files():
+        text = path.read_text(encoding="utf-8")
+        for match in UNCLOSED_COMMENT.finditer(text):
+            lineno = text[: match.start()].count("\n") + 1
+            snippet = text[match.start() :].split("\n", 1)[0].strip()
+            offenders.append(f"{path.relative_to(BASE_DIR)}:{lineno}: {snippet[:80]}")
+
+    message = (
+        "These `{# #}` comments do not close on their own line, so Django renders them as "
+        "visible text. Use {% comment %}...{% endcomment %}:\n  " + "\n  ".join(offenders)
+    )
     assert not offenders, message

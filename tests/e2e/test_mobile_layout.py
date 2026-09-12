@@ -46,9 +46,9 @@ def test_ticket_detail_stacks_rather_than_overflowing(signed_in_page, live_serve
         }"""
     )
     assert positions is not None
-    assert positions["sideTop"] >= positions["threadBottom"] - 1, (
-        "the context panel is still beside the thread on a phone rather than below it"
-    )
+    assert (
+        positions["sideTop"] >= positions["threadBottom"] - 1
+    ), "the context panel is still beside the thread on a phone rather than below it"
 
 
 def test_public_request_form_fits_a_phone(page, live_server):
@@ -61,9 +61,9 @@ def test_public_request_form_fits_a_phone(page, live_server):
     assert overflow <= 1
 
     submit = page.locator("button[type='submit']").first.bounding_box()
-    assert submit["height"] >= MINIMUM_TARGET, (
-        f"the submit button is {submit['height']}px tall; a thumb needs about {MINIMUM_TARGET}px"
-    )
+    assert (
+        submit["height"] >= MINIMUM_TARGET
+    ), f"the submit button is {submit['height']}px tall; a thumb needs about {MINIMUM_TARGET}px"
 
 
 def test_primary_buttons_are_thumb_sized(signed_in_page, live_server, rtl_fixtures):

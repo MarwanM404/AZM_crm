@@ -11,7 +11,7 @@ took it.
 import threading
 
 import pytest
-from django.db import connections
+from django.db import connection, connections
 from django.test import Client
 from django.urls import reverse
 
@@ -19,6 +19,19 @@ from apps.accounts.models import User
 from apps.tickets.models import Ticket
 
 pytestmark = pytest.mark.django_db(transaction=True)
+
+# SQLite has no row-level locking: `select_for_update` cannot be exercised on it, and
+# concurrent writers lock the whole database rather than one row. A test that "passes" here
+# proves nothing about the race it claims to measure, so it is skipped rather than weakened
+# until it goes green. It runs against PostgreSQL — the production database per ADR-002 —
+# which is where the guarantee actually has to hold.
+needs_row_locking = pytest.mark.skipif(
+    connection.vendor == "sqlite",
+    reason=(
+        "select_for_update needs row-level locking; SQLite has none, so this cannot "
+        "exercise the take race. Runs against PostgreSQL in CI."
+    ),
+)
 
 
 def _agents(count, department, branch):
@@ -37,6 +50,7 @@ def _agents(count, department, branch):
 
 
 @pytest.mark.slow
+@needs_row_locking
 def test_many_agents_racing_for_one_ticket_produce_exactly_one_winner(
     department, branch, category, contact
 ):
@@ -53,26 +67,34 @@ def test_many_agents_racing_for_one_ticket_produce_exactly_one_winner(
     url = reverse("tickets:take", args=[ticket.reference])
     results, lock = [], threading.Lock()
 
-    def take(agent):
+    # Signed in up front, on this thread: force_login writes a session row, and twelve
+    # concurrent session writes lock SQLite regardless of application code. Doing it inside
+    # the threads made this test flaky for a reason that had nothing to do with the race it
+    # exists to measure.
+    clients = []
+    for agent in agents:
+        client = Client()
+        client.force_login(agent)
+        clients.append(client)
+
+    def take(client):
         try:
-            client = Client()
-            client.force_login(agent)
             response = client.post(url)
             with lock:
                 results.append(response.status_code)
         finally:
             connections.close_all()  # each thread holds its own connection
 
-    threads = [threading.Thread(target=take, args=(agent,)) for agent in agents]
+    threads = [threading.Thread(target=take, args=(c,)) for c in clients]
     for thread in threads:
         thread.start()
     for thread in threads:
         thread.join()
 
     winners = [code for code in results if code == 200]
-    assert len(winners) == 1, (
-        f"{len(winners)} agents were told they took the same ticket. Results: {results}"
-    )
+    assert (
+        len(winners) == 1
+    ), f"{len(winners)} agents were told they took the same ticket. Results: {results}"
 
     ticket.refresh_from_db()
     assert ticket.assigned_to is not None

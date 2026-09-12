@@ -20,6 +20,9 @@ class LoginRequiredMiddleware:
         if request.user.is_authenticated:
             return self.get_response(request)
 
+        if self._is_asset(request.path_info):
+            return self.get_response(request)
+
         try:
             match = resolve(request.path_info)
             url_name = f"{match.namespace}:{match.url_name}" if match.namespace else match.url_name
@@ -30,6 +33,23 @@ class LoginRequiredMiddleware:
             return self.get_response(request)
 
         return redirect_to_login(request.get_full_path(), login_url=settings.LOGIN_URL)
+
+    @staticmethod
+    def _is_asset(path):
+        """Static and media files are not views: they resolve to no URL name, so the
+        deny-by-default rule would redirect them to sign-in. In development, where Django
+        serves them, that leaves the public request form with no stylesheet for exactly the
+        people it exists for — anonymous customers.
+
+        The prefixes are checked rather than trusted. Django's MEDIA_URL defaults to "/",
+        and a prefix of "/" matches every path on the site — exempting it would switch
+        authentication off entirely. Only a prefix that actually names a subdirectory is
+        usable here.
+        """
+        for prefix in (settings.STATIC_URL, getattr(settings, "MEDIA_URL", None)):
+            if prefix and prefix not in ("", "/") and path.startswith(prefix):
+                return True
+        return False
 
 
 class UserLanguageMiddleware:
