@@ -4,6 +4,10 @@
 # for a reason unrelated to any code change.
 pytest>=8.3,<9
 pytest-django==4.9.0
+# The CI "Test" step runs `pytest --cov`; without this pinned, that step fails on a
+# clean machine with "unrecognized arguments: --cov" while passing on any developer
+# box that happens to have it installed.
+pytest-cov==7.1.0
 factory_boy==3.3.1
 ruff==0.7.4
 mypy==1.13.0

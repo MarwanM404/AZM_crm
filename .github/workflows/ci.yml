@@ -62,6 +62,12 @@ jobs:
       # a session. Splitting them is the fix, not a workaround.
       - name: Test
         run: pytest -m "not e2e" --cov
+        # Without this the step falls back to the pyproject default (config.settings.test,
+        # SQLite), so the take-race test skips here exactly as it does locally and the
+        # PostgreSQL service above sits unused — the guarantee this job exists to check is
+        # never actually checked. pytest-django resolves the env var ahead of the ini value.
+        env:
+          DJANGO_SETTINGS_MODULE: config.settings.ci
       - name: Browser tests
         run: pytest -m e2e
         env:
