@@ -215,6 +215,10 @@ LOGIN_EXEMPT_URL_NAMES = {
     # behind the sign-in wall they would load no catalog at all — leaving an Arabic visitor
     # reading English on the two screens the public actually sees.
     "javascript-catalog",
+    # Choosing a language before signing in. It has to be public for the same reason the
+    # sign-in page itself does: you cannot require a session to reach the control that makes
+    # the page readable enough to start one.
+    "accounts:anonymous_language",
 }
 LOGIN_URL = "accounts:sign_in"
 

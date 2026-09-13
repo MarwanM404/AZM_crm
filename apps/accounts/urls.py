@@ -7,4 +7,5 @@ urlpatterns = [
     path("sign-in/", views.sign_in, name="sign_in"),
     path("sign-out/", views.sign_out, name="sign_out"),
     path("language/", views.set_language_for_user, name="language"),
+    path("language/choose/", views.set_language_anonymously, name="anonymous_language"),
 ]

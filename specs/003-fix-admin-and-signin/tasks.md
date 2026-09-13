@@ -148,18 +148,18 @@ branded and switchable.
 
 ### Tests for User Story 4
 
-- [ ] T037 [P] [US4] Write `apps/accounts/tests/test_sign_in_language.py` asserting an anonymous visitor can choose a language, that an unsupported code is refused, and that the choice takes effect immediately
-- [ ] T038 [P] [US4] Extend `apps/accounts/tests/test_sign_in_language.py` asserting a language chosen while signed out is adopted by the account on successful sign-in (FR-014), resolving the mismatch where an account defaults to Arabic and an anonymous visitor to English
-- [ ] T039 [P] [US4] Write `tests/e2e/test_sign_in_visual.py` asserting the sign-in screen carries the product's branding and layout, and that it does not scroll sideways on a phone
-- [ ] T040 [P] [US4] Extend `tests/e2e/test_sign_in_visual.py` asserting a failed sign-in presents its error in the same style as errors elsewhere
+- [X] T037 [P] [US4] Write `apps/accounts/tests/test_sign_in_language.py` asserting an anonymous visitor can choose a language, that an unsupported code is refused, and that the choice takes effect immediately
+- [X] T038 [P] [US4] Extend `apps/accounts/tests/test_sign_in_language.py` asserting a language chosen while signed out is adopted by the account on successful sign-in (FR-014), resolving the mismatch where an account defaults to Arabic and an anonymous visitor to English
+- [X] T039 [P] [US4] Write `tests/e2e/test_sign_in_visual.py` asserting the sign-in screen carries the product's branding and layout, and that it does not scroll sideways on a phone
+- [X] T040 [P] [US4] Extend `tests/e2e/test_sign_in_visual.py` asserting a failed sign-in presents its error in the same style as errors elsewhere
 
 ### Implementation for User Story 4
 
-- [ ] T041 [US4] Implement anonymous language selection in `apps/accounts/views.py` and route it in `apps/accounts/urls.py`, separate from the signed-in switcher which writes to an account that does not yet exist
-- [ ] T042 [US4] Adopt a pre-sign-in language choice onto the account in `apps/accounts/views.py` `sign_in`
-- [ ] T043 [US4] Rebuild `templates/accounts/sign_in.html` with the product's chrome, a card, branding and the language switch
-- [ ] T044 [P] [US4] Add the sign-in screen's styles to `static/css/base.css`, placed after the rules they override — a media query adds no specificity, and an override written above its target loses
-- [ ] T045 [US4] Extract and translate this phase's strings, then check with `tools/catalog.py status`
+- [X] T041 [US4] Implement anonymous language selection in `apps/accounts/views.py` and route it in `apps/accounts/urls.py`, separate from the signed-in switcher which writes to an account that does not yet exist
+- [X] T042 [US4] Adopt a pre-sign-in language choice onto the account in `apps/accounts/views.py` `sign_in`
+- [X] T043 [US4] Rebuild `templates/accounts/sign_in.html` with the product's chrome, a card, branding and the language switch
+- [X] T044 [P] [US4] Add the sign-in screen's styles to `static/css/base.css`, placed after the rules they override — a media query adds no specificity, and an override written above its target loses
+- [X] T045 [US4] Extract and translate this phase's strings, then check with `tools/catalog.py status`
 
 **Checkpoint**: the first screen anyone sees looks like the product, in either language.
 

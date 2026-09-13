@@ -421,3 +421,32 @@ select:focus-visible, input:focus-visible, textarea:focus-visible {
   padding: 8px 10px; font-family: inherit; font-size: 13.5px;
   border: 1px solid var(--color-border); border-radius: var(--radius);
 }
+
+
+/* --- the sign-in screen (FR-013) ---
+ *
+ * The first screen anyone sees. It cannot reuse the app shell — that chrome is a signed-in
+ * navigation sidebar whose every link goes somewhere the reader cannot reach yet — so the
+ * identity is rebuilt in the same vocabulary: the same card, the same brand mark, the same
+ * type ramp.
+ *
+ * Centred with logical properties so it mirrors in Arabic without a second rule.
+ */
+.signin {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 14px; min-block-size: 100vh; padding: 24px 16px;
+}
+.signin__panel { inline-size: min(100%, 380px); padding: 28px 26px; }
+.brand--signin { margin-block-end: 18px; }
+.signin__title { margin: 0 0 2px; font-size: 21px; }
+.signin__sub { margin: 0 0 20px; font-size: 13px; color: var(--color-muted); }
+.signin__form .field { margin-block-end: 14px; }
+.btn--block { inline-size: 100%; justify-content: center; }
+.error--form { margin-block-end: 12px; }
+.signin__lang {
+  display: flex; gap: 6px; justify-content: center;
+  margin-block-start: 18px; padding-block-start: 16px;
+  border-block-start: 1px solid var(--color-line);
+}
+.btn--on { background: var(--color-accent-wash); border-color: var(--color-accent); font-weight: 600; }
+.signin__foot { font-size: 12.5px; text-align: center; }

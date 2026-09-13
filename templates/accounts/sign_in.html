@@ -2,19 +2,63 @@
 {% load i18n %}
 {% block title %}{% trans "Sign in" %}{% endblock %}
 {% block content %}
-<main class="shell__main">
-  <h1>{% trans "Sign in" %}</h1>
-  <form method="post" novalidate>
-    {% csrf_token %}
-    {% for field in form %}
-      <div class="field">
-        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-        {{ field }}
-        {% for error in field.errors %}<div class="error">{{ error }}</div>{% endfor %}
-      </div>
-    {% endfor %}
-    {% for error in form.non_field_errors %}<div class="error">{{ error }}</div>{% endfor %}
-    <button type="submit" class="btn btn--primary">{% trans "Sign in" %}</button>
-  </form>
+{% comment %}
+  The first screen anyone sees, including a customer's IT department during an evaluation. It
+  used to drop a bare form into the page with none of the chrome, card or branding every
+  screen behind it carries — so the product's first impression was of something unfinished.
+
+  It cannot extend shell.html: that chrome is a signed-in navigation sidebar, and every link
+  in it goes somewhere this reader cannot reach yet. So the identity is rebuilt here, in the
+  same vocabulary, rather than borrowed.
+
+  It is also the one screen where language cannot come from a stored preference, because the
+  preference is behind the thing the reader is trying to reach (FR-012).
+{% endcomment %}
+<main class="signin">
+  <div class="signin__panel card">
+    <div class="brand brand--signin">
+      <span class="brand__mark">A</span>
+      <span class="brand__name">{% trans "AZM Support" %}</span>
+    </div>
+
+    <h1 class="signin__title">{% trans "Sign in" %}</h1>
+    <p class="signin__sub">{% trans "Customer support desk" %}</p>
+
+    <form method="post" novalidate class="signin__form">
+      {% csrf_token %}
+      {% for field in form %}
+        <div class="field">
+          <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+          {{ field }}
+          {% for error in field.errors %}<div class="error">{{ error }}</div>{% endfor %}
+        </div>
+      {% endfor %}
+      {% for error in form.non_field_errors %}
+        <div class="error error--form">{{ error }}</div>
+      {% endfor %}
+      <button type="submit" class="btn btn--primary btn--block">{% trans "Sign in" %}</button>
+    </form>
+
+    {% comment %}
+      Separate from the signed-in switcher, which writes to an account that does not exist
+      yet. A language chosen here is carried onto the account on a successful sign-in, so the
+      choice is not undone one request later (FR-014).
+    {% endcomment %}
+    <form method="post" action="{% url 'accounts:anonymous_language' %}" class="signin__lang">
+      {% csrf_token %}
+      <input type="hidden" name="next" value="{{ request.get_full_path }}">
+      {% get_current_language as current %}
+      {% for code, label in LANGUAGES %}
+        <button type="submit" name="language" value="{{ code }}"
+                class="btn btn--quiet {% if code == current %}btn--on{% endif %}"
+                {% if code == current %}aria-current="true"{% endif %}>{{ label }}</button>
+      {% endfor %}
+    </form>
+  </div>
+
+  <p class="signin__foot muted">
+    {% blocktrans %}Not a member of staff? Send us a request.{% endblocktrans %}
+    <a href="{% url 'intake:form' %}">{% trans "Open the request form" %}</a>
+  </p>
 </main>
 {% endblock %}

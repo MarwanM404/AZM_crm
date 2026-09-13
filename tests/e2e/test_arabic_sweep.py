@@ -91,6 +91,27 @@ def test_the_status_that_changes_after_load_is_arabic(signed_in_page, live_serve
     assert "متصل" in status
 
 
+def test_the_sign_in_screen_is_fully_arabic(browser, live_server):
+    """Signed out, so `signed_in_page` cannot reach it — which is why it was missing from the
+    sweep above, and why two English strings survived a passing Arabic suite until somebody
+    looked at the page.
+    """
+    context = browser.new_context(locale="ar")
+    page = context.new_page()
+    try:
+        page.goto(f"{live_server.url}/sign-in/")
+        page.wait_for_load_state("networkidle")
+
+        text = page.inner_text("body")
+        assert not PLACEHOLDER.findall(text)
+        assert "Customer support desk" not in text
+        assert "Not a member of staff" not in text
+        assert "مكتب دعم العملاء" in text
+    finally:
+        page.close()
+        context.close()
+
+
 def test_departments_are_named_in_arabic(admin_page, live_server):
     """Stored since the MVP and read nowhere until this feature (FR-008)."""
     admin_page.goto(f"{live_server.url}/admin/users/new/")

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-13 10:41+0000\n"
+"POT-Creation-Date: 2026-09-13 13:29+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -32,43 +32,43 @@ msgstr "Password"
 msgid "Invalid email or password."
 msgstr "Invalid email or password."
 
-#: apps/accounts/models.py:23 apps/accounts/models.py:37
+#: apps/accounts/models.py:23 apps/accounts/models.py:54
 #: apps/customers/models.py:18 apps/tickets/models.py:20
 msgid "name"
 msgstr "name"
 
-#: apps/accounts/models.py:24 apps/accounts/models.py:38
+#: apps/accounts/models.py:24 apps/accounts/models.py:55
 #: apps/customers/models.py:19 apps/tickets/models.py:21
 msgid "name (Arabic)"
 msgstr "name (Arabic)"
 
-#: apps/accounts/models.py:86
+#: apps/accounts/models.py:120
 msgid "Agent"
 msgstr "Agent"
 
-#: apps/accounts/models.py:87
+#: apps/accounts/models.py:121
 msgid "Supervisor"
 msgstr "Supervisor"
 
-#: apps/accounts/models.py:88
+#: apps/accounts/models.py:122
 msgid "Administrator"
 msgstr "Administrator"
 
-#: apps/accounts/models.py:91 apps/customers/models.py:53
+#: apps/accounts/models.py:125 apps/customers/models.py:53
 #: templates/customers/contact_edit.html:17
 msgid "Arabic"
 msgstr "Arabic"
 
-#: apps/accounts/models.py:92 apps/customers/models.py:53
+#: apps/accounts/models.py:126 apps/customers/models.py:53
 #: templates/customers/contact_edit.html:18
 msgid "English"
 msgstr "English"
 
-#: apps/accounts/models.py:94
+#: apps/accounts/models.py:128
 msgid "email address"
 msgstr "email address"
 
-#: apps/accounts/models.py:95 apps/customers/models.py:50
+#: apps/accounts/models.py:129 apps/customers/models.py:50
 msgid "full name"
 msgstr "full name"
 
@@ -393,10 +393,27 @@ msgstr "Unknown category."
 msgid "A reply cannot be empty."
 msgstr "A reply cannot be empty."
 
-#: templates/accounts/sign_in.html:3 templates/accounts/sign_in.html:6
-#: templates/accounts/sign_in.html:17
+#: templates/accounts/sign_in.html:3 templates/accounts/sign_in.html:24
+#: templates/accounts/sign_in.html:39
 msgid "Sign in"
 msgstr "Sign in"
+
+#: templates/accounts/sign_in.html:21 templates/base.html:7
+#: templates/shell.html:9
+msgid "AZM Support"
+msgstr "AZM Support"
+
+#: templates/accounts/sign_in.html:25
+msgid "Customer support desk"
+msgstr "Customer support desk"
+
+#: templates/accounts/sign_in.html:61
+msgid "Not a member of staff? Send us a request."
+msgstr "Not a member of staff? Send us a request."
+
+#: templates/accounts/sign_in.html:62
+msgid "Open the request form"
+msgstr "Open the request form"
 
 #: templates/accounts/user_form.html:3 templates/accounts/user_form.html:8
 #: templates/accounts/user_form.html:12 templates/accounts/users.html:13
@@ -458,10 +475,6 @@ msgstr "Deactivate"
 #: templates/accounts/users.html:53
 msgid "No staff accounts in this department yet."
 msgstr "No staff accounts in this department yet."
-
-#: templates/base.html:7 templates/shell.html:9
-msgid "AZM Support"
-msgstr "AZM Support"
 
 #: templates/chat/console.html:13
 msgid "Conversations assigned to you"

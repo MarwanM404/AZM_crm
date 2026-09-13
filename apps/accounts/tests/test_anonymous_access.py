@@ -87,6 +87,10 @@ def test_exempt_list_is_small_and_deliberate():
       Arabic visitor reading English on the only screens the public ever sees. The response
       contains message strings and no data, no identifiers and no tokens, which
       tests/test_client_translations.py asserts rather than assumes.
+    - accounts:anonymous_language — the same argument as accounts:sign_in. You cannot require
+      a session to reach the control that makes the page readable enough to start one. It
+      writes a language cookie and nothing else, validates the code against LANGUAGES, and
+      refuses a redirect target outside this host.
     """
     assert settings.LOGIN_EXEMPT_URL_NAMES == {
         "intake:form",
@@ -98,4 +102,5 @@ def test_exempt_list_is_small_and_deliberate():
         "chat:start",
         "chat:leave_queue",
         "javascript-catalog",
+        "accounts:anonymous_language",
     }
