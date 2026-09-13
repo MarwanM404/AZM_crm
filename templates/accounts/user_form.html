@@ -34,10 +34,18 @@
       </select>
     </div>
     <div class="field">
+      {% comment %}
+        Pre-selected to the administrator's own. Before this, the field defaulted to whichever
+        department sorted first, so filling in a name and an email created an account in a
+        department the administrator cannot see — with no error anywhere (FR-001).
+
+        The other options stay: a control with one choice teaches that scope is not a real
+        field, and that lesson is wrong the moment a second branch exists.
+      {% endcomment %}
       <label for="id_department">{% trans "Department" %}</label>
       <select id="id_department" name="department" required>
         {% for department in departments %}
-          <option value="{{ department.pk }}">{{ department.name }}</option>
+          <option value="{{ department.pk }}"{% if department.pk == selected_department %} selected{% endif %}>{{ department.name }}</option>
         {% endfor %}
       </select>
     </div>
@@ -45,7 +53,7 @@
       <label for="id_branch">{% trans "Branch" %}</label>
       <select id="id_branch" name="branch" required>
         {% for branch in branches %}
-          <option value="{{ branch.pk }}">{{ branch.name }}</option>
+          <option value="{{ branch.pk }}"{% if branch.pk == selected_branch %} selected{% endif %}>{{ branch.name }}</option>
         {% endfor %}
       </select>
     </div>

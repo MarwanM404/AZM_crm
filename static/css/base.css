@@ -394,3 +394,16 @@ select:focus-visible, input:focus-visible, textarea:focus-visible {
   .chat-thread { max-block-size: 60vh; }
   .chat-observe__head { gap: 6px; }
 }
+
+
+/* --- a just-created account (FR-003) ---
+ *
+ * Marked by wash AND edge, not colour alone, for the same reason the internal note is: this
+ * is confirmation that a piece of work landed, and an administrator who cannot distinguish
+ * the row is back to counting rows. Placed at the end of the file because a later rule at
+ * equal specificity wins, and .table__row is declared above.
+ */
+.table__row--created {
+  background: var(--color-accent-wash);
+  border-inline-start: 4px solid var(--color-accent);
+}

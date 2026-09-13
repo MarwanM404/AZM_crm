@@ -51,8 +51,7 @@ def _scenario_numbers():
     import re
 
     return sorted(
-        int(match.group(1))
-        for match in re.finditer(r"^### (\d+)\. ", QUICKSTART.read_text(), re.M)
+        int(match.group(1)) for match in re.finditer(r"^### (\d+)\. ", QUICKSTART.read_text(), re.M)
     )
 
 

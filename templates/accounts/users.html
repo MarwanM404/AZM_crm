@@ -22,8 +22,13 @@
       <span>{% trans "Status" %}</span>
       <span></span>
     </div>
+    {% comment %}
+      A just-created account is marked for this visit only (FR-003). Being present in a list of
+      twenty is not confirmation that the work landed, and the defect that prompted all this
+      was an account that was created and could not be found.
+    {% endcomment %}
     {% for user in users %}
-      <div class="table__row table__row--users">
+      <div class="table__row table__row--users{% if user.pk == created_id %} table__row--created{% endif %}">
         <span class="trunc">{{ user.full_name }}</span>
         <span class="ltr trunc">{{ user.email }}</span>
         <span class="muted">{{ user.get_role_display }}</span>

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-13 07:54+0000\n"
+"POT-Creation-Date: 2026-09-13 09:55+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -73,23 +73,35 @@ msgstr "البريد الإلكتروني"
 msgid "full name"
 msgstr "الاسم الكامل"
 
-#: apps/accounts/views_admin.py:48
+#: apps/accounts/views_admin.py:67
 msgid "An email address and a name are required."
 msgstr "البريد الإلكتروني والاسم مطلوبان."
 
-#: apps/accounts/views_admin.py:50
+#: apps/accounts/views_admin.py:69
 msgid "Choose a role."
 msgstr "اختر دورًا."
 
-#: apps/accounts/views_admin.py:54 apps/accounts/views_admin.py:90
+#: apps/accounts/views_admin.py:73 apps/accounts/views_admin.py:127
 msgid "Choose a department and a branch."
 msgstr "اختر القسم والفرع."
 
-#: apps/accounts/views_admin.py:56
+#: apps/accounts/views_admin.py:80
+msgid ""
+"That department and branch are not yours to administer, and an account "
+"created there would not be visible to you. It has not been created."
+msgstr "هذا القسم وهذا الفرع ليسا ضمن إدارتك، ولن يكون الحساب المُنشأ فيهما ظاهرًا لك. لم يُنشأ الحساب."
+
+#: apps/accounts/views_admin.py:86
 msgid "An account with that email already exists."
 msgstr "يوجد حساب بهذا البريد الإلكتروني بالفعل."
 
-#: apps/accounts/views_admin.py:105
+#: apps/accounts/views_admin.py:133
+msgid ""
+"That department and branch are not yours to administer, and this account "
+"would no longer be visible to you. Nothing has been changed."
+msgstr "هذا القسم وهذا الفرع ليسا ضمن إدارتك، ولن يعود هذا الحساب ظاهرًا لك. لم يتغيّر شيء."
+
+#: apps/accounts/views_admin.py:152
 msgid "You cannot deactivate your own account."
 msgstr "لا يمكنك تعطيل حسابك الخاص."
 
@@ -159,7 +171,7 @@ msgstr "التصنيف"
 msgid "Waiting"
 msgstr "في الانتظار"
 
-#: apps/chat/models.py:22 templates/accounts/users.html:32
+#: apps/chat/models.py:22 templates/accounts/users.html:38
 msgid "Active"
 msgstr "نشط"
 
@@ -401,15 +413,15 @@ msgstr "الاسم الكامل"
 msgid "Role"
 msgstr "الدور"
 
-#: templates/accounts/user_form.html:37
+#: templates/accounts/user_form.html:46
 msgid "Department"
 msgstr "القسم"
 
-#: templates/accounts/user_form.html:45
+#: templates/accounts/user_form.html:54
 msgid "Branch"
 msgstr "الفرع"
 
-#: templates/accounts/user_form.html:52
+#: templates/accounts/user_form.html:61
 msgid "Create account"
 msgstr "إنشاء الحساب"
 
@@ -427,15 +439,15 @@ msgstr "الاسم"
 msgid "Status"
 msgstr "الحالة"
 
-#: templates/accounts/users.html:34
+#: templates/accounts/users.html:40
 msgid "Deactivated"
 msgstr "معطَّل"
 
-#: templates/accounts/users.html:41
+#: templates/accounts/users.html:47
 msgid "Deactivate"
 msgstr "تعطيل"
 
-#: templates/accounts/users.html:47
+#: templates/accounts/users.html:53
 msgid "No staff accounts in this department yet."
 msgstr "لا توجد حسابات موظفين في هذا القسم بعد."
 
@@ -519,7 +531,7 @@ msgstr "العميل"
 #: templates/customers/list.html:13
 #: templates/tickets/partials/queue_list.html:4
 msgid "Reference"
-msgstr "رد: %(reference)s"
+msgstr "الرقم المرجعي"
 
 #: templates/chat/partials/conversation_list.html:7
 msgid "Unread"

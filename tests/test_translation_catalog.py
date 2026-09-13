@@ -162,3 +162,56 @@ def test_the_compiled_arabic_catalog_actually_resolves_a_string():
         "The Arabic catalog compiled but did not translate a string that is present and "
         "non-fuzzy in django.po — the .mo is stale. Re-run `python manage.py compilemessages`."
     )
+
+
+# --- translations that are present, unflagged, and wrong (T004, T005) ---
+#
+# Everything above this line asks whether a translation is *there*. `Reference` was there, was
+# not fuzzy, and was the Arabic for the email reply subject — so the chat console's heading
+# rendered the literal text "رد: %(REFERENCE)S" while this file reported both catalogs clean.
+#
+# No rule catches a fluent sentence with the wrong meaning. One narrow rule catches the case
+# where the wrongness is visible in the string itself, and it is the case that reaches a user
+# as obvious breakage rather than as a subtle mistranslation.
+
+
+@pytest.mark.parametrize("language", sorted(CATALOGS))
+def test_no_translation_adds_a_placeholder_its_source_lacks(language):
+    from tools.catalog import placeholder_mismatches
+
+    found = placeholder_mismatches(language)
+
+    assert not found, "\n  ".join(
+        f"{msgid!r} -> {translated!r} adds {extra}" for msgid, translated, extra in found
+    )
+
+
+def test_a_translation_may_omit_a_placeholder_its_source_has():
+    """The rule is one-directional on purpose, and this is the test that keeps it that way.
+
+    Arabic's zero, one and two plural forms legitimately drop the numeral — "رسالة واحدة" is
+    "one message" and needs no digit. A symmetric rule would fail five correct entries here,
+    and the obvious response to five false positives is to delete the rule.
+    """
+    from tools.catalog import placeholder_mismatches
+
+    entries = _entries(CATALOGS["ar"])
+    omitting = [
+        msgid
+        for msgid, translations, _fuzzy in entries
+        if "%(counter)s" in msgid and any(t and "%(counter)s" not in t for t in translations)
+    ]
+
+    assert omitting, "expected at least one Arabic plural form that omits its numeral"
+
+    # Checked against these entries specifically, not against the catalog as a whole: any
+    # unrelated mismatch would otherwise make this test fail for somebody else's reason and
+    # say nothing about symmetry.
+    reported = {msgid for msgid, _translated, _extra in placeholder_mismatches("ar")}
+    wrongly_reported = reported & set(omitting)
+
+    assert not wrongly_reported, (
+        f"these entries omit a placeholder and were reported as mismatches: "
+        f"{sorted(wrongly_reported)}. The rule has become symmetric and will now fail on "
+        "correct Arabic plurals."
+    )

@@ -7,6 +7,7 @@ the whole organization (FR-023 makes no exception for role).
 
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
+from django.urls import reverse
 from django.utils.translation import gettext as _
 from django.views.decorators.http import require_POST
 
@@ -25,10 +26,28 @@ def _users_in_scope(request):
 
 @administrator_required
 def user_list(request):
+    created = request.GET.get("created")
     return render(
         request,
         "accounts/users.html",
-        {"section": "administration", "users": _users_in_scope(request)},
+        {
+            "section": "administration",
+            "users": _users_in_scope(request),
+            # Being present in a list of twenty is not confirmation that the work landed.
+            "created_id": int(created) if created and created.isdigit() else None,
+        },
+    )
+
+
+def _administers(request, department_id, branch_id) -> bool:
+    """Whether the acting administrator could see an account placed in this scope.
+
+    This is the question the add-account screen never asked. Scoping worked correctly the
+    whole time — the account was created, in a department the administrator cannot look at,
+    and nothing failed because nothing had gone wrong by the rules as written (FR-002).
+    """
+    return str(department_id) == str(request.user.department_id) and str(branch_id) == str(
+        request.user.branch_id
     )
 
 
@@ -52,6 +71,17 @@ def user_new(request):
             # FR-025: an account without a scope could see either everything or nothing;
             # both are wrong, so the account is not created at all.
             return HttpResponse(_("Choose a department and a branch."), status=422)
+        if not _administers(request, department_id, branch_id):
+            # Refused rather than corrected. Quietly moving the account into the
+            # administrator's own scope would also make it visible — and would be a second
+            # outcome they were not told about, which is the defect this is fixing (FR-020).
+            return HttpResponse(
+                _(
+                    "That department and branch are not yours to administer, and an account "
+                    "created there would not be visible to you. It has not been created."
+                ),
+                status=422,
+            )
         if User.objects.filter(email=email).exists():
             return HttpResponse(_("An account with that email already exists."), status=422)
 
@@ -66,7 +96,10 @@ def user_new(request):
         # so creating an account never creates a way in (FR-025).
         user.set_unusable_password()
         user.save()
-        return redirect("administration:users")
+        # Named in the redirect so the list can mark the row. Carried in the URL rather than
+        # stored, so it marks this visit and not this account: a badge that persisted would
+        # stop meaning "new" by the second visit.
+        return redirect(f"{reverse('administration:users')}?created={user.pk}")
 
     return render(
         request,
@@ -76,6 +109,10 @@ def user_new(request):
             "departments": departments,
             "branches": branches,
             "roles": User.Role.choices,
+            # The administrator's own scope, so the field starts where their work actually
+            # lands rather than on whichever department happens to sort first.
+            "selected_department": request.user.department_id,
+            "selected_branch": request.user.branch_id,
         },
     )
 
@@ -83,12 +120,22 @@ def user_new(request):
 @administrator_required
 @require_POST
 def user_scope(request, pk):
+    """Move an account to another department or branch (MVP FR-025).
+
+    Deliberately NOT refused when the destination is outside the administrator's own scope,
+    unlike `user_new`. The two look like the same rule and are not: moving someone to another
+    department is the operation working, and losing sight of them afterwards is the point.
+    Creating someone there is an accident nobody intended.
+
+    It is still an action whose result the acting user cannot see (FR-020), so it should say
+    so at the time. That needs a confirmation step, which is more than this story covers — it
+    is recorded in the tasks rather than smuggled in here.
+    """
     user = get_object_or_404_for_user(User.objects.all(), request.user, pk=pk)
     department_id = request.POST.get("department")
     branch_id = request.POST.get("branch")
     if not department_id or not branch_id:
         return HttpResponse(_("Choose a department and a branch."), status=422)
-
     user.department_id = department_id
     user.branch_id = branch_id
     user.save(update_fields=["department", "branch"])

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-13 07:54+0000\n"
+"POT-Creation-Date: 2026-09-13 09:55+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -72,23 +72,39 @@ msgstr "email address"
 msgid "full name"
 msgstr "full name"
 
-#: apps/accounts/views_admin.py:48
+#: apps/accounts/views_admin.py:67
 msgid "An email address and a name are required."
 msgstr "An email address and a name are required."
 
-#: apps/accounts/views_admin.py:50
+#: apps/accounts/views_admin.py:69
 msgid "Choose a role."
 msgstr "Choose a role."
 
-#: apps/accounts/views_admin.py:54 apps/accounts/views_admin.py:90
+#: apps/accounts/views_admin.py:73 apps/accounts/views_admin.py:127
 msgid "Choose a department and a branch."
 msgstr "Choose a department and a branch."
 
-#: apps/accounts/views_admin.py:56
+#: apps/accounts/views_admin.py:80
+msgid ""
+"That department and branch are not yours to administer, and an account "
+"created there would not be visible to you. It has not been created."
+msgstr ""
+"That department and branch are not yours to administer, and an account "
+"created there would not be visible to you. It has not been created."
+
+#: apps/accounts/views_admin.py:86
 msgid "An account with that email already exists."
 msgstr "An account with that email already exists."
 
-#: apps/accounts/views_admin.py:105
+#: apps/accounts/views_admin.py:133
+msgid ""
+"That department and branch are not yours to administer, and this account "
+"would no longer be visible to you. Nothing has been changed."
+msgstr ""
+"That department and branch are not yours to administer, and this account "
+"would no longer be visible to you. Nothing has been changed."
+
+#: apps/accounts/views_admin.py:152
 msgid "You cannot deactivate your own account."
 msgstr "You cannot deactivate your own account."
 
@@ -159,7 +175,7 @@ msgstr "Category"
 msgid "Waiting"
 msgstr "Waiting"
 
-#: apps/chat/models.py:22 templates/accounts/users.html:32
+#: apps/chat/models.py:22 templates/accounts/users.html:38
 msgid "Active"
 msgstr "Active"
 
@@ -397,15 +413,15 @@ msgstr "Full name"
 msgid "Role"
 msgstr "Role"
 
-#: templates/accounts/user_form.html:37
+#: templates/accounts/user_form.html:46
 msgid "Department"
 msgstr "Department"
 
-#: templates/accounts/user_form.html:45
+#: templates/accounts/user_form.html:54
 msgid "Branch"
 msgstr "Branch"
 
-#: templates/accounts/user_form.html:52
+#: templates/accounts/user_form.html:61
 msgid "Create account"
 msgstr "Create account"
 
@@ -423,15 +439,15 @@ msgstr "Name"
 msgid "Status"
 msgstr "Status"
 
-#: templates/accounts/users.html:34
+#: templates/accounts/users.html:40
 msgid "Deactivated"
 msgstr "Deactivated"
 
-#: templates/accounts/users.html:41
+#: templates/accounts/users.html:47
 msgid "Deactivate"
 msgstr "Deactivate"
 
-#: templates/accounts/users.html:47
+#: templates/accounts/users.html:53
 msgid "No staff accounts in this department yet."
 msgstr "No staff accounts in this department yet."
 
