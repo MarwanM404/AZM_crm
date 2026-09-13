@@ -51,23 +51,47 @@ def record_and_broadcast(conversation, *, body: str, author=None, direction, vis
         delivery_status=Message.DeliveryStatus.NOT_APPLICABLE,
     )
 
-    conversation.last_activity_at = timezone.now()
-    conversation.save(update_fields=["last_activity_at", "updated_at"])
+    # Internal notes are staff talking to staff, and deliberately do not count as activity.
+    # FR-036 closes an idle conversation, and `last_activity_at` is what "idle" is measured
+    # from: if a whisper refreshed it, a supervisor writing notes about a customer who left
+    # twenty minutes ago would hold the conversation open indefinitely, and the agent would
+    # keep a slot occupied for someone who is gone.
+    if visibility != Message.Visibility.INTERNAL:
+        conversation.last_activity_at = timezone.now()
+        conversation.save(update_fields=["last_activity_at", "updated_at"])
 
     if visibility == Message.Visibility.INTERNAL:
+        html = _render("chat/partials/whisper.html", message, conversation)
         _broadcast(
             groups.staff_group(conversation.pk),
-            {
-                "type": "chat.message",
-                "html": _render("chat/partials/whisper.html", message, conversation),
-            },
+            {"type": "chat.message", "html": html},
         )
+        _hold_if_the_agent_is_not_listening(conversation, message, html)
         return message
 
     html = _render("chat/partials/message.html", message, conversation)
     _broadcast(groups.public_group(conversation.pk), {"type": "chat.message", "html": html})
     _broadcast(groups.staff_group(conversation.pk), {"type": "chat.message", "html": html})
     return message
+
+
+def _hold_if_the_agent_is_not_listening(conversation, message, html) -> None:
+    """A broadcast to a group with no live member is simply lost (T099).
+
+    The note is already on the ticket either way — this is about the agent seeing it in time
+    for it to be coaching rather than a post-mortem. Held against the agent who is handling
+    the conversation *now*; see apps/chat/services/pending.py for why the key names them.
+
+    Takes the already-rendered staff HTML rather than re-rendering: the replayed note must be
+    the one that was written, and a second render is a second chance to reach for the wrong
+    template.
+    """
+    from apps.chat.services import pending, presence
+
+    agent_id = conversation.assigned_to_id
+    if agent_id is None or presence.has_socket(agent_id):
+        return
+    pending.hold(conversation.pk, agent_id, message_id=message.pk, html=html)
 
 
 def visitor_message(conversation, body: str):

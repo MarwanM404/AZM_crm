@@ -33,14 +33,23 @@ class AgentConsumer(ChatConsumer):
         # Their own group, for assignment offers that are not tied to a conversation yet.
         await self.channel_layer.group_add(self._personal_group(), self.channel_name)
 
-        for conversation_id in await self._held_conversation_ids():
+        held = await self._held_conversation_ids()
+        for conversation_id in held:
             await self._join_conversation(conversation_id)
 
+        await self._mark_socket_open()
         await self.accept()
+
+        # Replay anything a supervisor wrote while this socket was away (FR-024, T099).
+        # After accept(), so the frames have somewhere to land.
+        for conversation_id in held:
+            for html in await self._drain_pending(conversation_id):
+                await self.send_html(html)
 
     async def disconnect(self, code):
         if not hasattr(self, "user"):
             return
+        await self._mark_socket_closed()
         await self.channel_layer.group_discard(self._personal_group(), self.channel_name)
         for conversation_id in list(self.joined):
             await self._leave_conversation(conversation_id)
@@ -195,3 +204,17 @@ class AgentConsumer(ChatConsumer):
             ended_by=self.user,
             resolve=resolve,
         )
+
+    @database_sync_to_async
+    def _mark_socket_open(self):
+        presence.socket_opened(self.user.pk)
+
+    @database_sync_to_async
+    def _mark_socket_closed(self):
+        presence.socket_closed(self.user.pk)
+
+    @database_sync_to_async
+    def _drain_pending(self, conversation_id):
+        from apps.chat.services import pending
+
+        return pending.drain(conversation_id, self.user.pk)

@@ -121,3 +121,31 @@ def expire_now_for_tests(user_id) -> None:
         client.force_expire(_key(user_id))
     else:
         client.delete(_key(user_id))
+
+
+# --- socket presence ---
+#
+# Distinct from `is_online`, which answers "is this agent taking conversations". An agent can
+# be online and momentarily unreachable: the tunnel, the sleeping laptop, the reloading tab.
+# Whispers care about the second question, because a note broadcast to a group with no live
+# member is simply lost.
+
+
+def _socket_key(user_id) -> str:
+    return f"chat:socket:{int(user_id)}"
+
+
+def socket_opened(user_id) -> None:
+    client = get_client()
+    client.hset(_socket_key(user_id), mapping={"open": 1})
+    # A TTL as a backstop: a process killed between connect and disconnect would otherwise
+    # leave this saying "reachable" forever, and whispers would be dropped rather than held.
+    client.expire(_socket_key(user_id), _ttl() * 4)
+
+
+def socket_closed(user_id) -> None:
+    get_client().delete(_socket_key(user_id))
+
+
+def has_socket(user_id) -> bool:
+    return bool(get_client().exists(_socket_key(user_id)))

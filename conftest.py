@@ -210,3 +210,56 @@ def supervisor_client(db, supervisor):
     own = Client()
     own.force_login(supervisor)
     return own
+
+
+# --- live chat ---
+#
+# Here rather than in apps/chat/tests/conftest.py because tests/test_whisper_isolation.py
+# needs them: that invariant is about the system, not about the chat app.
+
+
+@pytest.fixture
+def conversation(db, department, branch, category, contact):
+    """A conversation already assigned, so message tests start from the interesting state."""
+    from apps.chat.models import Conversation
+    from apps.chat.services import tokens
+    from apps.tickets.models import Ticket
+
+    ticket = Ticket.objects.create(
+        contact=contact,
+        subject="Chat conversation",
+        description="",
+        category=category,
+        origin_channel=Ticket.Channel.CHAT,
+        department=department,
+        branch=branch,
+    )
+    token = tokens.issue(0)  # replaced below once the row has an id
+    conversation = Conversation.objects.create(
+        ticket=ticket,
+        contact=contact,
+        visitor_token_hash=tokens.fingerprint(token),
+        department=department,
+        branch=branch,
+    )
+    real_token = tokens.issue(conversation.pk)
+    conversation.visitor_token_hash = tokens.fingerprint(real_token)
+    conversation.save(update_fields=["visitor_token_hash"])
+    conversation.test_token = real_token
+    return conversation
+
+
+@pytest.fixture
+def assigned_conversation(conversation, agent):
+    from django.utils import timezone
+
+    from apps.chat.models import Conversation
+    from apps.chat.services import presence
+
+    presence.go_online(agent.pk, capacity=3)
+    presence.claim_slot(agent.pk)
+    conversation.assigned_to = agent
+    conversation.state = Conversation.State.ACTIVE
+    conversation.assigned_at = timezone.now()
+    conversation.save(update_fields=["assigned_to", "state", "assigned_at"])
+    return conversation

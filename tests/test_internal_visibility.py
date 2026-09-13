@@ -2,7 +2,9 @@
 FR-015: no message marked INTERNAL may appear in ANY customer-facing output.
 
 This is the cross-cutting invariant the roadmap pulled forward into the MVP (M8a) so that
-live chat's supervisor-whisper feature lands on prepared ground. The failure it guards
+live chat's supervisor-whisper feature lands on prepared ground. It now covers that feature:
+the customer's chat window and the fragments broadcast to the public group are swept here
+alongside the email and intake templates. The failure it guards
 against is silent and irreversible: once an email carrying a private staff note has left,
 nothing can recall it.
 
@@ -35,6 +37,24 @@ CUSTOMER_FACING_DIRS = [
     BASE_DIR / "templates" / "intake",
 ]
 
+# Live chat is the exception to the directory rule: templates/chat/ holds both the customer's
+# window and the agent's console, so it cannot be swept wholesale. Every chat template is
+# classified below instead, and a test asserts the two lists together cover the directory —
+# so a new one has to be consciously placed on one side or the other.
+CHAT_CUSTOMER_FACING = [
+    "chat/widget.html",
+    "chat/partials/message.html",
+    "chat/partials/system.html",
+]
+
+CHAT_STAFF_ONLY = [
+    "chat/console.html",
+    "chat/conversation.html",
+    "chat/supervise.html",
+    "chat/partials/whisper.html",
+    "chat/partials/conversation_list.html",
+]
+
 CUSTOMER_FACING_TEMPLATES = [
     "messaging/email/reply.en.txt",
     "messaging/email/reply.ar.txt",
@@ -42,6 +62,7 @@ CUSTOMER_FACING_TEMPLATES = [
     "messaging/email/confirmation.ar.txt",
     "intake/form.html",
     "intake/submitted.html",
+    *CHAT_CUSTOMER_FACING,
 ]
 
 
@@ -208,3 +229,76 @@ def test_internal_note_is_visible_to_staff_on_the_ticket(agent_client, ticket_wi
         reverse("tickets:detail", args=[ticket_with_both.reference])
     ).content.decode()
     assert SECRET in body
+
+
+# --- live chat (FR-025) ---
+
+
+def test_every_chat_template_is_classified():
+    """templates/chat/ holds both sides of the boundary, so it cannot be swept by directory.
+    A new template that nobody classified would otherwise be neither swept nor noticed."""
+    chat_dir = BASE_DIR / "templates" / "chat"
+    on_disk = {
+        str(path.relative_to(BASE_DIR / "templates"))
+        for path in chat_dir.rglob("*.html")
+        if path.is_file()
+    }
+    classified = set(CHAT_CUSTOMER_FACING) | set(CHAT_STAFF_ONLY)
+    unclassified = on_disk - classified
+
+    assert not unclassified, (
+        "These chat templates are on neither side of the visibility boundary. Add each to "
+        "CHAT_CUSTOMER_FACING (and it will be swept) or CHAT_STAFF_ONLY: "
+        f"{sorted(unclassified)}"
+    )
+
+
+@pytest.mark.django_db
+def test_the_customer_chat_window_cannot_render_an_internal_message(ticket_with_both):
+    """The whisper partial is never reached from the customer's side, but the guarantee must
+    not rest on the template being called correctly — render the customer's window with a
+    conversation whose ticket carries an internal note and confirm it cannot surface."""
+    from apps.tickets.services.visibility import public_messages_for
+
+    rendered = render_to_string(
+        "chat/widget.html",
+        {
+            "messages_": public_messages_for(ticket_with_both),
+            "conversation": None,
+            "form": None,
+        },
+    )
+
+    assert SECRET not in rendered
+
+
+@pytest.mark.django_db(transaction=True)
+def test_an_internal_message_is_never_broadcast_to_the_public_group(conversation, supervisor):
+    """Where the guarantee actually lives.
+
+    chat/partials/message.html is naive on purpose — it renders whatever message it is given,
+    and it is broadcast to the public group verbatim. Nothing in the template prevents an
+    internal body appearing there; what prevents it is that internal messages are routed to
+    whisper.html and the staff group by apps/chat/services/messaging.py, and never reach this
+    fragment at all. So the assertion belongs on the routing, not on the template.
+    """
+    from apps.chat.services import groups, messaging
+
+    sent = []
+
+    def record(group_name, payload):
+        sent.append((group_name, payload))
+
+    original = messaging._broadcast
+    messaging._broadcast = record
+    try:
+        messaging.whisper(conversation, supervisor, SECRET)
+    finally:
+        messaging._broadcast = original
+
+    public = groups.public_group(conversation.pk)
+    assert sent, "the whisper was not broadcast at all"
+    for group_name, payload in sent:
+        assert group_name != public, "a whisper was published to the customer's group"
+        assert SECRET in payload["html"]  # it did reach staff, unmangled
+    assert {group_name for group_name, _ in sent} == {groups.staff_group(conversation.pk)}

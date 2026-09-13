@@ -136,6 +136,18 @@ class SupervisorConsumer(ChatConsumer):
             )
             return
 
+        if kind == "whisper":
+            await self._whisper(payload.get("text", ""))
+
+    async def _whisper(self, text):
+        """A private note to the agent (FR-024).
+
+        The conversation is the one named at the handshake. A conversation id in the frame is
+        ignored entirely — as on the visitor socket — so a crafted frame cannot post a note
+        into a conversation this observer was never authorized for.
+        """
+        await self._record_whisper(text)
+
     # --- database work, behind the async boundary ---
 
     def _conversation_id_from_scope(self):
@@ -158,6 +170,13 @@ class SupervisorConsumer(ChatConsumer):
             .select_related("ticket", "contact", "assigned_to")
             .first()
         )
+
+    @database_sync_to_async
+    def _record_whisper(self, text):
+        """Persisted, then broadcast, like every other message (research.md #6), and to the
+        staff group alone. `messaging.whisper` owns that choice — this consumer never names a
+        group, which is what keeps the one decision that matters in one place."""
+        return messaging.whisper(self.conversation, self.user, text)
 
     @database_sync_to_async
     def _open_observation(self):

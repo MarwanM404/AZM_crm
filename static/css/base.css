@@ -335,6 +335,28 @@ select:focus-visible, input:focus-visible, textarea:focus-visible {
 .chat-msg__meta { display: flex; align-items: center; gap: 8px; font-size: 12px; margin-block-end: 6px; }
 .chat-msg__meta .muted { margin-inline-start: auto; }
 .chat-msg__body { margin: 0; font-size: 13.5px; line-height: 1.55; }
+/* The supervisor's whisper composer. Marked like the note it produces, so the box the
+   supervisor types into looks like what the agent will receive rather than like an ordinary
+   reply box — the visual cue is there before the note is sent, not only after (FR-027). */
+.chat-whisper {
+  display: flex; flex-direction: column; gap: 7px; margin-block-start: 14px;
+  padding: 11px 13px; border-radius: 6px;
+  background: var(--color-internal-bg);
+  border: 1px solid #eccd77; border-inline-start: 3px solid var(--color-internal-line);
+}
+.chat-whisper__label {
+  display: flex; align-items: center; gap: 6px;
+  color: var(--color-warn); font-size: 11.5px; font-weight: 700;
+  letter-spacing: .03em; text-transform: uppercase;
+}
+.chat-whisper__input {
+  padding: 9px 11px; font-family: inherit; font-size: 13.5px;
+  border: 1px solid var(--color-border); border-radius: var(--radius); resize: vertical;
+}
+.chat-whisper button { align-self: flex-start; }
+.chat-observe__head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-block-end: 12px; }
+.chat-observe__note { font-size: 12px; margin-block-start: 10px; }
+.side-card__contact.is-current { font-weight: 600; }
 .chat-system { text-align: center; font-size: 12px; color: var(--color-faint); padding-block: 6px; }
 .chat-typing { font-size: 12px; color: var(--color-faint); margin: 8px 0 0; }
 .chat-composer { display: flex; gap: 9px; align-items: flex-end; margin-block-start: 14px; }

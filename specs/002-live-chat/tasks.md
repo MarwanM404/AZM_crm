@@ -245,21 +245,21 @@ introduce the boundary and its first user at the same time.
 
 ### Tests for User Story 5
 
-- [ ] T089 [P] [US5] Write `tests/test_whisper_isolation.py` as the cross-cutting invariant: open a visitor socket and a staff socket on one conversation, send a whisper, and assert the visitor's socket receives **nothing at all**
-- [ ] T090 [P] [US5] Extend `tests/test_internal_visibility.py` so its customer-facing sweep covers chat transcripts alongside the email and intake templates it already checks
-- [ ] T091 [P] [US5] Write `apps/chat/tests/test_whisper_storage.py` asserting a whisper is stored as a Message with `visibility=INTERNAL` and `channel=CHAT`, reusing the MVP's model
-- [ ] T092 [P] [US5] Write `apps/chat/tests/test_whisper_in_transcript.py` asserting the whisper is on the ticket for staff and absent from every customer-facing output (FR-025)
-- [ ] T093 [P] [US5] Write `apps/chat/tests/test_whisper_distinct.py` asserting the agent's view marks a private note by wording as well as colour, as the ticket thread already does (FR-026)
-- [ ] T094 [P] [US5] Write `apps/chat/tests/test_whisper_cannot_be_misaddressed.py` asserting the agent's reply composer and the supervisor's whisper composer post to different destinations, so neither can become the other by a mode being wrong (FR-027)
-- [ ] T095 [P] [US5] Write `apps/chat/tests/test_whisper_edge_cases.py` covering a whisper to a disconnected agent, and a whisper sent as the conversation ends
+- [X] T089 [P] [US5] Write `tests/test_whisper_isolation.py` as the cross-cutting invariant: open a visitor socket and a staff socket on one conversation, send a whisper, and assert the visitor's socket receives **nothing at all**
+- [X] T090 [P] [US5] Extend `tests/test_internal_visibility.py` so its customer-facing sweep covers chat transcripts alongside the email and intake templates it already checks
+- [X] T091 [P] [US5] Write `apps/chat/tests/test_whisper_storage.py` asserting a whisper is stored as a Message with `visibility=INTERNAL` and `channel=CHAT`, reusing the MVP's model
+- [X] T092 [P] [US5] Write `apps/chat/tests/test_whisper_in_transcript.py` asserting the whisper is on the ticket for staff and absent from every customer-facing output (FR-025)
+- [X] T093 [P] [US5] Write `apps/chat/tests/test_whisper_distinct.py` asserting the agent's view marks a private note by wording as well as colour, as the ticket thread already does (FR-026)
+- [X] T094 [P] [US5] Write `apps/chat/tests/test_whisper_cannot_be_misaddressed.py` asserting the agent's reply composer and the supervisor's whisper composer post to different destinations, so neither can become the other by a mode being wrong (FR-027)
+- [X] T095 [P] [US5] Write `apps/chat/tests/test_whisper_edge_cases.py` covering a whisper to a disconnected agent, and a whisper sent as the conversation ends
 
 ### Implementation for User Story 5
 
-- [ ] T096 [US5] Implement the `whisper` frame in `apps/chat/consumers/supervisor.py`, publishing **only** to the staff group named by `apps/chat/services/groups.py`
-- [ ] T097 [US5] Persist the whisper through `apps/chat/services/messaging.py` with `visibility=INTERNAL`, before broadcasting, as every other message is
-- [ ] T098 [P] [US5] Create `templates/chat/partials/whisper.html`, marked as the ticket thread's internal note is — wash, edge, icon, and the restriction written out
-- [ ] T099 [US5] Hold an undelivered whisper in `apps/chat/services/messaging.py` for an agent who reconnects within the grace period, and do not deliver it to whoever takes the conversation over instead
-- [ ] T100 [US5] Extract and compile translations for this phase into `locale/ar/LC_MESSAGES/django.po` and `locale/en/LC_MESSAGES/django.po`, then check with `tools/catalog.py status`
+- [X] T096 [US5] Implement the `whisper` frame in `apps/chat/consumers/supervisor.py`, publishing **only** to the staff group named by `apps/chat/services/groups.py`
+- [X] T097 [US5] Persist the whisper through `apps/chat/services/messaging.py` with `visibility=INTERNAL`, before broadcasting, as every other message is
+- [X] T098 [P] [US5] Create `templates/chat/partials/whisper.html`, marked as the ticket thread's internal note is — wash, edge, icon, and the restriction written out
+- [X] T099 [US5] Hold an undelivered whisper in `apps/chat/services/messaging.py` for an agent who reconnects within the grace period, and do not deliver it to whoever takes the conversation over instead
+- [X] T100 [US5] Extract and compile translations for this phase into `locale/ar/LC_MESSAGES/django.po` and `locale/en/LC_MESSAGES/django.po`, then check with `tools/catalog.py status`
 
 **Checkpoint**: quickstart scenario 7 passes. The feature's most damaging failure is tested
 from both ends.

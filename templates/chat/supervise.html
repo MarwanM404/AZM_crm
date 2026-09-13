@@ -40,10 +40,25 @@
         </div>
 
         {% comment %}
-          There is no message box here, and that is the point (FR-022). Observation does not
-          make a supervisor a participant: the socket joins the staff group only, so this page
-          has nothing to send a customer-directed message through.
+          FR-027: there is exactly one composer on this page, and it can only send a private
+          note. There is no mode switch, no "send as" dropdown, no second destination — the
+          customer-facing composer lives on the agent's page and posts through a different
+          socket entirely. The two cannot be confused because they are not the same control.
+
+          FR-022 is the other half: a supervisor has nothing here to write to the customer
+          with, and the server refuses customer-directed frames from this socket anyway.
         {% endcomment %}
+        <form class="chat-whisper" @submit.prevent="sendWhisper">
+          <label class="chat-whisper__label" for="whisper-text">
+            <span aria-hidden="true">&#128274;</span>
+            {% trans "Private note to the agent — the customer will not see this" %}
+          </label>
+          <textarea id="whisper-text" class="chat-whisper__input" x-model="draft"
+                    rows="2" placeholder="{% trans 'Only the agent sees this' %}"></textarea>
+          <button type="submit" class="btn btn--quiet" :disabled="!draft.trim()">
+            {% trans "Send private note" %}
+          </button>
+        </form>
         <p class="muted chat-observe__note">
           {% trans "You are observing. The customer cannot see you, and you cannot write to them." %}
         </p>

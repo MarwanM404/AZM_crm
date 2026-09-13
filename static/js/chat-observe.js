@@ -9,6 +9,7 @@ function chatObserve(conversationId) {
   return {
     socket: null,
     ended: false,
+    draft: "",
 
     init() {
       const scheme = window.location.protocol === "https:" ? "wss" : "ws";
@@ -16,6 +17,19 @@ function chatObserve(conversationId) {
         `${scheme}://${window.location.host}/ws/chat/supervise/?conversation=${conversationId}`
       );
       this.socket.addEventListener("message", (event) => this.receive(event.data));
+    },
+
+    /*
+     * The only thing this page can send, and it can only be a private note (FR-027). There is
+     * no destination argument and no mode: the frame type is a literal. A bug here cannot
+     * turn a note into a customer-facing message, because there is no code path that would
+     * produce one.
+     */
+    sendWhisper() {
+      const text = this.draft.trim();
+      if (!text || !this.socket) return;
+      this.socket.send(JSON.stringify({ type: "whisper", text }));
+      this.draft = "";
     },
 
     receive(data) {
