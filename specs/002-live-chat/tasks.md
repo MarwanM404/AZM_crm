@@ -210,21 +210,21 @@ messages appear as they are sent, while the visitor's window shows no change of 
 
 ### Tests for User Story 4
 
-- [ ] T077 [P] [US4] Write `apps/chat/tests/test_supervisor_consumer.py` covering the supervisor socket's frames and refusals in [contracts/websocket.md](contracts/websocket.md)
-- [ ] T078 [P] [US4] Write `apps/chat/tests/test_observation_invisible.py` asserting that a supervisor connecting, observing and disconnecting produces **no frame of any kind** on the visitor's socket — not merely no message (FR-021)
-- [ ] T079 [P] [US4] Write `apps/chat/tests/test_observer_cannot_speak.py` asserting a customer-directed frame from a supervisor is rejected outright and appears on no socket (FR-022)
-- [ ] T080 [P] [US4] Write `apps/chat/tests/test_observation_scope.py` asserting a conversation outside the supervisor's department is refused as not-found, never as forbidden (FR-043, MVP FR-024)
-- [ ] T081 [P] [US4] Write `apps/chat/tests/test_observation_record.py` asserting an Observation row is opened on connect and closed on disconnect, naming who watched what and when (FR-023)
-- [ ] T082 [P] [US4] Write `apps/chat/tests/test_agent_cannot_observe.py` asserting the Agent role is refused the supervisor socket and every `/chat/supervise/` path
+- [X] T077 [P] [US4] Write `apps/chat/tests/test_supervisor_consumer.py` covering the supervisor socket's frames and refusals in [contracts/websocket.md](contracts/websocket.md)
+- [X] T078 [P] [US4] Write `apps/chat/tests/test_observation_invisible.py` asserting that a supervisor connecting, observing and disconnecting produces **no frame of any kind** on the visitor's socket — not merely no message (FR-021)
+- [X] T079 [P] [US4] Write `apps/chat/tests/test_observer_cannot_speak.py` asserting a customer-directed frame from a supervisor is rejected outright and appears on no socket (FR-022)
+- [X] T080 [P] [US4] Write `apps/chat/tests/test_observation_scope.py` asserting a conversation outside the supervisor's department is refused as not-found, never as forbidden (FR-043, MVP FR-024)
+- [X] T081 [P] [US4] Write `apps/chat/tests/test_observation_record.py` asserting an Observation row is opened on connect and closed on disconnect, naming who watched what and when (FR-023)
+- [X] T082 [P] [US4] Write `apps/chat/tests/test_agent_cannot_observe.py` asserting the Agent role is refused the supervisor socket and every `/chat/supervise/` path
 
 ### Implementation for User Story 4
 
-- [ ] T083 [US4] Implement `apps/chat/consumers/supervisor.py` — joins the **staff group only**, so an observer is not a participant and cannot become one by accident
-- [ ] T084 [US4] Reject customer-directed frames explicitly in `apps/chat/consumers/supervisor.py`, rather than relying on the absence of a handler — an unhandled frame is silence, a rejected one is a decision
-- [ ] T085 [US4] Open and close the `Observation` record on connect and disconnect in `apps/chat/consumers/supervisor.py`
-- [ ] T086 [US4] Implement `/chat/supervise/` and `/chat/supervise/<id>/` in `apps/chat/views.py`, scoped and supervisor-only
-- [ ] T087 [P] [US4] Create `templates/chat/supervise.html` — the live conversations list and the observation view, reusing the customer context panel
-- [ ] T088 [US4] Extract and compile translations for this phase into `locale/ar/LC_MESSAGES/django.po` and `locale/en/LC_MESSAGES/django.po`, then check with `tools/catalog.py status`
+- [X] T083 [US4] Implement `apps/chat/consumers/supervisor.py` — joins the **staff group only**, so an observer is not a participant and cannot become one by accident
+- [X] T084 [US4] Reject customer-directed frames explicitly in `apps/chat/consumers/supervisor.py`, rather than relying on the absence of a handler — an unhandled frame is silence, a rejected one is a decision
+- [X] T085 [US4] Open and close the `Observation` record on connect and disconnect in `apps/chat/consumers/supervisor.py`
+- [X] T086 [US4] Implement `/chat/supervise/` and `/chat/supervise/<id>/` in `apps/chat/views.py`, scoped and supervisor-only
+- [X] T087 [P] [US4] Create `templates/chat/supervise.html` — the live conversations list and the observation view, reusing the customer context panel
+- [X] T088 [US4] Extract and compile translations for this phase into `locale/ar/LC_MESSAGES/django.po` and `locale/en/LC_MESSAGES/django.po`, then check with `tools/catalog.py status`
 
 **Checkpoint**: quickstart scenarios 6 and 8 pass. A supervisor can watch without being seen
 and without being able to speak.

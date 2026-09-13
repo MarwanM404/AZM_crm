@@ -1,0 +1,103 @@
+{% extends "shell.html" %}
+{% load i18n static %}
+{% block title %}{% trans "Observe conversations" %}{% endblock %}
+{% block extra_head %}
+  <script src="{% static 'js/chat-observe.js' %}" defer></script>
+{% endblock %}
+{% block main %}
+<div {% if conversation %}x-data="chatObserve({{ conversation.pk }})"{% endif %}>
+  <header class="page-head">
+    <h1>{% trans "Observe conversations" %}</h1>
+    <p class="page-head__sub">
+      {% comment %}
+        Stated plainly rather than buried in a policy document. Agents are told observation is
+        recorded (FR-023), and a supervisor should be reminded of it at the moment they watch.
+      {% endcomment %}
+      {% trans "Conversations happening now in your department. Watching is recorded." %}
+    </p>
+  </header>
+
+  <div class="detail">
+    <section class="detail__thread">
+      {% if conversation %}
+        <div class="chat-observe__head">
+          <h2>{{ conversation.contact.full_name }}</h2>
+          <span class="ref">{{ conversation.ticket.reference }}</span>
+          <span class="pill pill--{{ conversation.state|lower }}">{{ conversation.get_state_display }}</span>
+          {% if conversation.assigned_to %}
+            <span class="muted">{% blocktrans with agent=conversation.assigned_to.full_name %}Handled by {{ agent }}{% endblocktrans %}</span>
+          {% endif %}
+        </div>
+
+        <div id="chat-thread" class="chat-thread">
+          {% for message in messages_ %}
+            {% if message.visibility == 'INTERNAL' %}
+              {% include "chat/partials/whisper.html" %}
+            {% else %}
+              {% include "chat/partials/message.html" %}
+            {% endif %}
+          {% endfor %}
+        </div>
+
+        {% comment %}
+          There is no message box here, and that is the point (FR-022). Observation does not
+          make a supervisor a participant: the socket joins the staff group only, so this page
+          has nothing to send a customer-directed message through.
+        {% endcomment %}
+        <p class="muted chat-observe__note">
+          {% trans "You are observing. The customer cannot see you, and you cannot write to them." %}
+        </p>
+      {% else %}
+        <p class="muted">{% trans "Choose a conversation to observe." %}</p>
+      {% endif %}
+    </section>
+
+    <aside class="detail__side">
+      <div class="card side-card">
+        <div class="label">{% trans "Live now" %}</div>
+        {% for item in conversations %}
+          <div class="side-card__contact {% if conversation and item.pk == conversation.pk %}is-current{% endif %}">
+            <a href="{% url 'chat:supervise_conversation' item.pk %}">{{ item.contact.full_name }}</a>
+            <div class="trunc muted">
+              {% if item.assigned_to %}{{ item.assigned_to.full_name }}{% else %}{% trans "Waiting" %}{% endif %}
+            </div>
+          </div>
+        {% empty %}
+          <p class="muted">{% trans "No conversations are in progress." %}</p>
+        {% endfor %}
+      </div>
+
+      {% if conversation %}
+        <div class="card side-card">
+          <div class="label">{% trans "Contact" %}</div>
+          <div class="side-card__strong">{{ conversation.contact.full_name }}</div>
+          {% for detail in conversation.contact.details.all %}
+            <div class="ltr muted">{{ detail.value }}</div>
+          {% endfor %}
+        </div>
+
+        <div class="card side-card">
+          <div class="label">{% trans "Organization" %}</div>
+          {% if conversation.contact.organization %}
+            <div class="side-card__strong">{{ conversation.contact.organization.name }}</div>
+          {% else %}
+            <div class="muted"><em>{% trans "Not linked yet" %}</em></div>
+          {% endif %}
+        </div>
+
+        <div class="card side-card">
+          <div class="label">{% trans "Recent tickets" %}</div>
+          {% for ticket in recent_tickets %}
+            <div class="side-card__contact">
+              <a class="ref" href="{% url 'tickets:detail' ticket.reference %}">{{ ticket.reference }}</a>
+              <div class="trunc muted">{{ ticket.subject }}</div>
+            </div>
+          {% empty %}
+            <p class="muted">{% trans "This is their first ticket." %}</p>
+          {% endfor %}
+        </div>
+      {% endif %}
+    </aside>
+  </div>
+</div>
+{% endblock %}

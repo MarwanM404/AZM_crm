@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-12 19:28+0000\n"
+"POT-Creation-Date: 2026-09-13 05:38+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -119,6 +119,20 @@ msgstr "لا يمكن إرفاق ملفات %(kind)s. المسموح: %(allowed)
 msgid "Unnamed"
 msgstr "بلا امتداد"
 
+#: apps/chat/consumers/supervisor.py:91
+msgid ""
+"%(observer)s is observing this conversation. They can send you private notes "
+"that the customer cannot see."
+msgstr "يراقب %(observer)s هذه المحادثة. يمكنه إرسال ملاحظات خاصة لا يراها العميل."
+
+#: apps/chat/consumers/supervisor.py:107
+msgid "%(observer)s is no longer observing."
+msgstr "لم يعد %(observer)s يراقب المحادثة."
+
+#: apps/chat/consumers/supervisor.py:135
+msgid "Observing a conversation does not let you take part in it."
+msgstr "مراقبة المحادثة لا تتيح لك المشاركة فيها."
+
 #: apps/chat/forms.py:16 apps/intake/forms.py:20
 msgid "Your name"
 msgstr "اسمك"
@@ -138,7 +152,7 @@ msgstr "بماذا يمكننا مساعدتك؟"
 msgid "Category"
 msgstr "التصنيف"
 
-#: apps/chat/models.py:21
+#: apps/chat/models.py:21 templates/chat/supervise.html:64
 msgid "Waiting"
 msgstr "في الانتظار"
 
@@ -197,7 +211,7 @@ msgstr[5] "تم إرفاق المحادثة المباشرة %(reference)s (%(co
 msgid "Transcript moved to %(reference)s."
 msgstr "تم نقل نص المحادثة إلى %(reference)s."
 
-#: apps/chat/views.py:210
+#: apps/chat/views.py:211
 msgid "This conversation cannot be attached to that ticket."
 msgstr "لا يمكن إرفاق هذه المحادثة بتلك التذكرة."
 
@@ -437,25 +451,27 @@ msgstr[5] "%(counter)s محادثة متاحة"
 msgid "You stop receiving new conversations when this reaches zero."
 msgstr "تتوقف عن استقبال محادثات جديدة عندما تصل هذه إلى صفر."
 
-#: templates/chat/conversation.html:34 templates/customers/unlinked.html:18
+#: templates/chat/conversation.html:34 templates/chat/supervise.html:74
+#: templates/customers/unlinked.html:18
 #: templates/tickets/partials/ticket_pane.html:129
 msgid "Contact"
 msgstr "جهة الاتصال"
 
 #: templates/chat/conversation.html:42
 #: templates/chat/partials/conversation_list.html:5
-#: templates/customers/list.html:12 templates/customers/unlinked.html:41
+#: templates/chat/supervise.html:82 templates/customers/list.html:12
+#: templates/customers/unlinked.html:41
 #: templates/tickets/partials/queue_list.html:6
 #: templates/tickets/partials/ticket_pane.html:120
 msgid "Organization"
 msgstr "المنشأة"
 
-#: templates/chat/conversation.html:46
+#: templates/chat/conversation.html:46 templates/chat/supervise.html:86
 #: templates/tickets/partials/ticket_pane.html:124
 msgid "Not linked yet"
 msgstr "غير مرتبطة بعد"
 
-#: templates/chat/conversation.html:51
+#: templates/chat/conversation.html:51 templates/chat/supervise.html:91
 msgid "Recent tickets"
 msgstr "التذاكر الأخيرة"
 
@@ -463,7 +479,7 @@ msgstr "التذاكر الأخيرة"
 msgid "Attach this chat"
 msgstr "إرفاق هذه المحادثة"
 
-#: templates/chat/conversation.html:71
+#: templates/chat/conversation.html:71 templates/chat/supervise.html:98
 msgid "This is their first ticket."
 msgstr "هذه أول تذكرة لهم."
 
@@ -493,6 +509,36 @@ msgstr "لا توجد محادثات مُسنَدة إليك. انتقل إلى 
 #: templates/chat/partials/whisper.html:14
 msgid "Private note — the customer cannot see this"
 msgstr "ملاحظة خاصة — لا يراها العميل"
+
+#: templates/chat/supervise.html:3 templates/chat/supervise.html:10
+msgid "Observe conversations"
+msgstr "مراقبة المحادثات"
+
+#: templates/chat/supervise.html:17
+msgid "Conversations happening now in your department. Watching is recorded."
+msgstr "المحادثات الجارية الآن في قسمك. تُسجَّل عمليات المراقبة."
+
+#: templates/chat/supervise.html:29
+#, python-format
+msgid "Handled by %(agent)s"
+msgstr "يتولاها %(agent)s"
+
+#: templates/chat/supervise.html:50
+msgid ""
+"You are observing. The customer cannot see you, and you cannot write to them."
+msgstr "أنت تراقب. لا يمكن للعميل رؤيتك، ولا يمكنك الكتابة إليه."
+
+#: templates/chat/supervise.html:53
+msgid "Choose a conversation to observe."
+msgstr "اختر محادثة لمراقبتها."
+
+#: templates/chat/supervise.html:59
+msgid "Live now"
+msgstr "جارية الآن"
+
+#: templates/chat/supervise.html:68
+msgid "No conversations are in progress."
+msgstr "لا توجد محادثات جارية."
 
 #: templates/chat/widget.html:15
 msgid "Tell us who you are and we will connect you to someone now."
@@ -764,6 +810,7 @@ msgstr "يرجى ذكر هذا الرقم في أي مراسلات لاحقة."
 
 #: templates/shell.html:13 templates/tickets/partials/ticket_pane.html:3
 #: templates/tickets/queue.html:3 templates/tickets/queue.html:6
+#: tests/test_translation_catalog.py:159
 msgid "Ticket queue"
 msgstr "قائمة التذاكر"
 

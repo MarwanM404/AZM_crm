@@ -11,6 +11,7 @@ from django.utils.translation import gettext as _
 from django.views.decorators.http import require_GET, require_http_methods
 
 from apps.accounts.models import Branch, Department
+from apps.accounts.permissions import observer_required
 from apps.chat.forms import PreChatForm
 from apps.chat.models import Conversation
 from apps.chat.services import lifecycle, presence, queue, transcript, unread
@@ -210,3 +211,55 @@ def attach(request, pk):
         return HttpResponse(_("This conversation cannot be attached to that ticket."), status=422)
 
     return redirect("chat:conversation", pk=conversation.pk)
+
+
+@require_GET
+@observer_required
+def supervise(request):
+    """Live conversations a supervisor may watch (FR-020).
+
+    Scoped like every other list here, and restricted to conversations that are actually
+    happening: an ended one is read on the ticket, where the whole transcript is, rather than
+    through a socket that will never send another frame.
+    """
+    conversations = (
+        Conversation.objects.for_user(request.user)
+        .filter(state__in=[Conversation.State.WAITING, Conversation.State.ACTIVE])
+        .select_related("contact", "contact__organization", "ticket", "assigned_to")
+        .order_by("-last_activity_at")
+    )
+    return render(
+        request,
+        "chat/supervise.html",
+        {"section": "chat", "conversations": conversations, "conversation": None},
+    )
+
+
+@require_GET
+@observer_required
+def supervise_conversation(request, pk):
+    """One live conversation, watched (FR-020, FR-023).
+
+    Out of scope is not found, never forbidden (FR-043). The `Observation` record is written
+    by the socket rather than here: opening the page is not yet watching, and a record that
+    began at page load would overstate what happened whenever a supervisor opened a tab and
+    closed it again.
+    """
+    conversation = get_object_or_404_for_user(Conversation, request.user, pk=pk)
+    conversations = (
+        Conversation.objects.for_user(request.user)
+        .filter(state__in=[Conversation.State.WAITING, Conversation.State.ACTIVE])
+        .select_related("contact", "ticket", "assigned_to")
+        .order_by("-last_activity_at")
+    )
+    return render(
+        request,
+        "chat/supervise.html",
+        {
+            "section": "chat",
+            "conversations": conversations,
+            "conversation": conversation,
+            "messages_": staff_messages_for(conversation.ticket).select_related("author"),
+            "recent_tickets": _recent_tickets(conversation),
+        },
+    )

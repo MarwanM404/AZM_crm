@@ -9,6 +9,8 @@ urlpatterns = [
     path("start/", views.start, name="start"),
     path("leave-queue/", views.leave_queue, name="leave_queue"),
     path("console/", views.console, name="console"),
+    path("supervise/", views.supervise, name="supervise"),
+    path("supervise/<int:pk>/", views.supervise_conversation, name="supervise_conversation"),
     path("conversations/<int:pk>/", views.conversation_detail, name="conversation"),
     path("conversations/<int:pk>/attach/", views.attach, name="attach"),
 ]

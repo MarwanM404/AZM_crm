@@ -189,6 +189,21 @@ def supervisor(db, department, branch):
 
 
 @pytest.fixture
+def other_department_supervisor(db, other_department, branch):
+    """A supervisor with the same authority, pointed at a different department. Used to prove
+    that authority is scoped rather than global (live chat FR-043)."""
+    return User.objects.create_user(
+        email="supervisor.other@example.com",
+        password="pw",
+        full_name="Other Team Lead",
+        role=User.Role.SUPERVISOR,
+        department=other_department,
+        branch=branch,
+        language="en",
+    )
+
+
+@pytest.fixture
 def supervisor_client(db, supervisor):
     from django.test import Client
 

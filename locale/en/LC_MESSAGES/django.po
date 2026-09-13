@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-12 19:28+0000\n"
+"POT-Creation-Date: 2026-09-13 05:38+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -118,6 +118,24 @@ msgstr "%(kind)s files cannot be attached. Allowed: %(allowed)s."
 msgid "Unnamed"
 msgstr "Unnamed"
 
+#: apps/chat/consumers/supervisor.py:91
+#, python-format
+msgid ""
+"%(observer)s is observing this conversation. They can send you private notes "
+"that the customer cannot see."
+msgstr ""
+"%(observer)s is observing this conversation. They can send you private notes "
+"that the customer cannot see."
+
+#: apps/chat/consumers/supervisor.py:107
+#, python-format
+msgid "%(observer)s is no longer observing."
+msgstr "%(observer)s is no longer observing."
+
+#: apps/chat/consumers/supervisor.py:135
+msgid "Observing a conversation does not let you take part in it."
+msgstr "Observing a conversation does not let you take part in it."
+
 #: apps/chat/forms.py:16 apps/intake/forms.py:20
 msgid "Your name"
 msgstr "Your name"
@@ -137,7 +155,7 @@ msgstr "What can we help with?"
 msgid "Category"
 msgstr "Category"
 
-#: apps/chat/models.py:21
+#: apps/chat/models.py:21 templates/chat/supervise.html:64
 msgid "Waiting"
 msgstr "Waiting"
 
@@ -192,7 +210,7 @@ msgstr[1] "Live chat %(reference)s attached (%(count)d messages)."
 msgid "Transcript moved to %(reference)s."
 msgstr "Transcript moved to %(reference)s."
 
-#: apps/chat/views.py:210
+#: apps/chat/views.py:211
 msgid "This conversation cannot be attached to that ticket."
 msgstr "This conversation cannot be attached to that ticket."
 
@@ -428,25 +446,27 @@ msgstr[1] "%(counter)s conversations free"
 msgid "You stop receiving new conversations when this reaches zero."
 msgstr "You stop receiving new conversations when this reaches zero."
 
-#: templates/chat/conversation.html:34 templates/customers/unlinked.html:18
+#: templates/chat/conversation.html:34 templates/chat/supervise.html:74
+#: templates/customers/unlinked.html:18
 #: templates/tickets/partials/ticket_pane.html:129
 msgid "Contact"
 msgstr "Contact"
 
 #: templates/chat/conversation.html:42
 #: templates/chat/partials/conversation_list.html:5
-#: templates/customers/list.html:12 templates/customers/unlinked.html:41
+#: templates/chat/supervise.html:82 templates/customers/list.html:12
+#: templates/customers/unlinked.html:41
 #: templates/tickets/partials/queue_list.html:6
 #: templates/tickets/partials/ticket_pane.html:120
 msgid "Organization"
 msgstr "Organization"
 
-#: templates/chat/conversation.html:46
+#: templates/chat/conversation.html:46 templates/chat/supervise.html:86
 #: templates/tickets/partials/ticket_pane.html:124
 msgid "Not linked yet"
 msgstr "Not linked yet"
 
-#: templates/chat/conversation.html:51
+#: templates/chat/conversation.html:51 templates/chat/supervise.html:91
 msgid "Recent tickets"
 msgstr "Recent tickets"
 
@@ -454,7 +474,7 @@ msgstr "Recent tickets"
 msgid "Attach this chat"
 msgstr "Attach this chat"
 
-#: templates/chat/conversation.html:71
+#: templates/chat/conversation.html:71 templates/chat/supervise.html:98
 msgid "This is their first ticket."
 msgstr "This is their first ticket."
 
@@ -484,6 +504,37 @@ msgstr "No conversations assigned to you. Go online to start receiving them."
 #: templates/chat/partials/whisper.html:14
 msgid "Private note — the customer cannot see this"
 msgstr "Private note — the customer cannot see this"
+
+#: templates/chat/supervise.html:3 templates/chat/supervise.html:10
+msgid "Observe conversations"
+msgstr "Observe conversations"
+
+#: templates/chat/supervise.html:17
+msgid "Conversations happening now in your department. Watching is recorded."
+msgstr "Conversations happening now in your department. Watching is recorded."
+
+#: templates/chat/supervise.html:29
+#, python-format
+msgid "Handled by %(agent)s"
+msgstr "Handled by %(agent)s"
+
+#: templates/chat/supervise.html:50
+msgid ""
+"You are observing. The customer cannot see you, and you cannot write to them."
+msgstr ""
+"You are observing. The customer cannot see you, and you cannot write to them."
+
+#: templates/chat/supervise.html:53
+msgid "Choose a conversation to observe."
+msgstr "Choose a conversation to observe."
+
+#: templates/chat/supervise.html:59
+msgid "Live now"
+msgstr "Live now"
+
+#: templates/chat/supervise.html:68
+msgid "No conversations are in progress."
+msgstr "No conversations are in progress."
 
 #: templates/chat/widget.html:15
 msgid "Tell us who you are and we will connect you to someone now."
@@ -759,6 +810,7 @@ msgstr "Please quote this reference in any further correspondence."
 
 #: templates/shell.html:13 templates/tickets/partials/ticket_pane.html:3
 #: templates/tickets/queue.html:3 templates/tickets/queue.html:6
+#: tests/test_translation_catalog.py:159
 msgid "Ticket queue"
 msgstr "Ticket queue"
 
