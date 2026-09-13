@@ -128,3 +128,37 @@ def test_english_catalog_matches_its_own_source_strings():
         "English translations that do not match their source string:\n  "
         + "\n  ".join(mismatches[:20])
     )
+
+
+# --- the compiled catalogs, not just the source ---
+#
+# Everything above checks the .po files. Django does not read .po at runtime: it reads the
+# compiled .mo, which is a build artifact and is gitignored. So every check above can pass
+# while Arabic renders entirely in English, which is what happened in CI — the workflow had
+# no `compilemessages` step, and the failure surfaced as three unrelated-looking assertions
+# about missing Arabic strings rather than as "the catalogs were never compiled".
+
+
+COMPILED = {language: path.with_suffix(".mo") for language, path in CATALOGS.items()}
+
+
+@pytest.mark.parametrize("language", sorted(COMPILED))
+def test_the_catalog_is_compiled(language):
+    assert COMPILED[language].exists(), (
+        f"{COMPILED[language]} is missing. Django reads the compiled .mo, not the .po, so "
+        f"every string falls back to English without it. Run `python manage.py "
+        f"compilemessages` — and if this failed in CI, the workflow is missing that step."
+    )
+
+
+def test_the_compiled_arabic_catalog_actually_resolves_a_string():
+    """Present but stale is as broken as absent, and harder to see."""
+    from django.utils import translation
+
+    with translation.override("ar"):
+        rendered = translation.gettext("Ticket queue")
+
+    assert rendered != "Ticket queue", (
+        "The Arabic catalog compiled but did not translate a string that is present and "
+        "non-fuzzy in django.po — the .mo is stale. Re-run `python manage.py compilemessages`."
+    )

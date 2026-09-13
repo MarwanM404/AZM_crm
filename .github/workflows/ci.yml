@@ -55,6 +55,17 @@ jobs:
         run: python manage.py makemigrations --check --dry-run
         env:
           DJANGO_SETTINGS_MODULE: config.settings.ci
+      # Django reads the compiled .mo, never the .po, and .mo is a build artifact that is
+      # gitignored — so without this step every Arabic string falls back to English here and
+      # the bilingual requirement (FR-031) is checked nowhere. gettext supplies msgfmt; the
+      # runner image is not guaranteed to carry it.
+      - name: Compile translation catalogs
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq gettext
+          python manage.py compilemessages
+        env:
+          DJANGO_SETTINGS_MODULE: config.settings.ci
+
       - name: Install browsers for the right-to-left checks
         run: python -m playwright install --with-deps chromium
       # Two sessions on purpose: pytest-playwright owns an event loop and pytest-asyncio
