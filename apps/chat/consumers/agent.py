@@ -171,7 +171,14 @@ class AgentConsumer(ChatConsumer):
 
     @database_sync_to_async
     def _go_offline(self):
+        from apps.chat.services import lifecycle
+
         presence.go_offline(self.user.pk)
+        # If that was the last agent, nobody is left to take whoever is still waiting
+        # (FR-042). Rare on this path — ending a conversation pulls the next visitor in, so an
+        # agent seldom reaches "holding nothing" while people wait — but it is the one closing
+        # an agent can actually observe, and apps/chat/tasks.py covers the ungraceful rest.
+        lifecycle.desk_closed_if_empty(self.user.department_id, self.user.branch_id)
 
     @database_sync_to_async
     def _focus(self, conversation_id):

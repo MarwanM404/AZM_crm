@@ -95,7 +95,51 @@ def end(conversation, *, reason, ended_by=None, resolve: bool = False):
 
     messaging.broadcast_system(conversation, text=_("This conversation has ended."))
     _announce_ended(conversation)
+
+    # The slot this conversation held is now free, so the longest-waiting visitor gets it.
+    # Without this the queue only ever moves when a *new* conversation starts, which means a
+    # visitor can sit behind an agent who has been idle for ten minutes.
+    connect_next_waiting(conversation.department_id, conversation.branch_id)
     return conversation
+
+
+def connect_next_waiting(department_id, branch_id):
+    """Assign the longest-waiting visitor to a free agent, and update everyone behind them.
+
+    Loops rather than pulling one: several slots can free at once — an agent ending three
+    conversations, or coming back online — and leaving visitors queued behind capacity that
+    already exists is the same failure as not having the queue move at all.
+    """
+    connected = []
+    while True:
+        candidates = candidate_agents(department_id, branch_id)
+        if not candidates:
+            break
+        token, score = queue.peek(department_id, branch_id)
+        if token is None:
+            break
+
+        conversation = (
+            Conversation.objects.filter(pk=int(token), state=Conversation.State.WAITING)
+            .select_related("ticket", "contact")
+            .first()
+        )
+        if conversation is None:
+            # Gone since they queued — ended, or already taken. Release their place so the
+            # next iteration serves whoever is actually still waiting.
+            queue.leave(token, department_id, branch_id)
+            continue
+
+        if assignment.assign(conversation, candidates) is None:
+            # The capacity we saw was taken in between. They keep their place — they were
+            # never removed — and there is nothing free to give, so stop.
+            break
+
+        queue.leave(token, department_id, branch_id)
+        connected.append(conversation)
+
+    queue.announce_positions(department_id, branch_id)
+    return connected
 
 
 def _announce_ended(conversation):
@@ -138,3 +182,60 @@ def anyone_available(department_id, branch_id) -> bool:
 
 def default_capacity() -> int:
     return getattr(settings, "CHAT_DEFAULT_AGENT_CAPACITY", 3)
+
+
+def desk_closed_if_empty(department_id, branch_id):
+    """Empty the queue when the last online agent goes offline (FR-042).
+
+    Called after any agent leaves, and does nothing while anyone else is still online: one of
+    two agents going home is not the desk closing.
+
+    For the people waiting this is the cruellest failure in the queue if it is missed. They
+    arrived while the desk was open and took their place honestly; without this they watch a
+    position that is accurate and will never change again.
+    """
+    from django.urls import reverse
+
+    if presence.anyone_online(list(_eligible_agent_ids(department_id, branch_id))):
+        return []
+
+    fallback = reverse("intake:form")
+    stranded = []
+    for token in queue.drain(department_id, branch_id):
+        conversation = (
+            Conversation.objects.filter(pk=int(token), state=Conversation.State.WAITING)
+            .select_related("contact", "ticket")
+            .first()
+        )
+        if conversation is None:
+            continue
+
+        queue.announce_desk_closed(
+            token,
+            fallback=fallback,
+            carry=_carry_from(conversation),
+        )
+        end(conversation, reason=Conversation.EndReason.DESK_CLOSED)
+        stranded.append(conversation)
+    return stranded
+
+
+def _carry_from(conversation) -> dict:
+    """What they already told us, so the request form opens filled in."""
+    email = conversation.contact.details.filter(kind="EMAIL").values_list("value", flat=True)
+    return {
+        "full_name": conversation.contact.full_name,
+        "email": next(iter(email), ""),
+        "subject": conversation.ticket.subject,
+    }
+
+
+def _eligible_agent_ids(department_id, branch_id):
+    from apps.accounts.models import User
+
+    return User.objects.filter(
+        department_id=department_id,
+        branch_id=branch_id,
+        is_active=True,
+        role__in=[User.Role.AGENT, User.Role.SUPERVISOR],
+    ).values_list("pk", flat=True)

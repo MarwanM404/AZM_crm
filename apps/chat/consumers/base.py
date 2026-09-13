@@ -69,6 +69,15 @@ class ChatConsumer(AsyncWebsocketConsumer):
             type="state", state=event.get("state"), position=event.get("position")
         )
 
+    async def chat_desk_closed(self, event):
+        """FR-042: the desk closed while this visitor was waiting. Carries where to go and
+        what they already typed, so they do not retype their question."""
+        await self.send_event(
+            type="desk_closed",
+            fallback=event.get("fallback"),
+            carry=event.get("carry") or {},
+        )
+
     async def chat_ended(self, event):
         await self.send_event(type="ended", reference=event.get("reference"))
 

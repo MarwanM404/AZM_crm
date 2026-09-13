@@ -276,19 +276,19 @@ is. With an agent online at capacity, confirm a visitor queues with a position t
 
 ### Tests for User Story 6
 
-- [ ] T101 [P] [US6] Write `apps/chat/tests/test_availability.py` asserting `/chat/availability/` answers "no" when no agent is online and "yes" when one is, without querying conversation history
-- [ ] T102 [P] [US6] Write `apps/chat/tests/test_queueing.py` asserting a visitor queues when all agents are at capacity, is shown a position, and that the position updates as the queue moves
-- [ ] T103 [P] [US6] Write `apps/chat/tests/test_queue_fairness.py` asserting the longest-waiting visitor is connected first (FR-017)
-- [ ] T104 [P] [US6] Write `apps/chat/tests/test_desk_closed.py` asserting chat is not offered at all with nobody online, and the request form is presented instead (FR-039)
-- [ ] T105 [P] [US6] Write `apps/chat/tests/test_last_agent_leaves.py` asserting a waiting visitor is moved to the request form immediately when the last online agent goes offline, with their typed text carried over (FR-042)
-- [ ] T106 [P] [US6] Write `apps/chat/tests/test_leave_queue.py` asserting a visitor who closes the panel is removed, so no agent is assigned a conversation nobody is waiting on (FR-019)
+- [X] T101 [P] [US6] Write `apps/chat/tests/test_availability.py` asserting `/chat/availability/` answers "no" when no agent is online and "yes" when one is, without querying conversation history
+- [X] T102 [P] [US6] Write `apps/chat/tests/test_queueing.py` asserting a visitor queues when all agents are at capacity, is shown a position, and that the position updates as the queue moves
+- [X] T103 [P] [US6] Write `apps/chat/tests/test_queue_fairness.py` asserting the longest-waiting visitor is connected first (FR-017)
+- [X] T104 [P] [US6] Write `apps/chat/tests/test_desk_closed.py` asserting chat is not offered at all with nobody online, and the request form is presented instead (FR-039)
+- [X] T105 [P] [US6] Write `apps/chat/tests/test_last_agent_leaves.py` asserting a waiting visitor is moved to the request form immediately when the last online agent goes offline, with their typed text carried over (FR-042)
+- [X] T106 [P] [US6] Write `apps/chat/tests/test_leave_queue.py` asserting a visitor who closes the panel is removed, so no agent is assigned a conversation nobody is waiting on (FR-019)
 
 ### Implementation for User Story 6
 
-- [ ] T107 [US6] Implement `/chat/availability/` in `apps/chat/views.py` as a cheap presence lookup, since the public site calls it on every page load
-- [ ] T108 [US6] Implement queue placement, position frames, and connection of the longest-waiting visitor in `apps/chat/services/queue.py`
-- [ ] T109 [US6] Implement the last-agent-offline handler in `apps/chat/services/queue.py`, moving everyone waiting to the request form with their draft (FR-042)
-- [ ] T110 [US6] Hide the chat launcher in `templates/chat/widget.html` when availability says no, and compile translations into `locale/*/LC_MESSAGES/django.po`
+- [X] T107 [US6] Implement `/chat/availability/` in `apps/chat/views.py` as a cheap presence lookup, since the public site calls it on every page load
+- [X] T108 [US6] Implement queue placement, position frames, and connection of the longest-waiting visitor in `apps/chat/services/queue.py`
+- [X] T109 [US6] Implement the last-agent-offline handler in `apps/chat/services/queue.py`, moving everyone waiting to the request form with their draft (FR-042)
+- [X] T110 [US6] Hide the chat launcher in `templates/chat/widget.html` when availability says no, and compile translations into `locale/*/LC_MESSAGES/django.po`
 
 **Checkpoint**: quickstart scenario 9 passes. Nobody waits for a desk that has closed.
 

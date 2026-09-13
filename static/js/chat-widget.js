@@ -67,6 +67,14 @@ function chatWidget() {
     },
 
     handleControlFrame(frame) {
+      if (frame.type === "desk_closed") {
+        // The last agent went offline while this visitor waited. Move them to the request
+        // form with what they already typed, rather than leaving them watching a position
+        // that is accurate and will never change again (FR-042).
+        const params = new URLSearchParams(frame.carry || {});
+        window.location = `${frame.fallback}?${params}`;
+        return;
+      }
       if (frame.type === "state") {
         this.position = frame.position ?? this.position;
         if (frame.state === "ACTIVE") this.stage = "chatting";

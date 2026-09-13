@@ -7,6 +7,7 @@ site asks before deciding whether to show a chat launcher at all.
 
 from django.http import Http404, HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
+from django.urls import reverse
 from django.utils.translation import gettext as _
 from django.views.decorators.http import require_GET, require_http_methods
 
@@ -62,13 +63,13 @@ def start(request):
     """
     department, branch = _default_scope()
     if department is None or branch is None:
-        return JsonResponse({"available": False, "fallback": "/request/"}, status=503)
+        return JsonResponse({"available": False, "fallback": reverse("intake:form")}, status=503)
 
     if not lifecycle.anyone_available(department.pk, branch.pk):
         return JsonResponse(
             {
                 "available": False,
-                "fallback": "/request/",
+                "fallback": reverse("intake:form"),
                 "carry": {
                     "full_name": request.POST.get("full_name", ""),
                     "email": request.POST.get("email", ""),

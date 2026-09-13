@@ -209,3 +209,15 @@ LOGIN_EXEMPT_URL_NAMES = {
     "chat:leave_queue",
 }
 LOGIN_URL = "accounts:sign_in"
+
+
+# FR-042: nobody waits for a desk that has closed. An agent whose laptop slept fires no event
+# — their presence key simply expires — so this is swept rather than handled. A minute is
+# chosen against the reconnection grace period (60s): long enough that a brief dropout does
+# not evict a queue, short enough that nobody waits materially past the desk closing.
+CELERY_BEAT_SCHEDULE = {
+    "close-deserted-desks": {
+        "task": "apps.chat.tasks.close_deserted_desks",
+        "schedule": 60.0,
+    },
+}

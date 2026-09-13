@@ -28,6 +28,10 @@ class Conversation(ScopedSoftDeleteModel):
         ENDED_BY_VISITOR = "ENDED_BY_VISITOR", _("Ended by the visitor")
         VISITOR_DISCONNECTED = "VISITOR_DISCONNECTED", _("The visitor disconnected")
         IDLE_TIMEOUT = "IDLE_TIMEOUT", _("Closed after inactivity")
+        # FR-042: they were still waiting when the last agent went offline. Distinct
+        # from every other ending because it is the only one that is the desk's fault,
+        # and a supervisor reading these needs to see it as its own number.
+        DESK_CLOSED = "DESK_CLOSED", _("The desk closed while waiting")
 
     #: Set when the conversation starts so a transcript can never be orphaned by an
     #: unexpected ending (FR-040). The agent may re-point it later, at which point the

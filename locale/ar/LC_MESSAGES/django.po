@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-13 06:12+0000\n"
+"POT-Creation-Date: 2026-09-13 06:38+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -187,6 +187,10 @@ msgstr "انقطع اتصال الزائر"
 msgid "Closed after inactivity"
 msgstr "أُغلقت بسبب عدم النشاط"
 
+#: apps/chat/models.py:34
+msgid "The desk closed while waiting"
+msgstr "أُغلق المكتب أثناء الانتظار"
+
 #: apps/chat/services/lifecycle.py:39 apps/tickets/models.py:52
 #: templates/chat/console.html:3 templates/chat/console.html:11
 #: templates/chat/conversation.html:6 templates/chat/widget.html:3
@@ -214,7 +218,7 @@ msgstr[5] "تم إرفاق المحادثة المباشرة %(reference)s (%(co
 msgid "Transcript moved to %(reference)s."
 msgstr "تم نقل نص المحادثة إلى %(reference)s."
 
-#: apps/chat/views.py:211
+#: apps/chat/views.py:212
 msgid "This conversation cannot be attached to that ticket."
 msgstr "لا يمكن إرفاق هذه المحادثة بتلك التذكرة."
 

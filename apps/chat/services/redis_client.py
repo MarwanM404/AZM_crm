@@ -75,6 +75,9 @@ class FakeRedis:
         members = [m for m, _score in ordered]
         return members[start:] if end == -1 else members[start : end + 1]
 
+    def zscore(self, key, member):
+        return self._zsets.get(key, {}).get(member)
+
     def zrank(self, key, member):
         ordered = [m for m, _ in sorted(self._zsets.get(key, {}).items(), key=lambda kv: kv[1])]
         return ordered.index(member) if member in ordered else None
