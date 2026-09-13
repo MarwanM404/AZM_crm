@@ -31,8 +31,19 @@ PREVIOUS_MSGID_LINE = re.compile(r"^#\|.*$\n?", re.MULTILINE)
 PLACEHOLDER = re.compile(r"%\([a-zA-Z_]+\)[sd]|%[sd]|\{[a-zA-Z_]+\}")
 
 
-def catalog_path(language):
-    return LOCALE_DIR / language / "LC_MESSAGES" / "django.po"
+#: Both gettext domains. `django` holds strings from Python and templates; `djangojs` holds
+#: the ones the browser asks for. Checking only the first is how "Online"/"Offline" stayed
+#: English on an otherwise Arabic screen — and it would have stayed invisible to `status` and
+#: to the placeholder rule after the catalog was wired up, which is the more dangerous half.
+DOMAINS = ("django", "djangojs")
+
+
+def catalog_path(language, domain="django"):
+    return LOCALE_DIR / language / "LC_MESSAGES" / f"{domain}.po"
+
+
+def catalog_paths(language):
+    return [p for p in (catalog_path(language, d) for d in DOMAINS) if p.exists()]
 
 
 def _blocks(path):
@@ -59,26 +70,24 @@ def _string_parts(lines, start_keyword):
 
 def status():
     for language in sorted(p.name for p in LOCALE_DIR.iterdir() if p.is_dir()):
-        path = catalog_path(language)
-        if not path.exists():
-            continue
         missing, fuzzy = [], []
-        for block in _blocks(path):
-            if "Project-Id-Version" in block:
-                continue
-            lines = block.split("\n")
-            msgid = _string_parts(lines, "msgid ")
-            if not msgid:
-                continue
-            if FUZZY_LINE.search(block):
-                fuzzy.append(msgid)
-            singular = _string_parts(lines, "msgstr ")
-            plurals = [line for line in lines if line.startswith("msgstr[")]
-            if plurals:
-                if any(line.split("]", 1)[1].strip() == '""' for line in plurals):
+        for path in catalog_paths(language):
+            for block in _blocks(path):
+                if "Project-Id-Version" in block:
+                    continue
+                lines = block.split("\n")
+                msgid = _string_parts(lines, "msgid ")
+                if not msgid:
+                    continue
+                if FUZZY_LINE.search(block):
+                    fuzzy.append(msgid)
+                singular = _string_parts(lines, "msgstr ")
+                plurals = [line for line in lines if line.startswith("msgstr[")]
+                if plurals:
+                    if any(line.split("]", 1)[1].strip() == '""' for line in plurals):
+                        missing.append(msgid)
+                elif not singular:
                     missing.append(msgid)
-            elif not singular:
-                missing.append(msgid)
         print(f"{language}: {len(missing)} untranslated, {len(fuzzy)} fuzzy")
         for m in missing:
             print(f"   missing: {m[:90]}")
@@ -104,34 +113,33 @@ def placeholder_mismatches(language):
     What it does NOT catch, stated rather than designed around: a fluent sentence with the
     wrong meaning and no placeholders passes. Only a person reading it will find that.
     """
-    path = catalog_path(language)
-    if not path.exists():
-        return []
-
     found = []
-    for block in _blocks(path):
-        if "Project-Id-Version" in block:
-            continue
-        lines = block.split("\n")
-        msgid = _string_parts(lines, "msgid ")
-        if not msgid:
-            continue
-
-        allowed = set(PLACEHOLDER.findall(msgid))
-        plural_id = _string_parts(lines, "msgid_plural ")
-        if plural_id:
-            allowed |= set(PLACEHOLDER.findall(plural_id))
-
-        translations = [_string_parts(lines, "msgstr ")]
-        translations += [
-            line.split("]", 1)[1].strip().strip('"') for line in lines if line.startswith("msgstr[")
-        ]
-        for translated in translations:
-            if not translated:
+    for path in catalog_paths(language):
+        for block in _blocks(path):
+            if "Project-Id-Version" in block:
                 continue
-            extra = sorted(set(PLACEHOLDER.findall(translated)) - allowed)
-            if extra:
-                found.append((msgid, translated, extra))
+            lines = block.split("\n")
+            msgid = _string_parts(lines, "msgid ")
+            if not msgid:
+                continue
+
+            allowed = set(PLACEHOLDER.findall(msgid))
+            plural_id = _string_parts(lines, "msgid_plural ")
+            if plural_id:
+                allowed |= set(PLACEHOLDER.findall(plural_id))
+
+            translations = [_string_parts(lines, "msgstr ")]
+            translations += [
+                line.split("]", 1)[1].strip().strip('"')
+                for line in lines
+                if line.startswith("msgstr[")
+            ]
+            for translated in translations:
+                if not translated:
+                    continue
+                extra = sorted(set(PLACEHOLDER.findall(translated)) - allowed)
+                if extra:
+                    found.append((msgid, translated, extra))
     return found
 
 
@@ -150,8 +158,15 @@ def placeholders():
 
 def sync_english():
     """English is the source language, so every msgstr is its own msgid. Provably correct,
-    and it removes the class of bug where a guessed English string ships."""
-    path = catalog_path("en")
+    and it removes the class of bug where a guessed English string ships.
+
+    Both domains: the client-side strings are as capable of shipping a guess as any other.
+    """
+    for path in catalog_paths("en"):
+        _sync_english_file(path)
+
+
+def _sync_english_file(path):
     out, changed = [], 0
     for block in _blocks(path):
         if "Project-Id-Version" in block:
@@ -187,7 +202,11 @@ def sync_english():
 def clear_fuzzy(language):
     """Accept guesses you have ALREADY reviewed. Never run this blind: Django ignores fuzzy
     entries, so clearing a flag is what makes a wrong guess start shipping."""
-    path = catalog_path(language)
+    for path in catalog_paths(language):
+        _clear_fuzzy_file(path, language)
+
+
+def _clear_fuzzy_file(path, language):
     out = []
     for block in _blocks(path):
         if "Project-Id-Version" not in block:
@@ -199,8 +218,16 @@ def clear_fuzzy(language):
 
 def fill(language, translations):
     """Apply a reviewed {msgid: msgstr} mapping, clearing the fuzzy flag on anything it
-    touches. Handles gettext's wrapped form, which is where hand-rolled regex kept failing."""
-    path = catalog_path(language)
+    touches. Handles gettext's wrapped form, which is where hand-rolled regex kept failing.
+
+    Applied across both domains, so a caller does not have to know which file a string lives
+    in — and cannot quietly miss one that lives in the other.
+    """
+    for path in catalog_paths(language):
+        _fill_file(path, language, translations)
+
+
+def _fill_file(path, language, translations):
     out, applied = [], 0
     for block in _blocks(path):
         if "Project-Id-Version" in block:

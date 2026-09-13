@@ -16,6 +16,14 @@
   <script src="{% static 'js/htmx.min.js' %}" defer></script>
   <script src="{% static 'js/htmx-ext-ws.min.js' %}" defer></script>
   {% comment %}
+    Client-side translations, before any script that calls gettext. Deferred scripts run in
+    document order, so a catalog loaded after chat-console.js would not exist when Alpine
+    initialises the component — and every string would silently take the fallback, which is
+    the defect this route was added to fix.
+  {% endcomment %}
+  <script src="{% url 'javascript-catalog' %}" defer></script>
+  <script src="{% static 'js/i18n-fallback.js' %}" defer></script>
+  {% comment %}
     Page scripts load BEFORE Alpine, and the order is load-bearing. Deferred scripts run in
     document order, and Alpine initialises as soon as it runs — so with Alpine first, every
     `x-data="chatWidget()"` on the page is evaluated before chat-widget.js has defined

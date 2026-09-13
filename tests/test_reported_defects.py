@@ -20,6 +20,9 @@ Recorded failures from the first run:
    AssertionError: ar: 'Reference' -> 'رد: %(reference)s' introduces %(reference)s
 4. test_the_client_side_translation_catalog_is_served
    NoReverseMatch: Reverse for 'javascript-catalog' not found
+   — closed by User Story 3. The route was only half of it: the strings live in the
+     `djangojs` domain, which had never been extracted, because the calls went through a
+     `gettextOrFallback` wrapper that xgettext does not recognise.
 5. test_an_audit_entry_for_a_creation_does_not_list_every_field
    AssertionError: a created ticket lists 16 changed fields, including reverse relations
    ['conversations', 'inbound_logs', 'messages']
@@ -154,10 +157,6 @@ def test_no_translation_introduces_a_placeholder_its_source_lacks(language):
 # --- 4. No client-side translations at all ---
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason="Open: fixed by User Story 3 (T034-T035). Strict, so this marker fails once it is.",
-)
 @pytest.mark.django_db
 def test_the_client_side_translation_catalog_is_served(client):
     """`gettextOrFallback` in static/js/chat-console.js looks for a real `gettext` and never

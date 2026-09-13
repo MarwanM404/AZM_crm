@@ -24,13 +24,13 @@
       <label class="visually-hidden" for="id_own_department">{% trans "Department" %}</label>
       <select id="id_own_department" name="department" required>
         {% for department in scope_departments %}
-          <option value="{{ department.pk }}">{{ department.name }}</option>
+          <option value="{{ department.pk }}">{{ department.display_name }}</option>
         {% endfor %}
       </select>
       <label class="visually-hidden" for="id_own_branch">{% trans "Branch" %}</label>
       <select id="id_own_branch" name="branch" required>
         {% for branch in scope_branches %}
-          <option value="{{ branch.pk }}">{{ branch.name }}</option>
+          <option value="{{ branch.pk }}">{{ branch.display_name }}</option>
         {% endfor %}
       </select>
       <button type="submit" class="btn btn--primary">{% trans "Set my department and branch" %}</button>

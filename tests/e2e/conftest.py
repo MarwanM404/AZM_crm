@@ -216,3 +216,37 @@ def chat_fixtures(rtl_fixtures):
         "ticket": ticket,
     }
     reset_for_tests()
+
+
+@pytest.fixture
+def arabic_administrator(rtl_fixtures):
+    """An administrator in the same scope as `arabic_agent`.
+
+    Needed because the administration screens refuse an agent with 403 — and a page reading
+    "403 Forbidden" passes a sweep looking for English text or placeholder codes, so a sweep
+    run as an agent reports those screens clean without ever rendering them.
+    """
+    from apps.accounts.models import User
+
+    agent = rtl_fixtures["agent"]
+    return User.objects.create_user(
+        email="admin.rtl@example.com",
+        password="rtl-test-password",
+        full_name="مسؤول النظام",
+        role=User.Role.ADMINISTRATOR,
+        department=agent.department,
+        branch=agent.branch,
+        language="ar",
+    )
+
+
+@pytest.fixture
+def admin_page(browser, live_server, arabic_administrator):
+    page = browser.new_page()
+    page.goto(f"{live_server.url}/sign-in/")
+    page.fill("input[name='email']", arabic_administrator.email)
+    page.fill("input[name='password']", "rtl-test-password")
+    page.click("button[type='submit']")
+    page.wait_for_load_state("networkidle")
+    yield page
+    page.close()

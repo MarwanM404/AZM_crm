@@ -22,7 +22,7 @@ function chatConsole(initialUnread) {
     },
 
     get statusLabel() {
-      return this.online ? gettextOrFallback("Online") : gettextOrFallback("Offline");
+      return this.online ? gettext("Online") : gettext("Offline");
     },
 
     connect() {
@@ -60,7 +60,7 @@ function chatConsole(initialUnread) {
         case "offline_refused":
           // FR-014. The number matters: "you still have conversations open" is unactionable.
           this.refusal = interpolate(
-            gettextOrFallback("You still have %s conversation(s) open."),
+            gettext("You still have %s conversation(s) open."),
             [frame.open]
           );
           break;
@@ -101,12 +101,3 @@ function chatConsole(initialUnread) {
 /* Django's JavaScript catalog is not wired up for this one screen, so these fall back to the
    source string rather than failing. If more client-side strings appear, that catalog is the
    right next step rather than growing this. */
-function gettextOrFallback(text) {
-  return typeof window.gettext === "function" ? window.gettext(text) : text;
-}
-
-function interpolate(template, values) {
-  return typeof window.interpolate === "function"
-    ? window.interpolate(template, values)
-    : template.replace("%s", values[0]);
-}

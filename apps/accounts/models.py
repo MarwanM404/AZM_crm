@@ -30,6 +30,23 @@ class Department(TimeStampedModel):
     def __str__(self):
         return self.name
 
+    @property
+    def display_name(self):
+        """The name in the reader's language, falling back to the other when blank.
+
+        A property rather than a choice at each display site: the second name has been stored
+        since the MVP and read nowhere, which means every site that shows a department made
+        the same wrong choice independently. One property makes it once.
+
+        Falling back to `name` matters — a missing translation should degrade to a readable
+        name, and an unnamed department in a dropdown is worse than an untranslated one.
+        """
+        from django.utils.translation import get_language
+
+        if (get_language() or "").startswith("ar") and self.name_ar:
+            return self.name_ar
+        return self.name
+
 
 class Branch(TimeStampedModel):
     """Location that scopes visibility (FR-023). One row at launch; the model supports many."""
@@ -42,6 +59,23 @@ class Branch(TimeStampedModel):
         ordering = ["name"]
 
     def __str__(self):
+        return self.name
+
+    @property
+    def display_name(self):
+        """The name in the reader's language, falling back to the other when blank.
+
+        A property rather than a choice at each display site: the second name has been stored
+        since the MVP and read nowhere, which means every site that shows a department made
+        the same wrong choice independently. One property makes it once.
+
+        Falling back to `name` matters — a missing translation should degrade to a readable
+        name, and an unnamed department in a dropdown is worse than an untranslated one.
+        """
+        from django.utils.translation import get_language
+
+        if (get_language() or "").startswith("ar") and self.name_ar:
+            return self.name_ar
         return self.name
 
 

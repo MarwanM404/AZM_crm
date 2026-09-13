@@ -45,7 +45,7 @@
       <label for="id_department">{% trans "Department" %}</label>
       <select id="id_department" name="department" required>
         {% for department in departments %}
-          <option value="{{ department.pk }}"{% if department.pk == selected_department %} selected{% endif %}>{{ department.name }}</option>
+          <option value="{{ department.pk }}"{% if department.pk == selected_department %} selected{% endif %}>{{ department.display_name }}</option>
         {% endfor %}
       </select>
     </div>
@@ -53,7 +53,7 @@
       <label for="id_branch">{% trans "Branch" %}</label>
       <select id="id_branch" name="branch" required>
         {% for branch in branches %}
-          <option value="{{ branch.pk }}"{% if branch.pk == selected_branch %} selected{% endif %}>{{ branch.name }}</option>
+          <option value="{{ branch.pk }}"{% if branch.pk == selected_branch %} selected{% endif %}>{{ branch.display_name }}</option>
         {% endfor %}
       </select>
     </div>

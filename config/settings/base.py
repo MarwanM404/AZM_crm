@@ -210,6 +210,11 @@ LOGIN_EXEMPT_URL_NAMES = {
     "chat:widget",
     "chat:start",
     "chat:leave_queue",
+    # Translations only, no data of any kind. It must be public because the screens that need
+    # it most are: the request form and the chat widget are read by anonymous customers, and
+    # behind the sign-in wall they would load no catalog at all — leaving an Arabic visitor
+    # reading English on the two screens the public actually sees.
+    "javascript-catalog",
 }
 LOGIN_URL = "accounts:sign_in"
 

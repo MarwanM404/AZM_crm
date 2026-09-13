@@ -119,20 +119,20 @@ find no Latin text and no placeholder.
 
 ### Tests for User Story 3
 
-- [ ] T026 [P] [US3] Write `apps/accounts/tests/test_bilingual_names.py` asserting department and branch names render in the reader's language wherever they appear, falling back to the other name when one is blank
-- [ ] T027 [P] [US3] Write `tests/test_client_translations.py` asserting the client-side catalog is served, and that the Arabic and English catalogs differ — serving a catalog is not the same as serving the right one
-- [ ] T028 [P] [US3] Extend `tests/test_client_translations.py` asserting client text falls back to the source language when the catalog is unavailable, rather than rendering empty (FR-011)
-- [ ] T029 [P] [US3] Write `tests/e2e/test_arabic_sweep.py` asserting no rendered screen in Arabic contains a format placeholder, and that the chat console's status and refusal text are Arabic after they change
-- [ ] T030 [P] [US3] Extend `tests/test_translation_catalog.py` with a task recording that human review of meaning is a step, not an assumption — the rule from Phase 2 cannot see a fluent sentence with the wrong meaning (US3 scenario 5)
+- [X] T026 [P] [US3] Write `apps/accounts/tests/test_bilingual_names.py` asserting department and branch names render in the reader's language wherever they appear, falling back to the other name when one is blank
+- [X] T027 [P] [US3] Write `tests/test_client_translations.py` asserting the client-side catalog is served, and that the Arabic and English catalogs differ — serving a catalog is not the same as serving the right one
+- [X] T028 [P] [US3] Extend `tests/test_client_translations.py` asserting client text falls back to the source language when the catalog is unavailable, rather than rendering empty (FR-011)
+- [X] T029 [P] [US3] Write `tests/e2e/test_arabic_sweep.py` asserting no rendered screen in Arabic contains a format placeholder, and that the chat console's status and refusal text are Arabic after they change
+- [X] T030 [P] [US3] Extend `tests/test_translation_catalog.py` with a task recording that human review of meaning is a step, not an assumption — the rule from Phase 2 cannot see a fluent sentence with the wrong meaning (US3 scenario 5)
 
 ### Implementation for User Story 3
 
 - [X] T031 [US3] Correct the `Reference` entry in `locale/ar/LC_MESSAGES/django.po` — **done in Phase 2**: the placeholder rule is a blocking gate and could not be left failing — currently the email reply subject, rendering `رد: %(REFERENCE)S` in the chat console heading
-- [ ] T032 [US3] Add a display-name property to `Department` and `Branch` in `apps/accounts/models.py`, so the language choice is made once rather than at every display site
-- [ ] T033 [US3] Use the display name wherever a department or branch is shown, starting with the administration dropdowns in `templates/accounts/`
-- [ ] T034 [US3] Route the client-side translation catalog in `config/urls.py`, per active language and not cached across languages
-- [ ] T035 [US3] Load the catalog in `templates/base.html` before the page scripts, so `gettextOrFallback` in `static/js/chat-console.js` finds a real `gettext` rather than always taking the fallback
-- [ ] T036 [US3] Extract and compile both catalogs, then check with `tools/catalog.py status`
+- [X] T032 [US3] Add a display-name property to `Department` and `Branch` in `apps/accounts/models.py`, so the language choice is made once rather than at every display site
+- [X] T033 [US3] Use the display name wherever a department or branch is shown, starting with the administration dropdowns in `templates/accounts/`
+- [X] T034 [US3] Route the client-side translation catalog in `config/urls.py`, per active language and not cached across languages
+- [X] T035 [US3] Load the catalog in `templates/base.html` before the page scripts, so `gettextOrFallback` in `static/js/chat-console.js` finds a real `gettext` rather than always taking the fallback
+- [X] T036 [US3] Extract and compile both catalogs, then check with `tools/catalog.py status`
 
 **Checkpoint**: the product is bilingual where it claimed to be, including after the page loads.
 

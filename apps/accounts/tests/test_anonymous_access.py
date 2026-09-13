@@ -81,6 +81,12 @@ def test_exempt_list_is_small_and_deliberate():
       phase. None of these reads or writes anything belonging to an existing customer: they
       report whether anyone is online, render a form, and create a new conversation. The
       socket that follows is authorized by a signed token naming exactly one conversation.
+    - javascript-catalog — translations and nothing else. It has to be public because the two
+      screens that need it most are: the request form and the chat widget are read by
+      anonymous customers, and behind the wall they would load no catalog at all, leaving an
+      Arabic visitor reading English on the only screens the public ever sees. The response
+      contains message strings and no data, no identifiers and no tokens, which
+      tests/test_client_translations.py asserts rather than assumes.
     """
     assert settings.LOGIN_EXEMPT_URL_NAMES == {
         "intake:form",
@@ -91,4 +97,5 @@ def test_exempt_list_is_small_and_deliberate():
         "chat:widget",
         "chat:start",
         "chat:leave_queue",
+        "javascript-catalog",
     }

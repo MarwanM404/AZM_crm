@@ -215,3 +215,51 @@ def test_a_translation_may_omit_a_placeholder_its_source_has():
         f"{sorted(wrongly_reported)}. The rule has become symmetric and will now fail on "
         "correct Arabic plurals."
     )
+
+
+def test_both_gettext_domains_are_checked():
+    """The blindness, moved rather than removed (T030).
+
+    Everything in this file used to read `django.po` alone. `djangojs.po` holds the strings
+    the browser asks for, and while it was unchecked a wrong client translation would have
+    been exactly as invisible as the `Reference` entry was — in a place that now looks
+    handled, which is worse.
+
+    Asserted on the tool rather than trusted, because "we remembered the second domain" is
+    the kind of thing that stays true only until someone adds a third.
+    """
+    from tools.catalog import DOMAINS, catalog_paths
+
+    assert set(DOMAINS) == {"django", "djangojs"}
+
+    checked = {path.name for path in catalog_paths("ar")}
+    assert checked == {"django.po", "djangojs.po"}, (
+        f"the catalog tooling reads {sorted(checked)}; a string in an unread domain is "
+        "unchecked and will report as correct"
+    )
+
+
+def test_what_these_checks_cannot_see_is_written_down():
+    """FR-021, stated as a limit rather than designed around.
+
+    None of the rules in this file can see a fluent Arabic sentence with the wrong meaning and
+    no placeholders. `Reference` was caught because its wrongness was visible in the string
+    itself; a plausible mistranslation is not, and only a person reading it will find one.
+
+    This test exists so the limit is recorded where the checks are, rather than assumed away
+    by a green run. Human review of meaning is a step in
+    specs/003-fix-admin-and-signin/quickstart.md, not an implication of this suite passing.
+    """
+    from pathlib import Path
+
+    quickstart = (
+        Path(__file__).resolve().parent.parent
+        / "specs"
+        / "003-fix-admin-and-signin"
+        / "quickstart.md"
+    ).read_text()
+
+    assert "wrong meaning" in quickstart or "reproducing the defect" in quickstart, (
+        "the review step that covers what these checks cannot has gone from the validation "
+        "scenarios; the suite would then imply a correctness it does not check"
+    )
