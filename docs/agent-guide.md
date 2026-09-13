@@ -90,6 +90,27 @@ to the customer, cannot end the conversation, and cannot take it from you. What 
 send you a private note. Nothing they do appears to the customer, who is not told that anyone
 else is present.
 
+### If a screen says your account has no department
+
+Every screen in this product shows you your own department and branch and nothing else. An
+account without them matches nothing, so the queue, the customer list and the staff accounts
+list all come up empty — and the emptiness is real, not a fault.
+
+If that is you, the screens now say so rather than just appearing empty. An administrator can
+set their own department and branch from that notice, once: it exists because the first
+account on a new installation has no scope and there is nobody else to ask. Anyone else should
+ask an administrator.
+
+This is the only place in the product where somebody sets their own scope, and it closes as
+soon as it is used. Changing it afterwards is an administrator's job, as it is for everyone.
+
+### Setting up a new installation
+
+Create the first administrator with `bootstrap_admin`, not `createsuperuser`. The second asks
+only for an email address and a name — it cannot sensibly ask for a department, because on an
+empty database there is none to choose — and the account it makes can see nothing. `README.md`
+has the exact command.
+
 ## بالعربية
 
 **تسجيل الدخول.** ادخل إلى `/sign-in/` باستخدام البريد الإلكتروني الذي أنشأه لك المسؤول. إذا
@@ -164,3 +185,21 @@ else is present.
 المراقبة قراءة وتوجيه فقط. المشرف الذي يراقب محادثتك لا يستطيع الكتابة إلى العميل، ولا إنهاء
 المحادثة، ولا أخذها منك. ما يستطيعه هو إرسال ملاحظة خاصة إليك. ولا يظهر شيء مما يفعله للعميل،
 الذي لا يُبلَّغ بوجود أي شخص آخر.
+
+### إذا ظهرت لك رسالة بأن حسابك بلا قسم
+
+كل شاشة في هذا النظام تعرض لك قسمك وفرعك وحدهما. والحساب الذي لا قسم له ولا فرع لا يطابق
+شيئًا، فتظهر قائمة التذاكر وقائمة العملاء وحسابات الموظفين فارغة — وهذا فراغ حقيقي، وليس عطلًا.
+
+إن كان هذا حالك، فالشاشات تخبرك بذلك الآن بدل أن تبدو فارغة بلا سبب. ويستطيع المسؤول تعيين
+قسمه وفرعه من تلك الرسالة، مرة واحدة: فهذا موجود لأن أول حساب في نظام جديد بلا نطاق ولا يوجد
+من يُسأل. أما غير المسؤول فعليه أن يطلب ذلك من المسؤول.
+
+هذا هو الموضع الوحيد في النظام الذي يعيّن فيه أحدٌ نطاق نفسه، ويُغلق بمجرد استخدامه. أما
+تغييره بعد ذلك فهو من عمل المسؤول، كحال الجميع.
+
+### تهيئة نظام جديد
+
+أنشئ أول مسؤول بالأمر `bootstrap_admin` لا بـ `createsuperuser`. فالثاني لا يسأل إلا عن بريد
+إلكتروني واسم — ولا يمكنه أن يسأل عن القسم، إذ لا قسم في قاعدة بيانات فارغة — والحساب الذي
+ينشئه لا يرى شيئًا. الأمر كاملًا في `README.md`.

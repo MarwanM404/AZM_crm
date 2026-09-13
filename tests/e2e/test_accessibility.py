@@ -177,3 +177,71 @@ def test_the_private_note_is_announced_as_private(signed_in_page, live_server, c
         ".chat-msg--whisper [aria-hidden='true']", "el => el.textContent.trim()"
     )
     assert hidden_glyph
+
+
+# --- screens added by spec 003 (T072) ---
+
+
+def test_the_sign_in_form_is_labelled(page, live_server):
+    """The first screen anyone meets, and the one a screen reader meets with no context."""
+    page.goto(f"{live_server.url}/sign-in/")
+    page.wait_for_load_state("networkidle")
+
+    unlabelled = page.eval_on_selector_all(
+        ".signin__form input:not([type=hidden])",
+        """els => els.filter(el => {
+            if (el.getAttribute('aria-label')) return false;
+            if (el.id && document.querySelector(`label[for="${el.id}"]`)) return false;
+            return !el.closest('label');
+        }).map(el => el.name || '(unnamed)')""",
+    )
+
+    assert not unlabelled, f"sign-in fields with no accessible name: {unlabelled}"
+
+
+def test_the_language_choice_says_which_one_is_current(page, live_server):
+    """Two buttons that look different and sound identical are one button to a screen
+    reader."""
+    page.goto(f"{live_server.url}/sign-in/")
+    page.wait_for_load_state("networkidle")
+
+    current = page.eval_on_selector_all(
+        ".signin__lang button",
+        "els => els.filter(el => el.getAttribute('aria-current')).map(el => el.value)",
+    )
+
+    assert len(current) == 1, f"{len(current)} language buttons claim to be current"
+
+
+def test_the_scope_notice_is_reachable_by_keyboard(browser, live_server, arabic_agent):
+    """It is the only route out of a product that shows this reader nothing."""
+    from apps.accounts.models import User
+
+    stranded = User.objects.create_user(
+        email="stranded.a11y@example.com",
+        password="rtl-test-password",
+        full_name="No Scope",
+        role=User.Role.ADMINISTRATOR,
+        language="en",
+    )
+    page = browser.new_page()
+    try:
+        page.goto(f"{live_server.url}/sign-in/")
+        page.fill("input[name='email']", stranded.email)
+        page.fill("input[name='password']", "rtl-test-password")
+        page.click(".signin__form button[type='submit']")
+        page.wait_for_load_state("networkidle")
+
+        unlabelled = page.eval_on_selector_all(
+            ".notice--scope select",
+            """els => els.filter(el => {
+                if (el.getAttribute('aria-label')) return false;
+                if (el.id && document.querySelector(`label[for="${el.id}"]`)) return false;
+                return !el.closest('label');
+            }).map(el => el.name)""",
+        )
+
+        assert page.locator(".notice--scope button").is_enabled()
+        assert not unlabelled, f"scope-notice fields with no accessible name: {unlabelled}"
+    finally:
+        page.close()

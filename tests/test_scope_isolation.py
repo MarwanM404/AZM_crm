@@ -200,3 +200,98 @@ def test_supervision_of_an_out_of_scope_conversation_is_not_found(
     assert response.status_code == 404
     assert response.status_code == absent.status_code
     assert "Out of scope conversation" not in response.content.decode()
+
+
+# --- the administration routes added by spec 003 (T071) ---
+
+
+def _administration_record_routes():
+    """Every administration route addressing one record by primary key.
+
+    Read from the URLconf rather than listed by hand, for the same reason the chat one is:
+    the failure to guard against is not a broken check but a route nobody remembered to
+    check, and that looks exactly like a passing suite.
+    """
+    from apps.accounts import urls_admin
+
+    return sorted(
+        pattern.name for pattern in urls_admin.urlpatterns if "<int:pk>" in str(pattern.pattern)
+    )
+
+
+ADMINISTRATION_RECORD_ROUTES_SWEPT = {"user_scope", "user_deactivate"}
+
+
+def test_every_administration_record_route_is_covered():
+    missing = set(_administration_record_routes()) - ADMINISTRATION_RECORD_ROUTES_SWEPT
+
+    assert not missing, (
+        "These administration routes address a single record and are in no scope sweep: "
+        f"{sorted(missing)}"
+    )
+
+
+@pytest.mark.django_db
+def test_an_out_of_scope_account_cannot_be_deactivated(admin_client_, other_department, branch):
+    """An account in another department is not this administrator's to switch off, and must
+    not be confirmed to exist by the refusal (MVP FR-024)."""
+    from apps.accounts.models import User
+
+    stranger = User.objects.create_user(
+        email="stranger@example.com",
+        password="x",
+        full_name="Stranger",
+        role=User.Role.AGENT,
+        department=other_department,
+        branch=branch,
+    )
+
+    response = admin_client_.post(reverse("administration:user_deactivate", args=[stranger.pk]))
+    absent = admin_client_.post(reverse("administration:user_deactivate", args=[999999]))
+    stranger.refresh_from_db()
+
+    assert response.status_code == 404
+    assert response.status_code == absent.status_code
+    assert stranger.is_active
+
+
+@pytest.mark.django_db
+def test_an_out_of_scope_accounts_scope_cannot_be_changed(
+    admin_client_, administrator, other_department, branch
+):
+    from apps.accounts.models import User
+
+    stranger = User.objects.create_user(
+        email="stranger@example.com",
+        password="x",
+        full_name="Stranger",
+        role=User.Role.AGENT,
+        department=other_department,
+        branch=branch,
+    )
+
+    response = admin_client_.post(
+        reverse("administration:user_scope", args=[stranger.pk]),
+        {"department": administrator.department_id, "branch": branch.pk},
+    )
+    stranger.refresh_from_db()
+
+    assert response.status_code == 404
+    assert stranger.department_id == other_department.pk
+
+
+@pytest.mark.django_db
+def test_the_own_scope_route_cannot_act_on_anyone_else(
+    admin_client_, administrator, agent, department, branch
+):
+    """It takes no identifier at all, which is the design: a route that names a user is a
+    route that can name the wrong one."""
+    from apps.accounts import urls_admin
+
+    own_scope = next(p for p in urls_admin.urlpatterns if p.name == "own_scope")
+
+    assert "<int:pk>" not in str(own_scope.pattern)
+    assert "<" not in str(own_scope.pattern), (
+        "the self-service scope route takes an argument; it acts on the signed-in account "
+        "and must not be able to name another"
+    )

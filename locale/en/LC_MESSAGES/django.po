@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-13 17:50+0000\n"
+"POT-Creation-Date: 2026-09-13 20:22+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -90,20 +90,20 @@ msgstr ""
 "There is no demonstration account for that role. Run the seed command, or "
 "sign in with an email address and a password."
 
-#: apps/accounts/views_admin.py:67
+#: apps/accounts/views_admin.py:66
 msgid "An email address and a name are required."
 msgstr "An email address and a name are required."
 
-#: apps/accounts/views_admin.py:69
+#: apps/accounts/views_admin.py:68
 msgid "Choose a role."
 msgstr "Choose a role."
 
-#: apps/accounts/views_admin.py:73 apps/accounts/views_admin.py:138
-#: apps/accounts/views_admin.py:186
+#: apps/accounts/views_admin.py:72 apps/accounts/views_admin.py:144
+#: apps/accounts/views_admin.py:194
 msgid "Choose a department and a branch."
 msgstr "Choose a department and a branch."
 
-#: apps/accounts/views_admin.py:80
+#: apps/accounts/views_admin.py:79
 msgid ""
 "That department and branch are not yours to administer, and an account "
 "created there would not be visible to you. It has not been created."
@@ -111,15 +111,15 @@ msgstr ""
 "That department and branch are not yours to administer, and an account "
 "created there would not be visible to you. It has not been created."
 
-#: apps/accounts/views_admin.py:86
+#: apps/accounts/views_admin.py:85
 msgid "An account with that email already exists."
 msgstr "An account with that email already exists."
 
-#: apps/accounts/views_admin.py:152
+#: apps/accounts/views_admin.py:160
 msgid "You cannot deactivate your own account."
 msgstr "You cannot deactivate your own account."
 
-#: apps/accounts/views_admin.py:177
+#: apps/accounts/views_admin.py:185
 msgid ""
 "Your account already has a department and a branch. Ask another "
 "administrator to change them."

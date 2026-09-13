@@ -184,3 +184,61 @@ def test_the_visitor_widget_mirrors_for_an_arabic_browser(browser, live_server, 
     finally:
         page.close()
         context.close()
+
+
+# --- screens added by spec 003 (T072) ---
+
+
+def test_the_scope_notice_mirrors(browser, live_server, arabic_agent):
+    """Shown to an account with no department, so it needs its own fixture: every other
+    signed-in fixture here has one."""
+    from apps.accounts.models import User
+
+    stranded = User.objects.create_user(
+        email="stranded.rtl@example.com",
+        password="rtl-test-password",
+        full_name="حساب بلا قسم",
+        role=User.Role.ADMINISTRATOR,
+        language="ar",
+    )
+    page = browser.new_page()
+    try:
+        page.goto(f"{live_server.url}/sign-in/")
+        page.fill("input[name='email']", stranded.email)
+        page.fill("input[name='password']", "rtl-test-password")
+        page.click(".signin__form button[type='submit']")
+        page.wait_for_load_state("networkidle")
+
+        assert page.locator(".notice--scope").is_visible()
+        overflow = page.evaluate(
+            "document.documentElement.scrollWidth - document.documentElement.clientWidth"
+        )
+        assert overflow <= 1
+    finally:
+        page.close()
+
+
+def test_the_audit_log_mirrors(admin_page, live_server):
+    admin_page.goto(f"{live_server.url}/admin/audit/")
+    admin_page.wait_for_load_state("networkidle")
+
+    assert "403" not in admin_page.inner_text("body")[:40]
+    assert admin_page.evaluate("document.documentElement.dir") == "rtl"
+    overflow = admin_page.evaluate(
+        "document.documentElement.scrollWidth - document.documentElement.clientWidth"
+    )
+    assert overflow <= 1
+
+
+def test_a_reference_in_the_audit_log_reads_left_to_right(admin_page, live_server):
+    """Latin text inside a right-to-left page. Without `ltr` the browser truncates from the
+    wrong end and every row reads "...-000002", losing what identifies the record."""
+    admin_page.goto(f"{live_server.url}/admin/audit/")
+    admin_page.wait_for_load_state("networkidle")
+
+    direction = admin_page.eval_on_selector(
+        ".table__row--audit:not(.table__row--head) .ltr",
+        "el => getComputedStyle(el).direction",
+    )
+
+    assert direction == "ltr"

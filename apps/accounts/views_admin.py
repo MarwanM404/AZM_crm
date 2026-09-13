@@ -6,14 +6,13 @@ the whole organization (FR-023 makes no exception for role).
 """
 
 from django.http import HttpResponse
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils.translation import gettext as _
 from django.views.decorators.http import require_POST
 
 from apps.accounts.models import Branch, Department, User
 from apps.accounts.permissions import administrator_required
-from apps.core.shortcuts import get_object_or_404_for_user
 
 
 def _users_in_scope(request):
@@ -122,6 +121,13 @@ def user_new(request):
 def user_scope(request, pk):
     """Move an account to another department or branch (MVP FR-025).
 
+    The account being moved must be one this administrator can already see. Until this was
+    written it was looked up through `User.objects.all()`, which reaches
+    `get_object_or_404_for_user` as a bare queryset — and that helper only applies scoping
+    when it is handed a model. `User` is not a `ScopedModel` and has no `for_user`, so no
+    filter was applied and an administrator could re-scope or deactivate an account in any
+    department. Found by the sweep in tests/test_scope_isolation.py.
+
     Deliberately NOT refused when the destination is outside the administrator's own scope,
     unlike `user_new`. The two look like the same rule and are not: moving someone to another
     department is the operation working, and losing sight of them afterwards is the point.
@@ -131,7 +137,7 @@ def user_scope(request, pk):
     so at the time. That needs a confirmation step, which is more than this story covers — it
     is recorded in the tasks rather than smuggled in here.
     """
-    user = get_object_or_404_for_user(User.objects.all(), request.user, pk=pk)
+    user = get_object_or_404(_users_in_scope(request), pk=pk)
     department_id = request.POST.get("department")
     branch_id = request.POST.get("branch")
     if not department_id or not branch_id:
@@ -147,7 +153,9 @@ def user_scope(request, pk):
 def user_deactivate(request, pk):
     """FR-026: access ends on the next request, not at next sign-in. The session teardown
     lives on the model so it happens however the account is deactivated."""
-    user = get_object_or_404_for_user(User.objects.all(), request.user, pk=pk)
+    # Scoped, and 404 rather than 403: a refusal that distinguished "not yours" from "not
+    # there" would confirm which accounts exist in other departments (MVP FR-024).
+    user = get_object_or_404(_users_in_scope(request), pk=pk)
     if user == request.user:
         return HttpResponse(_("You cannot deactivate your own account."), status=422)
 

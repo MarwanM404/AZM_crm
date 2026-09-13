@@ -263,3 +263,88 @@ def test_what_these_checks_cannot_see_is_written_down():
         "the review step that covers what these checks cannot has gone from the validation "
         "scenarios; the suite would then imply a correctness it does not check"
     )
+
+
+# --- the rule itself, not the catalogs it reads ---
+#
+# Every check above asks whether the catalogs are correct. None of them asks whether the
+# *rule* still works, and the difference is not academic: neutering
+# `placeholder_mismatches` to find nothing leaves all of them green, because with the
+# catalogs clean "found nothing" and "cannot find anything" produce identical results.
+#
+# That is the defect this whole feature is about, arrived at from the other direction — a
+# check that can only detect absence reporting correctness. These give the rule something it
+# must find.
+
+
+def _catalog(tmp_path, language, body):
+    path = tmp_path / language / "LC_MESSAGES"
+    path.mkdir(parents=True)
+    (path / "django.po").write_text(body, encoding="utf-8")
+    return path / "django.po"
+
+
+def test_the_rule_finds_an_added_placeholder(tmp_path, monkeypatch):
+    import tools.catalog as catalog
+
+    _catalog(
+        tmp_path,
+        "xx",
+        'msgid "Reference"\nmsgstr "رد: %(reference)s"\n',
+    )
+    monkeypatch.setattr(catalog, "LOCALE_DIR", tmp_path)
+
+    found = catalog.placeholder_mismatches("xx")
+
+    assert [(msgid, extra) for msgid, _translated, extra in found] == [
+        ("Reference", ["%(reference)s"])
+    ]
+
+
+def test_the_rule_allows_a_translation_that_keeps_its_placeholders(tmp_path, monkeypatch):
+    import tools.catalog as catalog
+
+    _catalog(
+        tmp_path,
+        "xx",
+        'msgid "Moved to %(reference)s."\nmsgstr "نُقلت إلى %(reference)s."\n',
+    )
+    monkeypatch.setattr(catalog, "LOCALE_DIR", tmp_path)
+
+    assert catalog.placeholder_mismatches("xx") == []
+
+
+def test_the_rule_allows_a_translation_that_drops_one(tmp_path, monkeypatch):
+    """Arabic's one and two forms legitimately omit the numeral. A symmetric rule would fail
+    five correct entries in the real catalog, and five false positives get a rule deleted."""
+    import tools.catalog as catalog
+
+    _catalog(
+        tmp_path,
+        "xx",
+        'msgid "%(counter)s ticket"\nmsgstr "تذكرة واحدة"\n',
+    )
+    monkeypatch.setattr(catalog, "LOCALE_DIR", tmp_path)
+
+    assert catalog.placeholder_mismatches("xx") == []
+
+
+def test_the_rule_checks_plural_forms_too(tmp_path, monkeypatch):
+    """A mismatch hiding in msgstr[3] is as invisible to a reader of the file as one in
+    msgstr, and Arabic has six of them."""
+    import tools.catalog as catalog
+
+    _catalog(
+        tmp_path,
+        "xx",
+        'msgid "%(count)d message"\n'
+        'msgid_plural "%(count)d messages"\n'
+        'msgstr[0] "%(count)d رسالة"\n'
+        'msgstr[1] "رسالة واحدة"\n'
+        'msgstr[2] "%(count)d رسالة و%(other)s"\n',
+    )
+    monkeypatch.setattr(catalog, "LOCALE_DIR", tmp_path)
+
+    found = catalog.placeholder_mismatches("xx")
+
+    assert [extra for _msgid, _translated, extra in found] == [["%(other)s"]]

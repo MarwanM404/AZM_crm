@@ -208,9 +208,9 @@ def test_an_audit_entry_for_a_creation_does_not_list_every_field(
     # Still stored, deliberately: the entry is immutable and nothing here alters it.
     assert stored & reverse_relations
 
-    assert readable_changes(entry) == [], (
-        "a creation is still shown as every field changing from nothing"
-    )
-    assert not {c.field for c in concrete_changes(entry)} & reverse_relations, (
-        "reverse relations are still shown as changed fields"
-    )
+    assert (
+        readable_changes(entry) == []
+    ), "a creation is still shown as every field changing from nothing"
+    assert (
+        not {c.field for c in concrete_changes(entry)} & reverse_relations
+    ), "reverse relations are still shown as changed fields"

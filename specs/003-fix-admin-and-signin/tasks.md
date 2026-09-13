@@ -228,13 +228,13 @@ horizontal scrolling or internal field names.
 
 ## Phase 9: Polish & Cross-Cutting Concerns
 
-- [ ] T069 Confirm every test in `tests/test_reported_defects.py` now passes, and that each one failed before its phase — a fix nobody saw fix anything is a claim
-- [ ] T070 [P] Demonstrate each check added by this feature fails when its defect is reintroduced deliberately (FR-021) — the scope refusal, the scopeless explanation, the placeholder rule, the production gate, the audit filtering — and record what was broken and what failed in `specs/003-fix-admin-and-signin/quickstart.md`
-- [ ] T071 [P] Extend `tests/test_scope_isolation.py` so the new administration routes are covered by the 404-not-403 sweep automatically
-- [ ] T072 [P] Add the new screens to `tests/e2e/test_rtl_layout.py` and `tests/e2e/test_accessibility.py`
-- [ ] T073 [P] Update `docs/agent-guide.md` in both languages with the first-run route and what an administrator sees when their account has no scope
-- [ ] T074 Run all nine scenarios in [quickstart.md](quickstart.md) in both languages, reproducing each defect first
-- [ ] T075 Confirm `tools/catalog.py status` reports `locale/ar/LC_MESSAGES/django.po` and `locale/en/LC_MESSAGES/django.po` with nothing missing, nothing fuzzy, and no placeholder mismatch
+- [X] T069 Confirm every test in `tests/test_reported_defects.py` now passes, and that each one failed before its phase — a fix nobody saw fix anything is a claim
+- [X] T070 [P] Demonstrate each check added by this feature fails when its defect is reintroduced deliberately (FR-021) — the scope refusal, the scopeless explanation, the placeholder rule, the production gate, the audit filtering — and record what was broken and what failed in `specs/003-fix-admin-and-signin/quickstart.md`
+- [X] T071 [P] Extend `tests/test_scope_isolation.py` so the new administration routes are covered by the 404-not-403 sweep automatically
+- [X] T072 [P] Add the new screens to `tests/e2e/test_rtl_layout.py` and `tests/e2e/test_accessibility.py`
+- [X] T073 [P] Update `docs/agent-guide.md` in both languages with the first-run route and what an administrator sees when their account has no scope
+- [X] T074 Run all nine scenarios in [quickstart.md](quickstart.md) in both languages, reproducing each defect first
+- [X] T075 Confirm `tools/catalog.py status` reports `locale/ar/LC_MESSAGES/django.po` and `locale/en/LC_MESSAGES/django.po` with nothing missing, nothing fuzzy, and no placeholder mismatch
 
 ---
 
