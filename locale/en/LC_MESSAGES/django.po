@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-13 17:16+0000\n"
+"POT-Creation-Date: 2026-09-13 17:50+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -33,12 +33,14 @@ msgid "Invalid email or password."
 msgstr "Invalid email or password."
 
 #: apps/accounts/models.py:23 apps/accounts/models.py:54
-#: apps/customers/models.py:18 apps/tickets/models.py:20
+#: apps/core/templatetags/audit.py:54 apps/customers/models.py:18
+#: apps/tickets/models.py:20
 msgid "name"
 msgstr "name"
 
 #: apps/accounts/models.py:24 apps/accounts/models.py:55
-#: apps/customers/models.py:19 apps/tickets/models.py:21
+#: apps/core/templatetags/audit.py:93 apps/customers/models.py:19
+#: apps/tickets/models.py:21
 msgid "name (Arabic)"
 msgstr "name (Arabic)"
 
@@ -68,7 +70,8 @@ msgstr "English"
 msgid "email address"
 msgstr "email address"
 
-#: apps/accounts/models.py:129 apps/customers/models.py:50
+#: apps/accounts/models.py:129 apps/core/templatetags/audit.py:51
+#: apps/customers/models.py:50
 msgid "full name"
 msgstr "full name"
 
@@ -79,7 +82,7 @@ msgid ""
 msgstr ""
 "Your account has no department or branch, so there is nothing for it to show."
 
-#: apps/accounts/views.py:174
+#: apps/accounts/views.py:173
 msgid ""
 "There is no demonstration account for that role. Run the seed command, or "
 "sign in with an email address and a password."
@@ -124,7 +127,7 @@ msgstr ""
 "Your account already has a department and a branch. Ask another "
 "administrator to change them."
 
-#: apps/attachments/models.py:52
+#: apps/attachments/models.py:52 apps/core/templatetags/audit.py:96
 msgid "file name"
 msgstr "file name"
 
@@ -265,6 +268,230 @@ msgstr "This conversation will close soon if nobody replies."
 #: apps/chat/views.py:212
 msgid "This conversation cannot be attached to that ticket."
 msgstr "This conversation cannot be attached to that ticket."
+
+#: apps/core/templatetags/audit.py:39
+msgid "assigned to"
+msgstr "assigned to"
+
+#: apps/core/templatetags/audit.py:40
+msgid "branch"
+msgstr "branch"
+
+#: apps/core/templatetags/audit.py:41
+msgid "category"
+msgstr "category"
+
+#: apps/core/templatetags/audit.py:42
+msgid "contact"
+msgstr "contact"
+
+#: apps/core/templatetags/audit.py:43 apps/core/templatetags/audit.py:167
+msgid "created"
+msgstr "created"
+
+#: apps/core/templatetags/audit.py:44 apps/core/templatetags/audit.py:169
+msgid "deleted"
+msgstr "deleted"
+
+#: apps/core/templatetags/audit.py:45
+msgid "deleted by"
+msgstr "deleted by"
+
+#: apps/core/templatetags/audit.py:46
+msgid "department"
+msgstr "department"
+
+#: apps/core/templatetags/audit.py:47
+msgid "description"
+msgstr "description"
+
+#: apps/core/templatetags/audit.py:48
+msgid "email"
+msgstr "email"
+
+#: apps/core/templatetags/audit.py:49
+msgid "ended"
+msgstr "ended"
+
+#: apps/core/templatetags/audit.py:50
+msgid "reason for ending"
+msgstr "reason for ending"
+
+#: apps/core/templatetags/audit.py:52
+msgid "active"
+msgstr "active"
+
+#: apps/core/templatetags/audit.py:53
+msgid "language"
+msgstr "language"
+
+#: apps/core/templatetags/audit.py:55
+msgid "organization"
+msgstr "organization"
+
+#: apps/core/templatetags/audit.py:56 apps/core/templatetags/audit.py:74
+msgid "channel"
+msgstr "channel"
+
+#: apps/core/templatetags/audit.py:57
+msgid "priority"
+msgstr "priority"
+
+#: apps/core/templatetags/audit.py:58
+msgid "reference"
+msgstr "reference"
+
+#: apps/core/templatetags/audit.py:59
+msgid "resolved"
+msgstr "resolved"
+
+#: apps/core/templatetags/audit.py:60
+msgid "role"
+msgstr "role"
+
+#: apps/core/templatetags/audit.py:61
+msgid "state"
+msgstr "state"
+
+#: apps/core/templatetags/audit.py:62
+msgid "status"
+msgstr "status"
+
+#: apps/core/templatetags/audit.py:63
+msgid "subject"
+msgstr "subject"
+
+#: apps/core/templatetags/audit.py:64
+msgid "ticket"
+msgstr "ticket"
+
+#: apps/core/templatetags/audit.py:65
+msgid "updated"
+msgstr "updated"
+
+#: apps/core/templatetags/audit.py:66
+msgid "visibility"
+msgstr "visibility"
+
+#: apps/core/templatetags/audit.py:71
+msgid "assigned"
+msgstr "assigned"
+
+#: apps/core/templatetags/audit.py:72
+msgid "author"
+msgstr "author"
+
+#: apps/core/templatetags/audit.py:73 apps/core/templatetags/audit.py:92
+msgid "message"
+msgstr "message"
+
+#: apps/core/templatetags/audit.py:75
+msgid "record type"
+msgstr "record type"
+
+#: apps/core/templatetags/audit.py:76
+msgid "conversation"
+msgstr "conversation"
+
+#: apps/core/templatetags/audit.py:77
+msgid "delivery error"
+msgstr "delivery error"
+
+#: apps/core/templatetags/audit.py:78
+msgid "delivery status"
+msgstr "delivery status"
+
+#: apps/core/templatetags/audit.py:79
+msgid "direction"
+msgstr "direction"
+
+#: apps/core/templatetags/audit.py:80
+msgid "ended by"
+msgstr "ended by"
+
+#: apps/core/templatetags/audit.py:81
+msgid "external identifier"
+msgstr "external identifier"
+
+#: apps/core/templatetags/audit.py:82
+msgid "file"
+msgstr "file"
+
+#: apps/core/templatetags/audit.py:83
+msgid "first response"
+msgstr "first response"
+
+#: apps/core/templatetags/audit.py:84
+msgid "identifier"
+msgstr "identifier"
+
+#: apps/core/templatetags/audit.py:85
+msgid "idle warning sent"
+msgstr "idle warning sent"
+
+#: apps/core/templatetags/audit.py:86
+msgid "primary"
+msgstr "primary"
+
+#: apps/core/templatetags/audit.py:87
+msgid "staff access"
+msgstr "staff access"
+
+#: apps/core/templatetags/audit.py:88
+msgid "superuser"
+msgstr "superuser"
+
+#: apps/core/templatetags/audit.py:89
+msgid "kind"
+msgstr "kind"
+
+#: apps/core/templatetags/audit.py:90
+msgid "last activity"
+msgstr "last activity"
+
+#: apps/core/templatetags/audit.py:91
+msgid "last signed in"
+msgstr "last signed in"
+
+#: apps/core/templatetags/audit.py:94
+msgid "note"
+msgstr "note"
+
+#: apps/core/templatetags/audit.py:95
+msgid "observer"
+msgstr "observer"
+
+#: apps/core/templatetags/audit.py:97
+msgid "preferred language"
+msgstr "preferred language"
+
+#: apps/core/templatetags/audit.py:98
+msgid "size"
+msgstr "size"
+
+#: apps/core/templatetags/audit.py:99
+msgid "started"
+msgstr "started"
+
+#: apps/core/templatetags/audit.py:100
+msgid "uploaded by"
+msgstr "uploaded by"
+
+#: apps/core/templatetags/audit.py:101
+msgid "value"
+msgstr "value"
+
+#: apps/core/templatetags/audit.py:102
+msgid "visitor token"
+msgstr "visitor token"
+
+#: apps/core/templatetags/audit.py:168
+msgid "changed"
+msgstr "changed"
+
+#: apps/core/templatetags/audit.py:170
+msgid "accessed"
+msgstr "accessed"
 
 #: apps/customers/models.py:71
 msgid "Phone"
@@ -749,7 +976,7 @@ msgstr "Changes"
 msgid "System"
 msgstr "System"
 
-#: templates/core/audit_log.html:59
+#: templates/core/audit_log.html:84
 msgid "No entries match these filters."
 msgstr "No entries match these filters."
 

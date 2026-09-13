@@ -274,7 +274,10 @@ select:focus-visible, input:focus-visible, textarea:focus-visible {
 .table__row--users { grid-template-columns: minmax(0, 1fr) 240px 140px 120px 140px; }
 
 /* --- audit log --- */
-.table__row--audit { grid-template-columns: 180px 150px minmax(0, 1fr) 100px minmax(0, 1.4fr); }
+/* The entity column holds the longest value on the row — a model name and a reference —
+   and had the least room, so every row read "...tor". The date is a fixed width and does not
+   need 180px; the difference goes where the reading happens. */
+.table__row--audit { grid-template-columns: 150px 130px minmax(0, 1.6fr) 90px minmax(0, 1.3fr); }
 .audit-changes { display: flex; flex-direction: column; gap: 3px; min-inline-size: 0; }
 .audit-change { display: flex; align-items: baseline; gap: 8px; font-size: 12px; min-inline-size: 0; }
 .audit-change__field { color: var(--color-faint); flex: none; }
@@ -468,3 +471,24 @@ select:focus-visible, input:focus-visible, textarea:focus-visible {
 }
 .signin__demo-row { display: flex; flex-wrap: wrap; gap: 7px; align-items: center; margin: 0 0 8px; }
 .signin__demo-note { margin: 0; font-size: 11.5px; }
+
+
+/* --- audit entries (FR-025) ---
+ *
+ * Bounded so one entry cannot grow the row without limit — a ticket creation used to render
+ * sixteen lines of "nothing -> value" and push the table off the screen. Scrolls inside its
+ * own cell rather than truncating: this is evidence, and the remainder has to stay reachable.
+ */
+.audit-changes { display: block; max-block-size: 7.5em; overflow-y: auto; }
+.audit-change { display: flex; flex-wrap: wrap; gap: 6px; font-size: 12px; line-height: 1.5; }
+.audit-change__field { font-weight: 600; }
+.audit-change__from { color: var(--color-faint); text-decoration: line-through; }
+.audit-change__to { color: var(--color-ink); }
+
+
+@media (max-width: 900px) {
+  /* Five columns do not fit a narrow screen. Stack, and let the audit entry keep its own
+     scrolling cell rather than pushing the page sideways. */
+  .table__row--audit { grid-template-columns: minmax(0, 1fr); gap: 4px; }
+  .table__row--audit.table__row--head { display: none; }
+}

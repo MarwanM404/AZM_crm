@@ -26,6 +26,9 @@ Recorded failures from the first run:
 5. test_an_audit_entry_for_a_creation_does_not_list_every_field
    AssertionError: a created ticket lists 16 changed fields, including reverse relations
    ['conversations', 'inbound_logs', 'messages']
+   — closed by User Story 6. The sixteen are still STORED, which is the point: entries are
+     immutable (MVP FR-028) and this was a display fix. The assertion below now reads what
+     is shown rather than what is kept.
 
 Each test moves to the phase that fixes it. Until then it carries a strict expected-failure
 marker naming that phase — strict, so the day the phase lands the marker itself fails and has
@@ -177,10 +180,6 @@ def test_the_client_side_translation_catalog_is_served(client):
 # --- 5. An audit entry for a creation lists every field ---
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason="Open: fixed by User Story 6 (T058-T068). Strict, so this marker fails once it is.",
-)
 @pytest.mark.django_db
 def test_an_audit_entry_for_a_creation_does_not_list_every_field(
     department, branch, category, contact
@@ -200,11 +199,18 @@ def test_an_audit_entry_for_a_creation_does_not_list_every_field(
         department=department,
         branch=branch,
     )
+    from apps.core.templatetags.audit import concrete_changes, readable_changes
+
     entry = LogEntry.objects.filter(object_pk=str(ticket.pk)).first()
-    shown = set(entry.changes_dict)
+    stored = set(entry.changes_dict)
     reverse_relations = {"conversations", "inbound_logs", "messages", "attachments"}
 
-    assert not (shown & reverse_relations), (
-        f"a created ticket lists {len(shown)} changed fields, including reverse relations "
-        f"{sorted(shown & reverse_relations)}"
+    # Still stored, deliberately: the entry is immutable and nothing here alters it.
+    assert stored & reverse_relations
+
+    assert readable_changes(entry) == [], (
+        "a creation is still shown as every field changing from nothing"
+    )
+    assert not {c.field for c in concrete_changes(entry)} & reverse_relations, (
+        "reverse relations are still shown as changed fields"
     )

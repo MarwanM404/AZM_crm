@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-13 17:16+0000\n"
+"POT-Creation-Date: 2026-09-13 17:50+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -34,14 +34,16 @@ msgid "Invalid email or password."
 msgstr "البريد الإلكتروني أو كلمة المرور غير صحيحة."
 
 #: apps/accounts/models.py:23 apps/accounts/models.py:54
-#: apps/customers/models.py:18 apps/tickets/models.py:20
+#: apps/core/templatetags/audit.py:54 apps/customers/models.py:18
+#: apps/tickets/models.py:20
 msgid "name"
 msgstr "الاسم"
 
 #: apps/accounts/models.py:24 apps/accounts/models.py:55
-#: apps/customers/models.py:19 apps/tickets/models.py:21
+#: apps/core/templatetags/audit.py:93 apps/customers/models.py:19
+#: apps/tickets/models.py:21
 msgid "name (Arabic)"
-msgstr "الاسم (بالعربية)"
+msgstr "الاسم بالعربية"
 
 #: apps/accounts/models.py:120
 msgid "Agent"
@@ -69,7 +71,8 @@ msgstr "الإنجليزية"
 msgid "email address"
 msgstr "البريد الإلكتروني"
 
-#: apps/accounts/models.py:129 apps/customers/models.py:50
+#: apps/accounts/models.py:129 apps/core/templatetags/audit.py:51
+#: apps/customers/models.py:50
 msgid "full name"
 msgstr "الاسم الكامل"
 
@@ -79,11 +82,13 @@ msgid ""
 "Your account has no department or branch, so there is nothing for it to show."
 msgstr "حسابك بلا قسم ولا فرع، فلا يوجد ما يُعرض."
 
-#: apps/accounts/views.py:174
+#: apps/accounts/views.py:173
 msgid ""
 "There is no demonstration account for that role. Run the seed command, or "
 "sign in with an email address and a password."
-msgstr "لا يوجد حساب تجريبي لهذا الدور. شغّل أمر التهيئة، أو سجّل الدخول ببريد إلكتروني وكلمة مرور."
+msgstr ""
+"لا يوجد حساب تجريبي لهذا الدور. شغّل أمر التهيئة، أو سجّل الدخول ببريد "
+"إلكتروني وكلمة مرور."
 
 #: apps/accounts/views_admin.py:67
 msgid "An email address and a name are required."
@@ -120,7 +125,7 @@ msgid ""
 "administrator to change them."
 msgstr "حسابك له قسم وفرع بالفعل. اطلب من مسؤول آخر تغييرهما."
 
-#: apps/attachments/models.py:52
+#: apps/attachments/models.py:52 apps/core/templatetags/audit.py:96
 msgid "file name"
 msgstr "اسم الملف"
 
@@ -264,6 +269,230 @@ msgstr "ستُغلق هذه المحادثة قريبًا إذا لم يرد أ�
 #: apps/chat/views.py:212
 msgid "This conversation cannot be attached to that ticket."
 msgstr "لا يمكن إرفاق هذه المحادثة بتلك التذكرة."
+
+#: apps/core/templatetags/audit.py:39
+msgid "assigned to"
+msgstr "مُسنَدة إلى"
+
+#: apps/core/templatetags/audit.py:40
+msgid "branch"
+msgstr "الفرع"
+
+#: apps/core/templatetags/audit.py:41
+msgid "category"
+msgstr "التصنيف"
+
+#: apps/core/templatetags/audit.py:42
+msgid "contact"
+msgstr "جهة الاتصال"
+
+#: apps/core/templatetags/audit.py:43 apps/core/templatetags/audit.py:167
+msgid "created"
+msgstr "أُنشئت"
+
+#: apps/core/templatetags/audit.py:44 apps/core/templatetags/audit.py:169
+msgid "deleted"
+msgstr "حُذفت"
+
+#: apps/core/templatetags/audit.py:45
+msgid "deleted by"
+msgstr "حذفها"
+
+#: apps/core/templatetags/audit.py:46
+msgid "department"
+msgstr "القسم"
+
+#: apps/core/templatetags/audit.py:47
+msgid "description"
+msgstr "الوصف"
+
+#: apps/core/templatetags/audit.py:48
+msgid "email"
+msgstr "البريد الإلكتروني"
+
+#: apps/core/templatetags/audit.py:49
+msgid "ended"
+msgstr "انتهت"
+
+#: apps/core/templatetags/audit.py:50
+msgid "reason for ending"
+msgstr "سبب الإنهاء"
+
+#: apps/core/templatetags/audit.py:52
+msgid "active"
+msgstr "نشط"
+
+#: apps/core/templatetags/audit.py:53
+msgid "language"
+msgstr "اللغة"
+
+#: apps/core/templatetags/audit.py:55
+msgid "organization"
+msgstr "المنشأة"
+
+#: apps/core/templatetags/audit.py:56 apps/core/templatetags/audit.py:74
+msgid "channel"
+msgstr "القناة"
+
+#: apps/core/templatetags/audit.py:57
+msgid "priority"
+msgstr "الأولوية"
+
+#: apps/core/templatetags/audit.py:58
+msgid "reference"
+msgstr "الرقم المرجعي"
+
+#: apps/core/templatetags/audit.py:59
+msgid "resolved"
+msgstr "تم الحل"
+
+#: apps/core/templatetags/audit.py:60
+msgid "role"
+msgstr "الدور"
+
+#: apps/core/templatetags/audit.py:61
+msgid "state"
+msgstr "الحالة"
+
+#: apps/core/templatetags/audit.py:62
+msgid "status"
+msgstr "الحالة"
+
+#: apps/core/templatetags/audit.py:63
+msgid "subject"
+msgstr "الموضوع"
+
+#: apps/core/templatetags/audit.py:64
+msgid "ticket"
+msgstr "التذكرة"
+
+#: apps/core/templatetags/audit.py:65
+msgid "updated"
+msgstr "حُدّثت"
+
+#: apps/core/templatetags/audit.py:66
+msgid "visibility"
+msgstr "الظهور"
+
+#: apps/core/templatetags/audit.py:71
+msgid "assigned"
+msgstr "أُسندت"
+
+#: apps/core/templatetags/audit.py:72
+msgid "author"
+msgstr "الكاتب"
+
+#: apps/core/templatetags/audit.py:73 apps/core/templatetags/audit.py:92
+msgid "message"
+msgstr "الرسالة"
+
+#: apps/core/templatetags/audit.py:75
+msgid "record type"
+msgstr "نوع السجل"
+
+#: apps/core/templatetags/audit.py:76
+msgid "conversation"
+msgstr "المحادثة"
+
+#: apps/core/templatetags/audit.py:77
+msgid "delivery error"
+msgstr "خطأ التسليم"
+
+#: apps/core/templatetags/audit.py:78
+msgid "delivery status"
+msgstr "حالة التسليم"
+
+#: apps/core/templatetags/audit.py:79
+msgid "direction"
+msgstr "الاتجاه"
+
+#: apps/core/templatetags/audit.py:80
+msgid "ended by"
+msgstr "أنهاها"
+
+#: apps/core/templatetags/audit.py:81
+msgid "external identifier"
+msgstr "المعرّف الخارجي"
+
+#: apps/core/templatetags/audit.py:82
+msgid "file"
+msgstr "الملف"
+
+#: apps/core/templatetags/audit.py:83
+msgid "first response"
+msgstr "أول رد"
+
+#: apps/core/templatetags/audit.py:84
+msgid "identifier"
+msgstr "المعرّف"
+
+#: apps/core/templatetags/audit.py:85
+msgid "idle warning sent"
+msgstr "تنبيه الخمول"
+
+#: apps/core/templatetags/audit.py:86
+msgid "primary"
+msgstr "الأساسي"
+
+#: apps/core/templatetags/audit.py:87
+msgid "staff access"
+msgstr "صلاحية الموظفين"
+
+#: apps/core/templatetags/audit.py:88
+msgid "superuser"
+msgstr "مستخدم متميز"
+
+#: apps/core/templatetags/audit.py:89
+msgid "kind"
+msgstr "النوع"
+
+#: apps/core/templatetags/audit.py:90
+msgid "last activity"
+msgstr "آخر نشاط"
+
+#: apps/core/templatetags/audit.py:91
+msgid "last signed in"
+msgstr "آخر تسجيل دخول"
+
+#: apps/core/templatetags/audit.py:94
+msgid "note"
+msgstr "ملاحظة"
+
+#: apps/core/templatetags/audit.py:95
+msgid "observer"
+msgstr "المراقب"
+
+#: apps/core/templatetags/audit.py:97
+msgid "preferred language"
+msgstr "اللغة المفضّلة"
+
+#: apps/core/templatetags/audit.py:98
+msgid "size"
+msgstr "الحجم"
+
+#: apps/core/templatetags/audit.py:99
+msgid "started"
+msgstr "بدأت"
+
+#: apps/core/templatetags/audit.py:100
+msgid "uploaded by"
+msgstr "رفعها"
+
+#: apps/core/templatetags/audit.py:101
+msgid "value"
+msgstr "القيمة"
+
+#: apps/core/templatetags/audit.py:102
+msgid "visitor token"
+msgstr "رمز الزائر"
+
+#: apps/core/templatetags/audit.py:168
+msgid "changed"
+msgstr "تغيّرت"
+
+#: apps/core/templatetags/audit.py:170
+msgid "accessed"
+msgstr "اطُّلع عليها"
 
 #: apps/customers/models.py:71
 msgid "Phone"
@@ -748,7 +977,7 @@ msgstr "التغييرات"
 msgid "System"
 msgstr "النظام"
 
-#: templates/core/audit_log.html:59
+#: templates/core/audit_log.html:84
 msgid "No entries match these filters."
 msgstr "لا توجد قيود مطابقة لهذه المرشحات."
 

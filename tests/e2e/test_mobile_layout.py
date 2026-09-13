@@ -140,3 +140,32 @@ def test_the_conversation_fits_a_phone(signed_in_page, live_server, chat_fixture
         "document.documentElement.scrollWidth - document.documentElement.clientWidth"
     )
     assert overflow <= 1, f"the conversation scrolls sideways by {overflow}px"
+
+
+def test_the_audit_log_fits_a_phone(admin_page, live_server):
+    """T063. Its rows used to render sixteen lines of "nothing -> value" each and push the
+    table off the screen — on a phone there is nowhere for that to go."""
+    admin_page.set_viewport_size(PHONE)
+    admin_page.goto(f"{live_server.url}/admin/audit/")
+    admin_page.wait_for_load_state("networkidle")
+
+    assert "403" not in admin_page.inner_text("body")[:40], "the page was not rendered"
+    overflow = admin_page.evaluate(
+        "document.documentElement.scrollWidth - document.documentElement.clientWidth"
+    )
+
+    assert overflow <= 1, f"the audit log scrolls sideways by {overflow}px on a 390px screen"
+
+
+def test_an_audit_row_does_not_grow_without_limit(admin_page, live_server):
+    """FR-025. Bounded, and scrolling inside its own cell rather than truncated — this is
+    evidence, so the remainder has to stay reachable."""
+    admin_page.goto(f"{live_server.url}/admin/audit/")
+    admin_page.wait_for_load_state("networkidle")
+
+    tallest = admin_page.evaluate(
+        """() => Math.max(0, ...[...document.querySelectorAll('.table__row')]
+             .map(el => el.getBoundingClientRect().height))"""
+    )
+
+    assert tallest <= 220, f"the tallest audit row is {tallest}px"

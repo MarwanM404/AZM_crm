@@ -207,20 +207,20 @@ horizontal scrolling or internal field names.
 
 ### Tests for User Story 6
 
-- [ ] T058 [P] [US6] Write `apps/core/tests/test_audit_readability.py` asserting a creation is presented as a creation rather than as every field changing from nothing — measured at 16 fields on a real ticket ([research.md](research.md) §8)
-- [ ] T059 [P] [US6] Extend `apps/core/tests/test_audit_readability.py` asserting a change lists only the fields that moved
-- [ ] T060 [P] [US6] Extend `apps/core/tests/test_audit_readability.py` asserting reverse relations — `conversations`, `inbound_logs` — are not listed as changed fields
-- [ ] T061 [P] [US6] Extend `apps/core/tests/test_audit_readability.py` asserting field names are translated and no internal identifier is shown
-- [ ] T062 [P] [US6] Extend `apps/core/tests/test_audit_readability.py` asserting nothing stored is altered by the rendering — entries are immutable (MVP FR-028) and this work is display only
-- [ ] T063 [P] [US6] Extend `tests/e2e/test_mobile_layout.py` asserting the audit log does not scroll sideways
+- [X] T058 [P] [US6] Write `apps/core/tests/test_audit_readability.py` asserting a creation is presented as a creation rather than as every field changing from nothing — measured at 16 fields on a real ticket ([research.md](research.md) §8)
+- [X] T059 [P] [US6] Extend `apps/core/tests/test_audit_readability.py` asserting a change lists only the fields that moved
+- [X] T060 [P] [US6] Extend `apps/core/tests/test_audit_readability.py` asserting reverse relations — `conversations`, `inbound_logs` — are not listed as changed fields
+- [X] T061 [P] [US6] Extend `apps/core/tests/test_audit_readability.py` asserting field names are translated and no internal identifier is shown
+- [X] T062 [P] [US6] Extend `apps/core/tests/test_audit_readability.py` asserting nothing stored is altered by the rendering — entries are immutable (MVP FR-028) and this work is display only
+- [X] T063 [P] [US6] Extend `tests/e2e/test_mobile_layout.py` asserting the audit log does not scroll sideways
 
 ### Implementation for User Story 6
 
-- [ ] T064 [US6] Present creations as creations in `apps/core/views.py` and `templates/core/audit_log.html`
-- [ ] T065 [US6] Filter reverse relations and unchanged fields out of what an entry displays, in `apps/core/templatetags/`
-- [ ] T066 [US6] Translate field names for display in `apps/core/templatetags/`, falling back to the stored name rather than to nothing when no translation exists
-- [ ] T067 [US6] Bound what one row shows in `templates/core/audit_log.html` and `static/css/base.css`, keeping the remainder reachable — nothing may become unreadable
-- [ ] T068 [US6] Extract and translate this phase's strings, then check with `tools/catalog.py status`
+- [X] T064 [US6] Present creations as creations in `apps/core/views.py` and `templates/core/audit_log.html`
+- [X] T065 [US6] Filter reverse relations and unchanged fields out of what an entry displays, in `apps/core/templatetags/`
+- [X] T066 [US6] Translate field names for display in `apps/core/templatetags/`, falling back to the stored name rather than to nothing when no translation exists
+- [X] T067 [US6] Bound what one row shows in `templates/core/audit_log.html` and `static/css/base.css`, keeping the remainder reachable — nothing may become unreadable
+- [X] T068 [US6] Extract and translate this phase's strings, then check with `tools/catalog.py status`
 
 **Checkpoint**: the audit log is usable as evidence rather than merely complete.
 

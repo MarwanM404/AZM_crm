@@ -1,5 +1,5 @@
 {% extends "shell.html" %}
-{% load i18n %}
+{% load i18n audit %}
 {% block title %}{% trans "Audit log" %}{% endblock %}
 {% block main %}
   <header class="page-head">
@@ -43,16 +43,38 @@
       <div class="table__row table__row--audit">
         <span class="muted">{{ entry.timestamp }}</span>
         <span class="trunc">{{ entry.actor.full_name|default:_("System") }}</span>
-        <span class="trunc">{{ entry.content_type.model }} · {{ entry.object_repr }}</span>
-        <span class="muted">{{ entry.get_action_display }}</span>
+        {% comment %}
+          `content_type.model` is an internal model name, in English. The record's own
+          representation is what a reader recognises, so it leads (FR-024).
+        {% endcomment %}
+        {% comment %}
+          `ltr` as well as `trunc`: a reference like AZM-2026-000002 is Latin text inside a
+          right-to-left page, and without it the browser truncates from the wrong end — every
+          row read "...-000002", losing the part that identifies the record.
+        {% endcomment %}
+        <span class="ltr trunc" title="{{ entry.object_repr }}">{{ entry.object_repr }}</span>
+        <span class="muted">{{ entry|action_label }}</span>
+        {% comment %}
+          A creation shows no change list: every field "changed from nothing", which is true
+          and useless, and the interesting fact — that the record was created — is already in
+          the action column (FR-022).
+
+          Reverse relations and internal field names are filtered and translated by
+          apps/core/templatetags/audit.py. Nothing stored is altered; entries are immutable
+          (MVP FR-028) and everything hidden here is still on the entry.
+        {% endcomment %}
         <span class="audit-changes">
-          {% for field, values in entry.changes_dict.items %}
-            <div class="audit-change">
-              <span class="audit-change__field">{{ field }}</span>
-              <span class="audit-change__from">{{ values.0|truncatechars:40 }}</span>
-              <span class="audit-change__to">{{ values.1|truncatechars:40 }}</span>
-            </div>
-          {% endfor %}
+          {% with changes=entry|readable_changes %}
+            {% for change in changes %}
+              <div class="audit-change">
+                <span class="audit-change__field">{{ change.label }}</span>
+                <span class="audit-change__from">{{ change.before|truncatechars:40 }}</span>
+                <span class="audit-change__to">{{ change.after|truncatechars:40 }}</span>
+              </div>
+            {% empty %}
+              <span class="muted">—</span>
+            {% endfor %}
+          {% endwith %}
         </span>
       </div>
     {% empty %}
