@@ -215,9 +215,26 @@ LOGIN_URL = "accounts:sign_in"
 # — their presence key simply expires — so this is swept rather than handled. A minute is
 # chosen against the reconnection grace period (60s): long enough that a brief dropout does
 # not evict a queue, short enough that nobody waits materially past the desk closing.
+# Spec assumptions, to be confirmed with agents before release — the two numbers most likely
+# to feel wrong in practice (spec.md, Assumptions).
+CHAT_RECONNECT_GRACE_SECONDS = 60
+CHAT_IDLE_LIMIT_SECONDS = 600
+CHAT_IDLE_WARNING_SECONDS = 480
+
 CELERY_BEAT_SCHEDULE = {
     "close-deserted-desks": {
         "task": "apps.chat.tasks.close_deserted_desks",
         "schedule": 60.0,
+    },
+    # Absence is the one state that cannot announce itself: a party who has gone silent sends
+    # no event saying so. Every fifteen seconds, so a dropout is acted on close to the grace
+    # period rather than up to a minute after it.
+    "sweep-interrupted-conversations": {
+        "task": "apps.chat.tasks.sweep_interrupted_conversations",
+        "schedule": 15.0,
+    },
+    "sweep-idle-conversations": {
+        "task": "apps.chat.tasks.sweep_idle_conversations",
+        "schedule": 30.0,
     },
 }

@@ -128,3 +128,16 @@ class User(AbstractBaseUser, PermissionsMixin, TimeStampedModel):
         super().save(*args, **kwargs)
         if was_active and not self.is_active:
             self.terminate_sessions()
+            self.release_live_conversations()
+
+    def release_live_conversations(self):
+        """Hand on any live chat this account was holding (live chat FR-034, MVP FR-026).
+
+        Here rather than in the deactivation view for the same reason `terminate_sessions` is:
+        an account can be deactivated from the admin, from a shell, or from a future bulk
+        action, and a customer left talking to a dismissed agent is not a failure that should
+        depend on which route was taken.
+        """
+        from apps.chat.services.lifecycle import agent_deactivated
+
+        agent_deactivated(self)

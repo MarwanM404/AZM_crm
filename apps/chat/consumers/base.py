@@ -78,6 +78,13 @@ class ChatConsumer(AsyncWebsocketConsumer):
             carry=event.get("carry") or {},
         )
 
+    async def chat_disconnect(self, event):
+        """Close this socket now — the account behind it was deactivated (MVP FR-026).
+
+        A handshake-time authorization check cannot expire on its own, so the revocation has
+        to be pushed."""
+        await self.close()
+
     async def chat_ended(self, event):
         await self.send_event(type="ended", reference=event.get("reference"))
 

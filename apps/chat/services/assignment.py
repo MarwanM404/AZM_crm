@@ -12,7 +12,7 @@ from django.db import transaction
 from django.utils import timezone
 
 from apps.chat.models import Conversation
-from apps.chat.services import presence
+from apps.chat.services import liveness, presence
 
 
 def assign(conversation: Conversation, candidate_user_ids) -> int | None:
@@ -42,6 +42,11 @@ def assign(conversation: Conversation, candidate_user_ids) -> int | None:
             # loses capacity for the lifetime of their session.
             presence.release_slot(user_id)
             raise
+
+        # Seeded here, at the one place an assignment can succeed, so no caller can forget.
+        # Without it the interruption sweep sees an agent who has never been "seen" on this
+        # conversation and requeues it within the grace period — every conversation, forever.
+        liveness.seen(conversation.pk, liveness.AGENT)
 
         conversation.refresh_from_db()
         return user_id

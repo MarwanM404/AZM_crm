@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-13 06:38+0000\n"
+"POT-Creation-Date: 2026-09-13 07:03+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -191,16 +191,24 @@ msgstr "Closed after inactivity"
 msgid "The desk closed while waiting"
 msgstr "The desk closed while waiting"
 
-#: apps/chat/services/lifecycle.py:39 apps/tickets/models.py:52
+#: apps/chat/services/lifecycle.py:40 apps/tickets/models.py:52
 #: templates/chat/console.html:3 templates/chat/console.html:11
 #: templates/chat/conversation.html:6 templates/chat/widget.html:3
 #: templates/chat/widget.html:10 templates/shell.html:19
 msgid "Live chat"
 msgstr "Live chat"
 
-#: apps/chat/services/lifecycle.py:96 templates/chat/widget.html:52
+#: apps/chat/services/lifecycle.py:102 templates/chat/widget.html:52
 msgid "This conversation has ended."
 msgstr "This conversation has ended."
+
+#: apps/chat/services/lifecycle.py:308
+msgid "The customer disconnected and did not return."
+msgstr "The customer disconnected and did not return."
+
+#: apps/chat/services/lifecycle.py:318 apps/chat/services/lifecycle.py:349
+msgid "Reconnecting you to the next available person."
+msgstr "Reconnecting you to the next available person."
 
 #: apps/chat/services/transcript.py:97
 #, python-format
@@ -213,6 +221,14 @@ msgstr[1] "Live chat %(reference)s attached (%(count)d messages)."
 #, python-format
 msgid "Transcript moved to %(reference)s."
 msgstr "Transcript moved to %(reference)s."
+
+#: apps/chat/tasks.py:106
+msgid "This conversation was closed after a period of inactivity."
+msgstr "This conversation was closed after a period of inactivity."
+
+#: apps/chat/tasks.py:113
+msgid "This conversation will close soon if nobody replies."
+msgstr "This conversation will close soon if nobody replies."
 
 #: apps/chat/views.py:212
 msgid "This conversation cannot be attached to that ticket."

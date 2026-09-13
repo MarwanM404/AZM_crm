@@ -14,7 +14,7 @@ from channels.db import database_sync_to_async
 from apps.accounts.models import User
 from apps.chat.consumers.base import ChatConsumer, RateLimiter
 from apps.chat.models import Conversation
-from apps.chat.services import groups, messaging, presence
+from apps.chat.services import groups, liveness, messaging, presence
 
 STAFF_ROLES = {User.Role.AGENT, User.Role.SUPERVISOR, User.Role.ADMINISTRATOR}
 
@@ -38,6 +38,7 @@ class AgentConsumer(ChatConsumer):
             await self._join_conversation(conversation_id)
 
         await self._mark_socket_open()
+        await self._still_here()
         await self.accept()
 
         # Replay anything a supervisor wrote while this socket was away (FR-024, T099).
@@ -61,6 +62,10 @@ class AgentConsumer(ChatConsumer):
         if not self.limiter.allow():
             await self.send_event(type="throttled")
             return
+
+        # Any frame is a sign of life on every conversation this agent holds. Their socket is
+        # one socket for all of them, so there is nothing per-conversation to refresh.
+        await self._still_here()
 
         if kind == "message":
             await self._reply(payload.get("conversation"), payload.get("text", ""))
@@ -225,3 +230,10 @@ class AgentConsumer(ChatConsumer):
         from apps.chat.services import pending
 
         return pending.drain(conversation_id, self.user.pk)
+
+    @database_sync_to_async
+    def _still_here(self):
+        for conversation_id in Conversation.objects.filter(
+            assigned_to=self.user, state=Conversation.State.ACTIVE
+        ).values_list("pk", flat=True):
+            liveness.seen(conversation_id, liveness.AGENT)

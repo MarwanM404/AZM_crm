@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-13 06:38+0000\n"
+"POT-Creation-Date: 2026-09-13 07:03+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -191,16 +191,24 @@ msgstr "أُغلقت بسبب عدم النشاط"
 msgid "The desk closed while waiting"
 msgstr "أُغلق المكتب أثناء الانتظار"
 
-#: apps/chat/services/lifecycle.py:39 apps/tickets/models.py:52
+#: apps/chat/services/lifecycle.py:40 apps/tickets/models.py:52
 #: templates/chat/console.html:3 templates/chat/console.html:11
 #: templates/chat/conversation.html:6 templates/chat/widget.html:3
 #: templates/chat/widget.html:10 templates/shell.html:19
 msgid "Live chat"
 msgstr "المحادثة المباشرة"
 
-#: apps/chat/services/lifecycle.py:96 templates/chat/widget.html:52
+#: apps/chat/services/lifecycle.py:102 templates/chat/widget.html:52
 msgid "This conversation has ended."
 msgstr "انتهت هذه المحادثة."
+
+#: apps/chat/services/lifecycle.py:308
+msgid "The customer disconnected and did not return."
+msgstr "انقطع اتصال العميل ولم يعد."
+
+#: apps/chat/services/lifecycle.py:318 apps/chat/services/lifecycle.py:349
+msgid "Reconnecting you to the next available person."
+msgstr "جارٍ توصيلك بأول موظف متاح."
 
 #: apps/chat/services/transcript.py:97
 #, python-format
@@ -217,6 +225,14 @@ msgstr[5] "تم إرفاق المحادثة المباشرة %(reference)s (%(co
 #, python-format
 msgid "Transcript moved to %(reference)s."
 msgstr "تم نقل نص المحادثة إلى %(reference)s."
+
+#: apps/chat/tasks.py:106
+msgid "This conversation was closed after a period of inactivity."
+msgstr "أُغلقت هذه المحادثة بعد فترة من عدم النشاط."
+
+#: apps/chat/tasks.py:113
+msgid "This conversation will close soon if nobody replies."
+msgstr "ستُغلق هذه المحادثة قريبًا إذا لم يرد أحد."
 
 #: apps/chat/views.py:212
 msgid "This conversation cannot be attached to that ticket."

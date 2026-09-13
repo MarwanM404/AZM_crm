@@ -303,19 +303,19 @@ conversation resumes with history intact and nothing sent in between is lost.
 
 ### Tests for User Story 7
 
-- [ ] T111 [P] [US7] Write `apps/chat/tests/test_reconnect.py` asserting a visitor reconnecting within the grace period resumes the same conversation with full history, presenting the same token
-- [ ] T112 [P] [US7] Write `apps/chat/tests/test_visitor_gone.py` asserting a visitor who does not return ends the conversation, saves the transcript, and tells the agent why rather than leaving them waiting (FR-033)
-- [ ] T113 [P] [US7] Write `apps/chat/tests/test_agent_gone.py` asserting an agent who does not return returns the conversation to the queue with its history, and the visitor is told they are being reconnected (FR-034)
-- [ ] T114 [P] [US7] Write `apps/chat/tests/test_missed_messages.py` asserting a message sent while a party was briefly disconnected is delivered on reconnection (FR-035)
-- [ ] T115 [P] [US7] Write `apps/chat/tests/test_idle_timeout.py` asserting both parties are warned before an idle conversation closes, not after (FR-036)
-- [ ] T116 [P] [US7] Write `apps/chat/tests/test_deactivated_agent.py` asserting an agent deactivated mid-conversation has their sockets closed and their conversation requeued (MVP FR-026)
+- [X] T111 [P] [US7] Write `apps/chat/tests/test_reconnect.py` asserting a visitor reconnecting within the grace period resumes the same conversation with full history, presenting the same token
+- [X] T112 [P] [US7] Write `apps/chat/tests/test_visitor_gone.py` asserting a visitor who does not return ends the conversation, saves the transcript, and tells the agent why rather than leaving them waiting (FR-033)
+- [X] T113 [P] [US7] Write `apps/chat/tests/test_agent_gone.py` asserting an agent who does not return returns the conversation to the queue with its history, and the visitor is told they are being reconnected (FR-034)
+- [X] T114 [P] [US7] Write `apps/chat/tests/test_missed_messages.py` asserting a message sent while a party was briefly disconnected is delivered on reconnection (FR-035)
+- [X] T115 [P] [US7] Write `apps/chat/tests/test_idle_timeout.py` asserting both parties are warned before an idle conversation closes, not after (FR-036)
+- [X] T116 [P] [US7] Write `apps/chat/tests/test_deactivated_agent.py` asserting an agent deactivated mid-conversation has their sockets closed and their conversation requeued (MVP FR-026)
 
 ### Implementation for User Story 7
 
-- [ ] T117 [US7] Implement the reconnection window in `apps/chat/services/lifecycle.py`, keyed on the same visitor token rather than a new one
-- [ ] T118 [US7] Implement requeueing in `apps/chat/services/lifecycle.py` for a conversation whose agent is lost, preserving its history and its ticket
-- [ ] T119 [US7] Implement replay of missed messages in `apps/chat/services/messaging.py`, read from the database rather than an in-memory buffer — the buffer is what a crash loses
-- [ ] T120 [US7] Implement the idle sweep in `apps/chat/tasks.py` on Celery Beat — warn, then close — and extract and compile translations for this phase
+- [X] T117 [US7] Implement the reconnection window in `apps/chat/services/lifecycle.py`, keyed on the same visitor token rather than a new one
+- [X] T118 [US7] Implement requeueing in `apps/chat/services/lifecycle.py` for a conversation whose agent is lost, preserving its history and its ticket
+- [X] T119 [US7] Implement replay of missed messages in `apps/chat/services/messaging.py`, read from the database rather than an in-memory buffer — the buffer is what a crash loses
+- [X] T120 [US7] Implement the idle sweep in `apps/chat/tasks.py` on Celery Beat — warn, then close — and extract and compile translations for this phase
 
 **Checkpoint**: quickstart scenarios 10 and 12 pass. A bad network is an inconvenience, not a
 data loss.

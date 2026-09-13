@@ -58,7 +58,11 @@ def record_and_broadcast(conversation, *, body: str, author=None, direction, vis
     # keep a slot occupied for someone who is gone.
     if visibility != Message.Visibility.INTERNAL:
         conversation.last_activity_at = timezone.now()
-        conversation.save(update_fields=["last_activity_at", "updated_at"])
+        # A conversation that woke up has not been warned about *this* idle period. Leaving
+        # the mark set would mean the next silence closed with no warning at all, which is
+        # exactly what FR-036 forbids.
+        conversation.idle_warned_at = None
+        conversation.save(update_fields=["last_activity_at", "idle_warned_at", "updated_at"])
 
     if visibility == Message.Visibility.INTERNAL:
         html = _render("chat/partials/whisper.html", message, conversation)
@@ -139,3 +143,22 @@ def broadcast_system(conversation, *, text: str, staff_only: bool = False) -> No
     _broadcast(groups.staff_group(conversation.pk), payload)
     if not staff_only:
         _broadcast(groups.public_group(conversation.pk), payload)
+
+
+def history_for_visitor(conversation) -> list[str]:
+    """Everything the customer is entitled to see, rendered, oldest first (FR-032, FR-035).
+
+    Read from the database rather than a buffer held in the process. A buffer is precisely
+    what a crash loses, and surviving a crash is half of what this feature is for — the other
+    half being a phone in a tunnel, which a buffer would survive but which is the easier case.
+
+    Goes through `public_messages_for`, the same filter every other customer-facing output
+    uses (MVP FR-015). This is a second path to the customer's screen, and a replay that read
+    the staff view would deliver every private note at once.
+    """
+    from apps.tickets.services.visibility import public_messages_for
+
+    return [
+        _render("chat/partials/message.html", message, conversation)
+        for message in public_messages_for(conversation.ticket)
+    ]

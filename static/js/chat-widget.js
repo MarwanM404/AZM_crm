@@ -11,6 +11,7 @@ function chatWidget() {
     errors: {},
     draft: "",
     position: null,
+    heartbeatTimer: null,
     reference: null,
     theyAreTyping: false,
     typingTimer: null,
@@ -62,8 +63,29 @@ function chatWidget() {
       };
 
       this.socket.onclose = () => {
+        clearInterval(this.heartbeatTimer);
         if (this.stage !== "ended") this.stage = "waiting";
       };
+
+      this.startHeartbeat();
+    },
+
+    /*
+     * A customer reading a long reply sends nothing for minutes, and the server cannot tell
+     * that apart from a phone that went into a tunnel. Without this they are swept as
+     * disconnected mid-conversation (FR-033) while sitting right there — and the agent is
+     * told they left.
+     *
+     * Twenty seconds against a sixty-second grace period: two heartbeats may be lost before
+     * anyone is considered gone.
+     */
+    startHeartbeat() {
+      clearInterval(this.heartbeatTimer);
+      this.heartbeatTimer = setInterval(() => {
+        if (this.socket && this.socket.readyState === WebSocket.OPEN) {
+          this.socket.send(JSON.stringify({ type: "heartbeat" }));
+        }
+      }, 20000);
     },
 
     handleControlFrame(frame) {

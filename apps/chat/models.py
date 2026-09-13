@@ -71,6 +71,10 @@ class Conversation(ScopedSoftDeleteModel):
     #: about the same ended conversation, and only one of them is a service problem.
     end_reason = models.CharField(max_length=25, choices=EndReason.choices, blank=True, default="")
     last_activity_at = models.DateTimeField(default=timezone.now)
+    #: Set when the idle warning was sent, so it is sent once rather than on every sweep
+    #: (FR-036). Cleared whenever the conversation becomes active again — a warning that
+    #: stayed set would mean the second idle period closed without any warning at all.
+    idle_warned_at = models.DateTimeField(null=True, blank=True)
 
     class Meta:
         ordering = ["-started_at"]
