@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-13 13:29+0000\n"
+"POT-Creation-Date: 2026-09-13 17:16+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -78,6 +78,12 @@ msgstr "الاسم الكامل"
 msgid ""
 "Your account has no department or branch, so there is nothing for it to show."
 msgstr "حسابك بلا قسم ولا فرع، فلا يوجد ما يُعرض."
+
+#: apps/accounts/views.py:174
+msgid ""
+"There is no demonstration account for that role. Run the seed command, or "
+"sign in with an email address and a password."
+msgstr "لا يوجد حساب تجريبي لهذا الدور. شغّل أمر التهيئة، أو سجّل الدخول ببريد إلكتروني وكلمة مرور."
 
 #: apps/accounts/views_admin.py:67
 msgid "An email address and a name are required."
@@ -408,11 +414,29 @@ msgstr "دعم AZM"
 msgid "Customer support desk"
 msgstr "مكتب دعم العملاء"
 
-#: templates/accounts/sign_in.html:61
+#: templates/accounts/sign_in.html:72
+msgid "Development sign-in"
+msgstr "تسجيل دخول للتطوير"
+
+#: templates/accounts/sign_in.html:82
+msgid "Request form"
+msgstr "نموذج الطلب"
+
+#: templates/accounts/sign_in.html:83
+msgid "Chat widget"
+msgstr "نافذة المحادثة"
+
+#: templates/accounts/sign_in.html:86
+msgid ""
+"These are the demonstration accounts. This section does not exist in "
+"production."
+msgstr "هذه هي الحسابات التجريبية. لا يظهر هذا القسم في بيئة التشغيل."
+
+#: templates/accounts/sign_in.html:92
 msgid "Not a member of staff? Send us a request."
 msgstr "لست من الموظفين؟ أرسل إلينا طلبًا."
 
-#: templates/accounts/sign_in.html:62
+#: templates/accounts/sign_in.html:93
 msgid "Open the request form"
 msgstr "افتح نموذج الطلب"
 

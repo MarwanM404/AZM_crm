@@ -39,3 +39,13 @@ EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 # Encryption of personal data at rest (constitution: Security & Access Control) is a
 # deployment-target property, not application code. See docs/decisions/006-deployment-target.md
 # (T144). Nothing here substitutes for it.
+
+
+# One-click sign-in, off unconditionally (FR-017).
+#
+# NOT read from the environment, and that is the whole point of writing it here. Everything
+# else in this module is configurable because deployments differ; this is not, because there
+# is no deployment that wants one-click administrator access on a public page. Reading it from
+# an environment variable would mean a single mistyped value turns the sign-in screen into an
+# open door, and "we would notice" is not a control.
+QUICK_SIGN_IN_ENABLED = False

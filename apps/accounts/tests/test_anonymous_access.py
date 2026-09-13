@@ -91,6 +91,12 @@ def test_exempt_list_is_small_and_deliberate():
       a session to reach the control that makes the page readable enough to start one. It
       writes a language cookie and nothing else, validates the code against LANGUAGES, and
       refuses a redirect target outside this host.
+    - accounts:quick_sign_in — reachable only when QUICK_SIGN_IN_ENABLED is on, which
+      production forces off without reading the environment. The view refuses on that setting
+      before anything else, so the exemption grants nothing the setting has not already
+      granted; and it must be exempt, because its whole purpose is use by somebody who has not
+      signed in. apps/accounts/tests/test_quick_sign_in.py asserts the route refuses when
+      disabled, called directly with no control rendered.
     """
     assert settings.LOGIN_EXEMPT_URL_NAMES == {
         "intake:form",
@@ -103,4 +109,5 @@ def test_exempt_list_is_small_and_deliberate():
         "chat:leave_queue",
         "javascript-catalog",
         "accounts:anonymous_language",
+        "accounts:quick_sign_in",
     }

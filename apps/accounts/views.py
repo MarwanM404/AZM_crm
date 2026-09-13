@@ -1,13 +1,15 @@
 from django.conf import settings
 from django.contrib.auth import login, logout
-from django.http import HttpResponse
+from django.http import Http404, HttpResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.http import url_has_allowed_host_and_scheme
 from django.utils.translation import activate
-from django.views.decorators.http import require_http_methods
+from django.utils.translation import gettext as _
+from django.views.decorators.http import require_http_methods, require_POST
 
 from apps.accounts.forms import SignInForm
+from apps.accounts.models import User
 
 
 def _adopt_language_chosen_before_signing_in(request, user):
@@ -43,7 +45,27 @@ def sign_in(request):
             return redirect("tickets:queue")
     else:
         form = SignInForm()
-    return render(request, "accounts/sign_in.html", {"form": form})
+    return render(
+        request,
+        "accounts/sign_in.html",
+        {"form": form, "quick_sign_in_roles": _quick_sign_in_roles()},
+    )
+
+
+def _quick_sign_in_roles():
+    """The roles the sign-in screen offers a one-click button for, or nothing at all.
+
+    Empty unless the setting is on, so the controls cannot appear where the route would refuse
+    them — but the route checks the setting itself and does not trust this. A hidden button is
+    presentation; the refusal is the control (FR-018).
+    """
+    if not getattr(settings, "QUICK_SIGN_IN_ENABLED", False):
+        return []
+
+    labels = dict(User.Role.choices)
+    return [
+        (role, labels.get(role, role)) for role in getattr(settings, "QUICK_SIGN_IN_ACCOUNTS", {})
+    ]
 
 
 @require_http_methods(["POST"])
@@ -117,3 +139,42 @@ def set_language_anonymously(request):
     )
     activate(language)
     return response
+
+
+@require_POST
+def quick_sign_in(request, role):
+    """Sign in as a demonstration account, for testing (FR-015).
+
+    Every refusal below comes before anything else happens, and the order is the design.
+
+    The setting is checked first. Hiding the control on the sign-in screen is presentation; it
+    does not disable the route behind it, and a route that works when its control is hidden is
+    a route somebody will find (FR-018). `config/settings/production.py` forces the setting off
+    without reading the environment, so there is no deployment value that reaches this line
+    with it on.
+
+    The account is then looked up by name from configuration, never by role. "Sign me in as an
+    agent" must not mean "whichever account happens to hold that role" — that is the difference
+    between a convenience and an authentication bypass (FR-019).
+    """
+    if not getattr(settings, "QUICK_SIGN_IN_ENABLED", False):
+        raise Http404
+
+    email = getattr(settings, "QUICK_SIGN_IN_ACCOUNTS", {}).get(role)
+    if email is None:
+        raise Http404
+
+    user = User.objects.filter(email=email, is_active=True).first()
+    if user is None:
+        # Deleted, renamed, or never seeded. It says so rather than signing somebody in as
+        # whoever is nearest — a convenience that guesses is worse than one that stops.
+        return HttpResponse(
+            _(
+                "There is no demonstration account for that role. Run the seed command, or "
+                "sign in with an email address and a password."
+            ),
+            status=404,
+        )
+
+    login(request, user, backend="django.contrib.auth.backends.ModelBackend")
+    return redirect("tickets:queue")

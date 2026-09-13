@@ -71,6 +71,33 @@ indistinguishable from one that expired, so a running sweep against an unreachab
 end every live conversation as "the visitor disconnected". The restart procedure is in
 [operations.md](operations.md), together with the load measurements and the tunables.
 
+### 6. One-click sign-in is off, and cannot be turned on
+*Added 2026-09-13 with [spec 003](../specs/003-fix-admin-and-signin/spec.md).*
+
+The sign-in screen can offer a button that signs somebody in as an agent, a supervisor or an
+administrator without a password. It exists for development and it must never reach a
+deployment, so the gate is designed around that failure rather than around the feature.
+
+`QUICK_SIGN_IN_ENABLED` defaults to `False`, and `config/settings/production.py` assigns it
+the literal `False` — **not** from the environment. That is the point: a value read from the
+environment can be off wherever it is checked and on in production, and one mistyped
+deployment variable would put one-click administrator access on a public page.
+
+Two tests hold it, in `apps/accounts/tests/test_quick_sign_in.py`:
+
+- `test_production_sets_it_off_literally` reads the production module's source and fails if
+  the assignment is anything but the literal. Rewriting it to read the environment fails this.
+- `test_production_cannot_be_talked_into_enabling_it` imports the module with the environment
+  variable set to `1`, `true`, `True`, `yes` and `on`, and fails if the value moves.
+
+A third, `test_the_route_refuses_when_disabled`, calls the route directly with no control
+rendered anywhere. That is the one to keep: hiding a button is presentation, and a route that
+still works when its button is hidden is a route somebody will find.
+
+Nothing to verify before release beyond confirming those tests run, because there is nothing
+an operator can configure here. If the sign-in screen of a deployment ever shows a
+"Development sign-in" section, the deployment is not using the production settings module.
+
 ---
 
 ## Not blocking, but unverified by a person

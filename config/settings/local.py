@@ -24,3 +24,9 @@ CACHES = {
 }
 
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+
+
+# On for local development — the reason this feature exists. `config/settings/production.py`
+# forces it off, and apps/accounts/tests/test_quick_sign_in.py proves that no environment
+# value can change it there.
+QUICK_SIGN_IN_ENABLED = True

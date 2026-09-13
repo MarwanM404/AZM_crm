@@ -56,6 +56,36 @@
     </form>
   </div>
 
+    {% if quick_sign_in_roles %}
+      {% comment %}
+        Development only (FR-015 to FR-019). Rendering is presentation; the protection is the
+        route, which refuses on the setting before anything else — production forces that
+        setting off without reading the environment, so hiding this is a convenience and not a
+        control. See apps/accounts/views.py and apps/accounts/tests/test_quick_sign_in.py.
+
+        There is no customer here on purpose. Visitors are anonymous until the portal phase,
+        so "see what a customer sees" is a link to their screens, not an account.
+      {% endcomment %}
+      <div class="signin__demo">
+        <p class="signin__demo-title">{% trans "Development sign-in" %}</p>
+        <div class="signin__demo-row">
+          {% for role, label in quick_sign_in_roles %}
+            <form method="post" action="{% url 'accounts:quick_sign_in' role %}">
+              {% csrf_token %}
+              <button type="submit" class="btn btn--quiet btn--sm">{{ label }}</button>
+            </form>
+          {% endfor %}
+        </div>
+        <p class="signin__demo-row">
+          <a href="{% url 'intake:form' %}">{% trans "Request form" %}</a>
+          <a href="{% url 'chat:widget' %}">{% trans "Chat widget" %}</a>
+        </p>
+        <p class="muted signin__demo-note">
+          {% trans "These are the demonstration accounts. This section does not exist in production." %}
+        </p>
+      </div>
+    {% endif %}
+
   <p class="signin__foot muted">
     {% blocktrans %}Not a member of staff? Send us a request.{% endblocktrans %}
     <a href="{% url 'intake:form' %}">{% trans "Open the request form" %}</a>

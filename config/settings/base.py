@@ -219,6 +219,12 @@ LOGIN_EXEMPT_URL_NAMES = {
     # sign-in page itself does: you cannot require a session to reach the control that makes
     # the page readable enough to start one.
     "accounts:anonymous_language",
+    # Reachable only when QUICK_SIGN_IN_ENABLED is on, which production forces off without
+    # reading the environment. The view refuses on the setting before anything else, so
+    # exempting it from the sign-in wall grants nothing that the setting has not already
+    # granted — and it must be exempt, because its entire purpose is to be used by somebody
+    # who has not signed in.
+    "accounts:quick_sign_in",
 }
 LOGIN_URL = "accounts:sign_in"
 
@@ -249,4 +255,23 @@ CELERY_BEAT_SCHEDULE = {
         "task": "apps.chat.tasks.sweep_idle_conversations",
         "schedule": 30.0,
     },
+}
+
+
+# --- one-click sign-in for testing (FR-015 to FR-019) ---
+#
+# Off by default, because a convenience that is on unless switched off is on in every place
+# nobody remembered to switch it off — and what this switches on is signing in as an
+# administrator without a password.
+#
+# It is safe to *have* only because it offers the `seed_demo` accounts, whose passwords are
+# already in this repository: it discloses nothing that is not already disclosed. Pointed at a
+# real account it would be an authentication bypass outright, which is why the accounts are
+# named here rather than found by role.
+QUICK_SIGN_IN_ENABLED = False
+
+QUICK_SIGN_IN_ACCOUNTS = {
+    "AGENT": "agent@example.com",
+    "SUPERVISOR": "supervisor@example.com",
+    "ADMINISTRATOR": "admin@example.com",
 }

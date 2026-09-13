@@ -178,21 +178,21 @@ rather than the feature, and T047 matters more than T046.
 
 ### Tests for User Story 5
 
-- [ ] T046 [P] [US5] Write `apps/accounts/tests/test_quick_sign_in.py` asserting that, when enabled, each of the three roles can be signed in as in one action
-- [ ] T047 [P] [US5] Extend `apps/accounts/tests/test_quick_sign_in.py` asserting the route refuses when the feature is disabled, **called directly with no control rendered** — hiding a button does not disable the route behind it (FR-018)
-- [ ] T048 [P] [US5] Extend `apps/accounts/tests/test_quick_sign_in.py` asserting `config/settings/production.py` evaluates the setting to off, and that no environment value changes that (FR-017)
-- [ ] T049 [P] [US5] Extend `apps/accounts/tests/test_quick_sign_in.py` asserting the feature never authenticates an account that is not demonstration data, including when asked for one by name (FR-019)
-- [ ] T050 [P] [US5] Extend `apps/accounts/tests/test_quick_sign_in.py` asserting a missing or renamed demonstration account fails visibly rather than signing someone in as whoever is nearest
-- [ ] T051 [P] [US5] Write `tests/e2e/test_sign_in_visual.py` coverage asserting the customer-facing links reach the request form and the chat widget without an account
+- [X] T046 [P] [US5] Write `apps/accounts/tests/test_quick_sign_in.py` asserting that, when enabled, each of the three roles can be signed in as in one action
+- [X] T047 [P] [US5] Extend `apps/accounts/tests/test_quick_sign_in.py` asserting the route refuses when the feature is disabled, **called directly with no control rendered** — hiding a button does not disable the route behind it (FR-018)
+- [X] T048 [P] [US5] Extend `apps/accounts/tests/test_quick_sign_in.py` asserting `config/settings/production.py` evaluates the setting to off, and that no environment value changes that (FR-017)
+- [X] T049 [P] [US5] Extend `apps/accounts/tests/test_quick_sign_in.py` asserting the feature never authenticates an account that is not demonstration data, including when asked for one by name (FR-019)
+- [X] T050 [P] [US5] Extend `apps/accounts/tests/test_quick_sign_in.py` asserting a missing or renamed demonstration account fails visibly rather than signing someone in as whoever is nearest
+- [X] T051 [P] [US5] Write `tests/e2e/test_sign_in_visual.py` coverage asserting the customer-facing links reach the request form and the chat widget without an account
 
 ### Implementation for User Story 5
 
-- [ ] T052 [US5] Add the quick sign-in setting to `config/settings/base.py`, defaulting to off
-- [ ] T053 [US5] Force it off in `config/settings/production.py` unconditionally, not read from the environment — a single mistyped deployment variable must not put one-click administrator access on a public page
-- [ ] T054 [US5] Implement the quick sign-in route in `apps/accounts/views.py`, refusing on the setting before anything else and accepting only demonstration accounts
-- [ ] T055 [US5] Render the controls in `templates/accounts/sign_in.html` only when enabled, alongside links to the customer-facing screens, which have no account to sign into
-- [ ] T056 [US5] Note in `docs/production-readiness.md` that this exists, that production forces it off, and which test proves it
-- [ ] T057 [US5] Extract and translate this phase's strings, then check with `tools/catalog.py status`
+- [X] T052 [US5] Add the quick sign-in setting to `config/settings/base.py`, defaulting to off
+- [X] T053 [US5] Force it off in `config/settings/production.py` unconditionally, not read from the environment — a single mistyped deployment variable must not put one-click administrator access on a public page
+- [X] T054 [US5] Implement the quick sign-in route in `apps/accounts/views.py`, refusing on the setting before anything else and accepting only demonstration accounts
+- [X] T055 [US5] Render the controls in `templates/accounts/sign_in.html` only when enabled, alongside links to the customer-facing screens, which have no account to sign into
+- [X] T056 [US5] Note in `docs/production-readiness.md` that this exists, that production forces it off, and which test proves it
+- [X] T057 [US5] Extract and translate this phase's strings, then check with `tools/catalog.py status`
 
 **Checkpoint**: three roles reachable in one click where it is enabled, and unreachable by any route where it is not.
 
