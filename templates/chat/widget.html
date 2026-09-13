@@ -35,7 +35,17 @@
 
     <section class="card chat-panel" x-show="stage === 'chatting' || stage === 'ended'" x-cloak>
       {# The socket delivers rendered HTML, which htmx appends here (ADR-008). #}
-      <div id="chat-thread" class="chat-thread"></div>
+      {% comment %}
+        A live region, which no other screen in this product needs. Everywhere else, new
+        content arrives because the user asked for it — they clicked, and they know to look.
+        Here it arrives because somebody else typed, and without `aria-live` a screen-reader
+        user is told nothing at all: the reply is on the page and they have no way to know.
+
+        `polite` rather than `assertive` so an arriving message waits for the user to finish
+        what they are hearing, and `additions` so the whole conversation is not re-read every
+        time one line is appended.
+      {% endcomment %}
+      <div id="chat-thread" class="chat-thread" role="log" aria-live="polite" aria-relevant="additions" aria-atomic="false" aria-label="{% trans 'Conversation' %}"></div>
 
       <p class="chat-typing" x-show="theyAreTyping" x-cloak>
         {% trans "Typing…" %}

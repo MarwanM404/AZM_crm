@@ -9,7 +9,9 @@ adds an unprefetched lookup to a template.
 """
 
 import pytest
+from django.db import connection
 from django.test import Client
+from django.test.utils import CaptureQueriesContext
 from django.urls import reverse
 
 from apps.customers.models import Organization
@@ -208,3 +210,152 @@ def test_organization_sidebar_still_shows_contact_details_after_prefetch(workloa
 
     assert "person0@example.com" in body
     assert "Person 0" in body
+
+
+# --- live chat (T125) ---
+#
+# The console shows several conversations at once, each with its own customer context, which
+# is exactly the shape that grows a query per row. The property asserted is the same as above:
+# not a fixed budget, but that the count is identical at one conversation and at several.
+
+
+def _make_conversations(count, *, department, branch, category, agent):
+    from django.utils import timezone
+
+    from apps.chat.models import Conversation
+    from apps.customers.models import Organization
+    from apps.tickets.models import Message, Ticket
+
+    organization = Organization.objects.create(
+        name="Chatty Co", department=department, branch=branch
+    )
+    made = []
+    for i in range(count):
+        contact, _ = find_or_create_contact(
+            full_name=f"Chatter {i}",
+            email=f"chatter{i}@example.com",
+            department=department,
+            branch=branch,
+        )
+        contact.organization = organization
+        contact.save(update_fields=["organization"])
+        ticket = Ticket.objects.create(
+            contact=contact,
+            organization=organization,
+            subject=f"Chat {i}",
+            description="",
+            category=category,
+            origin_channel=Ticket.Channel.CHAT,
+            department=department,
+            branch=branch,
+        )
+        Message.objects.create(
+            ticket=ticket,
+            author=None,
+            direction=Message.Direction.INBOUND,
+            visibility=Message.Visibility.PUBLIC,
+            channel=Ticket.Channel.CHAT,
+            body=f"Hello {i}",
+        )
+        made.append(
+            Conversation.objects.create(
+                ticket=ticket,
+                contact=contact,
+                visitor_token_hash=f"hash-{i}",
+                department=department,
+                branch=branch,
+                assigned_to=agent,
+                state=Conversation.State.ACTIVE,
+                assigned_at=timezone.now(),
+            )
+        )
+    return made
+
+
+@pytest.mark.django_db
+def test_the_console_does_not_query_per_conversation(
+    agent, department, branch, category, django_assert_num_queries
+):
+    """An agent holding three conversations is the ordinary case, and each one carries a
+    contact, an organization and contact details beside it — a query per row here is three
+    round trips on every page load, growing with how busy the agent is."""
+    from apps.chat.services.redis_client import reset_for_tests
+
+    reset_for_tests()
+    client = Client()
+    client.force_login(agent)
+
+    _make_conversations(1, department=department, branch=branch, category=category, agent=agent)
+    with CaptureQueriesContext(connection) as few:
+        client.get(reverse("chat:console"))
+
+    _make_conversations(4, department=department, branch=branch, category=category, agent=agent)
+    with CaptureQueriesContext(connection) as many:
+        client.get(reverse("chat:console"))
+
+    assert len(many) == len(few), (
+        f"The console issued {len(few)} queries for one conversation and {len(many)} for "
+        "five. Something in chat/console.html or its partials reads through a relation that "
+        "is not prefetched."
+    )
+    reset_for_tests()
+
+
+@pytest.mark.django_db
+def test_the_conversation_view_does_not_query_per_message(
+    agent, department, branch, category, django_assert_num_queries
+):
+    """A long conversation is the normal end state of a short one."""
+    from apps.chat.services.redis_client import reset_for_tests
+    from apps.tickets.models import Message, Ticket
+
+    reset_for_tests()
+    client = Client()
+    client.force_login(agent)
+    conversation = _make_conversations(
+        1, department=department, branch=branch, category=category, agent=agent
+    )[0]
+
+    with CaptureQueriesContext(connection) as few:
+        client.get(reverse("chat:conversation", args=[conversation.pk]))
+
+    for i in range(20):
+        Message.objects.create(
+            ticket=conversation.ticket,
+            author=agent,
+            direction=Message.Direction.OUTBOUND,
+            visibility=Message.Visibility.PUBLIC,
+            channel=Ticket.Channel.CHAT,
+            body=f"Reply {i}",
+        )
+
+    with CaptureQueriesContext(connection) as many:
+        client.get(reverse("chat:conversation", args=[conversation.pk]))
+
+    assert len(many) == len(few), (
+        f"The conversation view issued {len(few)} queries with one message and {len(many)} "
+        "with twenty-one. The author lookup in chat/partials/message.html is the usual cause."
+    )
+    reset_for_tests()
+
+
+@pytest.mark.django_db
+def test_the_supervision_list_does_not_query_per_conversation(
+    supervisor, department, branch, category, agent, django_assert_num_queries
+):
+    from apps.chat.services.redis_client import reset_for_tests
+
+    reset_for_tests()
+    client = Client()
+    client.force_login(supervisor)
+
+    _make_conversations(1, department=department, branch=branch, category=category, agent=agent)
+    with CaptureQueriesContext(connection) as few:
+        client.get(reverse("chat:supervise"))
+
+    _make_conversations(4, department=department, branch=branch, category=category, agent=agent)
+    with CaptureQueriesContext(connection) as many:
+        client.get(reverse("chat:supervise"))
+
+    assert len(many) == len(few)
+    reset_for_tests()

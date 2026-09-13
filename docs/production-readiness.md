@@ -56,8 +56,20 @@ through whatever proxy sits in front of it. A proxy that closes idle connections
 seconds will disconnect every quiet conversation.
 
 Redis is no longer merely useful. Without it there is no chat: it carries the channel layer,
-agent presence and the waiting queue. A Redis outage now degrades a customer-facing feature
-rather than delaying a background job.
+agent presence, the waiting queue and connection liveness. A Redis outage now degrades a
+customer-facing feature rather than delaying a background job.
+
+**Two things about that changed again in phase 9, and both need an operator to know them.**
+
+Celery *Beat* is now load-bearing, not only a worker. Three periodic sweeps uphold three
+requirements — nobody waits for a closed desk (FR-042), a party who went silent is acted on
+(FR-033, FR-034), and an idle conversation is warned before it closes (FR-036). With Beat
+stopped, nothing fails: the guarantees simply stop holding, quietly.
+
+And **Beat must be stopped before Redis is**. A liveness key that cannot be read is
+indistinguishable from one that expired, so a running sweep against an unreachable Redis would
+end every live conversation as "the visitor disconnected". The restart procedure is in
+[operations.md](operations.md), together with the load measurements and the tunables.
 
 ---
 

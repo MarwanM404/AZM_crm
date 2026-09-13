@@ -324,20 +324,20 @@ data loss.
 
 ## Phase 10: Polish & Cross-Cutting Concerns
 
-- [ ] T121 [P] Write `tests/e2e/test_two_party_chat.py` driving **two real browsers at once** through a whole conversation — the only test that exercises what two people actually experience
-- [ ] T122 [P] Extend `tests/e2e/test_rtl_layout.py` to the chat widget and console, measuring rendered geometry as it already does for the queue and ticket detail
-- [ ] T123 [P] Write `tests/e2e/test_whisper_visual.py` asserting the private note is distinguishable in a real browser under a greyscale filter, as `test_internal_note_visual.py` does for the ticket thread
-- [ ] T124 [P] Extend `tests/test_scope_isolation.py` to cover the chat routes, so the 404-not-403 sweep includes them automatically
-- [ ] T125 [P] Add query-count budgets for the console and the conversation view in `tests/test_query_budget.py`, asserting queries do not grow with the number of conversations held
-- [ ] T126 [P] Load-test 150 concurrent conversations against the assumed 50 agents, recording the result in `docs/operations.md` rather than asserting a timing in the suite
-- [ ] T127 [P] Verify the widget on a phone in `tests/e2e/test_mobile_layout.py` — chat is the most likely of all these screens to be used on one
-- [ ] T128 [P] Accessibility pass over the widget and console in `tests/e2e/test_accessibility.py`: a live region so a screen reader announces arriving messages, which no other screen in this product needs
-- [ ] T129 [P] Complete both translation catalogs and confirm `tools/catalog.py status` reports nothing missing and nothing fuzzy
-- [ ] T130 Review every consumer for database access outside `database_sync_to_async`, and for business logic that belongs in `services/`
-- [ ] T131 Document the chat operator's view in `docs/agent-guide.md` — going online, capacity, and what a private note is — in Arabic and English
-- [ ] T132 Document supervision in `docs/agent-guide.md`: what a supervisor can see, what is recorded when they watch, and that agents know observation is logged
-- [ ] T133 Update `docs/production-readiness.md`: Redis is now required for the product to function at all, not only for background jobs
-- [ ] T134 Run all twelve validation scenarios in [quickstart.md](quickstart.md) in both languages
+- [X] T121 [P] Write `tests/e2e/test_two_party_chat.py` driving **two real browsers at once** through a whole conversation — the only test that exercises what two people actually experience
+- [X] T122 [P] Extend `tests/e2e/test_rtl_layout.py` to the chat widget and console, measuring rendered geometry as it already does for the queue and ticket detail
+- [X] T123 [P] Write `tests/e2e/test_whisper_visual.py` asserting the private note is distinguishable in a real browser under a greyscale filter, as `test_internal_note_visual.py` does for the ticket thread
+- [X] T124 [P] Extend `tests/test_scope_isolation.py` to cover the chat routes, so the 404-not-403 sweep includes them automatically
+- [X] T125 [P] Add query-count budgets for the console and the conversation view in `tests/test_query_budget.py`, asserting queries do not grow with the number of conversations held
+- [X] T126 [P] Load-test 150 concurrent conversations against the assumed 50 agents, recording the result in `docs/operations.md` rather than asserting a timing in the suite
+- [X] T127 [P] Verify the widget on a phone in `tests/e2e/test_mobile_layout.py` — chat is the most likely of all these screens to be used on one
+- [X] T128 [P] Accessibility pass over the widget and console in `tests/e2e/test_accessibility.py`: a live region so a screen reader announces arriving messages, which no other screen in this product needs
+- [X] T129 [P] Complete both translation catalogs and confirm `tools/catalog.py status` reports nothing missing and nothing fuzzy
+- [X] T130 Review every consumer for database access outside `database_sync_to_async`, and for business logic that belongs in `services/`
+- [X] T131 Document the chat operator's view in `docs/agent-guide.md` — going online, capacity, and what a private note is — in Arabic and English
+- [X] T132 Document supervision in `docs/agent-guide.md`: what a supervisor can see, what is recorded when they watch, and that agents know observation is logged
+- [X] T133 Update `docs/production-readiness.md`: Redis is now required for the product to function at all, not only for background jobs
+- [X] T134 Run all twelve validation scenarios in [quickstart.md](quickstart.md) in both languages
 
 ---
 

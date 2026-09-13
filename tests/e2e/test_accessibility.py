@@ -93,3 +93,87 @@ def test_document_declares_its_language(signed_in_page, live_server):
     """Without a lang attribute a screen reader reads Arabic with English pronunciation."""
     signed_in_page.goto(f"{live_server.url}/tickets/")
     assert signed_in_page.evaluate("document.documentElement.lang") in ("ar", "en")
+
+
+# --- live chat (T128) ---
+
+
+def test_the_conversation_is_a_live_region(signed_in_page, live_server, chat_fixtures):
+    """The one thing chat needs that no other screen here does.
+
+    Everywhere else in this product, new content arrives because the user asked for it — they
+    clicked, and they know to look. In a conversation it arrives because somebody else typed.
+    Without a live region a screen-reader user is told nothing: the reply is on the page and
+    they have no way to know it appeared.
+    """
+    signed_in_page.goto(f"{live_server.url}/chat/conversations/{chat_fixtures['conversation'].pk}/")
+    signed_in_page.wait_for_load_state("networkidle")
+
+    thread = signed_in_page.eval_on_selector(
+        "#chat-thread",
+        """el => ({
+            live: el.getAttribute('aria-live'),
+            role: el.getAttribute('role'),
+            relevant: el.getAttribute('aria-relevant'),
+            label: el.getAttribute('aria-label'),
+        })""",
+    )
+
+    assert (
+        thread["live"] == "polite"
+    ), "the conversation is not a live region; an arriving message is announced to nobody"
+    assert thread["role"] == "log"
+    assert (
+        thread["relevant"] == "additions"
+    ), "without aria-relevant=additions the whole conversation is re-read on every message"
+    assert thread["label"]
+
+
+def test_the_visitor_widget_is_a_live_region(browser, live_server, chat_fixtures):
+    """The customer's side matters more, not less: they have no console to fall back on."""
+    context = browser.new_context(locale="ar")
+    page = context.new_page()
+    try:
+        page.goto(f"{live_server.url}/chat/widget/")
+        page.wait_for_load_state("networkidle")
+
+        live = page.eval_on_selector("#chat-thread", "el => el.getAttribute('aria-live')")
+        assert live == "polite"
+    finally:
+        page.close()
+        context.close()
+
+
+def test_the_message_composer_is_labelled(signed_in_page, live_server, chat_fixtures):
+    """A textarea a screen reader announces only as "edit text"."""
+    signed_in_page.goto(f"{live_server.url}/chat/console/")
+    signed_in_page.wait_for_load_state("networkidle")
+
+    unlabelled = signed_in_page.eval_on_selector_all(
+        "textarea",
+        """els => els.filter(el => {
+            if (el.getAttribute('aria-label')) return false;
+            if (el.id && document.querySelector(`label[for="${el.id}"]`)) return false;
+            return !el.closest('label');
+        }).map(el => el.className || el.name || '(unnamed)')""",
+    )
+
+    assert not unlabelled, f"textareas with no accessible name: {unlabelled}"
+
+
+def test_the_private_note_is_announced_as_private(signed_in_page, live_server, chat_fixtures):
+    """The restriction has to reach a screen reader as words, not as a colour or an icon.
+
+    The lock glyph is aria-hidden precisely so it is not read as "lock" before the sentence
+    that actually says what the note is.
+    """
+    signed_in_page.goto(f"{live_server.url}/chat/conversations/{chat_fixtures['conversation'].pk}/")
+    signed_in_page.wait_for_load_state("networkidle")
+
+    text = signed_in_page.inner_text(".chat-msg--whisper")
+    assert "لا يراها العميل" in text
+
+    hidden_glyph = signed_in_page.eval_on_selector(
+        ".chat-msg--whisper [aria-hidden='true']", "el => el.textContent.trim()"
+    )
+    assert hidden_glyph

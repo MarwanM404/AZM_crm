@@ -126,3 +126,61 @@ def test_english_interface_still_reads_left_to_right(page, live_server, rtl_fixt
     assert page.evaluate("document.documentElement.dir") == "ltr"
     nav = _box(page, ".shell__nav")
     assert nav["left"] < 2, "The navigation should be on the left in the English interface"
+
+
+# --- live chat (T122) ---
+
+
+def test_the_chat_console_mirrors(signed_in_page, live_server, chat_fixtures):
+    signed_in_page.goto(f"{live_server.url}/chat/console/")
+    signed_in_page.wait_for_load_state("networkidle")
+
+    assert signed_in_page.evaluate("document.documentElement.dir") == "rtl"
+    box = _box(signed_in_page, ".table__row--chat")
+    assert box["direction"] == "rtl"
+
+
+def test_a_chat_message_starts_from_the_right(signed_in_page, live_server, chat_fixtures):
+    """A bubble whose text begins on the left is the defect Arabic users report first."""
+    signed_in_page.goto(f"{live_server.url}/chat/conversations/{chat_fixtures['conversation'].pk}/")
+    signed_in_page.wait_for_load_state("networkidle")
+
+    box = _box(signed_in_page, ".chat-msg")
+    assert box["direction"] == "rtl"
+    assert box["borderLeftWidth"] != box["borderRightWidth"] or box["borderLeftWidth"] == "0px"
+
+
+def test_the_chat_thread_does_not_overflow_its_column(signed_in_page, live_server, chat_fixtures):
+    """A panel wider than its container pushes a horizontal scrollbar onto the whole page,
+    which in RTL scrolls away from the text rather than towards it."""
+    signed_in_page.goto(f"{live_server.url}/chat/conversations/{chat_fixtures['conversation'].pk}/")
+    signed_in_page.wait_for_load_state("networkidle")
+
+    overflow = signed_in_page.evaluate(
+        "document.documentElement.scrollWidth - document.documentElement.clientWidth"
+    )
+    assert overflow <= 1, f"the page scrolls horizontally by {overflow}px"
+
+
+def test_the_visitor_widget_mirrors_for_an_arabic_browser(browser, live_server, chat_fixtures):
+    """The customer's panel is the one screen a non-staff Arabic speaker sees.
+
+    Driven with an Arabic browser locale, because a visitor is anonymous: there is no stored
+    preference to read, so the language comes from `Accept-Language` exactly as it does on the
+    public request form. An English-by-default page for a visitor whose browser asks for
+    English is the existing, deliberate behaviour — not a chat defect.
+    """
+    context = browser.new_context(locale="ar")
+    page = context.new_page()
+    try:
+        page.goto(f"{live_server.url}/chat/widget/")
+        page.wait_for_load_state("networkidle")
+
+        assert page.evaluate("document.documentElement.dir") == "rtl"
+        overflow = page.evaluate(
+            "document.documentElement.scrollWidth - document.documentElement.clientWidth"
+        )
+        assert overflow <= 1, f"the widget scrolls horizontally by {overflow}px"
+    finally:
+        page.close()
+        context.close()

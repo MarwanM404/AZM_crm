@@ -18,7 +18,17 @@
 
   <div class="detail">
     <section class="detail__thread">
-      <div id="chat-thread" class="chat-thread">
+      {% comment %}
+        A live region, which no other screen in this product needs. Everywhere else, new
+        content arrives because the user asked for it — they clicked, and they know to look.
+        Here it arrives because somebody else typed, and without `aria-live` a screen-reader
+        user is told nothing at all: the reply is on the page and they have no way to know.
+
+        `polite` rather than `assertive` so an arriving message waits for the user to finish
+        what they are hearing, and `additions` so the whole conversation is not re-read every
+        time one line is appended.
+      {% endcomment %}
+      <div id="chat-thread" class="chat-thread" role="log" aria-live="polite" aria-relevant="additions" aria-atomic="false" aria-label="{% trans 'Conversation' %}">
         {% for message in messages_ %}
           {% if message.visibility == 'INTERNAL' %}
             {% include "chat/partials/whisper.html" %}

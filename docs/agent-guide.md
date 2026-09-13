@@ -40,6 +40,56 @@ follows your account, so it holds on any computer you sign in from.
 
 ---
 
+### Live chat
+
+**Going online.** Chat is at `/chat/console/`. Nothing reaches you until you press **Go
+online** — the system never assigns a conversation to someone who has not said they are there.
+Customers are only offered chat while at least one agent is online; when nobody is, they see
+the request form instead. So going online is not a preference. It is what opens the desk.
+
+**Capacity.** You hold three conversations at once by default, and a fourth goes to somebody
+else or waits in the queue. The number beside your status is how many you can still take. An
+administrator can change it for you.
+
+**Going offline.** You cannot go offline while you are still holding conversations. The button
+refuses and tells you how many are open. End them first, or hand them over by ending and
+letting the queue reassign. This exists because "I am done for the day" would otherwise leave
+a customer typing into a conversation nobody is reading.
+
+**If your connection drops.** Come back within a minute and you keep your conversations, with
+everything said while you were away. Longer than that and they return to the queue with their
+full history, and the customer is told they are being reconnected — they are not asked to
+start again.
+
+**The ticket.** Every chat is a ticket from the moment it starts, so nothing is ever lost if a
+conversation ends badly. The customer is not shown the reference until it ends, because you
+may attach the conversation to a ticket they already had. If you do, the whole transcript
+moves there and the placeholder is retired. You can only attach to the same customer's open
+tickets.
+
+**Ending.** Ending a chat and solving the problem are separate. Tick **resolved** only if it
+is; otherwise the ticket stays open for you or a colleague to finish.
+
+**Private notes.** A note from a supervisor appears in your conversation marked with a lock and
+the words *the customer cannot see this*. It is never sent to the customer — there is no route
+from that note to their window, not a setting that might be wrong. You cannot reply to it in
+the conversation; speak to your supervisor as you normally would.
+
+### Being observed
+
+A supervisor in your department can open one of your live conversations and read it as it
+happens, along with the customer's history. **You are told when they do**, by name, in the
+conversation itself — and told again when they stop.
+
+Every observation is recorded: who watched which conversation, and when. That record cannot be
+edited or deleted by anyone, including the supervisor who made it and the administrator who
+can read the audit log.
+
+Observation is reading and coaching only. A supervisor watching your conversation cannot write
+to the customer, cannot end the conversation, and cannot take it from you. What they can do is
+send you a private note. Nothing they do appears to the customer, who is not told that anyone
+else is present.
+
 ## بالعربية
 
 **تسجيل الدخول.** ادخل إلى `/sign-in/` باستخدام البريد الإلكتروني الذي أنشأه لك المسؤول. إذا
@@ -72,3 +122,45 @@ follows your account, so it holds on any computer you sign in from.
 
 **اللغة.** بدّل بين العربية و English من أسفل القائمة الجانبية. يُحفظ الاختيار في حسابك،
 فيبقى على أي جهاز تسجّل الدخول منه.
+
+### المحادثة المباشرة
+
+**الاتصال.** المحادثات في `/chat/console/`. لا يصلك شيء حتى تضغط **اتصال** — لا يُسنِد النظام
+محادثة إلى شخص لم يعلن حضوره. ولا تُعرض المحادثة على العملاء إلا إذا كان هناك موظف واحد على
+الأقل متصلًا؛ وإن لم يكن، يظهر لهم نموذج الطلب بدلًا منها. فالاتصال ليس تفضيلًا شخصيًا، بل هو
+ما يفتح المكتب.
+
+**السعة.** تتولى ثلاث محادثات في وقت واحد افتراضيًا، والرابعة تذهب لزميل أو تنتظر في الطابور.
+الرقم بجانب حالتك هو عدد ما يمكنك استقباله بعد. ويمكن للمسؤول تغييره لك.
+
+**قطع الاتصال.** لا يمكنك قطع الاتصال وأنت ما زلت تتولى محادثات. سيرفض الزر ويخبرك بعددها
+المفتوح. أنهِ المحادثات أولًا، أو سلّمها بإنهائها ليعيد الطابور إسنادها. هذا موجود لأن "انتهى
+دوامي" كان سيترك عميلًا يكتب في محادثة لا يقرأها أحد.
+
+**إذا انقطع اتصالك.** إن عدت خلال دقيقة احتفظت بمحادثاتك، وبكل ما قيل أثناء غيابك. وإن طالت
+المدة عادت المحادثات إلى الطابور بسجلها كاملًا، ويُبلَّغ العميل بأنه يُعاد توصيله — ولا
+يُطلب منه أن يبدأ من جديد.
+
+**التذكرة.** كل محادثة هي تذكرة منذ لحظة بدئها، فلا يضيع شيء إذا انتهت المحادثة على نحو
+غير متوقع. ولا يُعرض الرقم المرجعي على العميل حتى تنتهي، لأنك قد تُرفق المحادثة بتذكرة
+لديه أصلًا. وإن فعلت، ينتقل نص المحادثة كاملًا إليها وتُسحب التذكرة المؤقتة. ولا يمكنك
+الإرفاق إلا بتذاكر العميل نفسه المفتوحة.
+
+**الإنهاء.** إنهاء المحادثة وحلّ المشكلة أمران منفصلان. علّم **تم الحل** فقط إن كان كذلك؛
+وإلا تبقى التذكرة مفتوحة لك أو لزميل يكملها.
+
+**الملاحظات الخاصة.** تظهر ملاحظة المشرف في محادثتك بعلامة قفل وعبارة *لا يراها العميل*. ولا
+تُرسل إلى العميل أبدًا — لا يوجد طريق أصلًا من تلك الملاحظة إلى نافذته، وليست مجرد إعداد قد
+يكون خاطئًا. ولا يمكنك الرد عليها داخل المحادثة؛ تحدّث إلى مشرفك كالمعتاد.
+
+### حين تكون تحت المراقبة
+
+يستطيع المشرف في قسمك فتح إحدى محادثاتك الجارية وقراءتها لحظة بلحظة، مع سجل العميل. **وتُبلَّغ
+حين يفعل**، بالاسم، داخل المحادثة نفسها — وتُبلَّغ مرة أخرى حين يتوقف.
+
+كل مراقبة تُسجَّل: من راقب أي محادثة، ومتى. ولا يمكن لأحد تعديل ذلك السجل أو حذفه، بما في ذلك
+المشرف الذي أنشأه والمسؤول الذي يستطيع قراءة سجل التدقيق.
+
+المراقبة قراءة وتوجيه فقط. المشرف الذي يراقب محادثتك لا يستطيع الكتابة إلى العميل، ولا إنهاء
+المحادثة، ولا أخذها منك. ما يستطيعه هو إرسال ملاحظة خاصة إليك. ولا يظهر شيء مما يفعله للعميل،
+الذي لا يُبلَّغ بوجود أي شخص آخر.

@@ -15,8 +15,17 @@
   <link rel="stylesheet" href="{% static 'css/base.css' %}">
   <script src="{% static 'js/htmx.min.js' %}" defer></script>
   <script src="{% static 'js/htmx-ext-ws.min.js' %}" defer></script>
-  <script src="{% static 'js/alpine.min.js' %}" defer></script>
+  {% comment %}
+    Page scripts load BEFORE Alpine, and the order is load-bearing. Deferred scripts run in
+    document order, and Alpine initialises as soon as it runs — so with Alpine first, every
+    `x-data="chatWidget()"` on the page is evaluated before chat-widget.js has defined
+    chatWidget. Alpine logs "chatWidget is not defined" as a console *warning*, the component
+    silently has no state, and every `x-show` evaluates falsy: the chat form, the console and
+    the observation view all render as an empty page with no error anywhere on the server.
+    tests/e2e/test_two_party_chat.py is what found it; nothing server-side can.
+  {% endcomment %}
   {% block extra_head %}{% endblock %}
+  <script src="{% static 'js/alpine.min.js' %}" defer></script>
 </head>
 <body hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
   {% block content %}{% endblock %}
