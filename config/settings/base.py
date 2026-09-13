@@ -84,6 +84,9 @@ TEMPLATES = [
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
                 "django.template.context_processors.i18n",
+                # FR-004: the scope notice belongs on every scoped screen, and
+                # adding it view by view means every future view must remember.
+                "apps.core.context_processors.scope_notice",
             ],
         },
     },

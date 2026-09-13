@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-13 09:55+0000\n"
+"POT-Creation-Date: 2026-09-13 10:41+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -72,6 +72,13 @@ msgstr "email address"
 msgid "full name"
 msgstr "full name"
 
+#: apps/accounts/tests/test_scopeless_administrator.py:120
+#: templates/partials/no_scope.html:16
+msgid ""
+"Your account has no department or branch, so there is nothing for it to show."
+msgstr ""
+"Your account has no department or branch, so there is nothing for it to show."
+
 #: apps/accounts/views_admin.py:67
 msgid "An email address and a name are required."
 msgstr "An email address and a name are required."
@@ -80,7 +87,8 @@ msgstr "An email address and a name are required."
 msgid "Choose a role."
 msgstr "Choose a role."
 
-#: apps/accounts/views_admin.py:73 apps/accounts/views_admin.py:127
+#: apps/accounts/views_admin.py:73 apps/accounts/views_admin.py:138
+#: apps/accounts/views_admin.py:186
 msgid "Choose a department and a branch."
 msgstr "Choose a department and a branch."
 
@@ -96,17 +104,17 @@ msgstr ""
 msgid "An account with that email already exists."
 msgstr "An account with that email already exists."
 
-#: apps/accounts/views_admin.py:133
-msgid ""
-"That department and branch are not yours to administer, and this account "
-"would no longer be visible to you. Nothing has been changed."
-msgstr ""
-"That department and branch are not yours to administer, and this account "
-"would no longer be visible to you. Nothing has been changed."
-
 #: apps/accounts/views_admin.py:152
 msgid "You cannot deactivate your own account."
 msgstr "You cannot deactivate your own account."
+
+#: apps/accounts/views_admin.py:177
+msgid ""
+"Your account already has a department and a branch. Ask another "
+"administrator to change them."
+msgstr ""
+"Your account already has a department and a branch. Ask another "
+"administrator to change them."
 
 #: apps/attachments/models.py:52
 msgid "file name"
@@ -413,11 +421,11 @@ msgstr "Full name"
 msgid "Role"
 msgstr "Role"
 
-#: templates/accounts/user_form.html:46
+#: templates/accounts/user_form.html:46 templates/partials/no_scope.html:24
 msgid "Department"
 msgstr "Department"
 
-#: templates/accounts/user_form.html:54
+#: templates/accounts/user_form.html:54 templates/partials/no_scope.html:30
 msgid "Branch"
 msgstr "Branch"
 
@@ -861,6 +869,22 @@ msgstr "Your reference number is"
 msgid "Please quote this reference in any further correspondence."
 msgstr "Please quote this reference in any further correspondence."
 
+#: templates/partials/no_scope.html:20
+msgid ""
+"Choose where you work. You can do this yourself because your account is the "
+"one that sets it up."
+msgstr ""
+"Choose where you work. You can do this yourself because your account is the "
+"one that sets it up."
+
+#: templates/partials/no_scope.html:36
+msgid "Set my department and branch"
+msgstr "Set my department and branch"
+
+#: templates/partials/no_scope.html:40
+msgid "Ask an administrator to set your department and branch."
+msgstr "Ask an administrator to set your department and branch."
+
 #: templates/shell.html:13 templates/tickets/partials/ticket_pane.html:3
 #: templates/tickets/queue.html:3 templates/tickets/queue.html:6
 #: tests/test_translation_catalog.py:159
@@ -974,3 +998,10 @@ msgstr "Assigned to me"
 #: templates/tickets/queue.html:37 templates/tickets/queue.html:38
 msgid "Search reference, subject or contact"
 msgstr "Search reference, subject or contact"
+
+#~ msgid ""
+#~ "That department and branch are not yours to administer, and this account "
+#~ "would no longer be visible to you. Nothing has been changed."
+#~ msgstr ""
+#~ "That department and branch are not yours to administer, and this account "
+#~ "would no longer be visible to you. Nothing has been changed."

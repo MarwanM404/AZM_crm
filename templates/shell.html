@@ -45,6 +45,7 @@
     </div>
   </aside>
   <main class="shell__main">
+    {% if viewer_has_no_scope %}{% include "partials/no_scope.html" %}{% endif %}
     {% block main %}{% endblock %}
   </main>
 </div>

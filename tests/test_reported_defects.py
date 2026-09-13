@@ -13,6 +13,9 @@ Recorded failures from the first run:
    list its creator sees
 2. test_an_administrator_without_a_scope_can_see_the_other_accounts
    AssertionError: 2 accounts exist; the list shows only the signed-in one
+   — closed by User Story 2, and the test was REWRITTEN rather than simply passing: the
+     original assertion described the symptom, and satisfying it literally would have been
+     an escalation. See the test's own docstring.
 3. test_no_translation_introduces_a_placeholder_its_source_lacks
    AssertionError: ar: 'Reference' -> 'رد: %(reference)s' introduces %(reference)s
 4. test_the_client_side_translation_catalog_is_served
@@ -72,16 +75,28 @@ def test_an_account_created_out_of_scope_is_visible_to_its_creator(
 # --- 2. A scopeless administrator sees only itself ---
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason="Open: fixed by User Story 2 (T016-T025). Strict, so this marker fails once it is.",
-)
 @pytest.mark.django_db
-def test_an_administrator_without_a_scope_can_see_the_other_accounts(client, department, branch):
-    """The state `createsuperuser` leaves behind, because it never asks for a scope."""
+def test_an_administrator_without_a_scope_is_not_left_staring_at_an_empty_product(
+    client, department, branch
+):
+    """The state `createsuperuser` leaves behind, because it never asks for a scope.
+
+    Rewritten once User Story 2 landed, and the rewrite is the interesting part. The original
+    assertion — that the other accounts appear — described the *symptom* and would have been
+    the wrong fix: showing an account records from departments it has no scope in is the
+    escalation this feature explicitly tested against (test_scope_self_service.py), and it
+    would turn a misconfiguration into a privilege the most powerful account in the system
+    quietly gains.
+
+    What was actually wrong is that nothing said why the screen was empty. So the requirement
+    is that the cause is stated and reachable, and that the accounts appear once the
+    administrator has a scope — not before.
+    """
     from apps.accounts.models import User
 
-    root = User.objects.create_superuser(email="root@example.com", password="x", full_name="Root")
+    root = User.objects.create_superuser(
+        email="root@example.com", password="x", full_name="Root", language="en"
+    )
     User.objects.create_user(
         email="someone@example.com",
         password="x",
@@ -92,11 +107,22 @@ def test_an_administrator_without_a_scope_can_see_the_other_accounts(client, dep
     )
     client.force_login(root)
 
-    body = client.get(reverse("administration:users")).content.decode()
-
+    before = client.get(reverse("administration:users")).content.decode()
     assert (
-        "Someone Real" in body
-    ), f"{User.objects.count()} accounts exist; the list shows only the signed-in one"
+        "no department or branch" in before.lower()
+    ), "the screen is empty and says nothing about why"
+    assert (
+        "Someone Real" not in before
+    ), "an account outside the viewer's scope is visible; the fix has become an escalation"
+
+    client.post(
+        reverse("administration:own_scope"),
+        {"department": department.pk, "branch": branch.pk},
+    )
+
+    after = client.get(reverse("administration:users")).content.decode()
+    assert "Someone Real" in after
+    assert "no department or branch" not in after.lower()
 
 
 # --- 3. A translation that is present, unflagged, and wrong ---

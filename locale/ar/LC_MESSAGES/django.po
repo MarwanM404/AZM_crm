@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-13 09:55+0000\n"
+"POT-Creation-Date: 2026-09-13 10:41+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -73,6 +73,12 @@ msgstr "البريد الإلكتروني"
 msgid "full name"
 msgstr "الاسم الكامل"
 
+#: apps/accounts/tests/test_scopeless_administrator.py:120
+#: templates/partials/no_scope.html:16
+msgid ""
+"Your account has no department or branch, so there is nothing for it to show."
+msgstr "حسابك بلا قسم ولا فرع، فلا يوجد ما يُعرض."
+
 #: apps/accounts/views_admin.py:67
 msgid "An email address and a name are required."
 msgstr "البريد الإلكتروني والاسم مطلوبان."
@@ -81,7 +87,8 @@ msgstr "البريد الإلكتروني والاسم مطلوبان."
 msgid "Choose a role."
 msgstr "اختر دورًا."
 
-#: apps/accounts/views_admin.py:73 apps/accounts/views_admin.py:127
+#: apps/accounts/views_admin.py:73 apps/accounts/views_admin.py:138
+#: apps/accounts/views_admin.py:186
 msgid "Choose a department and a branch."
 msgstr "اختر القسم والفرع."
 
@@ -89,21 +96,23 @@ msgstr "اختر القسم والفرع."
 msgid ""
 "That department and branch are not yours to administer, and an account "
 "created there would not be visible to you. It has not been created."
-msgstr "هذا القسم وهذا الفرع ليسا ضمن إدارتك، ولن يكون الحساب المُنشأ فيهما ظاهرًا لك. لم يُنشأ الحساب."
+msgstr ""
+"هذا القسم وهذا الفرع ليسا ضمن إدارتك، ولن يكون الحساب المُنشأ فيهما ظاهرًا لك. "
+"لم يُنشأ الحساب."
 
 #: apps/accounts/views_admin.py:86
 msgid "An account with that email already exists."
 msgstr "يوجد حساب بهذا البريد الإلكتروني بالفعل."
 
-#: apps/accounts/views_admin.py:133
-msgid ""
-"That department and branch are not yours to administer, and this account "
-"would no longer be visible to you. Nothing has been changed."
-msgstr "هذا القسم وهذا الفرع ليسا ضمن إدارتك، ولن يعود هذا الحساب ظاهرًا لك. لم يتغيّر شيء."
-
 #: apps/accounts/views_admin.py:152
 msgid "You cannot deactivate your own account."
 msgstr "لا يمكنك تعطيل حسابك الخاص."
+
+#: apps/accounts/views_admin.py:177
+msgid ""
+"Your account already has a department and a branch. Ask another "
+"administrator to change them."
+msgstr "حسابك له قسم وفرع بالفعل. اطلب من مسؤول آخر تغييرهما."
 
 #: apps/attachments/models.py:52
 msgid "file name"
@@ -413,11 +422,11 @@ msgstr "الاسم الكامل"
 msgid "Role"
 msgstr "الدور"
 
-#: templates/accounts/user_form.html:46
+#: templates/accounts/user_form.html:46 templates/partials/no_scope.html:24
 msgid "Department"
 msgstr "القسم"
 
-#: templates/accounts/user_form.html:54
+#: templates/accounts/user_form.html:54 templates/partials/no_scope.html:30
 msgid "Branch"
 msgstr "الفرع"
 
@@ -860,6 +869,20 @@ msgstr "رقم طلبك هو"
 msgid "Please quote this reference in any further correspondence."
 msgstr "يرجى ذكر هذا الرقم في أي مراسلات لاحقة."
 
+#: templates/partials/no_scope.html:20
+msgid ""
+"Choose where you work. You can do this yourself because your account is the "
+"one that sets it up."
+msgstr "اختر مكان عملك. يمكنك فعل ذلك بنفسك لأن حسابك هو الذي يُهيّئ النظام."
+
+#: templates/partials/no_scope.html:36
+msgid "Set my department and branch"
+msgstr "تعيين قسمي وفرعي"
+
+#: templates/partials/no_scope.html:40
+msgid "Ask an administrator to set your department and branch."
+msgstr "اطلب من المسؤول تعيين قسمك وفرعك."
+
 #: templates/shell.html:13 templates/tickets/partials/ticket_pane.html:3
 #: templates/tickets/queue.html:3 templates/tickets/queue.html:6
 #: tests/test_translation_catalog.py:159
@@ -977,3 +1000,10 @@ msgstr "المُسنَدة إليّ"
 #: templates/tickets/queue.html:37 templates/tickets/queue.html:38
 msgid "Search reference, subject or contact"
 msgstr "ابحث برقم الطلب أو الموضوع أو جهة الاتصال"
+
+#~ msgid ""
+#~ "That department and branch are not yours to administer, and this account "
+#~ "would no longer be visible to you. Nothing has been changed."
+#~ msgstr ""
+#~ "هذا القسم وهذا الفرع ليسا ضمن إدارتك، ولن يعود هذا الحساب ظاهرًا لك. لم "
+#~ "يتغيّر شيء."

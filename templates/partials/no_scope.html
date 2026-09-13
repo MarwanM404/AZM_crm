@@ -1,0 +1,43 @@
+{% load i18n %}
+{% comment %}
+  Shown when a scoped screen is empty because the VIEWER has no department or branch, not
+  because there is nothing to see (FR-004).
+
+  Nothing has failed here. Scoping is working exactly as written: the screens filter for
+  records in the viewer's department, and an account with no department matches almost
+  nothing. The emptiness is real and its cause is invisible, which is why this is an
+  explanation rather than a change to the filter.
+
+  An administrator can fix it here, because on a new installation there is nobody else to ask
+  (FR-005). Anyone else is told who to ask.
+{% endcomment %}
+<div class="card notice notice--scope">
+  <p class="notice__title">
+    {% trans "Your account has no department or branch, so there is nothing for it to show." %}
+  </p>
+  {% if request.user.role == "ADMINISTRATOR" %}
+    <p class="muted">
+      {% trans "Choose where you work. You can do this yourself because your account is the one that sets it up." %}
+    </p>
+    <form method="post" action="{% url 'administration:own_scope' %}" class="notice__form">
+      {% csrf_token %}
+      <label class="visually-hidden" for="id_own_department">{% trans "Department" %}</label>
+      <select id="id_own_department" name="department" required>
+        {% for department in scope_departments %}
+          <option value="{{ department.pk }}">{{ department.name }}</option>
+        {% endfor %}
+      </select>
+      <label class="visually-hidden" for="id_own_branch">{% trans "Branch" %}</label>
+      <select id="id_own_branch" name="branch" required>
+        {% for branch in scope_branches %}
+          <option value="{{ branch.pk }}">{{ branch.name }}</option>
+        {% endfor %}
+      </select>
+      <button type="submit" class="btn btn--primary">{% trans "Set my department and branch" %}</button>
+    </form>
+  {% else %}
+    <p class="muted">
+      {% trans "Ask an administrator to set your department and branch." %}
+    </p>
+  {% endif %}
+</div>

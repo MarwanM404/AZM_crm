@@ -91,19 +91,19 @@ the cause; then create a first administrator from an empty database and confirm 
 
 ### Tests for User Story 2
 
-- [ ] T016 [P] [US2] Write `apps/accounts/tests/test_scopeless_administrator.py` asserting the staff accounts list, the ticket queue and the customer list each explain a missing scope rather than appearing empty
-- [ ] T017 [P] [US2] Extend `apps/accounts/tests/test_scopeless_administrator.py` asserting the explanation appears for a scopeless user and NOT for a scoped one — an explanation shown to everybody explains nothing
-- [ ] T018 [P] [US2] Write `apps/accounts/tests/test_scope_self_service.py` asserting a scopeless administrator can set their own scope, and that an administrator who already has one cannot change it (FR-005; the narrowing recorded in [plan.md](plan.md) Complexity Tracking)
-- [ ] T019 [P] [US2] Extend `apps/accounts/tests/test_scope_self_service.py` asserting a scopeless account is NOT treated as seeing everything — the escalation this defect could have produced (Constitution III, [research.md](research.md) §2)
-- [ ] T020 [P] [US2] Write `apps/accounts/tests/test_bootstrap_command.py` asserting the first-administrator command creates a department, a branch and an administrator together, and refuses to leave any of them missing
+- [X] T016 [P] [US2] Write `apps/accounts/tests/test_scopeless_administrator.py` asserting the staff accounts list, the ticket queue and the customer list each explain a missing scope rather than appearing empty
+- [X] T017 [P] [US2] Extend `apps/accounts/tests/test_scopeless_administrator.py` asserting the explanation appears for a scopeless user and NOT for a scoped one — an explanation shown to everybody explains nothing
+- [X] T018 [P] [US2] Write `apps/accounts/tests/test_scope_self_service.py` asserting a scopeless administrator can set their own scope, and that an administrator who already has one cannot change it (FR-005; the narrowing recorded in [plan.md](plan.md) Complexity Tracking)
+- [X] T019 [P] [US2] Extend `apps/accounts/tests/test_scope_self_service.py` asserting a scopeless account is NOT treated as seeing everything — the escalation this defect could have produced (Constitution III, [research.md](research.md) §2)
+- [X] T020 [P] [US2] Write `apps/accounts/tests/test_bootstrap_command.py` asserting the first-administrator command creates a department, a branch and an administrator together, and refuses to leave any of them missing
 
 ### Implementation for User Story 2
 
-- [ ] T021 [US2] Implement the first-administrator command in `apps/accounts/management/commands/`, creating the scope and the account in one step because on an empty database there is no department to point at
-- [ ] T022 [US2] Explain a scope-caused empty result in `templates/accounts/users.html` and the shared empty-state used by the ticket queue and customer list
-- [ ] T023 [US2] Implement the one-time self-service scope change in `apps/accounts/views_admin.py`, permitted only from no scope and never between scopes
-- [ ] T024 [US2] Document the first-run route in `README.md`, replacing any instruction that produces a scopeless account
-- [ ] T025 [US2] Extract and translate this phase's strings, then check with `tools/catalog.py status`
+- [X] T021 [US2] Implement the first-administrator command in `apps/accounts/management/commands/`, creating the scope and the account in one step because on an empty database there is no department to point at
+- [X] T022 [US2] Explain a scope-caused empty result in `templates/accounts/users.html` and the shared empty-state used by the ticket queue and customer list
+- [X] T023 [US2] Implement the one-time self-service scope change in `apps/accounts/views_admin.py`, permitted only from no scope and never between scopes
+- [X] T024 [US2] Document the first-run route in `README.md`, replacing any instruction that produces a scopeless account
+- [X] T025 [US2] Extract and translate this phase's strings, then check with `tools/catalog.py status`
 
 **Checkpoint**: a new installation reaches a working administrator, and an existing broken one can recover.
 

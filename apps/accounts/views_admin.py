@@ -154,3 +154,38 @@ def user_deactivate(request, pk):
     user.is_active = False
     user.save(update_fields=["is_active"])
     return redirect("administration:users")
+
+
+@administrator_required
+@require_POST
+def own_scope(request):
+    """Let an administrator with NO scope give themselves one (FR-005).
+
+    The only place in this product where somebody changes their own scope, and a deliberate
+    narrowing rather than an exception. Everywhere else scope is administered by somebody
+    else, which works until the case that produced this defect: one administrator, no scope,
+    and nobody who could fix it. Requiring a second, already-scoped administrator assumes one
+    exists, and on a new installation none does.
+
+    Permitted only from *no* scope. Once used it closes behind itself, because the account is
+    no longer scopeless — an administrator who has a scope is in the ordinary case and the
+    ordinary rule applies.
+    """
+    if request.user.department_id or request.user.branch_id:
+        return HttpResponse(
+            _(
+                "Your account already has a department and a branch. Ask another "
+                "administrator to change them."
+            ),
+            status=422,
+        )
+
+    department_id = request.POST.get("department")
+    branch_id = request.POST.get("branch")
+    if not department_id or not branch_id:
+        return HttpResponse(_("Choose a department and a branch."), status=422)
+
+    request.user.department_id = department_id
+    request.user.branch_id = branch_id
+    request.user.save(update_fields=["department", "branch"])
+    return redirect("administration:users")

@@ -407,3 +407,17 @@ select:focus-visible, input:focus-visible, textarea:focus-visible {
   background: var(--color-accent-wash);
   border-inline-start: 4px solid var(--color-accent);
 }
+
+
+/* --- the missing-scope notice (FR-004) ---
+ *
+ * Sits above the page content on every scoped screen, because the screen behind it is empty
+ * and the reader needs to know why before they conclude the product is broken.
+ */
+.notice { padding: 16px 18px; margin-block-end: 18px; border-inline-start: 4px solid var(--color-accent); }
+.notice__title { margin: 0 0 6px; font-weight: 600; }
+.notice__form { display: flex; flex-wrap: wrap; gap: 9px; align-items: center; margin-block-start: 12px; }
+.notice__form select {
+  padding: 8px 10px; font-family: inherit; font-size: 13.5px;
+  border: 1px solid var(--color-border); border-radius: var(--radius);
+}

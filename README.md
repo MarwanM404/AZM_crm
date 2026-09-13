@@ -28,9 +28,29 @@ cp .env.example .env   # fill in real values; .env is gitignored, never commit i
 
 python manage.py migrate
 python manage.py compilemessages
-python manage.py createsuperuser
+
+# The first administrator, with a department and a branch. Use this rather than
+# `createsuperuser`: that command asks only for an email and a name, because those are the
+# only fields the model marks required — and it cannot reasonably ask for a department, since
+# on an empty database there is none to choose. The account it creates has no scope, so every
+# screen filters to nothing and the product looks broken on the first visit. Ask this project
+# how it knows.
+python manage.py bootstrap_admin \
+    --email you@example.com \
+    --full-name "Your Name" \
+    --department Support \
+    --branch "Head Office"
+
+# Creating an account never creates a way in, so set a password before signing in.
+python manage.py changepassword you@example.com
+
 python manage.py seed_demo   # departments, branches, categories, demo agent/admin accounts
 ```
+
+If you already have an administrator with no department or branch, you do not need to start
+again: sign in and the screens will say so and offer to set one. That recovery exists because
+requiring a second, already-scoped administrator assumes one exists, and on a new installation
+none does.
 
 ## Running
 
