@@ -131,7 +131,7 @@ def unlinked_contacts(request):
         request,
         "customers/unlinked.html",
         {
-            "section": "customers",
+            "section": "unlinked",
             "contacts": contacts,
             "shared_domains": {d for d, count in domains.items() if count > 1},
             "organizations": Organization.objects.for_user(request.user).order_by("name"),

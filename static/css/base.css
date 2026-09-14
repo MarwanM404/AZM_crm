@@ -45,6 +45,26 @@ a:hover { color: var(--color-accent-ink); text-decoration: underline; }
   background: var(--color-bg);
   border-inline-end: 1px solid var(--color-line);
   display: flex;
+  /* The height of the screen, not the height of the page.
+   *
+   * `.shell` is a flex row, so its children stretch to the tallest — which is the main
+   * content. On a long page the sidebar became as tall as the whole document, and because
+   * `.shell__foot` is pushed down with `margin-block-start: auto`, sign-out and the language
+   * switch ended up at the bottom of the *document*: several thousand pixels away on the
+   * audit log.
+   *
+   * `align-self` is the part that is easy to miss. A flex item stretches by default, and a
+   * stretched item is as tall as the page — so `position: sticky` has nothing to stick
+   * within and does nothing at all. Holding it to the start is what makes the height real.
+   *
+   * `dvh` first for mobile browsers, whose chrome makes `vh` taller than the visible area;
+   * `vh` stays as the fallback for browsers that do not know it. */
+  position: sticky;
+  inset-block-start: 0;
+  align-self: flex-start;
+  block-size: 100vh;
+  block-size: 100dvh;
+  overflow-y: auto;
   flex-direction: column;
 }
 .shell__main { flex: 1; min-inline-size: 0; padding: 26px 30px; }
@@ -227,7 +247,19 @@ select:focus-visible, input:focus-visible, textarea:focus-visible {
 
 @media (max-width: 860px) {
   .shell { flex-direction: column; }
-  .shell__nav { inline-size: auto; border-inline-end: 0; border-block-end: 1px solid var(--color-line); }
+  /* Stacked, so the navigation is a banner across the top rather than a column beside the
+     content. Everything that holds it to the viewport has to be undone here: a banner with
+     `block-size: 100dvh` is a full screen of navigation before the page begins, which is
+     what the first version of that fix did on a narrow window. */
+  .shell__nav {
+    inline-size: auto;
+    border-inline-end: 0;
+    border-block-end: 1px solid var(--color-line);
+    position: static;
+    block-size: auto;
+    align-self: stretch;
+    overflow: visible;
+  }
   .detail { flex-direction: column; }
   .detail__side { inline-size: 100%; }
   .table__row { grid-template-columns: 1fr 1fr; row-gap: 6px; padding-block: 12px; }

@@ -41,7 +41,7 @@ def audit_log(request):
         request,
         "core/audit_log.html",
         {
-            "section": "administration",
+            "section": "audit",
             "entries": entries[:PAGE_SIZE],
             "entities": sorted(ct.model for ct in audited_types),
             "actors": User.objects.filter(
