@@ -9,10 +9,12 @@
  * Everything else the console shows is still rendered by the server. If this file starts
  * building markup, that is the signal ADR-008 asked to watch for.
  */
-function chatConsole(initialUnread) {
+function chatConsole(initialUnread, initiallyOnline) {
   return {
     unread: initialUnread || {},
-    online: false,
+    // Whatever the server says, not a guess. Presence lives in Redis and expires on its own,
+    // so the page load is the only moment this side can learn the truth.
+    online: Boolean(initiallyOnline),
     refusal: "",
     socket: null,
     heartbeatTimer: null,

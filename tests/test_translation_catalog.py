@@ -14,12 +14,35 @@ still render in English, in two ways this test exists to catch.
 Both failures are invisible in the interface until an Arabic speaker reads it.
 """
 
+import re
 from pathlib import Path
 
 import pytest
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-CATALOGS = {
+
+
+#: Every catalog file, in both gettext domains.
+#:
+#: This used to name `django.po` alone, and that is why "Online" shipped untranslated. The
+#: *tool* was taught about `djangojs` when the client-side catalog was added, and this file
+#: was not — so `tools/catalog.py status` could see the gap and the test suite could not.
+#: CI runs the suite, not the tool, which made the difference invisible where it mattered.
+def _all_catalogs():
+    from tools.catalog import DOMAINS
+
+    return {
+        f"{language}:{domain}": BASE_DIR / "locale" / language / "LC_MESSAGES" / f"{domain}.po"
+        for language in ("ar", "en")
+        for domain in DOMAINS
+        if (BASE_DIR / "locale" / language / "LC_MESSAGES" / f"{domain}.po").exists()
+    }
+
+
+CATALOGS = _all_catalogs()
+
+#: The message domain only, for the checks that are about source strings rather than files.
+MESSAGE_CATALOGS = {
     "ar": BASE_DIR / "locale" / "ar" / "LC_MESSAGES" / "django.po",
     "en": BASE_DIR / "locale" / "en" / "LC_MESSAGES" / "django.po",
 }
@@ -33,8 +56,13 @@ def _entries(path):
     translations (plural forms). Getting this wrong makes every wrapped string look
     untranslated — an earlier version of this test did exactly that.
     """
-    blocks = path.read_text(encoding="utf-8").split("\n\n")
-    for block in blocks:
+    # Split by `tools.catalog`, deliberately: that is the parser everything else in this
+    # project uses, so it is the one that has to be right. Duplicating the splitting here
+    # meant fixing the same blind spot twice — and the copy in this file went on skipping an
+    # entry after the tool had stopped.
+    from tools.catalog import _blocks
+
+    for block in _blocks(path):
         if "Project-Id-Version" in block:
             continue  # the catalog header is always flagged fuzzy; it is not a translation
 
@@ -120,7 +148,7 @@ def test_english_catalog_matches_its_own_source_strings():
     rendered "Contact" instead of "All contacts". A mismatch here is always a bug.
     """
     mismatches = []
-    for msgid, translations, _fuzzy in _entries(CATALOGS["en"]):
+    for msgid, translations, _fuzzy in _entries(MESSAGE_CATALOGS["en"]):
         if len(translations) == 1 and translations[0] and translations[0] != msgid:
             mismatches.append(f"{msgid!r} -> {translations[0]!r}")
 
@@ -195,7 +223,7 @@ def test_a_translation_may_omit_a_placeholder_its_source_has():
     """
     from tools.catalog import placeholder_mismatches
 
-    entries = _entries(CATALOGS["ar"])
+    entries = _entries(MESSAGE_CATALOGS["ar"])
     omitting = [
         msgid
         for msgid, translations, _fuzzy in entries
@@ -348,3 +376,39 @@ def test_the_rule_checks_plural_forms_too(tmp_path, monkeypatch):
     found = catalog.placeholder_mismatches("xx")
 
     assert [extra for _msgid, _translated, extra in found] == [["%(other)s"]]
+
+
+# --- the parser's blind spot (found 2026-09-14) ---
+#
+# "Online" sat untranslated in djangojs.po for a day while every check here reported both
+# catalogs complete. The entry is written immediately after the metadata header with no blank
+# line between them, so splitting the file on blank lines puts the header and that entry in
+# one block — and every function skips blocks containing "Project-Id-Version".
+#
+# A malformed file did not make the checks fail. It made them look. That is the same failure
+# this project keeps meeting, and this time it was in the tool that was supposed to catch it.
+
+
+def _msgids_by_naive_scan(path):
+    """Every msgid in the file, found without any notion of blocks."""
+    return {m for m in re.findall(r'^msgid "(.+)"$', path.read_text(encoding="utf-8"), re.M)}
+
+
+@pytest.mark.parametrize("language", sorted(CATALOGS))
+def test_the_parser_sees_every_entry_in_the_file(language):
+    """Two independent readings of the same file, compared.
+
+    A regex scan knows nothing about blocks and cannot be defeated by their absence. If the
+    block parser sees fewer entries, the file's structure is hiding some of them — and an
+    entry the parser cannot see is an entry no check in this file applies to.
+    """
+    path = CATALOGS[language]
+
+    naive = _msgids_by_naive_scan(path)
+    parsed = {msgid for msgid, _translations, _fuzzy in _entries(path)}
+    invisible = naive - parsed
+
+    assert not invisible, (
+        f"{path}: these entries are invisible to the parser, so no check in this file "
+        f"applies to them: {sorted(invisible)}"
+    )

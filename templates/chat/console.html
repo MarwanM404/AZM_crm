@@ -5,7 +5,13 @@
   <script src="{% static 'js/chat-console.js' %}" defer></script>
 {% endblock %}
 {% block main %}
-<div x-data="chatConsole({{ unread|safe }})">
+{% comment %}
+  The presence state is passed in, not assumed. The component used to hardcode `online: false`
+  while the template took the pill's colour from the server — so an online agent saw a green
+  pill reading "Offline", and going online appeared to stop working the moment the page was
+  reloaded. Two halves of one control, given different answers.
+{% endcomment %}
+<div x-data="chatConsole({{ unread|safe }}, {{ online|yesno:"true,false" }})">
   <header class="page-head page-head--split">
     <div>
       <h1>{% trans "Live chat" %}</h1>

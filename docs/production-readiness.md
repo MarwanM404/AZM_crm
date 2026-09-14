@@ -98,6 +98,27 @@ Nothing to verify before release beyond confirming those tests run, because ther
 an operator can configure here. If the sign-in screen of a deployment ever shows a
 "Development sign-in" section, the deployment is not using the production settings module.
 
+### 7. Static files are served without cache busting
+*Found 2026-09-14, while fixing the chat console's presence state.*
+
+Scripts and stylesheets are referenced by a plain path — `/static/js/chat-console.js` — with
+no version in the name or the query string, and no `STORAGES` / `STATICFILES_STORAGE` setting
+configured. Browsers and any CDN in front of the application will therefore keep serving the
+previous file after a deployment, for as long as their cache says it is fresh.
+
+This is not theoretical. The console's presence bug was fixed, the server was restarted, and
+the browser went on running the old JavaScript through a full reload — the fix looked like it
+had not worked. A returning user after a deployment is in exactly that position, with no
+reason to suspect a stale file.
+
+The usual remedy is Django's `ManifestStaticFilesStorage`, which renames each file with a
+hash of its contents so a changed file has a new URL. It requires `collectstatic` as a
+deployment step, which this deployment does not currently have — which is why it is recorded
+here as a decision to take rather than applied quietly as part of a bug fix.
+
+Until then: a deployment that changes a script or a stylesheet needs users told to reload, and
+"it did not work" reports after a release should be checked against a hard refresh first.
+
 ---
 
 ## Not blocking, but unverified by a person

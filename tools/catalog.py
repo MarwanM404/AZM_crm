@@ -47,11 +47,53 @@ def catalog_paths(language):
 
 
 def _blocks(path):
-    return path.read_text(encoding="utf-8").split("\n\n")
+    """The file's entries, one per block.
+
+    Built line by line rather than by splitting on blank lines. gettext separates entries with
+    a blank line by convention, and a file that does not follow it is still a valid catalog —
+    `djangojs.po` was written with its first entry glued to the metadata header, so splitting
+    on blank lines put both in one block. Every function here skips blocks containing
+    "Project-Id-Version", so that entry was skipped too: "Online" sat untranslated for a day
+    while `status` reported the catalog complete.
+
+    A malformed file did not make the checks fail. It made them look away.
+
+    An entry begins at a comment or a `msgid` that follows a finished one — finished meaning a
+    `msgstr` has already been seen. Splitting on every comment line instead would separate a
+    `#: source reference` from the `msgid` it belongs to.
+    """
+    blocks, current, seen_translation = [], [], False
+
+    for line in path.read_text(encoding="utf-8").split("\n"):
+        starts_entry = line.startswith("#") or line.startswith("msgid ")
+        if starts_entry and seen_translation and current:
+            blocks.append("\n".join(current).strip("\n"))
+            current, seen_translation = [], False
+
+        if line.startswith("msgstr"):
+            seen_translation = True
+        current.append(line)
+
+    if current:
+        blocks.append("\n".join(current).strip("\n"))
+    return [block for block in blocks if block.strip()]
 
 
 def _write(path, blocks):
-    path.write_text("\n\n".join(blocks), encoding="utf-8")
+    """Rewrite with a blank line between entries, whatever the file had before.
+
+    Writing them back exactly as found would preserve the missing separator that hid an entry
+    from every check in the first place.
+    """
+    # Blank lines *inside* an entry are dropped as well as normalised between them: an
+    # earlier version of this function left one between a `#:` reference and its `msgid`,
+    # which gettext tolerates and a reader should not have to.
+    cleaned = [
+        "\n".join(line for line in block.split("\n") if line.strip())
+        for block in blocks
+        if block.strip()
+    ]
+    path.write_text("\n\n".join(cleaned) + "\n", encoding="utf-8")
 
 
 def _string_parts(lines, start_keyword):
