@@ -1,0 +1,51 @@
+{% extends "portal/base.html" %}
+{% load i18n %}
+{% comment %}
+  Swept for internal content by tests/test_internal_visibility.py, along with every other file
+  in this directory. `messages_` comes from apps.portal.services.tickets.conversation_for,
+  which goes through the product's one internal/public filter — so there is nothing here to
+  filter and nothing here that could be un-filtered by a later edit.
+{% endcomment %}
+{% block title %}{{ ticket.reference }} — {{ ticket.subject }}{% endblock %}
+{% block main %}
+  <nav class="crumbs">
+    <a href="{% url 'portal:home' %}">{% trans "Your support requests" %}</a>
+    <span class="crumbs__sep">/</span>
+    <span class="ref">{{ ticket.reference }}</span>
+  </nav>
+
+  <h1>{{ ticket.subject }}</h1>
+  <div class="req__meta">
+    <span class="pill pill--{{ ticket.status|lower }}">{{ ticket.get_status_display }}</span>
+    <span class="muted">{% blocktrans with opened=ticket.created_at|date:"j M Y" %}Opened {{ opened }}{% endblocktrans %}</span>
+    <span class="muted">{% blocktrans with changed=ticket.updated_at|date:"j M Y" %}Last update {{ changed }}{% endblocktrans %}</span>
+  </div>
+
+  <section class="thread">
+    {% comment %}
+      The customer's own opening words. They live on Ticket.description rather than as a
+      message, so a conversation built only from messages begins in the middle — the customer
+      reads a reply to a question the page never shows them asking.
+    {% endcomment %}
+    <article class="msg msg--inbound">
+      <div class="msg__head">
+        <strong>{% trans "Your request" %}</strong>
+        <span class="muted">{{ ticket.created_at|date:"j M Y, H:i" }}</span>
+      </div>
+      <p class="msg__body">{{ ticket.description|linebreaksbr }}</p>
+    </article>
+
+    {% for message in messages_ %}
+      <article class="msg msg--{{ message.direction|lower }}">
+        <div class="msg__head">
+          <strong>
+            {% if message.direction == 'INBOUND' %}{% trans "You" %}
+            {% else %}{% trans "AZM Support" %}{% endif %}
+          </strong>
+          <span class="muted">{{ message.created_at|date:"j M Y, H:i" }}</span>
+        </div>
+        <p class="msg__body">{{ message.body|linebreaksbr }}</p>
+      </article>
+    {% endfor %}
+  </section>
+{% endblock %}

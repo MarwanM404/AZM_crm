@@ -51,3 +51,37 @@ def customer_client(client, customer):
     session.save()
     client.cookies[settings.SESSION_COOKIE_NAME] = session.session_key
     return client
+
+
+@pytest.fixture
+def customer_contact(db, customer, department, branch):
+    """A contact record carrying the same address the customer confirmed.
+
+    Created separately from the account on purpose: nothing links the two in the database,
+    and the whole of research.md §2 rests on that. The match happens at read time, by address.
+    """
+    from apps.customers.services.matching import find_or_create_contact
+
+    contact, _ = find_or_create_contact(
+        full_name="Noura Al-Harbi",
+        email=customer.email,
+        department=department,
+        branch=branch,
+    )
+    return contact
+
+
+@pytest.fixture
+def customer_ticket(db, customer_contact, category, department, branch):
+    from apps.tickets.models import Ticket
+
+    return Ticket.objects.create(
+        contact=customer_contact,
+        organization=customer_contact.organization,
+        subject="The delivery never arrived",
+        description="We were told it shipped on Tuesday and nothing has come.",
+        category=category,
+        origin_channel=Ticket.Channel.WEB_FORM,
+        department=department,
+        branch=branch,
+    )

@@ -1,0 +1,47 @@
+{% extends "portal/base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Your support requests" %}{% endblock %}
+{% block main %}
+  <div class="portal__title">
+    <h1>{% trans "Your support requests" %}</h1>
+    <form method="post" action="{% url 'portal:sign_out' %}" class="portal__signout">
+      {% csrf_token %}
+      <button type="submit" class="linkish">{% trans "Sign out" %}</button>
+    </form>
+  </div>
+
+  {% if requests %}
+    <ul class="req-list">
+      {% for ticket in requests %}
+        <li class="req">
+          <a class="req__link" href="{% url 'portal:request' ticket.reference %}">
+            <span class="req__subject">{{ ticket.subject }}</span>
+            <span class="ref">{{ ticket.reference }}</span>
+          </a>
+          <div class="req__meta">
+            <span class="pill pill--{{ ticket.status|lower }}">{{ ticket.get_status_display }}</span>
+            {% comment %}
+              Both dates, always. "Opened three weeks ago" without "last changed yesterday" is
+              what makes somebody write in to ask whether anyone is looking at it — which is
+              the message this page exists to prevent.
+            {% endcomment %}
+            <span class="muted">{% blocktrans with opened=ticket.created_at|date:"j M Y" %}Opened {{ opened }}{% endblocktrans %}</span>
+            <span class="muted">{% blocktrans with changed=ticket.updated_at|date:"j M Y" %}Last update {{ changed }}{% endblocktrans %}</span>
+          </div>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    {% comment %}
+      The ordinary state of a new account, not an edge case: a customer exists before their
+      first request does (FR-009). An empty page with nothing on it is how somebody decides
+      the portal is broken minutes after being told to use it.
+    {% endcomment %}
+    <div class="req-empty">
+      <p>{% trans "You have not raised any requests yet." %}</p>
+      <p>
+        <a class="btn btn--primary" href="{% url 'intake:form' %}">{% trans "Raise a request" %}</a>
+      </p>
+    </div>
+  {% endif %}
+{% endblock %}

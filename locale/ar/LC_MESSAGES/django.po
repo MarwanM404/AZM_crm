@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-15 09:20+0000\n"
+"POT-Creation-Date: 2026-09-15 11:12+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -577,19 +577,19 @@ msgstr "تأكيد عنوان البريد الإلكتروني"
 msgid "Reset a password"
 msgstr "إعادة تعيين كلمة المرور"
 
-#: apps/portal/views.py:48
+#: apps/portal/views.py:59
 msgid "Please try again in a minute."
 msgstr "يرجى المحاولة مرة أخرى بعد دقيقة."
 
-#: apps/portal/views.py:49
+#: apps/portal/views.py:60
 msgid "Please try again in a few minutes."
 msgstr "يرجى المحاولة مرة أخرى بعد بضع دقائق."
 
-#: apps/portal/views.py:50
+#: apps/portal/views.py:61
 msgid "Please try again in an hour."
 msgstr "يرجى المحاولة مرة أخرى بعد ساعة."
 
-#: apps/portal/views.py:51
+#: apps/portal/views.py:62
 msgid "Please try again tomorrow."
 msgstr "يرجى المحاولة مرة أخرى غدًا."
 
@@ -690,7 +690,8 @@ msgid "Sign in"
 msgstr "تسجيل الدخول"
 
 #: templates/accounts/sign_in.html:21 templates/base.html:7
-#: templates/portal/base.html:20 templates/shell.html:9
+#: templates/portal/base.html:20 templates/portal/request_detail.html:44
+#: templates/shell.html:9
 msgid "AZM Support"
 msgstr "دعم AZM"
 
@@ -1244,20 +1245,13 @@ msgstr "لم يعد هذا الرابط صالحًا"
 msgid ""
 "Confirmation links can be used once, and they stop working after a few days. "
 "This one has already been used or has expired."
-msgstr "تُستخدم روابط التأكيد مرة واحدة، وتتوقف عن العمل بعد بضعة أيام. هذا الرابط إما أنه استُخدم من قبل أو انتهت صلاحيته."
+msgstr ""
+"تُستخدم روابط التأكيد مرة واحدة، وتتوقف عن العمل بعد بضعة أيام. هذا الرابط "
+"إما أنه استُخدم من قبل أو انتهت صلاحيته."
 
 #: templates/portal/confirm_failed.html:17
 msgid "Send me another"
 msgstr "أرسل لي رابطًا آخر"
-
-#: templates/portal/home.html:3 templates/portal/home.html:5
-msgid "Your support requests"
-msgstr "طلبات الدعم الخاصة بك"
-
-#: templates/portal/home.html:6
-#, python-format
-msgid "Signed in as %(address)s."
-msgstr "تم تسجيل الدخول باسم %(address)s."
 
 #: templates/portal/register.html:3 templates/portal/register.html:5
 #: templates/portal/sign_in.html:34
@@ -1268,7 +1262,9 @@ msgstr "إنشاء حساب"
 msgid ""
 "Sign up with the email address you use to contact support, and you will be "
 "able to see your requests here."
-msgstr "سجّل باستخدام عنوان البريد الإلكتروني الذي تتواصل به مع الدعم، وستتمكن من متابعة طلباتك هنا."
+msgstr ""
+"سجّل باستخدام عنوان البريد الإلكتروني الذي تتواصل به مع الدعم، وستتمكن من "
+"متابعة طلباتك هنا."
 
 #: templates/portal/register.html:24
 msgid "I already have an account"
@@ -1283,17 +1279,54 @@ msgstr "تحقّق من بريدك الإلكتروني"
 msgid ""
 "If that address can be registered, a message is on its way to it. Follow the "
 "link inside to finish setting up your account."
-msgstr "إذا كان من الممكن تسجيل هذا العنوان، فهناك رسالة في طريقها إليه. اتبع الرابط داخلها لإكمال إعداد حسابك."
+msgstr ""
+"إذا كان من الممكن تسجيل هذا العنوان، فهناك رسالة في طريقها إليه. اتبع الرابط "
+"داخلها لإكمال إعداد حسابك."
 
 #: templates/portal/register_done.html:21
 msgid ""
 "The link works once and stops working after a few days. If it has expired, "
 "you can ask for another."
-msgstr "يعمل الرابط مرة واحدة ويتوقف عن العمل بعد بضعة أيام. إذا انتهت صلاحيته، يمكنك طلب رابط آخر."
+msgstr ""
+"يعمل الرابط مرة واحدة ويتوقف عن العمل بعد بضعة أيام. إذا انتهت صلاحيته، "
+"يمكنك طلب رابط آخر."
 
 #: templates/portal/register_done.html:27
 msgid "Send another message"
 msgstr "إرسال رسالة أخرى"
+
+#: templates/portal/request_detail.html:12 templates/portal/requests.html:3
+#: templates/portal/requests.html:6
+msgid "Your support requests"
+msgstr "طلبات الدعم الخاصة بك"
+
+#: templates/portal/request_detail.html:20 templates/portal/requests.html:29
+msgid "Opened %(opened)s"
+msgstr "فُتح في %(opened)s"
+
+#: templates/portal/request_detail.html:21 templates/portal/requests.html:30
+msgid "Last update %(changed)s"
+msgstr "آخر تحديث %(changed)s"
+
+#: templates/portal/request_detail.html:33
+msgid "Your request"
+msgstr "طلبك"
+
+#: templates/portal/request_detail.html:43
+msgid "You"
+msgstr "أنت"
+
+#: templates/portal/requests.html:9 templates/shell.html:43
+msgid "Sign out"
+msgstr "تسجيل الخروج"
+
+#: templates/portal/requests.html:43
+msgid "You have not raised any requests yet."
+msgstr "لم تقدّم أي طلبات بعد."
+
+#: templates/portal/requests.html:45
+msgid "Raise a request"
+msgstr "تقديم طلب"
 
 #: templates/portal/resend_confirmation.html:3
 #: templates/portal/resend_confirmation.html:5 templates/portal/sign_in.html:16
@@ -1317,7 +1350,8 @@ msgstr "العودة إلى تسجيل الدخول"
 msgid ""
 "This address has not been confirmed yet. Follow the link in the message we "
 "sent you."
-msgstr "لم يتم تأكيد هذا العنوان بعد. اتبع الرابط في الرسالة التي أرسلناها إليك."
+msgstr ""
+"لم يتم تأكيد هذا العنوان بعد. اتبع الرابط في الرسالة التي أرسلناها إليك."
 
 #: templates/portal/sign_in.html:19
 msgid "That email address and password do not match."
@@ -1336,10 +1370,6 @@ msgstr "كانت هناك محاولات كثيرة جدًا من هنا مؤخ�
 #: tests/test_translation_catalog.py:187
 msgid "Ticket queue"
 msgstr "قائمة التذاكر"
-
-#: templates/shell.html:43
-msgid "Sign out"
-msgstr "تسجيل الدخول"
 
 #: templates/tickets/partials/queue_list.html:7
 #: templates/tickets/partials/ticket_pane.html:148
@@ -1449,6 +1479,9 @@ msgstr "المُسنَدة إليّ"
 msgid "Search reference, subject or contact"
 msgstr "ابحث برقم الطلب أو الموضوع أو جهة الاتصال"
 
+#, python-format
+#~ msgid "Signed in as %(address)s."
+#~ msgstr "تم تسجيل الدخول باسم %(address)s."
 #~ msgid ""
 #~ "That department and branch are not yours to administer, and this account "
 #~ "would no longer be visible to you. Nothing has been changed."

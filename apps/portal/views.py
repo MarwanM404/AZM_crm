@@ -18,7 +18,7 @@ defence that does not depend on it.
 """
 
 from django.conf import settings
-from django.http import HttpResponse
+from django.http import Http404, HttpResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils import translation
@@ -31,7 +31,7 @@ from django_ratelimit.decorators import ratelimit
 from apps.portal import auth
 from apps.portal.auth import Unconfirmed, customer_required
 from apps.portal.forms import EmailForm, RegistrationForm, SignInForm
-from apps.portal.services import registration
+from apps.portal.services import registration, tickets
 
 #: Limits count POSTs and nothing else.
 #:
@@ -84,7 +84,36 @@ def too_many(request, rate_setting):
 
 @customer_required
 def home(request):
-    return render(request, "portal/home.html", {"customer": request.customer})
+    """The customer's requests. The portal's front door once they are signed in."""
+    return render(
+        request,
+        "portal/requests.html",
+        {"customer": request.customer, "requests": tickets.requests_for(request.customer)},
+    )
+
+
+@customer_required
+def request_detail(request, reference):
+    """One request, with the customer side of its conversation.
+
+    `raise Http404` for a reference that is not theirs AND for one that was never issued, with
+    no branch between them — FR-017. Written as two cases with different messages it would
+    still be a 404 and would still disclose the difference to anyone comparing the pages,
+    which is why `tickets.request_for` returns None for both.
+    """
+    ticket = tickets.request_for(request.customer, reference)
+    if ticket is None:
+        raise Http404("No such request")
+
+    return render(
+        request,
+        "portal/request_detail.html",
+        {
+            "customer": request.customer,
+            "ticket": ticket,
+            "messages_": tickets.conversation_for(ticket),
+        },
+    )
 
 
 @require_http_methods(["POST"])

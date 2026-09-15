@@ -25,9 +25,12 @@ every staff screen and be saved only by having no department.
 future change to populate and no shape a staff query could accidentally match.
 
 **Deliberately not stored**: a link to a `Contact`. Matching happens at read time by address
-(research.md §2), so a customer can register before they have ever written in, an edited
-contact address does not silently move what they can see, and two contact records with the same
-address both match.
+(research.md §2), so a customer can register before they have ever written in, and an edited
+contact address does not silently move what they can see.
+
+(The original text here also claimed two contact records with the same address both match. A
+unique constraint on `ContactDetail(kind, value)` prevents the second record from existing —
+see the correction in research.md §2.)
 
 ### CustomerToken
 

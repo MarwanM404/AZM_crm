@@ -19,6 +19,28 @@ from apps.customers.services.matching import find_or_create_contact
 from apps.tickets.models import Message, Ticket
 
 
+@pytest.fixture
+def customer_client_for_budget(db):
+    """A signed-in portal customer. Local to this file so the portal's own conftest fixtures
+    do not have to be importable from tests/."""
+    from django.conf import settings
+
+    from apps.portal.auth import CUSTOMER_SESSION_KEY
+    from apps.portal.models import CustomerAccount
+
+    account = CustomerAccount.objects.create_account(
+        email="budget@example.com", password="a-long-enough-passphrase-42"
+    )
+    account.confirm()
+
+    client = Client()
+    session = client.session
+    session[CUSTOMER_SESSION_KEY] = account.pk
+    session.save()
+    client.cookies[settings.SESSION_COOKIE_NAME] = session.session_key
+    return client, account
+
+
 def _make_tickets(count, *, organization, department, branch, category, agent, start=0):
     for i in range(start, start + count):
         contact, _ = find_or_create_contact(
@@ -359,3 +381,112 @@ def test_the_supervision_list_does_not_query_per_conversation(
 
     assert len(many) == len(few)
     reset_for_tests()
+
+
+# --- the customer portal (spec 004, T050) ---
+
+
+@pytest.mark.django_db
+def test_the_portal_request_list_does_not_query_per_request(
+    customer_client_for_budget, department, branch, category
+):
+    """The portal's list is the page most likely to be opened by somebody on a phone on a bad
+    connection, and the one whose owner cannot ask an administrator to make it faster.
+
+    Asserted as "the count does not change with the number of rows" rather than as a budget,
+    for the reason at the top of this file.
+    """
+    from apps.customers.models import Contact, ContactDetail
+    from apps.tickets.models import Ticket
+
+    client, account = customer_client_for_budget
+    contact = Contact.objects.create(
+        full_name="Noura Al-Harbi", department=department, branch=branch
+    )
+    ContactDetail.objects.create(
+        contact=contact,
+        kind=ContactDetail.Kind.EMAIL,
+        value=account.email,
+        department=department,
+        branch=branch,
+    )
+
+    def make(count):
+        for i in range(count):
+            Ticket.objects.create(
+                contact=contact,
+                subject=f"Request {i}",
+                description="...",
+                category=category,
+                origin_channel=Ticket.Channel.EMAIL,
+                department=department,
+                branch=branch,
+            )
+
+    url = reverse("portal:home")
+
+    make(3)
+    with CaptureQueriesContext(connection) as few:
+        assert client.get(url).status_code == 200
+
+    make(20)
+    with CaptureQueriesContext(connection) as many:
+        assert client.get(url).status_code == 200
+
+    assert len(many) == len(few), (
+        f"{len(few)} queries for 3 requests and {len(many)} for 23. The list issues a query "
+        "per row."
+    )
+
+
+@pytest.mark.django_db
+def test_the_portal_request_detail_does_not_query_per_message(
+    customer_client_for_budget, department, branch, category, agent
+):
+    from apps.customers.models import Contact, ContactDetail
+    from apps.tickets.models import Message, Ticket
+
+    client, account = customer_client_for_budget
+    contact = Contact.objects.create(full_name="Noura", department=department, branch=branch)
+    ContactDetail.objects.create(
+        contact=contact,
+        kind=ContactDetail.Kind.EMAIL,
+        value=account.email,
+        department=department,
+        branch=branch,
+    )
+    ticket = Ticket.objects.create(
+        contact=contact,
+        subject="A long conversation",
+        description="...",
+        category=category,
+        origin_channel=Ticket.Channel.EMAIL,
+        department=department,
+        branch=branch,
+    )
+
+    def reply(count):
+        for i in range(count):
+            Message.objects.create(
+                ticket=ticket,
+                author=agent,
+                direction=Message.Direction.OUTBOUND,
+                visibility=Message.Visibility.PUBLIC,
+                channel=Ticket.Channel.EMAIL,
+                body=f"Update {i}",
+            )
+
+    url = reverse("portal:request", args=[ticket.reference])
+
+    reply(2)
+    with CaptureQueriesContext(connection) as few:
+        assert client.get(url).status_code == 200
+
+    reply(20)
+    with CaptureQueriesContext(connection) as many:
+        assert client.get(url).status_code == 200
+
+    assert len(many) == len(few), (
+        f"{len(few)} queries for 2 messages and {len(many)} for 22. The thread issues a query "
+        "per message — most likely the author on each one."
+    )

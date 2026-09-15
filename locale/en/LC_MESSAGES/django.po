@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-15 09:20+0000\n"
+"POT-Creation-Date: 2026-09-15 11:12+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -575,19 +575,19 @@ msgstr "Confirm an email address"
 msgid "Reset a password"
 msgstr "Reset a password"
 
-#: apps/portal/views.py:48
+#: apps/portal/views.py:59
 msgid "Please try again in a minute."
 msgstr "Please try again in a minute."
 
-#: apps/portal/views.py:49
+#: apps/portal/views.py:60
 msgid "Please try again in a few minutes."
 msgstr "Please try again in a few minutes."
 
-#: apps/portal/views.py:50
+#: apps/portal/views.py:61
 msgid "Please try again in an hour."
 msgstr "Please try again in an hour."
 
-#: apps/portal/views.py:51
+#: apps/portal/views.py:62
 msgid "Please try again tomorrow."
 msgstr "Please try again tomorrow."
 
@@ -688,7 +688,8 @@ msgid "Sign in"
 msgstr "Sign in"
 
 #: templates/accounts/sign_in.html:21 templates/base.html:7
-#: templates/portal/base.html:20 templates/shell.html:9
+#: templates/portal/base.html:20 templates/portal/request_detail.html:44
+#: templates/shell.html:9
 msgid "AZM Support"
 msgstr "AZM Support"
 
@@ -1256,15 +1257,6 @@ msgstr ""
 msgid "Send me another"
 msgstr "Send me another"
 
-#: templates/portal/home.html:3 templates/portal/home.html:5
-msgid "Your support requests"
-msgstr "Your support requests"
-
-#: templates/portal/home.html:6
-#, python-format
-msgid "Signed in as %(address)s."
-msgstr "Signed in as %(address)s."
-
 #: templates/portal/register.html:3 templates/portal/register.html:5
 #: templates/portal/sign_in.html:34
 msgid "Create an account"
@@ -1306,6 +1298,41 @@ msgstr ""
 #: templates/portal/register_done.html:27
 msgid "Send another message"
 msgstr "Send another message"
+
+#: templates/portal/request_detail.html:12 templates/portal/requests.html:3
+#: templates/portal/requests.html:6
+msgid "Your support requests"
+msgstr "Your support requests"
+
+#: templates/portal/request_detail.html:20 templates/portal/requests.html:29
+#, python-format
+msgid "Opened %(opened)s"
+msgstr "Opened %(opened)s"
+
+#: templates/portal/request_detail.html:21 templates/portal/requests.html:30
+#, python-format
+msgid "Last update %(changed)s"
+msgstr "Last update %(changed)s"
+
+#: templates/portal/request_detail.html:33
+msgid "Your request"
+msgstr "Your request"
+
+#: templates/portal/request_detail.html:43
+msgid "You"
+msgstr "You"
+
+#: templates/portal/requests.html:9 templates/shell.html:43
+msgid "Sign out"
+msgstr "Sign out"
+
+#: templates/portal/requests.html:43
+msgid "You have not raised any requests yet."
+msgstr "You have not raised any requests yet."
+
+#: templates/portal/requests.html:45
+msgid "Raise a request"
+msgstr "Raise a request"
 
 #: templates/portal/resend_confirmation.html:3
 #: templates/portal/resend_confirmation.html:5 templates/portal/sign_in.html:16
@@ -1351,10 +1378,6 @@ msgstr "There have been too many attempts from here recently."
 #: tests/test_translation_catalog.py:187
 msgid "Ticket queue"
 msgstr "Ticket queue"
-
-#: templates/shell.html:43
-msgid "Sign out"
-msgstr "Sign out"
 
 #: templates/tickets/partials/queue_list.html:7
 #: templates/tickets/partials/ticket_pane.html:148
@@ -1460,6 +1483,9 @@ msgstr "Assigned to me"
 msgid "Search reference, subject or contact"
 msgstr "Search reference, subject or contact"
 
+#, python-format
+#~ msgid "Signed in as %(address)s."
+#~ msgstr "Signed in as %(address)s."
 #~ msgid ""
 #~ "That department and branch are not yours to administer, and this account "
 #~ "would no longer be visible to you. Nothing has been changed."

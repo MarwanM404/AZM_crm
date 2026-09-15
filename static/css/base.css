@@ -568,8 +568,49 @@ select:focus-visible, input:focus-visible, textarea:focus-visible {
 .portal .error--form p { margin: 0 0 6px; font-size: inherit; }
 .portal .error--form p:last-child { margin-block-end: 0; }
 
+/* The list of a customer's requests. */
+.portal__title { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; }
+.portal__signout { margin: 0; }
+.req-list { list-style: none; margin: 18px 0 0; padding: 0; }
+.req {
+  padding: 14px 16px; margin-block-end: 10px;
+  border: 1px solid var(--color-line); border-radius: var(--radius); background: var(--color-bg);
+}
+.req__link { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+.req__subject { font-weight: 600; }
+.req__meta { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-block-start: 8px; font-size: 12.5px; }
+/* The two dates read as one run-on sentence without something between them, and they are the
+ * pair a customer actually scans: "opened three weeks ago" means something different next to
+ * "last update yesterday" than next to "last update three weeks ago". */
+.req__meta .muted + .muted::before { content: "·"; margin-inline-end: 10px; color: var(--color-faint); }
+.req-empty { padding: 28px 0; }
+.req-empty p { margin-block-end: 14px; }
+
+/* The conversation. Reuses .msg from the staff thread so the two stay in one visual
+ * vocabulary — but nothing here can render an internal note: the messages come from
+ * apps.portal.services.tickets.conversation_for, which goes through the product's one
+ * internal/public filter. */
+.thread { margin-block-start: 22px; display: flex; flex-direction: column; gap: 12px; }
+.thread .msg {
+  padding: 12px 14px; border: 1px solid var(--color-line); border-radius: var(--radius);
+  background: var(--color-bg);
+}
+/* Who said it, at a glance.
+ *
+ * --color-sunken alone was not enough: on this background the customer's own message and the
+ * desk's reply were near-identical, and a support conversation where you cannot tell your own
+ * words from theirs is hard to read at exactly the moment somebody is upset. The edge is a
+ * logical property, so it moves to the other side in Arabic without a second rule. */
+.thread .msg--inbound { border-inline-start: 3px solid var(--color-line); }
+.thread .msg--outbound {
+  background: var(--color-sunken); border-inline-start: 3px solid var(--color-accent);
+}
+.thread .msg__head { display: flex; gap: 10px; align-items: baseline; margin-block-end: 6px; font-size: 12.5px; }
+.thread .msg__body { margin: 0; font-size: 14px; white-space: pre-wrap; }
+
 @media (max-width: 600px) {
   .portal { padding: 0 16px 32px; }
   .portal__head { flex-wrap: wrap; gap: 12px; padding-block: 16px; margin-block-end: 18px; }
   .portal__form, .portal .error--form { max-inline-size: none; }
+  .req__link { flex-direction: column; gap: 4px; }
 }

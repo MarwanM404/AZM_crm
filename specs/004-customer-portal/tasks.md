@@ -133,23 +133,23 @@ phase is a hybrid because the refusal and the thing refused are the same object.
 
 ### Tests for User Story 2
 
-- [ ] T042 [P] [US2] Write `apps/portal/tests/test_request_list.py` asserting the list shows the requests raised from the confirmed address, with reference, subject, status and both dates
-- [ ] T043 [P] [US2] Extend `test_request_list.py` asserting a customer whose address matches no contact sees an empty list and an invitation, not an error (research.md §2)
-- [ ] T044 [P] [US2] Extend `test_request_list.py` asserting a colleague's requests at the same organization are absent (FR-018)
-- [ ] T045 [P] [US2] Extend `test_request_list.py` asserting an address recorded on two contacts sees both histories
-- [ ] T046 [P] [US2] Write `apps/portal/tests/test_request_detail.py` asserting the customer-facing conversation appears in order
-- [ ] T047 [P] [US2] Extend `test_request_detail.py` asserting an internal note is absent from the page and from its source (FR-016)
-- [ ] T048 [P] [US2] Extend `test_request_detail.py` asserting another customer's request is refused **identically** to a reference that does not exist — same status, same body (FR-017)
-- [ ] T049 [P] [US2] Extend `test_request_detail.py` asserting resolved and closed requests stay readable (FR-019)
-- [ ] T050 [P] [US2] Write `tests/test_query_budget.py` coverage asserting the portal list does not issue a query per request
+- [x] T042 [P] [US2] Write `apps/portal/tests/test_request_list.py` asserting the list shows the requests raised from the confirmed address, with reference, subject, status and both dates
+- [x] T043 [P] [US2] Extend `test_request_list.py` asserting a customer whose address matches no contact sees an empty list and an invitation, not an error (research.md §2)
+- [x] T044 [P] [US2] Extend `test_request_list.py` asserting a colleague's requests at the same organization are absent (FR-018)
+- [x] T045 [P] [US2] Extend `test_request_list.py` asserting an address recorded on two contacts sees both histories
+- [x] T046 [P] [US2] Write `apps/portal/tests/test_request_detail.py` asserting the customer-facing conversation appears in order
+- [x] T047 [P] [US2] Extend `test_request_detail.py` asserting an internal note is absent from the page and from its source (FR-016)
+- [x] T048 [P] [US2] Extend `test_request_detail.py` asserting another customer's request is refused **identically** to a reference that does not exist — same status, same body (FR-017)
+- [x] T049 [P] [US2] Extend `test_request_detail.py` asserting resolved and closed requests stay readable (FR-019)
+- [x] T050 [P] [US2] Write `tests/test_query_budget.py` coverage asserting the portal list does not issue a query per request
 
 ### Implementation
 
-- [ ] T051 [US2] Implement reading in `apps/portal/services/tickets.py`, matching contacts by confirmed address at read time and reading messages through the existing customer-facing filter
-- [ ] T052 [US2] Implement the list and detail views in `apps/portal/views.py`, refusing anything not the customer's as not-found
-- [ ] T053 [P] [US2] Create `templates/portal/requests.html` and `request_detail.html`
-- [ ] T054 [US2] Extract and translate this phase's strings, then check both domains
-- [ ] T055 [US2] Demonstrate the boundary fails when broken: make the detail view read the staff message filter, confirm T047 and the internal-visibility sweep both fail; restore
+- [x] T051 [US2] Implement reading in `apps/portal/services/tickets.py`, matching contacts by confirmed address at read time and reading messages through the existing customer-facing filter
+- [x] T052 [US2] Implement the list and detail views in `apps/portal/views.py`, refusing anything not the customer's as not-found
+- [x] T053 [P] [US2] Create `templates/portal/requests.html` and `request_detail.html`
+- [x] T054 [US2] Extract and translate this phase's strings, then check both domains
+- [x] T055 [US2] Demonstrate the boundary fails when broken: make the detail view read the staff message filter, confirm T047 and the internal-visibility sweep both fail; restore
 
 **Checkpoint**: the portal is useful. This is the smallest version worth shipping.
 

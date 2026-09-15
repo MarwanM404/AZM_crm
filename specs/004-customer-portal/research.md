@@ -53,8 +53,18 @@ The account stores the address; it does not store a link to a contact.
 **Rationale**: Matching at read time is what makes the edge cases behave. A customer registers
 before they have written in — no contact exists yet, and the list is empty rather than broken.
 An administrator later edits a contact's address — the customer's view follows the address they
-proved, which is the only thing they proved. A customer has written from one address and been
-recorded twice — both records match, and they see both.
+proved, which is the only thing they proved. A contact's address is superseded and the address
+re-recorded on another contact — the live record matches and the removed one does not, which
+is the same answer staff see.
+
+**Corrected during implementation (T045).** This section originally said that an address
+recorded on two contacts matches both and the customer sees both histories. It cannot:
+`ContactDetail` carries a unique constraint on `(kind, value)` for rows that are not
+soft-deleted, so the second record does not exist to be matched. The claim was written from
+the portal's side without reading the schema. The read query still uses `contact_id__in`
+rather than a single lookup — it costs nothing and stays correct if the constraint is ever
+relaxed — and `test_one_address_cannot_be_recorded_on_two_live_contacts` pins the constraint
+so this does not get re-asserted.
 
 Storing a link instead would fix the association at registration, which is the moment we know
 least.
