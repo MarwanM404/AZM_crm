@@ -269,6 +269,10 @@ def fill(language, translations):
         _fill_file(path, language, translations)
 
 
+def _escape(value):
+    return value.replace("\\", "\\\\").replace('"', '\\"')
+
+
 def _fill_file(path, language, translations):
     out, applied = [], 0
     for block in _blocks(path):
@@ -278,7 +282,6 @@ def _fill_file(path, language, translations):
         lines = block.split("\n")
         msgid = _string_parts(lines, "msgid ")
         if msgid in translations:
-            value = translations[msgid].replace("\\", "\\\\").replace('"', '\\"')
             msgstr_at = next((i for i, line in enumerate(lines) if line.startswith("msgstr")), None)
             if msgstr_at is not None:
                 head = [
@@ -286,11 +289,47 @@ def _fill_file(path, language, translations):
                     for line in lines[:msgstr_at]
                     if not line.startswith("#,") and not line.startswith("#|")
                 ]
-                block = "\n".join(head + [f'msgstr "{value}"'])
+                block = "\n".join(head + _translation_lines(lines, translations[msgid], msgid))
                 applied += 1
         out.append(block)
     _write(path, out)
     print(f"{language}: {applied} translation(s) applied")
+
+
+def _translation_lines(lines, value, msgid):
+    """The msgstr line, or the msgstr[n] lines for a plural entry.
+
+    Written because the single-msgstr version SILENTLY DESTROYED plural entries: it replaced
+    six `msgstr[n]` lines with one `msgstr`, leaving a `msgid_plural` with no plural forms.
+    msgfmt rejects that, so it would have been caught — but only at compile time, and only by
+    whoever ran compilemessages next, with nothing pointing at the tool that did it.
+
+    Arabic has six plural forms, so a caller filling a plural entry passes a list of six.
+    Passing the wrong number is refused here rather than written out, because a catalog with
+    four forms where the header promises six fails in one specific language at runtime.
+    """
+    plural_lines = [line for line in lines if line.startswith("msgstr[")]
+
+    if not plural_lines:
+        if isinstance(value, list):
+            raise ValueError(
+                f"{msgid!r} is not a plural entry, but a list of translations was given."
+            )
+        return [f'msgstr "{_escape(value)}"']
+
+    if not isinstance(value, list):
+        raise ValueError(
+            f"{msgid!r} is a plural entry with {len(plural_lines)} forms. Give a list of "
+            f"{len(plural_lines)} translations, not a single string — one string would "
+            "destroy the plural forms."
+        )
+    if len(value) != len(plural_lines):
+        raise ValueError(
+            f"{msgid!r} has {len(plural_lines)} plural forms and {len(value)} translations "
+            "were given. Arabic has six; English has two."
+        )
+
+    return [f'msgstr[{n}] "{_escape(form)}"' for n, form in enumerate(value)]
 
 
 if __name__ == "__main__":

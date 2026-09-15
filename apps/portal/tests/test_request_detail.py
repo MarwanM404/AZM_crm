@@ -94,7 +94,7 @@ def test_an_internal_note_is_absent_from_the_context_too(customer_client, conver
     """
     response = detail(customer_client, conversation.reference)
 
-    for message in response.context["messages_"]:
+    for message in response.context["public_messages"]:
         assert message.visibility == Message.Visibility.PUBLIC
         assert SECRET not in message.body
 
@@ -169,3 +169,23 @@ def test_the_detail_carries_a_way_back(customer_client, conversation):
     body = detail(customer_client, conversation.reference).content.decode()
 
     assert reverse("portal:home") in body
+
+
+def test_the_template_never_receives_the_ticket(customer_client, conversation):
+    """The mechanism, not the symptom.
+
+    Filtering the messages and handing over the ticket anyway passes every boundary test in
+    this file — because the template as written does not reach for `ticket.messages`. The
+    next person to edit it would have a ticket object in scope and no reason to suspect it.
+    `customer_facing_context` exists so that the reach is impossible rather than merely
+    unmade, and tests/test_internal_visibility.py asserts the same thing about every other
+    customer-facing screen.
+    """
+    response = detail(customer_client, conversation.reference)
+
+    assert "ticket" not in response.context, (
+        "The detail template is handed the ticket, so a later edit can walk to "
+        "ticket.messages and print an internal note."
+    )
+    for value in response.context["public_messages"]:
+        assert not hasattr(value, "messages")

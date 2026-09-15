@@ -169,3 +169,61 @@ def test_a_failed_sign_in_still_counts(client, customer, settings):
     responses = [client.post(url, {"email": customer.email, "password": "wrong"}) for _ in range(6)]
 
     assert any(refused(r) for r in responses)
+
+
+# --- behind sign-in, where there is no address in the form (T061) ---
+
+
+def test_replying_is_limited(customer_client, customer_ticket, settings):
+    settings.PORTAL_REPLY_RATE_PER_ADDRESS = "3/h"
+    url = reverse("portal:reply", args=[customer_ticket.reference])
+
+    responses = attempts(customer_client, url, {"body": "Any news?"}, 6)
+
+    assert any(refused(r) for r in responses)
+
+
+def test_a_limited_reply_is_not_written(customer_client, customer_ticket, settings):
+    settings.PORTAL_REPLY_RATE_PER_ADDRESS = "2/h"
+    url = reverse("portal:reply", args=[customer_ticket.reference])
+
+    attempts(customer_client, url, {"body": "Any news?"}, 5)
+
+    assert (
+        customer_ticket.messages.count() <= 2
+    ), "A refused reply was still added to the conversation."
+
+
+def test_the_reply_limit_is_per_customer_not_per_address_in_the_form(
+    customer_client, customer_ticket, settings
+):
+    """Behind sign-in there is no address in the POST, so `key="post:email"` would key every
+    customer to the empty string — one shared limit for the whole product, and the first busy
+    customer of the hour locks everyone else out.
+
+    The key is the signed-in customer's address instead. This asserts the limit actually
+    discriminates: a second customer is unaffected by the first one's spending.
+    """
+    from django.conf import settings as django_settings
+
+    from apps.portal.auth import CUSTOMER_SESSION_KEY
+    from apps.portal.models import CustomerAccount
+
+    settings.PORTAL_REPLY_RATE_PER_ADDRESS = "2/h"
+    settings.PORTAL_REPLY_RATE_PER_SOURCE = "1000/h"
+    url = reverse("portal:reply", args=[customer_ticket.reference])
+
+    attempts(customer_client, url, {"body": "Any news?"}, 5)
+
+    other = CustomerAccount.objects.create_account(
+        email="someone.else@example.com", password=GOOD_PASSWORD
+    )
+    other.confirm()
+    session = customer_client.session
+    session[CUSTOMER_SESSION_KEY] = other.pk
+    session.save()
+    customer_client.cookies[django_settings.SESSION_COOKIE_NAME] = session.session_key
+
+    # Not their request, so 404 — but a 404 means the limiter let them through, which is what
+    # is being checked. A shared key would have refused them before the view ran.
+    assert customer_client.post(url, {"body": "Mine too?"}).status_code == 404

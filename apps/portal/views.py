@@ -30,7 +30,7 @@ from django_ratelimit.decorators import ratelimit
 
 from apps.portal import auth
 from apps.portal.auth import Unconfirmed, customer_required
-from apps.portal.forms import EmailForm, RegistrationForm, SignInForm
+from apps.portal.forms import EmailForm, RegistrationForm, ReplyForm, SignInForm
 from apps.portal.services import registration, tickets
 
 #: Limits count POSTs and nothing else.
@@ -53,6 +53,18 @@ def _rate(setting_name):
     django-ratelimit accepts a callable for exactly this.
     """
     return lambda group, request: getattr(settings, setting_name)
+
+
+def _customer_key(group, request):
+    """Rate limit per CUSTOMER, on the screens where the address is not in the form.
+
+    The public screens key on `post:email` because the address is what was submitted. Behind
+    sign-in there is no address in the request, and keying on the IP alone would let one
+    account hammer the desk from a phone network whose address changes — or, worse, limit an
+    office full of people sharing one address to whatever one of them does.
+    """
+    customer = getattr(request, "customer", None)
+    return customer.email if customer else ""
 
 
 PERIODS = {
@@ -93,27 +105,22 @@ def home(request):
 
 
 @customer_required
-def request_detail(request, reference):
+def request_detail(request, reference, form=None):
     """One request, with the customer side of its conversation.
 
     `raise Http404` for a reference that is not theirs AND for one that was never issued, with
     no branch between them — FR-017. Written as two cases with different messages it would
     still be a 404 and would still disclose the difference to anyone comparing the pages,
     which is why `tickets.request_for` returns None for both.
+
+    The template is handed `tickets.page_for(...)` rather than the ticket. The difference is
+    the point and is explained there.
     """
     ticket = tickets.request_for(request.customer, reference)
     if ticket is None:
         raise Http404("No such request")
 
-    return render(
-        request,
-        "portal/request_detail.html",
-        {
-            "customer": request.customer,
-            "ticket": ticket,
-            "messages_": tickets.conversation_for(ticket),
-        },
-    )
+    return render(request, "portal/request_detail.html", tickets.page_for(ticket, form))
 
 
 @require_http_methods(["POST"])
@@ -286,3 +293,38 @@ def sign_in(request):
 def sign_out(request):
     auth.sign_out_customer(request)
     return redirect("portal:sign_in")
+
+
+@require_http_methods(["POST"])
+@ratelimit(key="ip", rate=_rate("PORTAL_REPLY_RATE_PER_SOURCE"), method=POST_ONLY, block=False)
+@ratelimit(
+    key=_customer_key, rate=_rate("PORTAL_REPLY_RATE_PER_ADDRESS"), method=POST_ONLY, block=False
+)
+@customer_required
+def reply(request, reference):
+    """A customer adds to their own conversation (FR-020 to FR-024).
+
+    Refused content comes back on the request's own page with what they wrote still in the
+    box. Scenario 5 asks for that on a rate-limited reply and the same courtesy belongs on a
+    validation refusal — somebody who has just written four paragraphs and is handed an empty
+    textarea has been punished for a typo.
+
+    The limit here is deliberately generous (settings). This is the portal working as
+    intended: a customer in a live back-and-forth about an urgent problem should not meet a
+    limit, and the limit exists for the script, not the person.
+    """
+    if getattr(request, "limited", False):
+        return too_many(request, "PORTAL_REPLY_RATE_PER_SOURCE")
+
+    form = ReplyForm(request.POST)
+
+    if not form.is_valid():
+        return request_detail(request, reference, form=form)
+
+    message = tickets.reply_to(request.customer, reference, form.cleaned_data["body"])
+    if message is None:
+        # Not theirs, or never issued — the same answer to both (FR-017), and nothing written
+        # either way because `reply_to` checks before it writes.
+        raise Http404("No such request")
+
+    return redirect("portal:request", reference=reference)

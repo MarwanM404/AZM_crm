@@ -330,6 +330,12 @@ PORTAL_RESET_LINK_SECONDS = 3600  # 1 hour: it is a password, in transit
 # message our own mail server sends under our own reputation.
 PORTAL_BASE_URL = env("PORTAL_BASE_URL", default="http://localhost:8000")
 
+# The longest a customer-authored reply or request may be (FR-024). A setting rather than a
+# model field length, because the limit is a product decision about what a support desk can
+# usefully read and not a storage constraint — `Message.body` is a TextField with no limit at
+# all, which is why the check has to be made deliberately on the way in.
+PORTAL_MESSAGE_MAX_LENGTH = 10000
+
 
 CELERY_BEAT_SCHEDULE = {
     "close-deserted-desks": {

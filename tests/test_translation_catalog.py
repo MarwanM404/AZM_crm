@@ -412,3 +412,58 @@ def test_the_parser_sees_every_entry_in_the_file(language):
         f"{path}: these entries are invisible to the parser, so no check in this file "
         f"applies to them: {sorted(invisible)}"
     )
+
+
+# --- plural entries (spec 004, T067) ---
+
+
+def test_fill_refuses_to_collapse_a_plural_entry(tmp_path):
+    """`fill` used to write one `msgstr` over a plural entry's six `msgstr[n]` lines.
+
+    The result is a `msgid_plural` with no plural forms — which msgfmt rejects, so it would
+    have been caught, but only at compile time and only by whoever ran compilemessages next,
+    with nothing pointing back at the tool that did it. Refusing at the point of the mistake
+    names the cause.
+    """
+    import pytest
+
+    from tools import catalog
+
+    lines = [
+        'msgid "one %(n)d thing"',
+        'msgid_plural "%(n)d things"',
+        'msgstr[0] ""',
+        'msgstr[1] ""',
+    ]
+
+    with pytest.raises(ValueError, match="plural"):
+        catalog._translation_lines(lines, "a single string", "one %(n)d thing")
+
+
+def test_fill_refuses_the_wrong_number_of_plural_forms():
+    """Arabic has six. A catalog with four where the header promises six fails at runtime, in
+    one language, on whichever count falls into a missing form."""
+    import pytest
+
+    from tools import catalog
+
+    lines = ['msgid "x"', 'msgid_plural "xs"'] + [f'msgstr[{n}] ""' for n in range(6)]
+
+    with pytest.raises(ValueError, match="six"):
+        catalog._translation_lines(lines, ["a", "b", "c", "d"], "x")
+
+
+def test_fill_writes_every_plural_form():
+    from tools import catalog
+
+    lines = ['msgid "x"', 'msgid_plural "xs"'] + [f'msgstr[{n}] ""' for n in range(6)]
+
+    written = catalog._translation_lines(lines, list("abcdef"), "x")
+
+    assert written == [f'msgstr[{n}] "{form}"' for n, form in enumerate("abcdef")]
+
+
+def test_a_singular_entry_still_takes_a_string():
+    from tools import catalog
+
+    assert catalog._translation_lines(['msgid "x"', 'msgstr ""'], "y", "x") == ['msgstr "y"']

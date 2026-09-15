@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-15 11:12+0000\n"
+"POT-Creation-Date: 2026-09-15 12:36+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -25,7 +25,7 @@ msgstr ""
 msgid "Email"
 msgstr "البريد الإلكتروني"
 
-#: apps/accounts/forms.py:8 apps/portal/forms.py:26 apps/portal/forms.py:48
+#: apps/accounts/forms.py:8 apps/portal/forms.py:28 apps/portal/forms.py:50
 msgid "Password"
 msgstr "كلمة المرور"
 
@@ -172,8 +172,8 @@ msgstr "مراقبة المحادثة لا تتيح لك المشاركة فيه
 msgid "Your name"
 msgstr "اسمك"
 
-#: apps/chat/forms.py:17 apps/intake/forms.py:21 apps/portal/forms.py:20
-#: apps/portal/forms.py:24 apps/portal/forms.py:46
+#: apps/chat/forms.py:17 apps/intake/forms.py:21 apps/portal/forms.py:22
+#: apps/portal/forms.py:26 apps/portal/forms.py:48
 #: templates/accounts/user_form.html:25
 msgid "Email address"
 msgstr "عنوان البريد الإلكتروني"
@@ -561,6 +561,25 @@ msgstr "تم استلام طلبك: %(reference)s"
 msgid "Re: %(reference)s"
 msgstr "رد: %(reference)s"
 
+#: apps/portal/forms.py:70
+msgid "Your reply"
+msgstr "ردّك"
+
+#: apps/portal/forms.py:78
+msgid "Write something before sending."
+msgstr "اكتب شيئًا قبل الإرسال."
+
+#: apps/portal/forms.py:93
+#, python-format
+msgid "This is too long by %(over)d character. The limit is %(limit)d."
+msgid_plural "This is too long by %(over)d characters. The limit is %(limit)d."
+msgstr[0] "النص أطول من الحد المسموح. الحد الأقصى %(limit)d حرف."
+msgstr[1] "النص أطول بحرف واحد. الحد الأقصى %(limit)d حرف."
+msgstr[2] "النص أطول بحرفين. الحد الأقصى %(limit)d حرف."
+msgstr[3] "النص أطول بـ %(over)d أحرف. الحد الأقصى %(limit)d حرف."
+msgstr[4] "النص أطول بـ %(over)d حرفًا. الحد الأقصى %(limit)d حرف."
+msgstr[5] "النص أطول بـ %(over)d حرف. الحد الأقصى %(limit)d حرف."
+
 #: apps/portal/models.py:84
 msgid "password"
 msgstr "كلمة المرور"
@@ -577,19 +596,19 @@ msgstr "تأكيد عنوان البريد الإلكتروني"
 msgid "Reset a password"
 msgstr "إعادة تعيين كلمة المرور"
 
-#: apps/portal/views.py:59
+#: apps/portal/views.py:71
 msgid "Please try again in a minute."
 msgstr "يرجى المحاولة مرة أخرى بعد دقيقة."
 
-#: apps/portal/views.py:60
+#: apps/portal/views.py:72
 msgid "Please try again in a few minutes."
 msgstr "يرجى المحاولة مرة أخرى بعد بضع دقائق."
 
-#: apps/portal/views.py:61
+#: apps/portal/views.py:73
 msgid "Please try again in an hour."
 msgstr "يرجى المحاولة مرة أخرى بعد ساعة."
 
-#: apps/portal/views.py:62
+#: apps/portal/views.py:74
 msgid "Please try again tomorrow."
 msgstr "يرجى المحاولة مرة أخرى غدًا."
 
@@ -629,35 +648,39 @@ msgstr "مغلقة"
 msgid "Web form"
 msgstr "نموذج الويب"
 
-#: apps/tickets/models.py:120
+#: apps/tickets/models.py:57
+msgid "Customer portal"
+msgstr "بوابة العملاء"
+
+#: apps/tickets/models.py:125
 msgid "Inbound"
 msgstr "وارد"
 
-#: apps/tickets/models.py:121
+#: apps/tickets/models.py:126
 msgid "Outbound"
 msgstr "صادر"
 
-#: apps/tickets/models.py:124
+#: apps/tickets/models.py:129
 msgid "Public"
 msgstr "عام"
 
-#: apps/tickets/models.py:125
+#: apps/tickets/models.py:130
 msgid "Internal"
 msgstr "داخلي"
 
-#: apps/tickets/models.py:128
+#: apps/tickets/models.py:133
 msgid "Pending"
 msgstr "قيد الانتظار"
 
-#: apps/tickets/models.py:129
+#: apps/tickets/models.py:134
 msgid "Sent"
 msgstr "تم الإرسال"
 
-#: apps/tickets/models.py:130
+#: apps/tickets/models.py:135
 msgid "Failed"
 msgstr "فشل"
 
-#: apps/tickets/models.py:131
+#: apps/tickets/models.py:136
 msgid "Not applicable"
 msgstr "لا ينطبق"
 
@@ -1301,10 +1324,12 @@ msgid "Your support requests"
 msgstr "طلبات الدعم الخاصة بك"
 
 #: templates/portal/request_detail.html:20 templates/portal/requests.html:29
+#, python-format
 msgid "Opened %(opened)s"
 msgstr "فُتح في %(opened)s"
 
 #: templates/portal/request_detail.html:21 templates/portal/requests.html:30
+#, python-format
 msgid "Last update %(changed)s"
 msgstr "آخر تحديث %(changed)s"
 
@@ -1315,6 +1340,11 @@ msgstr "طلبك"
 #: templates/portal/request_detail.html:43
 msgid "You"
 msgstr "أنت"
+
+#: templates/portal/request_detail.html:66
+#: templates/tickets/partials/ticket_pane.html:96
+msgid "Send reply"
+msgstr "إرسال الرد"
 
 #: templates/portal/requests.html:9 templates/shell.html:43
 msgid "Sign out"
@@ -1430,10 +1460,6 @@ msgstr "اكتب ردّك…"
 msgid "Will be emailed to the contact on this ticket."
 msgstr "سيُرسل بالبريد الإلكتروني إلى جهة الاتصال المرتبطة بهذه التذكرة."
 
-#: templates/tickets/partials/ticket_pane.html:96
-msgid "Send reply"
-msgstr "إرسال الرد"
-
 #: templates/tickets/partials/ticket_pane.html:105
 msgid "Write a note for the team…"
 msgstr "اكتب ملاحظة لفريق العمل…"
@@ -1482,6 +1508,7 @@ msgstr "ابحث برقم الطلب أو الموضوع أو جهة الاتص�
 #, python-format
 #~ msgid "Signed in as %(address)s."
 #~ msgstr "تم تسجيل الدخول باسم %(address)s."
+
 #~ msgid ""
 #~ "That department and branch are not yours to administer, and this account "
 #~ "would no longer be visible to you. Nothing has been changed."

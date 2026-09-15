@@ -608,6 +608,13 @@ select:focus-visible, input:focus-visible, textarea:focus-visible {
 .thread .msg__head { display: flex; gap: 10px; align-items: baseline; margin-block-end: 6px; font-size: 12.5px; }
 .thread .msg__body { margin: 0; font-size: 14px; white-space: pre-wrap; }
 
+.reply { margin-block-start: 22px; }
+.reply textarea {
+  inline-size: 100%; padding: 10px 12px; font-family: inherit; font-size: 14px;
+  border: 1px solid var(--color-border); border-radius: var(--radius); resize: vertical;
+}
+.reply .field { margin-block-end: 12px; }
+
 @media (max-width: 600px) {
   .portal { padding: 0 16px 32px; }
   .portal__head { flex-wrap: wrap; gap: 12px; padding-block: 16px; margin-block-end: 18px; }

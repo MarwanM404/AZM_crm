@@ -50,6 +50,11 @@ class Ticket(ScopedSoftDeleteModel):
         WEB_FORM = "WEB_FORM", _("Web form")
         EMAIL = "EMAIL", _("Email")
         CHAT = "CHAT", _("Live chat")
+        # The customer portal (spec 004, FR-021). A label, not a branch: nothing in this
+        # product should behave differently because a message arrived this way. What it buys
+        # an agent is knowing whether the customer is reading answers in the portal or needs
+        # them to survive an email client.
+        PORTAL = "PORTAL", _("Customer portal")
 
     # Confirmed with stakeholders 2026-09-12 (T147). Changing these now means migrating
     # live ticket data, so treat an edit here as a schema change, not a tweak.

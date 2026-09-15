@@ -20,6 +20,7 @@ urlpatterns = [
     path("", views.home, name="home"),
     path("language/", views.set_language, name="language"),
     path("requests/<str:reference>/", views.request_detail, name="request"),
+    path("requests/<str:reference>/reply/", views.reply, name="reply"),
     # Reachable without a session. Each is justified by name in
     # settings.LOGIN_EXEMPT_URL_NAMES, which apps/accounts/tests/test_anonymous_access.py
     # pins exactly — so one cannot be added here and quietly left off that list, nor added to

@@ -163,21 +163,21 @@ phase is a hybrid because the refusal and the thing refused are the same object.
 
 ### Tests for User Story 3
 
-- [ ] T056 [P] [US3] Write `apps/portal/tests/test_reply.py` asserting a reply joins the conversation, attributed to the customer and marked as coming from the portal (FR-020, FR-021)
-- [ ] T057 [P] [US3] Extend `test_reply.py` asserting a reply to a request awaiting the customer stops it waiting, identically to an emailed reply (FR-022)
-- [ ] T058 [P] [US3] Extend `test_reply.py` asserting a reply to a resolved request reopens it, identically to an emailed reply
-- [ ] T059 [P] [US3] Extend `test_reply.py` asserting empty and over-long content are refused with a reason naming which, and that nothing is written (FR-024)
-- [ ] T060 [P] [US3] Extend `test_reply.py` asserting a reply directed at another customer's request is refused as not-found and writes nothing
-- [ ] T061 [P] [US3] Extend `apps/portal/tests/test_rate_limits.py` asserting replies beyond the configured limit are refused, the customer is told when to try again, and nothing they wrote is lost
-- [ ] T062 [P] [US3] Write `apps/portal/tests/test_reply_parity.py` asserting a portal reply and an emailed reply produce the same ticket state from the same starting state — the property that stops the two paths diverging
+- [x] T056 [P] [US3] Write `apps/portal/tests/test_reply.py` asserting a reply joins the conversation, attributed to the customer and marked as coming from the portal (FR-020, FR-021)
+- [x] T057 [P] [US3] Extend `test_reply.py` asserting a reply to a request awaiting the customer stops it waiting, identically to an emailed reply (FR-022)
+- [x] T058 [P] [US3] Extend `test_reply.py` asserting a reply to a resolved request reopens it, identically to an emailed reply
+- [x] T059 [P] [US3] Extend `test_reply.py` asserting empty and over-long content are refused with a reason naming which, and that nothing is written (FR-024)
+- [x] T060 [P] [US3] Extend `test_reply.py` asserting a reply directed at another customer's request is refused as not-found and writes nothing
+- [x] T061 [P] [US3] Extend `apps/portal/tests/test_rate_limits.py` asserting replies beyond the configured limit are refused, the customer is told when to try again, and nothing they wrote is lost
+- [x] T062 [P] [US3] Write `apps/portal/tests/test_reply_parity.py` asserting a portal reply and an emailed reply produce the same ticket state from the same starting state — the property that stops the two paths diverging
 
 ### Implementation
 
-- [ ] T063 [US3] Implement replying in `apps/portal/services/tickets.py`, calling the existing ticket services rather than reimplementing the transitions
-- [ ] T064 [US3] Add the portal channel value in `apps/tickets/models.py` and its migration, confirming it alters no column
-- [ ] T065 [US3] Implement the reply view in `apps/portal/views.py` with validation and rate limiting
-- [ ] T066 [P] [US3] Add the reply composer to `templates/portal/request_detail.html`
-- [ ] T067 [US3] Extract and translate this phase's strings, then check both domains
+- [x] T063 [US3] Implement replying in `apps/portal/services/tickets.py`, calling the existing ticket services rather than reimplementing the transitions
+- [x] T064 [US3] Add the portal channel value in `apps/tickets/models.py` and its migration, confirming it alters no column
+- [x] T065 [US3] Implement the reply view in `apps/portal/views.py` with validation and rate limiting
+- [x] T066 [P] [US3] Add the reply composer to `templates/portal/request_detail.html`
+- [x] T067 [US3] Extract and translate this phase's strings, then check both domains
 
 **Checkpoint**: the loop closes — a customer can answer without leaving the portal.
 

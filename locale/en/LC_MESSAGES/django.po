@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-15 11:12+0000\n"
+"POT-Creation-Date: 2026-09-15 12:36+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -23,7 +23,7 @@ msgstr ""
 msgid "Email"
 msgstr "Email"
 
-#: apps/accounts/forms.py:8 apps/portal/forms.py:26 apps/portal/forms.py:48
+#: apps/accounts/forms.py:8 apps/portal/forms.py:28 apps/portal/forms.py:50
 msgid "Password"
 msgstr "Password"
 
@@ -174,8 +174,8 @@ msgstr "Observing a conversation does not let you take part in it."
 msgid "Your name"
 msgstr "Your name"
 
-#: apps/chat/forms.py:17 apps/intake/forms.py:21 apps/portal/forms.py:20
-#: apps/portal/forms.py:24 apps/portal/forms.py:46
+#: apps/chat/forms.py:17 apps/intake/forms.py:21 apps/portal/forms.py:22
+#: apps/portal/forms.py:26 apps/portal/forms.py:48
 #: templates/accounts/user_form.html:25
 msgid "Email address"
 msgstr "Email address"
@@ -559,6 +559,21 @@ msgstr "Your request has been received: %(reference)s"
 msgid "Re: %(reference)s"
 msgstr "Re: %(reference)s"
 
+#: apps/portal/forms.py:70
+msgid "Your reply"
+msgstr "Your reply"
+
+#: apps/portal/forms.py:78
+msgid "Write something before sending."
+msgstr "Write something before sending."
+
+#: apps/portal/forms.py:93
+#, python-format
+msgid "This is too long by %(over)d character. The limit is %(limit)d."
+msgid_plural "This is too long by %(over)d characters. The limit is %(limit)d."
+msgstr[0] "This is too long by %(over)d character. The limit is %(limit)d."
+msgstr[1] "This is too long by %(over)d characters. The limit is %(limit)d."
+
 #: apps/portal/models.py:84
 msgid "password"
 msgstr "password"
@@ -575,19 +590,19 @@ msgstr "Confirm an email address"
 msgid "Reset a password"
 msgstr "Reset a password"
 
-#: apps/portal/views.py:59
+#: apps/portal/views.py:71
 msgid "Please try again in a minute."
 msgstr "Please try again in a minute."
 
-#: apps/portal/views.py:60
+#: apps/portal/views.py:72
 msgid "Please try again in a few minutes."
 msgstr "Please try again in a few minutes."
 
-#: apps/portal/views.py:61
+#: apps/portal/views.py:73
 msgid "Please try again in an hour."
 msgstr "Please try again in an hour."
 
-#: apps/portal/views.py:62
+#: apps/portal/views.py:74
 msgid "Please try again tomorrow."
 msgstr "Please try again tomorrow."
 
@@ -627,35 +642,39 @@ msgstr "Closed"
 msgid "Web form"
 msgstr "Web form"
 
-#: apps/tickets/models.py:120
+#: apps/tickets/models.py:57
+msgid "Customer portal"
+msgstr "Customer portal"
+
+#: apps/tickets/models.py:125
 msgid "Inbound"
 msgstr "Inbound"
 
-#: apps/tickets/models.py:121
+#: apps/tickets/models.py:126
 msgid "Outbound"
 msgstr "Outbound"
 
-#: apps/tickets/models.py:124
+#: apps/tickets/models.py:129
 msgid "Public"
 msgstr "Public"
 
-#: apps/tickets/models.py:125
+#: apps/tickets/models.py:130
 msgid "Internal"
 msgstr "Internal"
 
-#: apps/tickets/models.py:128
+#: apps/tickets/models.py:133
 msgid "Pending"
 msgstr "Pending"
 
-#: apps/tickets/models.py:129
+#: apps/tickets/models.py:134
 msgid "Sent"
 msgstr "Sent"
 
-#: apps/tickets/models.py:130
+#: apps/tickets/models.py:135
 msgid "Failed"
 msgstr "Failed"
 
-#: apps/tickets/models.py:131
+#: apps/tickets/models.py:136
 msgid "Not applicable"
 msgstr "Not applicable"
 
@@ -1322,6 +1341,11 @@ msgstr "Your request"
 msgid "You"
 msgstr "You"
 
+#: templates/portal/request_detail.html:66
+#: templates/tickets/partials/ticket_pane.html:96
+msgid "Send reply"
+msgstr "Send reply"
+
 #: templates/portal/requests.html:9 templates/shell.html:43
 msgid "Sign out"
 msgstr "Sign out"
@@ -1434,10 +1458,6 @@ msgstr "Write your reply…"
 msgid "Will be emailed to the contact on this ticket."
 msgstr "Will be emailed to the contact on this ticket."
 
-#: templates/tickets/partials/ticket_pane.html:96
-msgid "Send reply"
-msgstr "Send reply"
-
 #: templates/tickets/partials/ticket_pane.html:105
 msgid "Write a note for the team…"
 msgstr "Write a note for the team…"
@@ -1486,6 +1506,7 @@ msgstr "Search reference, subject or contact"
 #, python-format
 #~ msgid "Signed in as %(address)s."
 #~ msgstr "Signed in as %(address)s."
+
 #~ msgid ""
 #~ "That department and branch are not yours to administer, and this account "
 #~ "would no longer be visible to you. Nothing has been changed."
