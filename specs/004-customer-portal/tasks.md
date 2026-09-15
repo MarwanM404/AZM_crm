@@ -191,18 +191,18 @@ phase is a hybrid because the refusal and the thing refused are the same object.
 
 ### Tests for User Story 4
 
-- [ ] T068 [P] [US4] Write `apps/portal/tests/test_new_request.py` asserting a signed-in customer is not asked for their name or email (FR-023)
-- [ ] T069 [P] [US4] Extend `test_new_request.py` asserting the request is attached to their contact, appears in their list immediately, and reaches the agent queue marked as coming from the portal
-- [ ] T070 [P] [US4] Extend `test_new_request.py` asserting a customer with no contact record yet gets one created by raising their first request
-- [ ] T071 [P] [US4] Write `apps/intake/tests/` coverage asserting the anonymous request form behaves exactly as before — the portal adds a second path and must not change the first (FR-025)
-- [ ] T072 [P] [US4] Extend `apps/portal/tests/test_rate_limits.py` for new requests
+- [x] T068 [P] [US4] Write `apps/portal/tests/test_new_request.py` asserting a signed-in customer is not asked for their name or email (FR-023)
+- [x] T069 [P] [US4] Extend `test_new_request.py` asserting the request is attached to their contact, appears in their list immediately, and reaches the agent queue marked as coming from the portal
+- [x] T070 [P] [US4] Extend `test_new_request.py` asserting a customer with no contact record yet gets one created by raising their first request
+- [x] T071 [P] [US4] Write `apps/intake/tests/` coverage asserting the anonymous request form behaves exactly as before — the portal adds a second path and must not change the first (FR-025)
+- [x] T072 [P] [US4] Extend `apps/portal/tests/test_rate_limits.py` for new requests
 
 ### Implementation
 
-- [ ] T073 [US4] Implement raising a request in `apps/portal/services/tickets.py`, reusing the intake service rather than duplicating it
-- [ ] T074 [US4] Implement the view in `apps/portal/views.py` with validation and rate limiting
-- [ ] T075 [P] [US4] Create `templates/portal/new_request.html`
-- [ ] T076 [US4] Extract and translate this phase's strings, then check both domains
+- [x] T073 [US4] Implement raising a request in `apps/portal/services/tickets.py`, reusing the intake service rather than duplicating it
+- [x] T074 [US4] Implement the view in `apps/portal/views.py` with validation and rate limiting
+- [x] T075 [P] [US4] Create `templates/portal/new_request.html`
+- [x] T076 [US4] Extract and translate this phase's strings, then check both domains
 
 **Checkpoint**: full self-service. A customer never needs the anonymous form again.
 

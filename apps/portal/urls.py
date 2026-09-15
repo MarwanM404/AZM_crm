@@ -19,6 +19,10 @@ app_name = "portal"
 urlpatterns = [
     path("", views.home, name="home"),
     path("language/", views.set_language, name="language"),
+    # Before the `<str:reference>` pattern, which would otherwise match "new" as a
+    # reference. The same collision that made confirm/resend/ answer "this link no longer
+    # works" — caught here by ordering because both genuinely belong under requests/.
+    path("requests/new/", views.new_request, name="new_request"),
     path("requests/<str:reference>/", views.request_detail, name="request"),
     path("requests/<str:reference>/reply/", views.reply, name="reply"),
     # Reachable without a session. Each is justified by name in

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-15 12:36+0000\n"
+"POT-Creation-Date: 2026-09-15 14:58+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,12 +18,12 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: apps/accounts/forms.py:7 apps/customers/models.py:70
-#: apps/tickets/models.py:51 templates/accounts/users.html:20
+#: apps/tickets/models.py:70 templates/accounts/users.html:20
 #: templates/customers/unlinked.html:19
 msgid "Email"
 msgstr "Email"
 
-#: apps/accounts/forms.py:8 apps/portal/forms.py:28 apps/portal/forms.py:50
+#: apps/accounts/forms.py:8 apps/portal/forms.py:60 apps/portal/forms.py:82
 msgid "Password"
 msgstr "Password"
 
@@ -174,8 +174,8 @@ msgstr "Observing a conversation does not let you take part in it."
 msgid "Your name"
 msgstr "Your name"
 
-#: apps/chat/forms.py:17 apps/intake/forms.py:21 apps/portal/forms.py:22
-#: apps/portal/forms.py:26 apps/portal/forms.py:48
+#: apps/chat/forms.py:17 apps/intake/forms.py:21 apps/portal/forms.py:54
+#: apps/portal/forms.py:58 apps/portal/forms.py:80
 #: templates/accounts/user_form.html:25
 msgid "Email address"
 msgstr "Email address"
@@ -202,7 +202,7 @@ msgstr "Active"
 msgid "Ended"
 msgstr "Ended"
 
-#: apps/chat/models.py:26 apps/tickets/models.py:46
+#: apps/chat/models.py:26 apps/tickets/models.py:65
 msgid "Resolved"
 msgstr "Resolved"
 
@@ -226,7 +226,7 @@ msgstr "Closed after inactivity"
 msgid "The desk closed while waiting"
 msgstr "The desk closed while waiting"
 
-#: apps/chat/services/lifecycle.py:40 apps/tickets/models.py:52
+#: apps/chat/services/lifecycle.py:40 apps/tickets/models.py:71
 #: templates/chat/console.html:3 templates/chat/console.html:17
 #: templates/chat/conversation.html:6 templates/chat/widget.html:3
 #: templates/chat/widget.html:10 templates/shell.html:19
@@ -537,7 +537,8 @@ msgstr "Choose an organization, or name a new one."
 msgid "Phone number"
 msgstr "Phone number"
 
-#: apps/intake/forms.py:26 templates/tickets/partials/queue_list.html:5
+#: apps/intake/forms.py:26 apps/portal/forms.py:138
+#: templates/tickets/partials/queue_list.html:5
 msgid "Subject"
 msgstr "Subject"
 
@@ -545,7 +546,7 @@ msgstr "Subject"
 msgid "Description"
 msgstr "Description"
 
-#: apps/intake/forms.py:39 apps/intake/forms.py:45
+#: apps/intake/forms.py:46 apps/intake/forms.py:52
 msgid "Submission rejected."
 msgstr "Submission rejected."
 
@@ -559,20 +560,40 @@ msgstr "Your request has been received: %(reference)s"
 msgid "Re: %(reference)s"
 msgstr "Re: %(reference)s"
 
-#: apps/portal/forms.py:70
-msgid "Your reply"
-msgstr "Your reply"
-
-#: apps/portal/forms.py:78
-msgid "Write something before sending."
-msgstr "Write something before sending."
-
-#: apps/portal/forms.py:93
+#: apps/portal/forms.py:41
 #, python-format
 msgid "This is too long by %(over)d character. The limit is %(limit)d."
 msgid_plural "This is too long by %(over)d characters. The limit is %(limit)d."
 msgstr[0] "This is too long by %(over)d character. The limit is %(limit)d."
 msgstr[1] "This is too long by %(over)d characters. The limit is %(limit)d."
+
+#: apps/portal/forms.py:102
+msgid "Your reply"
+msgstr "Your reply"
+
+#: apps/portal/forms.py:110
+msgid "Write something before sending."
+msgstr "Write something before sending."
+
+#: apps/portal/forms.py:133
+msgid "What is this about?"
+msgstr "What is this about?"
+
+#: apps/portal/forms.py:135
+msgid "Choose what this is about."
+msgstr "Choose what this is about."
+
+#: apps/portal/forms.py:141
+msgid "Give the request a short subject."
+msgstr "Give the request a short subject."
+
+#: apps/portal/forms.py:144
+msgid "What has happened?"
+msgstr "What has happened?"
+
+#: apps/portal/forms.py:147
+msgid "Describe what has happened."
+msgstr "Describe what has happened."
 
 #: apps/portal/models.py:84
 msgid "password"
@@ -590,91 +611,91 @@ msgstr "Confirm an email address"
 msgid "Reset a password"
 msgstr "Reset a password"
 
-#: apps/portal/views.py:71
+#: apps/portal/views.py:77
 msgid "Please try again in a minute."
 msgstr "Please try again in a minute."
 
-#: apps/portal/views.py:72
+#: apps/portal/views.py:78
 msgid "Please try again in a few minutes."
 msgstr "Please try again in a few minutes."
 
-#: apps/portal/views.py:73
+#: apps/portal/views.py:79
 msgid "Please try again in an hour."
 msgstr "Please try again in an hour."
 
-#: apps/portal/views.py:74
+#: apps/portal/views.py:80
 msgid "Please try again tomorrow."
 msgstr "Please try again tomorrow."
 
-#: apps/tickets/models.py:37
+#: apps/tickets/models.py:56
 msgid "Low"
 msgstr "Low"
 
-#: apps/tickets/models.py:38
+#: apps/tickets/models.py:57
 msgid "Normal"
 msgstr "Normal"
 
-#: apps/tickets/models.py:39
+#: apps/tickets/models.py:58
 msgid "High"
 msgstr "High"
 
-#: apps/tickets/models.py:40
+#: apps/tickets/models.py:59
 msgid "Urgent"
 msgstr "Urgent"
 
-#: apps/tickets/models.py:43
+#: apps/tickets/models.py:62
 msgid "New"
 msgstr "New"
 
-#: apps/tickets/models.py:44
+#: apps/tickets/models.py:63
 msgid "Open"
 msgstr "Open"
 
-#: apps/tickets/models.py:45
+#: apps/tickets/models.py:64
 msgid "Pending customer"
 msgstr "Pending customer"
 
-#: apps/tickets/models.py:47
+#: apps/tickets/models.py:66
 msgid "Closed"
 msgstr "Closed"
 
-#: apps/tickets/models.py:50
+#: apps/tickets/models.py:69
 msgid "Web form"
 msgstr "Web form"
 
-#: apps/tickets/models.py:57
+#: apps/tickets/models.py:76
 msgid "Customer portal"
 msgstr "Customer portal"
 
-#: apps/tickets/models.py:125
+#: apps/tickets/models.py:144
 msgid "Inbound"
 msgstr "Inbound"
 
-#: apps/tickets/models.py:126
+#: apps/tickets/models.py:145
 msgid "Outbound"
 msgstr "Outbound"
 
-#: apps/tickets/models.py:129
+#: apps/tickets/models.py:148
 msgid "Public"
 msgstr "Public"
 
-#: apps/tickets/models.py:130
+#: apps/tickets/models.py:149
 msgid "Internal"
 msgstr "Internal"
 
-#: apps/tickets/models.py:133
+#: apps/tickets/models.py:152
 msgid "Pending"
 msgstr "Pending"
 
-#: apps/tickets/models.py:134
+#: apps/tickets/models.py:153
 msgid "Sent"
 msgstr "Sent"
 
-#: apps/tickets/models.py:135
+#: apps/tickets/models.py:154
 msgid "Failed"
 msgstr "Failed"
 
-#: apps/tickets/models.py:136
+#: apps/tickets/models.py:155
 msgid "Not applicable"
 msgstr "Not applicable"
 
@@ -707,7 +728,7 @@ msgid "Sign in"
 msgstr "Sign in"
 
 #: templates/accounts/sign_in.html:21 templates/base.html:7
-#: templates/portal/base.html:20 templates/portal/request_detail.html:44
+#: templates/portal/base.html:20 templates/portal/request_detail.html:45
 #: templates/shell.html:9
 msgid "AZM Support"
 msgstr "AZM Support"
@@ -1276,6 +1297,28 @@ msgstr ""
 msgid "Send me another"
 msgstr "Send me another"
 
+#: templates/portal/new_request.html:3 templates/portal/new_request.html:11
+#: templates/portal/requests.html:14 templates/portal/requests.html:55
+msgid "Raise a request"
+msgstr "Raise a request"
+
+#: templates/portal/new_request.html:6 templates/portal/request_detail.html:13
+#: templates/portal/requests.html:3 templates/portal/requests.html:6
+msgid "Your support requests"
+msgstr "Your support requests"
+
+#: templates/portal/new_request.html:8
+msgid "New request"
+msgstr "New request"
+
+#: templates/portal/new_request.html:17
+msgid "We already know who you are, so just tell us what has happened."
+msgstr "We already know who you are, so just tell us what has happened."
+
+#: templates/portal/new_request.html:28
+msgid "Send request"
+msgstr "Send request"
+
 #: templates/portal/register.html:3 templates/portal/register.html:5
 #: templates/portal/sign_in.html:34
 msgid "Create an account"
@@ -1318,45 +1361,36 @@ msgstr ""
 msgid "Send another message"
 msgstr "Send another message"
 
-#: templates/portal/request_detail.html:12 templates/portal/requests.html:3
-#: templates/portal/requests.html:6
-msgid "Your support requests"
-msgstr "Your support requests"
-
-#: templates/portal/request_detail.html:20 templates/portal/requests.html:29
+#: templates/portal/request_detail.html:21 templates/portal/requests.html:39
 #, python-format
 msgid "Opened %(opened)s"
 msgstr "Opened %(opened)s"
 
-#: templates/portal/request_detail.html:21 templates/portal/requests.html:30
+#: templates/portal/request_detail.html:22 templates/portal/requests.html:40
 #, python-format
 msgid "Last update %(changed)s"
 msgstr "Last update %(changed)s"
 
-#: templates/portal/request_detail.html:33
+#: templates/portal/request_detail.html:34
 msgid "Your request"
 msgstr "Your request"
 
-#: templates/portal/request_detail.html:43
+#: templates/portal/request_detail.html:44
 msgid "You"
 msgstr "You"
 
-#: templates/portal/request_detail.html:66
+#: templates/portal/request_detail.html:71
 #: templates/tickets/partials/ticket_pane.html:96
 msgid "Send reply"
 msgstr "Send reply"
 
-#: templates/portal/requests.html:9 templates/shell.html:43
+#: templates/portal/requests.html:18 templates/shell.html:43
 msgid "Sign out"
 msgstr "Sign out"
 
-#: templates/portal/requests.html:43
+#: templates/portal/requests.html:53
 msgid "You have not raised any requests yet."
 msgstr "You have not raised any requests yet."
-
-#: templates/portal/requests.html:45
-msgid "Raise a request"
-msgstr "Raise a request"
 
 #: templates/portal/resend_confirmation.html:3
 #: templates/portal/resend_confirmation.html:5 templates/portal/sign_in.html:16

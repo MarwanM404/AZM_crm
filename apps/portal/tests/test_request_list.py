@@ -60,10 +60,10 @@ def test_a_customer_with_no_history_sees_an_invitation(customer_client):
 
     assert response.status_code == 200
     assert list(response.context["requests"]) == []
-    # The public request form today; User Story 4 replaces this with the portal's own screen,
-    # which will not ask a signed-in customer who they are. Either satisfies scenario 2 — what
-    # would not is an empty page with no way forward.
-    assert reverse("intake:form") in response.content.decode()
+    # The portal's own screen since User Story 4. It pointed at the public request form
+    # first, which asks a signed-in customer for a name and an address the product already
+    # knows — a way forward, but a worse one.
+    assert reverse("portal:new_request") in response.content.decode()
 
 
 def test_a_colleague_at_the_same_organization_is_not_shown(

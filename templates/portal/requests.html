@@ -4,10 +4,19 @@
 {% block main %}
   <div class="portal__title">
     <h1>{% trans "Your support requests" %}</h1>
-    <form method="post" action="{% url 'portal:sign_out' %}" class="portal__signout">
-      {% csrf_token %}
-      <button type="submit" class="linkish">{% trans "Sign out" %}</button>
-    </form>
+    <div class="portal__title-actions">
+      {% comment %}
+        Only when there is a list to sit above. The empty state already carries this button as
+        its whole point, and two identical buttons on one short page reads as a mistake.
+      {% endcomment %}
+      {% if requests %}
+        <a class="btn btn--primary" href="{% url 'portal:new_request' %}">{% trans "Raise a request" %}</a>
+      {% endif %}
+      <form method="post" action="{% url 'portal:sign_out' %}" class="portal__signout">
+        {% csrf_token %}
+        <button type="submit" class="linkish">{% trans "Sign out" %}</button>
+      </form>
+    </div>
   </div>
 
   {% if requests %}
@@ -40,7 +49,7 @@
     <div class="req-empty">
       <p>{% trans "You have not raised any requests yet." %}</p>
       <p>
-        <a class="btn btn--primary" href="{% url 'intake:form' %}">{% trans "Raise a request" %}</a>
+        <a class="btn btn--primary" href="{% url 'portal:new_request' %}">{% trans "Raise a request" %}</a>
       </p>
     </div>
   {% endif %}

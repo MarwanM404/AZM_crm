@@ -227,3 +227,55 @@ def test_the_reply_limit_is_per_customer_not_per_address_in_the_form(
     # Not their request, so 404 — but a 404 means the limiter let them through, which is what
     # is being checked. A shared key would have refused them before the view ran.
     assert customer_client.post(url, {"body": "Mine too?"}).status_code == 404
+
+
+def test_raising_a_request_is_limited(customer_client, category, branch, settings):
+    """T072. Looser than registration and tighter than replying: a customer opening thirty
+    separate requests in an hour is either in real trouble or is not a customer."""
+    settings.PORTAL_NEW_REQUEST_RATE_PER_ADDRESS = "3/h"
+    url = reverse("portal:new_request")
+    payload = {"category": category.pk, "subject": "A problem", "description": "It happened."}
+
+    responses = attempts(customer_client, url, payload, 6)
+
+    assert any(refused(r) for r in responses)
+
+
+def test_a_limited_request_creates_no_ticket(customer_client, category, branch, settings):
+    from apps.tickets.models import Ticket
+
+    settings.PORTAL_NEW_REQUEST_RATE_PER_ADDRESS = "2/h"
+    url = reverse("portal:new_request")
+    payload = {"category": category.pk, "subject": "A problem", "description": "It happened."}
+
+    attempts(customer_client, url, payload, 5)
+
+    assert Ticket.objects.count() <= 2, "A refused request was created anyway."
+
+
+def test_the_public_form_keeps_its_own_limit(client, category, branch, settings):
+    """FR-025. The portal's limits are settings; the public form's have been literals in its
+    decorator since the MVP. Changing one must not move the other."""
+    settings.PORTAL_NEW_REQUEST_RATE_PER_ADDRESS = "1/h"
+    settings.PORTAL_NEW_REQUEST_RATE_PER_SOURCE = "1/h"
+
+    import time
+
+    response = client.post(
+        reverse("intake:form"),
+        {
+            "full_name": "Sara Ahmed",
+            "email": "sara@example.com",
+            "phone": "",
+            "category": category.pk,
+            "subject": "Still working",
+            "description": "...",
+            "company_website": "",
+            "rendered_at": time.time() - 10,
+        },
+    )
+
+    assert response.status_code == 302, (
+        "Tightening a portal setting refused the public form. The two paths share creation, "
+        "not limits."
+    )

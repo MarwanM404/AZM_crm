@@ -33,6 +33,13 @@ class IntakeForm(forms.Form):
     # Minimum completion time (research.md #6).
     rendered_at = forms.FloatField(widget=forms.HiddenInput)
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # The same fix as the portal's form, for the same reason: this is the screen anonymous
+        # Arabic-speaking customers actually meet, and it has been offering them English
+        # category names since the MVP. Nothing else about this form changes (FR-025).
+        self.fields["category"].label_from_instance = lambda obj: obj.display_name
+
     def clean_company_website(self):
         value = self.cleaned_data.get("company_website")
         if value:

@@ -156,3 +156,35 @@ def reply_to(account, reference, body):
             body=body,
             delivery_status=Message.DeliveryStatus.NOT_APPLICABLE,
         )
+
+
+def raise_request(account, category, subject, description, language):
+    """Open a request on behalf of a signed-in customer (FR-023). Returns the ticket.
+
+    Calls the same `open_ticket` the public form calls, rather than creating the ticket here
+    — FR-025 requires the anonymous form to keep behaving exactly as it does, and the way to
+    get that is for the two paths to be one path. A portal copy would agree with it today and
+    diverge the first time either was touched, and the people who would notice the anonymous
+    one breaking are strangers with no account and no way to report it beyond giving up.
+
+    The address is the account's confirmed one and is never taken from the request. A view
+    that read an address out of the form would let a signed-in customer file against somebody
+    else's contact record, on a screen that looked exactly the same.
+
+    The name for a customer with no contact record yet is the local part of their address —
+    the same thing `apps/messaging/services/inbound.py` does for an unknown sender. Asking a
+    signed-in customer for their name is what FR-023 forbids, and a placeholder would put
+    "Unknown" in the customer list for a real person.
+    """
+    from apps.intake.services.creation import open_ticket
+
+    ticket, _contact, _created = open_ticket(
+        full_name=account.email.split("@")[0],
+        email=account.email,
+        subject=subject,
+        description=description,
+        category=category,
+        channel=Ticket.Channel.PORTAL,
+        language=language,
+    )
+    return ticket

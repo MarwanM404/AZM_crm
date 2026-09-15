@@ -31,6 +31,25 @@ class Category(TimeStampedModel):
     def __str__(self):
         return self.name
 
+    @property
+    def display_name(self):
+        """The name in the reader's language, for anything a customer reads.
+
+        `__str__` is deliberately left alone: it is what the Django admin, the staff screens,
+        the audit log and every log line use, and those should stay stable and searchable in
+        one language. This is the other half — a customer choosing a category on the request
+        form was offered "Billing" and "Logistics" beside labels reading الموضوع and ما الذي
+        حدث؟, which is the defect this project keeps finding by opening a page.
+
+        Falls back to `name` when `name_ar` is blank, which it is allowed to be: an untranslated
+        category should read oddly, not vanish.
+        """
+        from django.utils.translation import get_language
+
+        if (get_language() or "").startswith("ar") and self.name_ar:
+            return self.name_ar
+        return self.name
+
 
 class Ticket(ScopedSoftDeleteModel):
     class Priority(models.TextChoices):

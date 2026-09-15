@@ -7,15 +7,13 @@ in one transaction so a partial failure never leaves an orphaned contact or tick
 
 import time
 
-from django.db import transaction
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import translation
 from django.views.decorators.http import require_http_methods
 from django_ratelimit.decorators import ratelimit
 
-from apps.accounts.services.defaults import default_branch
-from apps.customers.services.matching import find_or_create_contact
 from apps.intake.forms import IntakeForm
+from apps.intake.services.creation import open_ticket
 from apps.messaging.tasks import send_confirmation_email
 from apps.tickets.models import Ticket
 
@@ -33,28 +31,19 @@ def request_form(request):
         form = IntakeForm(request.POST, initial={"rendered_at": time.time()})
         if form.is_valid():
             language = translation.get_language() or "ar"
-            with transaction.atomic():
-                branch = default_branch()
-                department = form.cleaned_data["category"].department
-                contact, _created = find_or_create_contact(
-                    full_name=form.cleaned_data["full_name"],
-                    email=form.cleaned_data["email"],
-                    department=department,
-                    branch=branch,
-                )
-                if _created:
-                    contact.preferred_language = language
-                    contact.save(update_fields=["preferred_language"])
-                ticket = Ticket.objects.create(
-                    contact=contact,
-                    organization=contact.organization,
-                    subject=form.cleaned_data["subject"],
-                    description=form.cleaned_data["description"],
-                    category=form.cleaned_data["category"],
-                    origin_channel=Ticket.Channel.WEB_FORM,
-                    department=department,
-                    branch=branch,
-                )
+            # Shared with the customer portal since spec 004 (FR-025). The behaviour here is
+            # unchanged and apps/intake/tests/test_public_form_is_unchanged.py says so on this
+            # form's own terms — the extraction exists so the two paths cannot drift apart,
+            # not so this one could be adjusted.
+            ticket, contact, _created = open_ticket(
+                full_name=form.cleaned_data["full_name"],
+                email=form.cleaned_data["email"],
+                subject=form.cleaned_data["subject"],
+                description=form.cleaned_data["description"],
+                category=form.cleaned_data["category"],
+                channel=Ticket.Channel.WEB_FORM,
+                language=language,
+            )
             send_confirmation_email.delay(
                 contact_id=contact.pk, ticket_reference=ticket.reference, language=language
             )

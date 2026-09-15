@@ -571,6 +571,15 @@ select:focus-visible, input:focus-visible, textarea:focus-visible {
 /* The list of a customer's requests. */
 .portal__title { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; }
 .portal__signout { margin: 0; }
+.portal__title-actions { display: flex; align-items: center; gap: 14px; }
+/* The new-request form carries a category picker and a description box, so it needs more
+ * room than the sign-in and registration panels the base width was chosen for. */
+.portal__form--wide { max-inline-size: 520px; }
+.portal__form--wide textarea, .portal__form--wide select, .portal__form--wide input {
+  inline-size: 100%; padding: 9px 12px; font-family: inherit; font-size: 14px;
+  border: 1px solid var(--color-border); border-radius: var(--radius);
+}
+.portal__form--wide textarea { resize: vertical; }
 .req-list { list-style: none; margin: 18px 0 0; padding: 0; }
 .req {
   padding: 14px 16px; margin-block-end: 10px;

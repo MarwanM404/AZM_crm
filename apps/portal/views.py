@@ -30,7 +30,13 @@ from django_ratelimit.decorators import ratelimit
 
 from apps.portal import auth
 from apps.portal.auth import Unconfirmed, customer_required
-from apps.portal.forms import EmailForm, RegistrationForm, ReplyForm, SignInForm
+from apps.portal.forms import (
+    EmailForm,
+    NewRequestForm,
+    RegistrationForm,
+    ReplyForm,
+    SignInForm,
+)
 from apps.portal.services import registration, tickets
 
 #: Limits count POSTs and nothing else.
@@ -328,3 +334,40 @@ def reply(request, reference):
         raise Http404("No such request")
 
     return redirect("portal:request", reference=reference)
+
+
+@require_http_methods(["GET", "POST"])
+@ratelimit(
+    key="ip", rate=_rate("PORTAL_NEW_REQUEST_RATE_PER_SOURCE"), method=POST_ONLY, block=False
+)
+@ratelimit(
+    key=_customer_key,
+    rate=_rate("PORTAL_NEW_REQUEST_RATE_PER_ADDRESS"),
+    method=POST_ONLY,
+    block=False,
+)
+@customer_required
+def new_request(request):
+    """A signed-in customer raises a request (FR-023).
+
+    The form carries no name and no email field, and this view reads neither — the address
+    comes from the session. Those are two separate guarantees: a form without a field is not
+    a view that would ignore one, and `test_the_address_cannot_be_supplied_by_the_caller`
+    submits both anyway.
+    """
+    if getattr(request, "limited", False):
+        return too_many(request, "PORTAL_NEW_REQUEST_RATE_PER_SOURCE")
+
+    form = NewRequestForm(request.POST or None)
+
+    if request.method == "POST" and form.is_valid():
+        ticket = tickets.raise_request(
+            account=request.customer,
+            category=form.cleaned_data["category"],
+            subject=form.cleaned_data["subject"],
+            description=form.cleaned_data["description"],
+            language=request.customer.language,
+        )
+        return redirect("portal:request", reference=ticket.reference)
+
+    return render(request, "portal/new_request.html", {"form": form})
