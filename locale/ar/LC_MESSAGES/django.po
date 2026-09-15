@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-13 20:22+0000\n"
+"POT-Creation-Date: 2026-09-15 07:39+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -34,44 +34,44 @@ msgid "Invalid email or password."
 msgstr "البريد الإلكتروني أو كلمة المرور غير صحيحة."
 
 #: apps/accounts/models.py:23 apps/accounts/models.py:54
-#: apps/core/templatetags/audit.py:54 apps/customers/models.py:18
+#: apps/core/templatetags/audit.py:63 apps/customers/models.py:18
 #: apps/tickets/models.py:20
 msgid "name"
 msgstr "الاسم"
 
 #: apps/accounts/models.py:24 apps/accounts/models.py:55
-#: apps/core/templatetags/audit.py:93 apps/customers/models.py:19
+#: apps/core/templatetags/audit.py:102 apps/customers/models.py:19
 #: apps/tickets/models.py:21
 msgid "name (Arabic)"
 msgstr "الاسم بالعربية"
 
-#: apps/accounts/models.py:120
+#: apps/accounts/models.py:136
 msgid "Agent"
 msgstr "موظف الدعم"
 
-#: apps/accounts/models.py:121
+#: apps/accounts/models.py:137
 msgid "Supervisor"
 msgstr "مشرف"
 
-#: apps/accounts/models.py:122
+#: apps/accounts/models.py:138
 msgid "Administrator"
 msgstr "المسؤول"
 
-#: apps/accounts/models.py:125 apps/customers/models.py:53
-#: templates/customers/contact_edit.html:17
+#: apps/accounts/models.py:141 apps/customers/models.py:53
+#: apps/portal/models.py:80 templates/customers/contact_edit.html:17
 msgid "Arabic"
 msgstr "العربية"
 
-#: apps/accounts/models.py:126 apps/customers/models.py:53
-#: templates/customers/contact_edit.html:18
+#: apps/accounts/models.py:142 apps/customers/models.py:53
+#: apps/portal/models.py:81 templates/customers/contact_edit.html:18
 msgid "English"
 msgstr "الإنجليزية"
 
-#: apps/accounts/models.py:128
+#: apps/accounts/models.py:144 apps/portal/models.py:83
 msgid "email address"
 msgstr "البريد الإلكتروني"
 
-#: apps/accounts/models.py:129 apps/core/templatetags/audit.py:51
+#: apps/accounts/models.py:145 apps/core/templatetags/audit.py:60
 #: apps/customers/models.py:50
 msgid "full name"
 msgstr "الاسم الكامل"
@@ -125,7 +125,7 @@ msgid ""
 "administrator to change them."
 msgstr "حسابك له قسم وفرع بالفعل. اطلب من مسؤول آخر تغييرهما."
 
-#: apps/attachments/models.py:52 apps/core/templatetags/audit.py:96
+#: apps/attachments/models.py:52 apps/core/templatetags/audit.py:105
 msgid "file name"
 msgstr "اسم الملف"
 
@@ -224,7 +224,7 @@ msgid "The desk closed while waiting"
 msgstr "أُغلق المكتب أثناء الانتظار"
 
 #: apps/chat/services/lifecycle.py:40 apps/tickets/models.py:52
-#: templates/chat/console.html:3 templates/chat/console.html:11
+#: templates/chat/console.html:3 templates/chat/console.html:17
 #: templates/chat/conversation.html:6 templates/chat/widget.html:3
 #: templates/chat/widget.html:10 templates/shell.html:19
 msgid "Live chat"
@@ -270,227 +270,247 @@ msgstr "ستُغلق هذه المحادثة قريبًا إذا لم يرد أ�
 msgid "This conversation cannot be attached to that ticket."
 msgstr "لا يمكن إرفاق هذه المحادثة بتلك التذكرة."
 
-#: apps/core/templatetags/audit.py:39
+#: apps/core/templatetags/audit.py:43 apps/portal/models.py:96
+msgid "customer account"
+msgstr "حساب عميل"
+
+#: apps/core/templatetags/audit.py:44
+msgid "email address confirmed"
+msgstr "تأكيد البريد الإلكتروني"
+
+#: apps/core/templatetags/audit.py:45
+msgid "link expires"
+msgstr "انتهاء صلاحية الرابط"
+
+#: apps/core/templatetags/audit.py:46
+msgid "link purpose"
+msgstr "الغرض من الرابط"
+
+#: apps/core/templatetags/audit.py:47
+msgid "link used"
+msgstr "استخدام الرابط"
+
+#: apps/core/templatetags/audit.py:48
 msgid "assigned to"
 msgstr "مُسنَدة إلى"
 
-#: apps/core/templatetags/audit.py:40
+#: apps/core/templatetags/audit.py:49
 msgid "branch"
 msgstr "الفرع"
 
-#: apps/core/templatetags/audit.py:41
+#: apps/core/templatetags/audit.py:50
 msgid "category"
 msgstr "التصنيف"
 
-#: apps/core/templatetags/audit.py:42
+#: apps/core/templatetags/audit.py:51
 msgid "contact"
 msgstr "جهة الاتصال"
 
-#: apps/core/templatetags/audit.py:43 apps/core/templatetags/audit.py:167
+#: apps/core/templatetags/audit.py:52 apps/core/templatetags/audit.py:176
 msgid "created"
 msgstr "أُنشئت"
 
-#: apps/core/templatetags/audit.py:44 apps/core/templatetags/audit.py:169
+#: apps/core/templatetags/audit.py:53 apps/core/templatetags/audit.py:178
 msgid "deleted"
 msgstr "حُذفت"
 
-#: apps/core/templatetags/audit.py:45
+#: apps/core/templatetags/audit.py:54
 msgid "deleted by"
 msgstr "حذفها"
 
-#: apps/core/templatetags/audit.py:46
+#: apps/core/templatetags/audit.py:55
 msgid "department"
 msgstr "القسم"
 
-#: apps/core/templatetags/audit.py:47
+#: apps/core/templatetags/audit.py:56
 msgid "description"
 msgstr "الوصف"
 
-#: apps/core/templatetags/audit.py:48
+#: apps/core/templatetags/audit.py:57
 msgid "email"
 msgstr "البريد الإلكتروني"
 
-#: apps/core/templatetags/audit.py:49
+#: apps/core/templatetags/audit.py:58
 msgid "ended"
 msgstr "انتهت"
 
-#: apps/core/templatetags/audit.py:50
+#: apps/core/templatetags/audit.py:59
 msgid "reason for ending"
 msgstr "سبب الإنهاء"
 
-#: apps/core/templatetags/audit.py:52
+#: apps/core/templatetags/audit.py:61
 msgid "active"
 msgstr "نشط"
 
-#: apps/core/templatetags/audit.py:53
+#: apps/core/templatetags/audit.py:62
 msgid "language"
 msgstr "اللغة"
 
-#: apps/core/templatetags/audit.py:55
+#: apps/core/templatetags/audit.py:64
 msgid "organization"
 msgstr "المنشأة"
 
-#: apps/core/templatetags/audit.py:56 apps/core/templatetags/audit.py:74
+#: apps/core/templatetags/audit.py:65 apps/core/templatetags/audit.py:83
 msgid "channel"
 msgstr "القناة"
 
-#: apps/core/templatetags/audit.py:57
+#: apps/core/templatetags/audit.py:66
 msgid "priority"
 msgstr "الأولوية"
 
-#: apps/core/templatetags/audit.py:58
+#: apps/core/templatetags/audit.py:67
 msgid "reference"
 msgstr "الرقم المرجعي"
 
-#: apps/core/templatetags/audit.py:59
+#: apps/core/templatetags/audit.py:68
 msgid "resolved"
 msgstr "تم الحل"
 
-#: apps/core/templatetags/audit.py:60
+#: apps/core/templatetags/audit.py:69
 msgid "role"
 msgstr "الدور"
 
-#: apps/core/templatetags/audit.py:61
+#: apps/core/templatetags/audit.py:70
 msgid "state"
 msgstr "الحالة"
 
-#: apps/core/templatetags/audit.py:62
+#: apps/core/templatetags/audit.py:71
 msgid "status"
 msgstr "الحالة"
 
-#: apps/core/templatetags/audit.py:63
+#: apps/core/templatetags/audit.py:72
 msgid "subject"
 msgstr "الموضوع"
 
-#: apps/core/templatetags/audit.py:64
+#: apps/core/templatetags/audit.py:73
 msgid "ticket"
 msgstr "التذكرة"
 
-#: apps/core/templatetags/audit.py:65
+#: apps/core/templatetags/audit.py:74
 msgid "updated"
 msgstr "حُدّثت"
 
-#: apps/core/templatetags/audit.py:66
+#: apps/core/templatetags/audit.py:75
 msgid "visibility"
 msgstr "الظهور"
 
-#: apps/core/templatetags/audit.py:71
+#: apps/core/templatetags/audit.py:80
 msgid "assigned"
 msgstr "أُسندت"
 
-#: apps/core/templatetags/audit.py:72
+#: apps/core/templatetags/audit.py:81
 msgid "author"
 msgstr "الكاتب"
 
-#: apps/core/templatetags/audit.py:73 apps/core/templatetags/audit.py:92
+#: apps/core/templatetags/audit.py:82 apps/core/templatetags/audit.py:101
 msgid "message"
 msgstr "الرسالة"
 
-#: apps/core/templatetags/audit.py:75
+#: apps/core/templatetags/audit.py:84
 msgid "record type"
 msgstr "نوع السجل"
 
-#: apps/core/templatetags/audit.py:76
+#: apps/core/templatetags/audit.py:85
 msgid "conversation"
 msgstr "المحادثة"
 
-#: apps/core/templatetags/audit.py:77
+#: apps/core/templatetags/audit.py:86
 msgid "delivery error"
 msgstr "خطأ التسليم"
 
-#: apps/core/templatetags/audit.py:78
+#: apps/core/templatetags/audit.py:87
 msgid "delivery status"
 msgstr "حالة التسليم"
 
-#: apps/core/templatetags/audit.py:79
+#: apps/core/templatetags/audit.py:88
 msgid "direction"
 msgstr "الاتجاه"
 
-#: apps/core/templatetags/audit.py:80
+#: apps/core/templatetags/audit.py:89
 msgid "ended by"
 msgstr "أنهاها"
 
-#: apps/core/templatetags/audit.py:81
+#: apps/core/templatetags/audit.py:90
 msgid "external identifier"
 msgstr "المعرّف الخارجي"
 
-#: apps/core/templatetags/audit.py:82
+#: apps/core/templatetags/audit.py:91
 msgid "file"
 msgstr "الملف"
 
-#: apps/core/templatetags/audit.py:83
+#: apps/core/templatetags/audit.py:92
 msgid "first response"
 msgstr "أول رد"
 
-#: apps/core/templatetags/audit.py:84
+#: apps/core/templatetags/audit.py:93
 msgid "identifier"
 msgstr "المعرّف"
 
-#: apps/core/templatetags/audit.py:85
+#: apps/core/templatetags/audit.py:94
 msgid "idle warning sent"
 msgstr "تنبيه الخمول"
 
-#: apps/core/templatetags/audit.py:86
+#: apps/core/templatetags/audit.py:95
 msgid "primary"
 msgstr "الأساسي"
 
-#: apps/core/templatetags/audit.py:87
+#: apps/core/templatetags/audit.py:96
 msgid "staff access"
 msgstr "صلاحية الموظفين"
 
-#: apps/core/templatetags/audit.py:88
+#: apps/core/templatetags/audit.py:97
 msgid "superuser"
 msgstr "مستخدم متميز"
 
-#: apps/core/templatetags/audit.py:89
+#: apps/core/templatetags/audit.py:98
 msgid "kind"
 msgstr "النوع"
 
-#: apps/core/templatetags/audit.py:90
+#: apps/core/templatetags/audit.py:99
 msgid "last activity"
 msgstr "آخر نشاط"
 
-#: apps/core/templatetags/audit.py:91
+#: apps/core/templatetags/audit.py:100
 msgid "last signed in"
 msgstr "آخر تسجيل دخول"
 
-#: apps/core/templatetags/audit.py:94
+#: apps/core/templatetags/audit.py:103
 msgid "note"
 msgstr "ملاحظة"
 
-#: apps/core/templatetags/audit.py:95
+#: apps/core/templatetags/audit.py:104
 msgid "observer"
 msgstr "المراقب"
 
-#: apps/core/templatetags/audit.py:97
+#: apps/core/templatetags/audit.py:106
 msgid "preferred language"
 msgstr "اللغة المفضّلة"
 
-#: apps/core/templatetags/audit.py:98
+#: apps/core/templatetags/audit.py:107
 msgid "size"
 msgstr "الحجم"
 
-#: apps/core/templatetags/audit.py:99
+#: apps/core/templatetags/audit.py:108
 msgid "started"
 msgstr "بدأت"
 
-#: apps/core/templatetags/audit.py:100
+#: apps/core/templatetags/audit.py:109
 msgid "uploaded by"
 msgstr "رفعها"
 
-#: apps/core/templatetags/audit.py:101
+#: apps/core/templatetags/audit.py:110
 msgid "value"
 msgstr "القيمة"
 
-#: apps/core/templatetags/audit.py:102
+#: apps/core/templatetags/audit.py:111
 msgid "visitor token"
 msgstr "رمز الزائر"
 
-#: apps/core/templatetags/audit.py:168
+#: apps/core/templatetags/audit.py:177
 msgid "changed"
 msgstr "تغيّرت"
 
-#: apps/core/templatetags/audit.py:170
+#: apps/core/templatetags/audit.py:179
 msgid "accessed"
 msgstr "اطُّلع عليها"
 
@@ -539,6 +559,22 @@ msgstr "تم استلام طلبك: %(reference)s"
 #, python-format
 msgid "Re: %(reference)s"
 msgstr "رد: %(reference)s"
+
+#: apps/portal/models.py:84
+msgid "password"
+msgstr "كلمة المرور"
+
+#: apps/portal/models.py:97
+msgid "customer accounts"
+msgstr "حسابات العملاء"
+
+#: apps/portal/models.py:150
+msgid "Confirm an email address"
+msgstr "تأكيد عنوان البريد الإلكتروني"
+
+#: apps/portal/models.py:151
+msgid "Reset a password"
+msgstr "إعادة تعيين كلمة المرور"
 
 #: apps/tickets/models.py:37
 msgid "Low"
@@ -635,7 +671,7 @@ msgid "Sign in"
 msgstr "تسجيل الدخول"
 
 #: templates/accounts/sign_in.html:21 templates/base.html:7
-#: templates/shell.html:9
+#: templates/portal/base.html:20 templates/shell.html:9
 msgid "AZM Support"
 msgstr "دعم AZM"
 
@@ -730,23 +766,23 @@ msgstr "تعطيل"
 msgid "No staff accounts in this department yet."
 msgstr "لا توجد حسابات موظفين في هذا القسم بعد."
 
-#: templates/chat/console.html:13
+#: templates/chat/console.html:19
 msgid "Conversations assigned to you"
 msgstr "المحادثات المُسنَدة إليك"
 
-#: templates/chat/console.html:20
+#: templates/chat/console.html:26
 msgid "Go offline"
 msgstr "الانتقال إلى غير متصل"
 
-#: templates/chat/console.html:20
+#: templates/chat/console.html:26
 msgid "Go online"
 msgstr "الانتقال إلى متصل"
 
-#: templates/chat/console.html:33
+#: templates/chat/console.html:39
 msgid "Capacity"
 msgstr "السعة"
 
-#: templates/chat/console.html:40
+#: templates/chat/console.html:46
 #, python-format
 msgid "%(counter)s conversation free"
 msgid_plural "%(counter)s conversations free"
@@ -757,7 +793,7 @@ msgstr[3] "%(counter)s محادثات متاحة"
 msgstr[4] "%(counter)s محادثة متاحة"
 msgstr[5] "%(counter)s محادثة متاحة"
 
-#: templates/chat/console.html:43
+#: templates/chat/console.html:49
 msgid "You stop receiving new conversations when this reaches zero."
 msgstr "تتوقف عن استقبال محادثات جديدة عندما تصل هذه إلى صفر."
 
@@ -981,6 +1017,37 @@ msgstr "النظام"
 msgid "No entries match these filters."
 msgstr "لا توجد قيود مطابقة لهذه المرشحات."
 
+#: templates/core/portal_is_for_customers.html:14
+msgid "The customer portal"
+msgstr "بوابة العملاء"
+
+#: templates/core/portal_is_for_customers.html:17
+msgid "This page is part of the customer portal"
+msgstr "هذه الصفحة جزء من بوابة العملاء"
+
+#: templates/core/portal_is_for_customers.html:19
+msgid ""
+"You are signed in as a member of staff, and the customer portal is a "
+"separate application with separate accounts. It is not broken and you have "
+"not lost access to anything — staff and customers simply do not share a sign-"
+"in here."
+msgstr ""
+"أنت مسجّل الدخول كموظف، وبوابة العملاء تطبيق منفصل له حسابات منفصلة. البوابة "
+"تعمل بشكل سليم ولم تفقد صلاحية الوصول إلى أي شيء — الموظفون والعملاء ببساطة "
+"لا يتشاركون تسجيل دخول واحد هنا."
+
+#: templates/core/portal_is_for_customers.html:26
+msgid ""
+"To see what a customer sees on this page, open it in a private window. Your "
+"staff session has been left exactly as it was."
+msgstr ""
+"لمعاينة ما يراه العميل في هذه الصفحة، افتحها في نافذة تصفح خاص. جلسة عملك "
+"كموظف بقيت كما هي تمامًا."
+
+#: templates/core/portal_is_for_customers.html:31
+msgid "Back to the ticket queue"
+msgstr "العودة إلى قائمة التذاكر"
+
 #: templates/customers/contact_edit.html:3
 #: templates/customers/contact_edit.html:6 templates/customers/detail.html:71
 msgid "Edit contact"
@@ -1149,9 +1216,18 @@ msgstr "تعيين قسمي وفرعي"
 msgid "Ask an administrator to set your department and branch."
 msgstr "اطلب من المسؤول تعيين قسمك وفرعك."
 
+#: templates/portal/home.html:3 templates/portal/home.html:5
+msgid "Your support requests"
+msgstr "طلبات الدعم الخاصة بك"
+
+#: templates/portal/home.html:6
+#, python-format
+msgid "Signed in as %(address)s."
+msgstr "تم تسجيل الدخول باسم %(address)s."
+
 #: templates/shell.html:13 templates/tickets/partials/ticket_pane.html:3
 #: templates/tickets/queue.html:3 templates/tickets/queue.html:6
-#: tests/test_translation_catalog.py:159
+#: tests/test_translation_catalog.py:187
 msgid "Ticket queue"
 msgstr "قائمة التذاكر"
 

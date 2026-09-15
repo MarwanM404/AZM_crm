@@ -1,0 +1,7 @@
+{% extends "portal/base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Your support requests" %}{% endblock %}
+{% block main %}
+  <h1>{% trans "Your support requests" %}</h1>
+  <p>{% blocktrans with address=customer.email %}Signed in as {{ address }}.{% endblocktrans %}</p>
+{% endblock %}

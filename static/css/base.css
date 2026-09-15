@@ -524,3 +524,31 @@ select:focus-visible, input:focus-visible, textarea:focus-visible {
   .table__row--audit { grid-template-columns: minmax(0, 1fr); gap: 4px; }
   .table__row--audit.table__row--head { display: none; }
 }
+
+
+/* --- the customer portal (spec 004) ---
+ *
+ * Its own chrome rather than the app shell, for the same reason the sign-in screen has its
+ * own: the shell is a sidebar of staff links, and every one of them goes somewhere a customer
+ * must never reach. What is shared is the vocabulary — the brand mark, the type ramp, the
+ * language switch — so the portal reads as the same product without inheriting its navigation.
+ *
+ * Logical properties throughout, so the whole thing mirrors in Arabic with no second rule.
+ */
+.portal { max-inline-size: 720px; margin-inline: auto; padding: 0 20px 48px; }
+.portal__head {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 16px; padding-block: 20px; margin-block-end: 24px;
+  border-block-end: 1px solid var(--color-line);
+}
+/* `.lang` is built for the sidebar, where its buttons are meant to fill the column. In a
+ * header row that makes it stretch to half the page, so the width is pinned here rather than
+ * the shared rule being changed under the screen that depends on it. */
+.portal__head .lang { flex: 0 0 auto; inline-size: 160px; }
+.portal__main h1 { margin: 0 0 14px; font-size: 22px; }
+.portal__main p { margin: 0 0 12px; font-size: 14px; }
+
+@media (max-width: 600px) {
+  .portal { padding: 0 16px 32px; }
+  .portal__head { flex-wrap: wrap; gap: 12px; padding-block: 16px; margin-block-end: 18px; }
+}

@@ -37,11 +37,11 @@ therefore end with a task that breaks something deliberately.
 **Purpose**: The application skeleton, and the guards that must exist before anything they
 guard does.
 
-- [ ] T001 Create the `apps/portal/` application with `models.py`, `views.py`, `urls.py`, `services/` and `tests/`, and register it in `config/settings/base.py`
-- [ ] T002 Route `/portal/` in `config/urls.py`, and create `templates/portal/` with a base template extending the product's existing chrome
-- [ ] T003 Extend `CUSTOMER_FACING_DIRS` in `tests/test_internal_visibility.py` with `templates/portal/`, so every portal template joins the sweep by directory rather than by being listed
-- [ ] T004 Demonstrate T003 works: add a template under `templates/portal/` that renders a ticket's staff view, confirm the sweep fails and names it, then remove it
-- [ ] T005 [P] Add the portal's settings to `config/settings/base.py`: rate limits per address and per source for registration, sign-in, reset, confirmation, reply and new request; lockout threshold and period; confirmation and reset link lifetimes
+- [x] T001 Create the `apps/portal/` application with `models.py`, `views.py`, `urls.py`, `services/` and `tests/`, and register it in `config/settings/base.py`
+- [x] T002 Route `/portal/` in `config/urls.py`, and create `templates/portal/` with a base template extending the product's existing chrome
+- [x] T003 Extend `CUSTOMER_FACING_DIRS` in `tests/test_internal_visibility.py` with `templates/portal/`, so every portal template joins the sweep by directory rather than by being listed
+- [x] T004 Demonstrate T003 works: add a template under `templates/portal/` that renders a ticket's staff view, confirm the sweep fails and names it, then remove it
+- [x] T005 [P] Add the portal's settings to `config/settings/base.py`: rate limits per address and per source for registration, sign-in, reset, confirmation, reply and new request; lockout threshold and period; confirmation and reset link lifetimes
 
 **Checkpoint**: a portal template cannot ship without being swept for internal messages.
 
@@ -65,25 +65,25 @@ phase is a hybrid because the refusal and the thing refused are the same object.
 
 ### Tests for the foundation and User Story 6
 
-- [ ] T006 [P] [US6] Write `apps/portal/tests/test_account_model.py` asserting `CustomerAccount` has no role, department or branch field — not empty ones, absent ones — and that nothing in `apps/portal/` assigns any
-- [ ] T007 [P] [US6] Write `apps/portal/tests/test_staff_routes_refuse_customers.py` enumerating every staff route from the URL configuration and asserting a customer session reaches none of them, so a route added later is covered on the day it is added (FR-029)
-- [ ] T008 [P] [US6] Extend `apps/portal/tests/test_staff_routes_refuse_customers.py` asserting those refusals still hold when a department is forced onto the customer account by any means — the refusal must rest on being a customer, not on having no scope (FR-028). **This is the test the architecture exists for**
-- [ ] T009 [P] [US6] Write `apps/portal/tests/test_staff_are_not_customers.py` asserting a staff session reaches no portal route (FR-030)
-- [ ] T010 [P] [US6] Extend `apps/portal/tests/test_staff_routes_refuse_customers.py` asserting a customer cannot reach the administrator self-service scope recovery added by spec 003 — an account without a scope is not necessarily an administrator who needs one
-- [ ] T011 [P] [US6] Write `apps/portal/tests/test_account_deactivation.py` asserting a deactivated customer's next request is refused (FR-031)
-- [ ] T012 [P] [US6] Write `apps/portal/tests/test_one_address_one_kind.py` asserting an address cannot be both a staff account and a customer account (FR-032)
-- [ ] T013 [P] Write `apps/portal/tests/test_token_model.py` asserting a link value cannot be recovered from storage, that `used_at` and `expires_at` are enforced, and that a confirmation link cannot be used as a reset
+- [x] T006 [P] [US6] Write `apps/portal/tests/test_account_model.py` asserting `CustomerAccount` has no role, department or branch field — not empty ones, absent ones — and that nothing in `apps/portal/` assigns any
+- [x] T007 [P] [US6] Write `apps/portal/tests/test_staff_routes_refuse_customers.py` enumerating every staff route from the URL configuration and asserting a customer session reaches none of them, so a route added later is covered on the day it is added (FR-029)
+- [x] T008 [P] [US6] Extend `apps/portal/tests/test_staff_routes_refuse_customers.py` asserting those refusals still hold when a department is forced onto the customer account by any means — the refusal must rest on being a customer, not on having no scope (FR-028). **This is the test the architecture exists for**
+- [x] T009 [P] [US6] Write `apps/portal/tests/test_staff_are_not_customers.py` asserting a staff session reaches no portal route (FR-030)
+- [x] T010 [P] [US6] Extend `apps/portal/tests/test_staff_routes_refuse_customers.py` asserting a customer cannot reach the administrator self-service scope recovery added by spec 003 — an account without a scope is not necessarily an administrator who needs one
+- [x] T011 [P] [US6] Write `apps/portal/tests/test_account_deactivation.py` asserting a deactivated customer's next request is refused (FR-031)
+- [x] T012 [P] [US6] Write `apps/portal/tests/test_one_address_one_kind.py` asserting an address cannot be both a staff account and a customer account (FR-032)
+- [x] T013 [P] Write `apps/portal/tests/test_token_model.py` asserting a link value cannot be recovered from storage, that `used_at` and `expires_at` are enforced, and that a confirmation link cannot be used as a reset
 
 ### Implementation
 
-- [ ] T014 Implement `CustomerAccount` in `apps/portal/models.py` — email, password, `email_confirmed_at`, language, `is_active`, timestamps. No role, no department, no branch
-- [ ] T015 Implement `CustomerToken` in `apps/portal/models.py` — account, purpose, `expires_at`, `used_at`, with the value stored so the table is not a list of live credentials
-- [ ] T016 Create the migration and confirm it adds two tables and alters no column on `Ticket`, `Message`, `Contact` or `User`
-- [ ] T017 Implement the customer session in `apps/portal/auth.py` — sign in, sign out, and a session key distinct from the staff session
-- [ ] T018 Implement `apps/portal/middleware.py` putting `request.customer` on the request and refusing a staff session at the portal, and register it in `config/settings/base.py`
-- [ ] T019 Implement the portal's access decorator in `apps/portal/auth.py`, requiring a customer whose address is confirmed, and refusing anything else
-- [ ] T020 Register `CustomerAccount` and `CustomerToken` for auditing in `apps/core/audit.py`, excluding the password and the link value — the audit log is immutable, so anything that reaches it stays (this product has excluded a password hash once already)
-- [ ] T021 Demonstrate the refusals fail when broken: make the portal's decorator accept any authenticated request, confirm T007 and T008 fail; restore
+- [x] T014 Implement `CustomerAccount` in `apps/portal/models.py` — email, password, `email_confirmed_at`, language, `is_active`, timestamps. No role, no department, no branch
+- [x] T015 Implement `CustomerToken` in `apps/portal/models.py` — account, purpose, `expires_at`, `used_at`, with the value stored so the table is not a list of live credentials
+- [x] T016 Create the migration and confirm it adds two tables and alters no column on `Ticket`, `Message`, `Contact` or `User`
+- [x] T017 Implement the customer session in `apps/portal/auth.py` — sign in, sign out, and a session key distinct from the staff session
+- [x] T018 Implement `apps/portal/middleware.py` putting `request.customer` on the request and refusing a staff session at the portal, and register it in `config/settings/base.py`
+- [x] T019 Implement the portal's access decorator in `apps/portal/auth.py`, requiring a customer whose address is confirmed, and refusing anything else
+- [x] T020 Register `CustomerAccount` and `CustomerToken` for auditing in `apps/core/audit.py`, excluding the password and the link value — the audit log is immutable, so anything that reaches it stays (this product has excluded a password hash once already)
+- [x] T021 Demonstrate the refusals fail when broken: make the portal's decorator accept any authenticated request, confirm T007 and T008 fail; restore
 
 **Checkpoint**: a customer account exists and reaches nothing it should not. Every later phase adds screens behind this.
 

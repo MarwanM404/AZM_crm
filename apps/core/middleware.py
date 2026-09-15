@@ -23,6 +23,9 @@ class LoginRequiredMiddleware:
         if self._is_asset(request.path_info):
             return self.get_response(request)
 
+        if self._is_a_customer_on_a_portal_path(request):
+            return self.get_response(request)
+
         try:
             match = resolve(request.path_info)
             url_name = f"{match.namespace}:{match.url_name}" if match.namespace else match.url_name
@@ -33,6 +36,32 @@ class LoginRequiredMiddleware:
             return self.get_response(request)
 
         return redirect_to_login(request.get_full_path(), login_url=settings.LOGIN_URL)
+
+    @staticmethod
+    def _is_a_customer_on_a_portal_path(request):
+        """A signed-in portal customer, on a portal page (spec 004, FR-027).
+
+        Both halves are required and the second is the security-critical one. A customer is
+        anonymous to `request.user` by design, so without the first half every portal screen
+        would be redirected to the staff sign-in page. But letting a customer session satisfy
+        this wall ANYWHERE would hand them the ticket queue — the wall is the only thing
+        standing in front of most staff views, since only thirteen of them carry a role check
+        of their own (research.md §1).
+
+        So the exemption is scoped to the portal's own URL namespace, resolved rather than
+        prefix-matched. apps/portal/tests/test_staff_routes_refuse_customers.py walks every
+        staff route with a customer session and is what fails if this is ever loosened.
+
+        The portal's pages that come BEFORE sign-in — register, confirm, sign in, reset — have
+        no customer yet and are exempted the ordinary way, by name, in
+        settings.LOGIN_EXEMPT_URL_NAMES, each with its written justification.
+        """
+        if getattr(request, "customer", None) is None:
+            return False
+
+        from apps.portal.middleware import is_portal_path
+
+        return is_portal_path(request)
 
     @staticmethod
     def _is_asset(path):

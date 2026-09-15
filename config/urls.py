@@ -25,6 +25,7 @@ urlpatterns = [
     path("customers/", include("apps.customers.urls")),
     path("attachments/", include("apps.attachments.urls")),
     path("chat/", include("apps.chat.urls")),
+    path("portal/", include("apps.portal.urls")),
 ]
 
 if settings.DEBUG:

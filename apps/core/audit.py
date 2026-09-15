@@ -20,6 +20,7 @@ from apps.accounts.models import Branch, Department, User
 from apps.attachments.models import Attachment
 from apps.chat.models import Conversation, Observation
 from apps.customers.models import Contact, ContactDetail, Note, Organization
+from apps.portal.models import CustomerAccount, CustomerToken
 from apps.tickets.models import Category, Message, Ticket
 
 AUDITED_MODELS = [
@@ -36,6 +37,8 @@ AUDITED_MODELS = [
     User,
     Department,
     Branch,
+    CustomerAccount,
+    CustomerToken,
 ]
 
 # FR-030: credentials must never reach an audit entry. django-auditlog records every field by
@@ -45,6 +48,14 @@ AUDITED_MODELS = [
 # every user has ever had.
 EXCLUDED_FIELDS = {
     User: ["password"],
+    # Same reasoning as User, with the same permanence: the log is immutable (FR-028), so a
+    # hash that reaches it is there for good.
+    CustomerAccount: ["password"],
+    # `value_hash` is a fingerprint, not the link — but it is still the only secret this row
+    # holds, and an audit entry that records it turns the immutable log into the credential
+    # store the model deliberately avoided being. What is worth auditing about a token is
+    # that one was issued and when it was used, which is every other field.
+    CustomerToken: ["value_hash"],
 }
 
 

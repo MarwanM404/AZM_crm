@@ -36,6 +36,15 @@ register = template.Library()
 #: Anything unmapped falls back to a humanised version of the name, so a new field degrades to
 #: something readable rather than to a raw identifier or to nothing.
 FIELD_LABELS = {
+    # The customer portal (spec 004). An administrator reading the audit log should see what
+    # happened to somebody's account without knowing the portal's column names — which is the
+    # whole point of this table, and the reason registering a model for auditing without
+    # labelling its fields fails the build.
+    "account": _("customer account"),
+    "email_confirmed_at": _("email address confirmed"),
+    "expires_at": _("link expires"),
+    "purpose": _("link purpose"),
+    "used_at": _("link used"),
     "assigned_to": _("assigned to"),
     "branch": _("branch"),
     "category": _("category"),

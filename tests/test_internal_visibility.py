@@ -31,11 +31,32 @@ from apps.tickets.services.visibility import (
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET = "CARRIER-SIGNATURE-DOES-NOT-MATCH-INTERNAL-ONLY"
 
+TEMPLATE_ROOT = BASE_DIR / "templates"
+
 # Directories whose every template is read by someone outside the organization.
 CUSTOMER_FACING_DIRS = [
-    BASE_DIR / "templates" / "messaging" / "email",
-    BASE_DIR / "templates" / "intake",
+    TEMPLATE_ROOT / "messaging" / "email",
+    TEMPLATE_ROOT / "intake",
+    # The customer portal (spec 004, FR-014). The whole directory is customer-facing by
+    # definition — a customer is the only person who signs into it — so it is swept by
+    # directory. Nothing here is listed by hand: a portal template that nobody remembered is
+    # exactly the failure this feature was told to prevent.
+    TEMPLATE_ROOT / "portal",
 ]
+
+
+def templates_in(directory):
+    """Every template under a customer-facing directory, named as Django loads it.
+
+    Recursive on purpose. `iterdir` was used here first and stopped at the top level, which
+    would have left templates/portal/email/ — the confirmation and reset messages, the most
+    unrecallable output this product produces — outside the sweep while the directory above
+    them reported covered.
+    """
+    return sorted(
+        str(path.relative_to(TEMPLATE_ROOT)) for path in directory.rglob("*") if path.is_file()
+    )
+
 
 # Live chat is the exception to the directory rule: templates/chat/ holds both the customer's
 # window and the agent's console, so it cannot be swept wholesale. Every chat template is
@@ -63,6 +84,10 @@ CUSTOMER_FACING_TEMPLATES = [
     "intake/form.html",
     "intake/submitted.html",
     *CHAT_CUSTOMER_FACING,
+    # Discovered rather than listed. The lists above are maintained by hand because their
+    # directories hold staff-facing files too; templates/portal/ holds nothing else, so the
+    # sweep picks up a new screen the moment it exists.
+    *templates_in(TEMPLATE_ROOT / "portal"),
 ]
 
 
@@ -129,14 +154,7 @@ def test_customer_facing_context_does_not_expose_the_ticket_object(ticket_with_b
 
 def test_template_registry_covers_every_customer_facing_template():
     """A new customer-facing template that nobody added to the list would go unswept."""
-    on_disk = {
-        f"{path.parent.name}/{path.name}"
-        if path.parent.name != "email"
-        else f"messaging/email/{path.name}"
-        for directory in CUSTOMER_FACING_DIRS
-        for path in directory.iterdir()
-        if path.is_file()
-    }
+    on_disk = {name for directory in CUSTOMER_FACING_DIRS for name in templates_in(directory)}
     listed = {t for t in CUSTOMER_FACING_TEMPLATES}
     missing = on_disk - listed
     assert not missing, (

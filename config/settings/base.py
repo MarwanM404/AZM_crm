@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     "apps.intake",
     "apps.attachments",
     "apps.chat",
+    "apps.portal",
 ]
 
 MIDDLEWARE = [
@@ -67,6 +68,9 @@ MIDDLEWARE = [
     "django_htmx.middleware.HtmxMiddleware",
     "auditlog.middleware.AuditlogMiddleware",  # sets the audit actor from request.user
     "apps.core.middleware.UserLanguageMiddleware",  # user's stored language beats the header
+    # Before the deny-by-default wall, which would otherwise redirect every customer to the
+    # STAFF sign-in page before the portal ever saw the request. See apps/portal/middleware.py.
+    "apps.portal.middleware.CustomerSessionMiddleware",
     "apps.core.middleware.LoginRequiredMiddleware",  # deny-by-default; last, sees resolved user
 ]
 
@@ -238,6 +242,59 @@ LOGIN_URL = "accounts:sign_in"
 CHAT_RECONNECT_GRACE_SECONDS = 60
 CHAT_IDLE_LIMIT_SECONDS = 600
 CHAT_IDLE_WARNING_SECONDS = 480
+
+
+# --- The customer portal (spec 004) -----------------------------------------------------
+#
+# Every limit below is expressed twice, per address and per source, because they stop
+# different attacks. Per address stops one account being ground down; per source stops one
+# machine working through a list of addresses. A limit on only one of them looks like rate
+# limiting and is not.
+#
+# Rates are django-ratelimit strings and are read by apps/portal/views.py.
+
+# Creating an account. The per-address figure matches the anonymous request form's, which has
+# survived contact with the public since the MVP.
+PORTAL_REGISTER_RATE_PER_ADDRESS = "5/h"
+PORTAL_REGISTER_RATE_PER_SOURCE = "20/h"
+
+# Signing in. Looser than registration because a person who has forgotten which password they
+# used will legitimately try several times, and a limit that punishes them teaches them to
+# give up rather than teaching an attacker anything. The lockout below is the real defence.
+PORTAL_SIGN_IN_RATE_PER_ADDRESS = "10/h"
+PORTAL_SIGN_IN_RATE_PER_SOURCE = "30/h"
+
+# Asking for a password reset, and asking for another confirmation message. Both send mail to
+# an address the requester has not proved they own, so the limit is also what stops this
+# product being used to send somebody a hundred emails.
+PORTAL_RESET_RATE_PER_ADDRESS = "5/h"
+PORTAL_RESET_RATE_PER_SOURCE = "20/h"
+PORTAL_CONFIRM_RESEND_RATE_PER_ADDRESS = "5/h"
+PORTAL_CONFIRM_RESEND_RATE_PER_SOURCE = "20/h"
+
+# Writing. Generous, because these are the portal working as intended: a customer in a live
+# back-and-forth about an urgent problem should not meet a limit, and the limit exists for
+# the script, not the person.
+PORTAL_REPLY_RATE_PER_ADDRESS = "30/h"
+PORTAL_REPLY_RATE_PER_SOURCE = "60/h"
+PORTAL_NEW_REQUEST_RATE_PER_ADDRESS = "10/h"
+PORTAL_NEW_REQUEST_RATE_PER_SOURCE = "20/h"
+
+# Lockout after repeated failures (FR-011). Deliberately a lockout with an end rather than
+# one an administrator must lift: this product has no self-service unlock for staff and no
+# support queue a locked-out customer could reach, so a lock that needs a human to release it
+# is a customer who cannot get help — and the person most likely to be locked out is the
+# legitimate owner having a bad morning.
+PORTAL_LOCKOUT_THRESHOLD = 10
+PORTAL_LOCKOUT_SECONDS = 900
+
+# How long a link in an email stays usable. The two numbers differ because the two links are
+# worth different amounts: a confirmation link proves an address, a reset link hands over the
+# account. A message sits in a mailbox indefinitely and may be forwarded, backed up, or read
+# on a shared machine years later, so neither may be open-ended.
+PORTAL_CONFIRMATION_LINK_SECONDS = 259200  # 72 hours: mail can be slow and people are busy
+PORTAL_RESET_LINK_SECONDS = 3600  # 1 hour: it is a password, in transit
+
 
 CELERY_BEAT_SCHEDULE = {
     "close-deserted-desks": {

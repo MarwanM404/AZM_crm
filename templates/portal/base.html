@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% comment %}
+  Chrome for every portal screen (T002).
+
+  This is customer-facing chrome, and templates/portal/ is swept wholesale for internal
+  content by tests/test_internal_visibility.py — so anything added here is read by someone
+  outside the organization and is checked on that basis.
+
+  It deliberately does NOT extend templates/shell.html. That shell is built around
+  request.user: a name, a role, a department, and a nav bar of staff screens. A customer has
+  none of those, and inheriting a template that assumes them is how a staff link ends up one
+  `{% if %}` away from a customer's browser.
+{% endcomment %}
+{% block content %}
+<div class="portal">
+  <header class="portal__head">
+    <div class="brand">
+      <span class="brand__mark">A</span>
+      <span class="brand__name">{% trans "AZM Support" %}</span>
+    </div>
+    {% get_current_language as CURRENT_LANGUAGE %}
+    {% comment %}
+      Two destinations, because there are two mechanisms. A signed-in customer's choice is
+      written to their account, which is the only thing CustomerSessionMiddleware reads —
+      posting to the anonymous route instead sets a cookie the middleware then overrides, and
+      the switch appears to do nothing at all. Before sign-in there is no account to write to,
+      so the cookie is the only mechanism there is.
+    {% endcomment %}
+    <form method="post" class="lang"
+          action="{% if request.customer %}{% url 'portal:language' %}{% else %}{% url 'accounts:anonymous_language' %}{% endif %}">
+      {% csrf_token %}
+      <input type="hidden" name="next" value="{{ request.get_full_path }}">
+      <button type="submit" name="language" value="en"
+              class="lang__btn {% if CURRENT_LANGUAGE == 'en' %}lang__btn--on{% endif %}">English</button>
+      <button type="submit" name="language" value="ar"
+              class="lang__btn {% if CURRENT_LANGUAGE == 'ar' %}lang__btn--on{% endif %}">العربية</button>
+    </form>
+  </header>
+  <main class="portal__main">
+    {% block main %}{% endblock %}
+  </main>
+</div>
+{% endblock %}

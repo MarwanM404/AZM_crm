@@ -86,6 +86,22 @@ class UserManager(BaseUserManager):
         if not email:
             raise ValueError("Users must have an email address")
         email = self.normalize_email(email)
+
+        # FR-032 (spec 004), from the staff side. One address is either a member of staff or
+        # a portal customer, never both. Enforced in both managers rather than in one,
+        # because a rule spanning two tables has no database constraint to fall back on and
+        # whichever side is left unguarded is the side somebody uses.
+        #
+        # The import is local: apps.portal imports this module, and a module-level import
+        # here would close the circle.
+        from apps.portal.models import AddressAlreadyInUse, CustomerAccount
+
+        if CustomerAccount.objects.filter(email__iexact=email).exists():
+            raise AddressAlreadyInUse(
+                f"{email} already belongs to a portal customer. Promoting a customer to staff "
+                "is not an account edit — it needs the customer account closed first, so the "
+                "audit trail says which of the two acted."
+            )
         user = self.model(email=email, **extra_fields)
         user.set_password(password)
         user.save(using=self._db)

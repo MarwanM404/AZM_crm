@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% comment %}
+  Shown to a member of staff who has opened a portal page (FR-030).
+
+  This template lives in templates/core/ and NOT in templates/portal/, which matters more
+  than it looks. tests/test_internal_visibility.py sweeps templates/portal/ by directory
+  rather than by a hand-written list, and that discovery is only sound while the directory
+  holds nothing but customer-facing files. One staff-facing page inside it and the rule
+  becomes "every file here is customer-facing, except the ones that are not" — which is the
+  position templates/chat/ is already in, where every file has to be classified by hand
+  because the directory holds both sides of the boundary.
+{% endcomment %}
+{% block title %}{% trans "The customer portal" %}{% endblock %}
+{% block content %}
+<main class="shell__main">
+  <h1>{% trans "This page is part of the customer portal" %}</h1>
+  <p>
+    {% blocktrans trimmed %}
+      You are signed in as a member of staff, and the customer portal is a separate
+      application with separate accounts. It is not broken and you have not lost access to
+      anything — staff and customers simply do not share a sign-in here.
+    {% endblocktrans %}
+  </p>
+  <p>
+    {% blocktrans trimmed %}
+      To see what a customer sees on this page, open it in a private window. Your staff
+      session has been left exactly as it was.
+    {% endblocktrans %}
+  </p>
+  <p><a class="btn btn--primary" href="{% url 'tickets:queue' %}">{% trans "Back to the ticket queue" %}</a></p>
+</main>
+{% endblock %}
