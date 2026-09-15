@@ -1,0 +1,18 @@
+{% extends "portal/base.html" %}
+{% load i18n %}
+{% block title %}{% trans "This link no longer works" %}{% endblock %}
+{% block main %}
+  <h1>{% trans "This link no longer works" %}</h1>
+  <p>
+    {% blocktrans trimmed %}
+      Confirmation links can be used once, and they stop working after a few days. This one
+      has already been used or has expired.
+    {% endblocktrans %}
+  </p>
+  {% comment %}
+    The way out, on the page that reports the problem. Without it this is a dead end: an
+    account nobody can ever use, held by a customer with nobody to ask.
+  {% endcomment %}
+  <p><a class="btn btn--primary" href="{% url 'portal:resend_confirmation' %}">{% trans "Send me another" %}</a></p>
+  <p class="portal__foot"><a href="{% url 'portal:sign_in' %}">{% trans "Sign in" %}</a></p>
+{% endblock %}

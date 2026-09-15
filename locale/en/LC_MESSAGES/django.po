@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-15 07:32+0000\n"
+"POT-Creation-Date: 2026-09-15 09:20+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -23,7 +23,7 @@ msgstr ""
 msgid "Email"
 msgstr "Email"
 
-#: apps/accounts/forms.py:8
+#: apps/accounts/forms.py:8 apps/portal/forms.py:26 apps/portal/forms.py:48
 msgid "Password"
 msgstr "Password"
 
@@ -174,7 +174,8 @@ msgstr "Observing a conversation does not let you take part in it."
 msgid "Your name"
 msgstr "Your name"
 
-#: apps/chat/forms.py:17 apps/intake/forms.py:21
+#: apps/chat/forms.py:17 apps/intake/forms.py:21 apps/portal/forms.py:20
+#: apps/portal/forms.py:24 apps/portal/forms.py:46
 #: templates/accounts/user_form.html:25
 msgid "Email address"
 msgstr "Email address"
@@ -574,6 +575,22 @@ msgstr "Confirm an email address"
 msgid "Reset a password"
 msgstr "Reset a password"
 
+#: apps/portal/views.py:48
+msgid "Please try again in a minute."
+msgstr "Please try again in a minute."
+
+#: apps/portal/views.py:49
+msgid "Please try again in a few minutes."
+msgstr "Please try again in a few minutes."
+
+#: apps/portal/views.py:50
+msgid "Please try again in an hour."
+msgstr "Please try again in an hour."
+
+#: apps/portal/views.py:51
+msgid "Please try again tomorrow."
+msgstr "Please try again tomorrow."
+
 #: apps/tickets/models.py:37
 msgid "Low"
 msgstr "Low"
@@ -664,7 +681,9 @@ msgid "A reply cannot be empty."
 msgstr "A reply cannot be empty."
 
 #: templates/accounts/sign_in.html:3 templates/accounts/sign_in.html:24
-#: templates/accounts/sign_in.html:39
+#: templates/accounts/sign_in.html:39 templates/portal/confirm_failed.html:18
+#: templates/portal/register_done.html:29 templates/portal/sign_in.html:3
+#: templates/portal/sign_in.html:5 templates/portal/sign_in.html:31
 msgid "Sign in"
 msgstr "Sign in"
 
@@ -736,7 +755,7 @@ msgstr "Department"
 msgid "Branch"
 msgstr "Branch"
 
-#: templates/accounts/user_form.html:61
+#: templates/accounts/user_form.html:61 templates/portal/register.html:21
 msgid "Create account"
 msgstr "Create account"
 
@@ -1220,6 +1239,23 @@ msgstr "Set my department and branch"
 msgid "Ask an administrator to set your department and branch."
 msgstr "Ask an administrator to set your department and branch."
 
+#: templates/portal/confirm_failed.html:3
+#: templates/portal/confirm_failed.html:5
+msgid "This link no longer works"
+msgstr "This link no longer works"
+
+#: templates/portal/confirm_failed.html:7
+msgid ""
+"Confirmation links can be used once, and they stop working after a few days. "
+"This one has already been used or has expired."
+msgstr ""
+"Confirmation links can be used once, and they stop working after a few days. "
+"This one has already been used or has expired."
+
+#: templates/portal/confirm_failed.html:17
+msgid "Send me another"
+msgstr "Send me another"
+
 #: templates/portal/home.html:3 templates/portal/home.html:5
 msgid "Your support requests"
 msgstr "Your support requests"
@@ -1228,6 +1264,87 @@ msgstr "Your support requests"
 #, python-format
 msgid "Signed in as %(address)s."
 msgstr "Signed in as %(address)s."
+
+#: templates/portal/register.html:3 templates/portal/register.html:5
+#: templates/portal/sign_in.html:34
+msgid "Create an account"
+msgstr "Create an account"
+
+#: templates/portal/register.html:7
+msgid ""
+"Sign up with the email address you use to contact support, and you will be "
+"able to see your requests here."
+msgstr ""
+"Sign up with the email address you use to contact support, and you will be "
+"able to see your requests here."
+
+#: templates/portal/register.html:24
+msgid "I already have an account"
+msgstr "I already have an account"
+
+#: templates/portal/register_done.html:11
+#: templates/portal/register_done.html:13
+msgid "Check your email"
+msgstr "Check your email"
+
+#: templates/portal/register_done.html:15
+msgid ""
+"If that address can be registered, a message is on its way to it. Follow the "
+"link inside to finish setting up your account."
+msgstr ""
+"If that address can be registered, a message is on its way to it. Follow the "
+"link inside to finish setting up your account."
+
+#: templates/portal/register_done.html:21
+msgid ""
+"The link works once and stops working after a few days. If it has expired, "
+"you can ask for another."
+msgstr ""
+"The link works once and stops working after a few days. If it has expired, "
+"you can ask for another."
+
+#: templates/portal/register_done.html:27
+msgid "Send another message"
+msgstr "Send another message"
+
+#: templates/portal/resend_confirmation.html:3
+#: templates/portal/resend_confirmation.html:5 templates/portal/sign_in.html:16
+msgid "Send another confirmation"
+msgstr "Send another confirmation"
+
+#: templates/portal/resend_confirmation.html:6
+msgid ""
+"Tell us the address you registered with and we will send the link again."
+msgstr ""
+"Tell us the address you registered with and we will send the link again."
+
+#: templates/portal/resend_confirmation.html:16
+msgid "Send it"
+msgstr "Send it"
+
+#: templates/portal/resend_confirmation.html:18
+msgid "Back to sign in"
+msgstr "Back to sign in"
+
+#: templates/portal/sign_in.html:15
+msgid ""
+"This address has not been confirmed yet. Follow the link in the message we "
+"sent you."
+msgstr ""
+"This address has not been confirmed yet. Follow the link in the message we "
+"sent you."
+
+#: templates/portal/sign_in.html:19
+msgid "That email address and password do not match."
+msgstr "That email address and password do not match."
+
+#: templates/portal/too_many.html:8 templates/portal/too_many.html:10
+msgid "Too many attempts"
+msgstr "Too many attempts"
+
+#: templates/portal/too_many.html:11
+msgid "There have been too many attempts from here recently."
+msgstr "There have been too many attempts from here recently."
 
 #: templates/shell.html:13 templates/tickets/partials/ticket_pane.html:3
 #: templates/tickets/queue.html:3 templates/tickets/queue.html:6

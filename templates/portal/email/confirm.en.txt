@@ -1,0 +1,19 @@
+{% comment %}
+  Literal text, no {% blocktrans %}. The language is chosen by the FILENAME — the task picks
+  confirm.{language}.txt — exactly as messaging/email/confirmation.{ar,en}.txt does. Wrapping
+  these in blocktrans was tried first and put the Arabic prose into the catalog as msgids,
+  which then wanted translating into Arabic.
+{% endcomment %}Hello,
+
+Someone asked to create an AZM Support account with this email address.
+
+To finish setting it up, open this link:
+
+{{ link }}
+
+The link works once and stops working after three days.
+
+If this was not you, you can ignore this message. No account can be used with your address
+until this link is opened, so nothing will happen if you do nothing.
+
+— AZM Support

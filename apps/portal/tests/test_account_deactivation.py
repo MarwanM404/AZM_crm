@@ -14,6 +14,24 @@ from apps.portal.tests.routes import portal_routes
 pytestmark = pytest.mark.django_db
 
 
+def behind_sign_in():
+    """The portal routes that require a customer.
+
+    Registration, sign-in and confirmation are public by design and serve everybody 200,
+    including a customer who has just been deactivated — which is correct and is not what
+    this file is about. Derived from LOGIN_EXEMPT_URL_NAMES rather than listed, so a public
+    route added later is excluded here on the day it is exempted there rather than on the day
+    this test starts failing for a reason nobody expects.
+    """
+    from django.conf import settings
+
+    return {
+        name: url
+        for name, url in portal_routes().items()
+        if name not in settings.LOGIN_EXEMPT_URL_NAMES
+    }
+
+
 def test_a_deactivated_customer_cannot_sign_in(client, customer):
     from apps.portal import auth
 
@@ -27,7 +45,7 @@ def test_deactivation_ends_a_session_already_in_progress(customer_client, custom
     customer.is_active = False
     customer.save(update_fields=["is_active"])
 
-    for name, url in portal_routes().items():
+    for name, url in behind_sign_in().items():
         assert customer_client.get(url).status_code != 200, (
             f"{name} ({url}) still served a deactivated customer. The check must run on each "
             "request, not once at sign-in."

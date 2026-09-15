@@ -1,0 +1,16 @@
+Hello,
+
+Someone tried to create an AZM Support account with this email address, but an account
+already exists for it.
+
+If that was you, sign in instead:
+
+{{ sign_in }}
+
+If it was not you, nothing has changed: no second account was created, your password was not
+altered, and the person who tried was not told whether this address is registered.
+
+We are telling you because you own the address, and because someone taking an interest in it
+is worth knowing about.
+
+— AZM Support

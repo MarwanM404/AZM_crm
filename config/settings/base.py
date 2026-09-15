@@ -229,6 +229,35 @@ LOGIN_EXEMPT_URL_NAMES = {
     # granted — and it must be exempt, because its entire purpose is to be used by somebody
     # who has not signed in.
     "accounts:quick_sign_in",
+    # --- the customer portal (spec 004, FR-027) ---
+    #
+    # Six routes, each reachable before a customer session exists — which is what makes them
+    # exemptions rather than oversights. They are the portal's public surface and are listed
+    # separately from the staff application's above, so a mistake in one list cannot widen
+    # the other.
+    #
+    # Creating an account. Public by necessity: it is the screen that exists to be used by
+    # somebody who has no account. It discloses nothing about whether an address is known
+    # (FR-007) and is limited per address and per source (FR-010).
+    "portal:register",
+    # "Check your email." Reached by redirect after the screen above, and says nothing at all
+    # about what happened — it is shown identically whether an account was created, a notice
+    # went to somebody else, or nothing happened.
+    "portal:register_done",
+    # Following the link from that message. Authenticated by the token in the URL rather than
+    # by a session: single use, expiring, and the only thing it can do is prove one address.
+    "portal:confirm",
+    # Asking for another confirmation message, for the one that expired or went to spam.
+    # Must be public for the same reason registration is — the person asking cannot sign in,
+    # which is precisely their problem. Rate limited because it sends mail on request.
+    "portal:resend_confirmation",
+    # The portal's sign-in page. Public for the reason every sign-in page is: requiring a
+    # session to reach the screen that creates one is a locked door with the key inside.
+    "portal:sign_in",
+    # Signing out. Exempt so that a customer whose session has already expired meets an
+    # ordinary sign-out rather than a redirect to the STAFF sign-in page — which is what the
+    # deny-by-default wall would otherwise give them, on a screen they have never seen.
+    "portal:sign_out",
 }
 LOGIN_URL = "accounts:sign_in"
 
@@ -294,6 +323,12 @@ PORTAL_LOCKOUT_SECONDS = 900
 # on a shared machine years later, so neither may be open-ended.
 PORTAL_CONFIRMATION_LINK_SECONDS = 259200  # 72 hours: mail can be slow and people are busy
 PORTAL_RESET_LINK_SECONDS = 3600  # 1 hour: it is a password, in transit
+
+# Where a link in a portal email points. A setting rather than django.contrib.sites or a Host
+# header, because the request that triggers the send is gone by the time the worker runs — and
+# a link built from a Host header is a link an attacker can point wherever they like, inside a
+# message our own mail server sends under our own reputation.
+PORTAL_BASE_URL = env("PORTAL_BASE_URL", default="http://localhost:8000")
 
 
 CELERY_BEAT_SCHEDULE = {

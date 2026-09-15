@@ -1,0 +1,12 @@
+{% extends "portal/base.html" %}
+{% load i18n %}
+{% comment %}
+  One page for every limited screen. It echoes nothing back — not the address, not the form —
+  so that two refusals are byte-identical whatever was submitted, and so the page cannot be
+  resubmitted by reflex.
+{% endcomment %}
+{% block title %}{% trans "Too many attempts" %}{% endblock %}
+{% block main %}
+  <h1>{% trans "Too many attempts" %}</h1>
+  <p>{% trans "There have been too many attempts from here recently." %} {{ try_again }}</p>
+{% endblock %}

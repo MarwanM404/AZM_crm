@@ -97,29 +97,29 @@ phase is a hybrid because the refusal and the thing refused are the same object.
 
 ### Tests for User Story 1
 
-- [ ] T022 [P] [US1] Write `apps/portal/tests/test_registration.py` asserting an account is created unusable and a confirmation is sent to the address claimed, and only there
-- [ ] T023 [P] [US1] Extend `test_registration.py` asserting an unconfirmed account reaches no portal route at all (FR-002)
-- [ ] T024 [P] [US1] Extend `test_registration.py` asserting the response for an address that already has an account is **byte-identical** to a first registration, and that no second account is created (FR-007)
-- [ ] T025 [P] [US1] Extend `test_registration.py` asserting the owner of an already-registered address is told an attempt was made (FR-008)
-- [ ] T026 [P] [US1] Extend `test_registration.py` asserting an address with existing tickets discloses nothing about them before confirmation
-- [ ] T027 [P] [US1] Extend `test_registration.py` asserting an address with no history at all can register — a customer exists before their first ticket does (FR-009)
-- [ ] T028 [P] [US1] Write `apps/portal/tests/test_confirmation.py` asserting a link works once, stops working after its configured lifetime, and that a new one can be requested
-- [ ] T029 [P] [US1] Write `apps/portal/tests/test_password_policy.py` asserting a password below the configured strength and a known-common password are both refused with a reason (FR-005)
-- [ ] T030 [P] [US1] Write `apps/portal/tests/test_sign_in.py` asserting an unconfirmed account is told the address is unconfirmed rather than that the password is wrong
-- [ ] T031 [P] [US1] Write `apps/portal/tests/test_rate_limits.py` asserting registration, sign-in and confirmation each refuse beyond their configured limit and say when to try again — with the rate limiter's cache cleared between tests, which this project has been caught by before
+- [x] T022 [P] [US1] Write `apps/portal/tests/test_registration.py` asserting an account is created unusable and a confirmation is sent to the address claimed, and only there
+- [x] T023 [P] [US1] Extend `test_registration.py` asserting an unconfirmed account reaches no portal route at all (FR-002)
+- [x] T024 [P] [US1] Extend `test_registration.py` asserting the response for an address that already has an account is **byte-identical** to a first registration, and that no second account is created (FR-007)
+- [x] T025 [P] [US1] Extend `test_registration.py` asserting the owner of an already-registered address is told an attempt was made (FR-008)
+- [x] T026 [P] [US1] Extend `test_registration.py` asserting an address with existing tickets discloses nothing about them before confirmation
+- [x] T027 [P] [US1] Extend `test_registration.py` asserting an address with no history at all can register — a customer exists before their first ticket does (FR-009)
+- [x] T028 [P] [US1] Write `apps/portal/tests/test_confirmation.py` asserting a link works once, stops working after its configured lifetime, and that a new one can be requested
+- [x] T029 [P] [US1] Write `apps/portal/tests/test_password_policy.py` asserting a password below the configured strength and a known-common password are both refused with a reason (FR-005)
+- [x] T030 [P] [US1] Write `apps/portal/tests/test_sign_in.py` asserting an unconfirmed account is told the address is unconfirmed rather than that the password is wrong
+- [x] T031 [P] [US1] Write `apps/portal/tests/test_rate_limits.py` asserting registration, sign-in and confirmation each refuse beyond their configured limit and say when to try again — with the rate limiter's cache cleared between tests, which this project has been caught by before
 
 ### Implementation
 
-- [ ] T032 [US1] Implement registration in `apps/portal/services/registration.py`, including the identical-response rule and the notice to an already-registered address
-- [ ] T033 [US1] Implement confirmation in `apps/portal/services/registration.py` — single use, expiring, and the only thing that makes an account usable
-- [ ] T034 [US1] Implement the password policy in `apps/portal/services/passwords.py`
-- [ ] T035 [US1] Implement the registration, confirmation and sign-in views in `apps/portal/views.py` and route them in `apps/portal/urls.py`
-- [ ] T036 [US1] Apply rate limits to all three, per address and per source
-- [ ] T037 [P] [US1] Create `templates/portal/register.html`, `sign_in.html` and `confirm.html`, carrying the product's chrome and the language switch that works without a session
-- [ ] T038 [P] [US1] Create the confirmation and already-registered emails in `templates/portal/email/`, in both languages, composed in the recipient's language rather than whatever is active when they are queued
-- [ ] T039 [US1] Add the five session-less routes to `LOGIN_EXEMPT_URL_NAMES` with the written justification per entry that `apps/accounts/tests/test_anonymous_access.py` demands
-- [ ] T040 [US1] Extract and translate this phase's strings into both domains, then check with `tools/catalog.py status` and `tools/catalog.py placeholders`
-- [ ] T041 [US1] Demonstrate the disclosure rule fails when broken: make registration answer differently for a known address, confirm T024 fails; restore
+- [x] T032 [US1] Implement registration in `apps/portal/services/registration.py`, including the identical-response rule and the notice to an already-registered address
+- [x] T033 [US1] Implement confirmation in `apps/portal/services/registration.py` — single use, expiring, and the only thing that makes an account usable
+- [x] T034 [US1] Implement the password policy in `apps/portal/services/passwords.py`
+- [x] T035 [US1] Implement the registration, confirmation and sign-in views in `apps/portal/views.py` and route them in `apps/portal/urls.py`
+- [x] T036 [US1] Apply rate limits to all three, per address and per source
+- [x] T037 [P] [US1] Create `templates/portal/register.html`, `sign_in.html` and `confirm.html`, carrying the product's chrome and the language switch that works without a session
+- [x] T038 [P] [US1] Create the confirmation and already-registered emails in `templates/portal/email/`, in both languages, composed in the recipient's language rather than whatever is active when they are queued
+- [x] T039 [US1] Add the five session-less routes to `LOGIN_EXEMPT_URL_NAMES` with the written justification per entry that `apps/accounts/tests/test_anonymous_access.py` demands
+- [x] T040 [US1] Extract and translate this phase's strings into both domains, then check with `tools/catalog.py status` and `tools/catalog.py placeholders`
+- [x] T041 [US1] Demonstrate the disclosure rule fails when broken: make registration answer differently for a known address, confirm T024 fails; restore
 
 **Checkpoint**: somebody can create an account and sign in. Nothing yet to see.
 

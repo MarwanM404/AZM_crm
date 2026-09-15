@@ -548,7 +548,28 @@ select:focus-visible, input:focus-visible, textarea:focus-visible {
 .portal__main h1 { margin: 0 0 14px; font-size: 22px; }
 .portal__main p { margin: 0 0 12px; font-size: 14px; }
 
+/* Narrower than the page it sits on. A sign-up form stretched to 680px puts the label at one
+ * end of the screen and the value at the other, and in Arabic it puts them at the opposite
+ * ends — the two languages then disagree about where a form begins. The sign-in panel uses
+ * the same measure. */
+.portal__form { max-inline-size: 380px; }
+.portal__lede { color: var(--color-muted); margin-block-end: 20px; }
+.portal__foot { margin-block-start: 18px; font-size: 13px; }
+
+/* A form-level message needs to look like one. `.error` is only coloured inside `.field`
+ * (base.css), so without this the sign-in failure and the unconfirmed notice render as
+ * ordinary body text — the customer reads a sentence about their account rather than seeing
+ * that something went wrong. */
+.portal .error--form {
+  max-inline-size: 380px; padding: 12px 14px; margin-block-end: 16px;
+  border: 1px solid var(--color-danger); border-radius: var(--radius);
+  background: var(--color-bg); color: var(--color-danger); font-size: 13.5px;
+}
+.portal .error--form p { margin: 0 0 6px; font-size: inherit; }
+.portal .error--form p:last-child { margin-block-end: 0; }
+
 @media (max-width: 600px) {
   .portal { padding: 0 16px 32px; }
   .portal__head { flex-wrap: wrap; gap: 12px; padding-block: 16px; margin-block-end: 18px; }
+  .portal__form, .portal .error--form { max-inline-size: none; }
 }

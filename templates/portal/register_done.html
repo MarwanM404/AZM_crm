@@ -1,0 +1,31 @@
+{% extends "portal/base.html" %}
+{% load i18n %}
+{% comment %}
+  Shown after every registration and every resend, whatever actually happened (FR-007).
+
+  It is written to be true in all of those cases, which is why it says "if" rather than
+  "we have sent". A page promising a message that was never sent — because the address
+  belongs to a member of staff, or to nobody — would be a lie; one that says an account
+  already exists would be the disclosure this whole screen avoids.
+{% endcomment %}
+{% block title %}{% trans "Check your email" %}{% endblock %}
+{% block main %}
+  <h1>{% trans "Check your email" %}</h1>
+  <p>
+    {% blocktrans trimmed %}
+      If that address can be registered, a message is on its way to it. Follow the link
+      inside to finish setting up your account.
+    {% endblocktrans %}
+  </p>
+  <p>
+    {% blocktrans trimmed %}
+      The link works once and stops working after a few days. If it has expired, you can ask
+      for another.
+    {% endblocktrans %}
+  </p>
+  <p class="portal__foot">
+    <a href="{% url 'portal:resend_confirmation' %}">{% trans "Send another message" %}</a>
+    ·
+    <a href="{% url 'portal:sign_in' %}">{% trans "Sign in" %}</a>
+  </p>
+{% endblock %}

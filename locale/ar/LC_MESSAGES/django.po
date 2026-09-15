@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-15 07:39+0000\n"
+"POT-Creation-Date: 2026-09-15 09:20+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -25,7 +25,7 @@ msgstr ""
 msgid "Email"
 msgstr "البريد الإلكتروني"
 
-#: apps/accounts/forms.py:8
+#: apps/accounts/forms.py:8 apps/portal/forms.py:26 apps/portal/forms.py:48
 msgid "Password"
 msgstr "كلمة المرور"
 
@@ -172,10 +172,11 @@ msgstr "مراقبة المحادثة لا تتيح لك المشاركة فيه
 msgid "Your name"
 msgstr "اسمك"
 
-#: apps/chat/forms.py:17 apps/intake/forms.py:21
+#: apps/chat/forms.py:17 apps/intake/forms.py:21 apps/portal/forms.py:20
+#: apps/portal/forms.py:24 apps/portal/forms.py:46
 #: templates/accounts/user_form.html:25
 msgid "Email address"
-msgstr "البريد الإلكتروني"
+msgstr "عنوان البريد الإلكتروني"
 
 #: apps/chat/forms.py:18
 msgid "What can we help with?"
@@ -576,6 +577,22 @@ msgstr "تأكيد عنوان البريد الإلكتروني"
 msgid "Reset a password"
 msgstr "إعادة تعيين كلمة المرور"
 
+#: apps/portal/views.py:48
+msgid "Please try again in a minute."
+msgstr "يرجى المحاولة مرة أخرى بعد دقيقة."
+
+#: apps/portal/views.py:49
+msgid "Please try again in a few minutes."
+msgstr "يرجى المحاولة مرة أخرى بعد بضع دقائق."
+
+#: apps/portal/views.py:50
+msgid "Please try again in an hour."
+msgstr "يرجى المحاولة مرة أخرى بعد ساعة."
+
+#: apps/portal/views.py:51
+msgid "Please try again tomorrow."
+msgstr "يرجى المحاولة مرة أخرى غدًا."
+
 #: apps/tickets/models.py:37
 msgid "Low"
 msgstr "منخفضة"
@@ -666,7 +683,9 @@ msgid "A reply cannot be empty."
 msgstr "لا يمكن إرسال رد فارغ."
 
 #: templates/accounts/sign_in.html:3 templates/accounts/sign_in.html:24
-#: templates/accounts/sign_in.html:39
+#: templates/accounts/sign_in.html:39 templates/portal/confirm_failed.html:18
+#: templates/portal/register_done.html:29 templates/portal/sign_in.html:3
+#: templates/portal/sign_in.html:5 templates/portal/sign_in.html:31
 msgid "Sign in"
 msgstr "تسجيل الدخول"
 
@@ -736,7 +755,7 @@ msgstr "القسم"
 msgid "Branch"
 msgstr "الفرع"
 
-#: templates/accounts/user_form.html:61
+#: templates/accounts/user_form.html:61 templates/portal/register.html:21
 msgid "Create account"
 msgstr "إنشاء الحساب"
 
@@ -1216,6 +1235,21 @@ msgstr "تعيين قسمي وفرعي"
 msgid "Ask an administrator to set your department and branch."
 msgstr "اطلب من المسؤول تعيين قسمك وفرعك."
 
+#: templates/portal/confirm_failed.html:3
+#: templates/portal/confirm_failed.html:5
+msgid "This link no longer works"
+msgstr "لم يعد هذا الرابط صالحًا"
+
+#: templates/portal/confirm_failed.html:7
+msgid ""
+"Confirmation links can be used once, and they stop working after a few days. "
+"This one has already been used or has expired."
+msgstr "تُستخدم روابط التأكيد مرة واحدة، وتتوقف عن العمل بعد بضعة أيام. هذا الرابط إما أنه استُخدم من قبل أو انتهت صلاحيته."
+
+#: templates/portal/confirm_failed.html:17
+msgid "Send me another"
+msgstr "أرسل لي رابطًا آخر"
+
 #: templates/portal/home.html:3 templates/portal/home.html:5
 msgid "Your support requests"
 msgstr "طلبات الدعم الخاصة بك"
@@ -1224,6 +1258,78 @@ msgstr "طلبات الدعم الخاصة بك"
 #, python-format
 msgid "Signed in as %(address)s."
 msgstr "تم تسجيل الدخول باسم %(address)s."
+
+#: templates/portal/register.html:3 templates/portal/register.html:5
+#: templates/portal/sign_in.html:34
+msgid "Create an account"
+msgstr "إنشاء حساب"
+
+#: templates/portal/register.html:7
+msgid ""
+"Sign up with the email address you use to contact support, and you will be "
+"able to see your requests here."
+msgstr "سجّل باستخدام عنوان البريد الإلكتروني الذي تتواصل به مع الدعم، وستتمكن من متابعة طلباتك هنا."
+
+#: templates/portal/register.html:24
+msgid "I already have an account"
+msgstr "لديّ حساب بالفعل"
+
+#: templates/portal/register_done.html:11
+#: templates/portal/register_done.html:13
+msgid "Check your email"
+msgstr "تحقّق من بريدك الإلكتروني"
+
+#: templates/portal/register_done.html:15
+msgid ""
+"If that address can be registered, a message is on its way to it. Follow the "
+"link inside to finish setting up your account."
+msgstr "إذا كان من الممكن تسجيل هذا العنوان، فهناك رسالة في طريقها إليه. اتبع الرابط داخلها لإكمال إعداد حسابك."
+
+#: templates/portal/register_done.html:21
+msgid ""
+"The link works once and stops working after a few days. If it has expired, "
+"you can ask for another."
+msgstr "يعمل الرابط مرة واحدة ويتوقف عن العمل بعد بضعة أيام. إذا انتهت صلاحيته، يمكنك طلب رابط آخر."
+
+#: templates/portal/register_done.html:27
+msgid "Send another message"
+msgstr "إرسال رسالة أخرى"
+
+#: templates/portal/resend_confirmation.html:3
+#: templates/portal/resend_confirmation.html:5 templates/portal/sign_in.html:16
+msgid "Send another confirmation"
+msgstr "إرسال رسالة تأكيد أخرى"
+
+#: templates/portal/resend_confirmation.html:6
+msgid ""
+"Tell us the address you registered with and we will send the link again."
+msgstr "أخبرنا بالعنوان الذي سجّلت به وسنرسل الرابط مرة أخرى."
+
+#: templates/portal/resend_confirmation.html:16
+msgid "Send it"
+msgstr "أرسِلها"
+
+#: templates/portal/resend_confirmation.html:18
+msgid "Back to sign in"
+msgstr "العودة إلى تسجيل الدخول"
+
+#: templates/portal/sign_in.html:15
+msgid ""
+"This address has not been confirmed yet. Follow the link in the message we "
+"sent you."
+msgstr "لم يتم تأكيد هذا العنوان بعد. اتبع الرابط في الرسالة التي أرسلناها إليك."
+
+#: templates/portal/sign_in.html:19
+msgid "That email address and password do not match."
+msgstr "عنوان البريد الإلكتروني وكلمة المرور غير متطابقين."
+
+#: templates/portal/too_many.html:8 templates/portal/too_many.html:10
+msgid "Too many attempts"
+msgstr "محاولات كثيرة جدًا"
+
+#: templates/portal/too_many.html:11
+msgid "There have been too many attempts from here recently."
+msgstr "كانت هناك محاولات كثيرة جدًا من هنا مؤخرًا."
 
 #: templates/shell.html:13 templates/tickets/partials/ticket_pane.html:3
 #: templates/tickets/queue.html:3 templates/tickets/queue.html:6
