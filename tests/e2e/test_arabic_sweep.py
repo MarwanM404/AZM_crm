@@ -121,3 +121,91 @@ def test_departments_are_named_in_arabic(admin_page, live_server):
 
     assert "403" not in text[:40], "the page was not rendered; the assertion would be vacuous"
     assert "الدعم" in text
+
+
+# --- the customer portal (spec 004, T091) ---
+#
+# Swept signed out AND signed in, because the signed-out half is the half that was missed
+# before: every fixture in this file signs somebody in, so the screens an Arabic visitor
+# actually meets first were the ones nobody looked at.
+
+PORTAL_PUBLIC = [
+    "/portal/sign-in/",
+    "/portal/register/",
+    "/portal/register/done/",
+    "/portal/reset/",
+    "/portal/reset/sent/",
+    "/portal/resend/",
+]
+
+PORTAL_PRIVATE = ["/portal/", "/portal/requests/new/"]
+
+
+def in_arabic(page, live_server, path):
+    page.goto(f"{live_server.url}{path}")
+    page.click(".lang button[value='ar']")
+    page.wait_for_load_state("networkidle")
+    page.goto(f"{live_server.url}{path}")
+    page.wait_for_load_state("networkidle")
+    return page
+
+
+@pytest.mark.parametrize("path", PORTAL_PUBLIC)
+def test_no_placeholder_on_a_public_portal_screen(page, live_server, path):
+    in_arabic(page, live_server, path)
+
+    found = PLACEHOLDER.findall(visible_text(page))
+
+    assert not found, f"{path} shows placeholder codes to the reader: {found}"
+
+
+@pytest.mark.parametrize("path", PORTAL_PUBLIC)
+def test_no_english_on_a_public_portal_screen(page, live_server, path):
+    """The language switch itself says "English", and that is the point of it — everything
+    else on the page must be Arabic."""
+    in_arabic(page, live_server, path)
+
+    text = visible_text(page).replace("English", "").replace("AZM", "")
+    latin_words = re.findall(r"\b[A-Za-z]{4,}\b", text)
+
+    assert not latin_words, f"{path} shows English to an Arabic reader: {latin_words}"
+
+
+@pytest.mark.parametrize("path", PORTAL_PRIVATE)
+def test_no_placeholder_for_a_signed_in_customer(portal_page, live_server, path):
+    portal_page.goto(f"{live_server.url}{path}")
+    portal_page.wait_for_load_state("networkidle")
+
+    assert (
+        "/sign-in/" not in portal_page.url
+    ), f"{path} redirected to sign-in; the sweep would have passed on that page instead"
+    found = PLACEHOLDER.findall(visible_text(portal_page))
+
+    assert not found, f"{path} shows placeholder codes to the reader: {found}"
+
+
+def test_the_request_detail_is_arabic(portal_page, live_server, portal_fixtures):
+    reference = portal_fixtures["ticket"].reference
+    portal_page.goto(f"{live_server.url}/portal/requests/{reference}/")
+    portal_page.wait_for_load_state("networkidle")
+
+    assert "/sign-in/" not in portal_page.url
+    text = visible_text(portal_page)
+
+    assert not PLACEHOLDER.findall(text)
+    assert "طلبك" in text, "the customer's own opening words are not labelled in Arabic"
+
+
+def test_the_internal_note_is_absent_from_the_rendered_page(
+    portal_page, live_server, portal_fixtures
+):
+    """The boundary, checked in a real browser rather than in a template render.
+
+    Everything server-side already asserts this. What only a browser can say is that nothing
+    put it there afterwards — a fragment, a data attribute read by script, a cached response.
+    """
+    reference = portal_fixtures["ticket"].reference
+    portal_page.goto(f"{live_server.url}/portal/requests/{reference}/")
+    portal_page.wait_for_load_state("networkidle")
+
+    assert "INTERNAL-NOTE-THE-CUSTOMER-MUST-NEVER-SEE" not in portal_page.content()

@@ -245,3 +245,70 @@ def test_the_scope_notice_is_reachable_by_keyboard(browser, live_server, arabic_
         assert not unlabelled, f"scope-notice fields with no accessible name: {unlabelled}"
     finally:
         page.close()
+
+
+# --- the customer portal (spec 004, T089) ---
+#
+# These matter more here than anywhere else in the product. An agent who cannot use a control
+# tells somebody; a customer closes the tab, and nobody ever learns why.
+
+PORTAL_PUBLIC = ["/portal/sign-in/", "/portal/register/", "/portal/reset/"]
+
+
+@pytest.mark.parametrize("path", PORTAL_PUBLIC)
+def test_every_public_portal_control_has_an_accessible_name(page, live_server, path):
+    page.goto(f"{live_server.url}{path}")
+
+    unnamed = page.eval_on_selector_all(
+        "input:not([type=hidden]), select, textarea",
+        """els => els.filter(el => {
+            if (el.getAttribute('aria-label')) return false;
+            if (el.getAttribute('title')) return false;
+            if (el.id && document.querySelector(`label[for="${el.id}"]`)) return false;
+            if (el.closest('label')) return false;
+            return true;
+        }).map(el => el.outerHTML.slice(0, 90))""",
+    )
+
+    assert not unnamed, f"{path} has form controls with no accessible name: {unnamed}"
+
+
+def test_the_new_request_form_controls_have_names(portal_page, live_server):
+    portal_page.goto(f"{live_server.url}/portal/requests/new/")
+    portal_page.wait_for_load_state("networkidle")
+
+    assert "/sign-in/" not in portal_page.url
+    unnamed = portal_page.eval_on_selector_all(
+        "input:not([type=hidden]), select, textarea",
+        """els => els.filter(el => {
+            if (el.getAttribute('aria-label')) return false;
+            if (el.id && document.querySelector(`label[for="${el.id}"]`)) return false;
+            if (el.closest('label')) return false;
+            return true;
+        }).map(el => el.outerHTML.slice(0, 90))""",
+    )
+
+    assert not unnamed, f"the new-request form has unnamed controls: {unnamed}"
+
+
+def test_a_validation_error_is_associated_with_its_field(page, live_server):
+    """A message sitting next to a box is visible; a screen reader announces the box and not
+    the message unless they are connected. Django wires `aria-describedby` when a field has
+    errors, so this asserts the template renders the errors Django knows about rather than
+    reimplementing them in markup of its own."""
+    page.goto(f"{live_server.url}/portal/register/")
+    page.fill("input[name=email]", "noura@example.com")
+    page.fill("input[name=password]", "password")
+    page.click(".portal__form button[type=submit]")
+    page.wait_for_load_state("networkidle")
+
+    described = page.eval_on_selector(
+        "input[name=password]", "el => el.getAttribute('aria-describedby')"
+    )
+    assert described, (
+        "the refused password field is not connected to its error message, so a screen "
+        "reader announces the box and never the reason"
+    )
+    assert page.query_selector(
+        f"#{described}"
+    ), f"the field points at #{described}, which is not on the page"

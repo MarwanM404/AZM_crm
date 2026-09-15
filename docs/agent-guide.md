@@ -104,6 +104,40 @@ ask an administrator.
 This is the only place in the product where somebody sets their own scope, and it closes as
 soon as it is used. Changing it afterwards is an administrator's job, as it is for everyone.
 
+### The customer portal
+
+Some customers now have an account here and can see their own requests without writing in to
+ask. It matters to you because it changes what the person on the other end is looking at.
+
+**What they can see.** The requests raised from the email address they proved they own — with
+the reference, the subject, the status, when it was opened and when it last changed — and the
+public conversation on each one. Their address, not their company's: a colleague at the same
+organization sees nothing of theirs, and they see nothing of their colleague's.
+
+**What they can never see.** Internal notes. Not on the page, not in the page's source, not in
+any email. If you need to write something a customer must not read, an internal note is still
+the way, and it is still safe.
+
+**What they can do.** Reply to a request of their own, and open a new one. A portal reply lands
+on the ticket exactly as an emailed one does — same attribution, same effect on the status —
+and is marked as having come from the portal, which is the one difference worth noticing.
+
+**Why that mark is worth noticing.** A customer replying from the portal is reading your
+answers in the portal. A customer replying by email may never open it. The channel on a message
+tells you which, and it is the difference between "I have updated the ticket" being enough and
+needing to say the thing in the reply itself.
+
+**A reply reopens a resolved request**, exactly as an emailed reply does. If a request you
+resolved is open again with a new customer message on it, that is the system working, not
+somebody reversing your decision.
+
+**They do not see your name.** The portal shows replies as coming from AZM Support.
+
+**If a customer says they cannot get in**, they can reset their own password from the sign-in
+screen, and an account locks itself for fifteen minutes after repeated failed attempts. Neither
+needs you, and there is nothing in the staff screens that unlocks an account — the lock ends by
+itself, and a completed password reset clears it.
+
 ### Setting up a new installation
 
 Create the first administrator with `bootstrap_admin`, not `createsuperuser`. The second asks
@@ -197,6 +231,37 @@ has the exact command.
 
 هذا هو الموضع الوحيد في النظام الذي يعيّن فيه أحدٌ نطاق نفسه، ويُغلق بمجرد استخدامه. أما
 تغييره بعد ذلك فهو من عمل المسؤول، كحال الجميع.
+
+### بوابة العملاء
+
+صار لبعض العملاء الآن حساب هنا، ويستطيعون متابعة طلباتهم دون مراسلتنا للسؤال. وهذا يعنيك لأنه
+يغيّر ما يراه الطرف الآخر أمامه.
+
+**ما يستطيعون رؤيته.** الطلبات المقدَّمة من عنوان البريد الذي أثبتوا ملكيته — بالرقم المرجعي
+والموضوع والحالة وتاريخ الفتح وتاريخ آخر تحديث — والمحادثة العلنية في كل طلب. عنوانهم هم، لا
+عنوان شركتهم: فالزميل في المؤسسة نفسها لا يرى شيئًا من طلباتهم، وهم لا يرون شيئًا من طلباته.
+
+**ما لا يمكن أن يروه أبدًا.** الملاحظات الداخلية. لا في الصفحة، ولا في مصدر الصفحة، ولا في أي
+رسالة بريد. فإن احتجت إلى كتابة شيء يجب ألا يقرأه العميل، فالملاحظة الداخلية ما زالت هي السبيل،
+وما زالت آمنة.
+
+**ما يستطيعون فعله.** الرد على طلب من طلباتهم، وفتح طلب جديد. ويصل الرد من البوابة إلى التذكرة
+تمامًا كما يصل الرد بالبريد — الإسناد نفسه، والأثر نفسه على الحالة — ويُوسَم بأنه ورد من
+البوابة، وهذا هو الفرق الوحيد الجدير بالانتباه.
+
+**لماذا يستحق ذلك الوسم الانتباه.** العميل الذي يرد من البوابة هو عميل يقرأ ردودك في البوابة.
+أما الذي يرد بالبريد فقد لا يفتحها أبدًا. والقناة المسجّلة على الرسالة تخبرك بأيهما، وهي الفرق
+بين أن يكفي "حدّثتُ التذكرة" وبين أن تحتاج إلى قول الأمر في الرد نفسه.
+
+**الرد يعيد فتح الطلب المحلول**، تمامًا كما يفعل الرد بالبريد. فإن وجدت طلبًا أنهيتَه وقد عاد
+مفتوحًا ومعه رسالة جديدة من العميل، فذلك عمل النظام الصحيح، لا نقضٌ لقرارك من أحد.
+
+**لا يرون اسمك.** تظهر الردود في البوابة باسم دعم AZM.
+
+**وإن قال عميل إنه لا يستطيع الدخول**، فبإمكانه إعادة تعيين كلمة مروره بنفسه من شاشة تسجيل
+الدخول، والحساب يُقفل ذاتيًا خمس عشرة دقيقة بعد محاولات فاشلة متكررة. ولا يحتاج أيٌّ من ذلك
+إليك، ولا يوجد في شاشات الموظفين ما يفتح القفل — فالقفل ينتهي وحده، وإتمام إعادة التعيين
+يلغيه.
 
 ### تهيئة نظام جديد
 

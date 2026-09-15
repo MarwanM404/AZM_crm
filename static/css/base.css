@@ -243,6 +243,7 @@ select:focus-visible, input:focus-visible, textarea:focus-visible {
   border: 1px solid var(--color-border); border-radius: var(--radius);
 }
 .field .error { color: var(--color-danger); font-size: 0.875em; }
+.field .error p { margin: 0; }
 .honeypot-field { position: absolute; inset-inline-start: -9999px; }
 
 @media (max-width: 860px) {

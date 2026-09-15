@@ -237,15 +237,15 @@ phase is a hybrid because the refusal and the thing refused are the same object.
 
 ## Phase 8: Polish & Cross-Cutting Concerns
 
-- [ ] T088 Demonstrate every check this feature added fails when its defect is reintroduced (FR-038): the staff refusal, the scope-independence of that refusal, the confirmation gate, the identical-response rule, the internal-message boundary, the reply parity. Record what was broken and what failed in [quickstart.md](quickstart.md)
-- [ ] T089 [P] Extend `tests/e2e/test_rtl_layout.py` and `tests/e2e/test_accessibility.py` with the portal screens
-- [ ] T090 [P] Extend `tests/e2e/test_mobile_layout.py` with the portal screens — a customer checking a request is the likeliest reader in this product to be on a phone
-- [ ] T091 [P] Extend `tests/e2e/test_arabic_sweep.py` with the portal screens, signed out and signed in, since signed-out screens were missed once already
-- [ ] T092 [P] Review `apps/portal/` for business logic in views rather than services, and for any read that bypasses the customer-facing filter
-- [ ] T093 [P] Document the portal in `docs/agent-guide.md` in both languages: what a customer can see and do, so an agent knows what the person on the other end is looking at
-- [ ] T094 [P] Update `docs/production-readiness.md`: the portal makes email delivery customer-facing, and adds a public sign-in to a product that had none
-- [ ] T095 Run all twelve scenarios in [quickstart.md](quickstart.md) in both languages
-- [ ] T096 Confirm `tools/catalog.py status` and `tools/catalog.py placeholders` report both domains clean
+- [x] T088 Demonstrate every check this feature added fails when its defect is reintroduced (FR-038): the staff refusal, the scope-independence of that refusal, the confirmation gate, the identical-response rule, the internal-message boundary, the reply parity. Record what was broken and what failed in [quickstart.md](quickstart.md)
+- [x] T089 [P] Extend `tests/e2e/test_rtl_layout.py` and `tests/e2e/test_accessibility.py` with the portal screens
+- [x] T090 [P] Extend `tests/e2e/test_mobile_layout.py` with the portal screens — a customer checking a request is the likeliest reader in this product to be on a phone
+- [x] T091 [P] Extend `tests/e2e/test_arabic_sweep.py` with the portal screens, signed out and signed in, since signed-out screens were missed once already
+- [x] T092 [P] Review `apps/portal/` for business logic in views rather than services, and for any read that bypasses the customer-facing filter
+- [x] T093 [P] Document the portal in `docs/agent-guide.md` in both languages: what a customer can see and do, so an agent knows what the person on the other end is looking at
+- [x] T094 [P] Update `docs/production-readiness.md`: the portal makes email delivery customer-facing, and adds a public sign-in to a product that had none
+- [x] T095 Run all twelve scenarios in [quickstart.md](quickstart.md) in both languages
+- [x] T096 Confirm `tools/catalog.py status` and `tools/catalog.py placeholders` report both domains clean
 
 ---
 

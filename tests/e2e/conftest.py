@@ -250,3 +250,96 @@ def admin_page(browser, live_server, arabic_administrator):
     page.wait_for_load_state("networkidle")
     yield page
     page.close()
+
+
+# --- the customer portal (spec 004) ---
+#
+# A customer needs its own page fixture: `signed_in_page` signs in as STAFF, and the whole
+# design of the portal is that a staff session reaches none of it. A test that reused it would
+# be photographing the 403 page.
+
+
+@pytest.fixture
+def portal_fixtures(arabic_agent):
+    """An Arabic-speaking customer with a history, including an internal note.
+
+    The note is the reason this fixture exists rather than a bare account: the sweeps below
+    are looking for what a customer can see, and a screen with nothing hidden on it proves
+    nothing about hiding.
+    """
+    from apps.customers.services.matching import find_or_create_contact
+    from apps.portal.models import CustomerAccount
+    from apps.tickets.models import Category, Message, Ticket
+
+    department, branch = arabic_agent.department, arabic_agent.branch
+    category = Category.objects.create(
+        name="Logistics", name_ar="الخدمات اللوجستية", department=department
+    )
+
+    account = CustomerAccount.objects.create_account(
+        email="noura@example.com", password="a-long-enough-passphrase-42", language="ar"
+    )
+    account.confirm()
+
+    contact, _ = find_or_create_contact(
+        full_name="نورة الحربي", email=account.email, department=department, branch=branch
+    )
+    ticket = Ticket.objects.create(
+        contact=contact,
+        subject="الشحنة مسجّلة كمُسلّمة ولم تصل",
+        description="قيل لنا إنها شُحنت يوم الثلاثاء ولم يصل شيء حتى الآن.",
+        category=category,
+        origin_channel=Ticket.Channel.WEB_FORM,
+        department=department,
+        branch=branch,
+    )
+    Message.objects.create(
+        ticket=ticket,
+        author=arabic_agent,
+        direction=Message.Direction.OUTBOUND,
+        visibility=Message.Visibility.PUBLIC,
+        channel=Ticket.Channel.EMAIL,
+        body="نتابع مع شركة الشحن وسنوافيك بالمستجدات اليوم.",
+    )
+    Message.objects.create(
+        ticket=ticket,
+        author=arabic_agent,
+        direction=Message.Direction.OUTBOUND,
+        visibility=Message.Visibility.INTERNAL,
+        channel=Ticket.Channel.EMAIL,
+        body="INTERNAL-NOTE-THE-CUSTOMER-MUST-NEVER-SEE",
+    )
+    return {"account": account, "contact": contact, "ticket": ticket, "category": category}
+
+
+@pytest.fixture
+def portal_page(page, live_server, portal_fixtures):
+    """A browser page holding a real customer session.
+
+    The session is written directly rather than driven through the sign-in form: these tests
+    are about layout, language and accessibility, and a fixture that goes through a screen
+    fails for two different reasons.
+    """
+    from django.conf import settings
+    from django.contrib.sessions.backends.db import SessionStore
+
+    from apps.portal.auth import CUSTOMER_SESSION_FINGERPRINT, CUSTOMER_SESSION_KEY
+
+    account = portal_fixtures["account"]
+    session = SessionStore()
+    session[CUSTOMER_SESSION_KEY] = account.pk
+    session[CUSTOMER_SESSION_FINGERPRINT] = account.session_fingerprint
+    session.save()
+
+    # The cookie can only be set against an origin the context has seen.
+    page.goto(f"{live_server.url}/portal/sign-in/")
+    page.context.add_cookies(
+        [
+            {
+                "name": settings.SESSION_COOKIE_NAME,
+                "value": session.session_key,
+                "url": live_server.url,
+            }
+        ]
+    )
+    return page

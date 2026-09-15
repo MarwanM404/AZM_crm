@@ -40,6 +40,26 @@ Until a mail domain and route exist, an agent can write a reply and the system r
 the ticket, but **nothing is delivered to the customer**. This is the one gap between the
 current build and the specification's own definition of done.
 
+**The customer portal (spec 004) raises what this costs.** It was one gap; it is now the thing
+the portal is built on. Registration, confirming an address, resetting a password and the
+locked-account notice are all *entirely* email — there is no second route to any of them, by
+design, because an address nobody has proved is worth nothing. Without delivery:
+
+- nobody can create an account at all, so the portal is not merely degraded but unusable;
+- a customer who forgets their password has no way back in, and no support queue to ask,
+  because the queue is the thing they cannot reach;
+- an account that locks itself after repeated sign-in attempts tells its owner nothing.
+
+Eight of the twelve scenarios in
+[the portal's quickstart](../specs/004-customer-portal/quickstart.md) end in a message
+arriving. None of them can be run, and the portal cannot be released, until this is done.
+
+`PORTAL_BASE_URL` must also be set, and set correctly. Links in these messages are built from
+it rather than from the request that triggered them, because the request is gone by the time
+the worker runs — and a link built from a Host header is a link an attacker can point wherever
+they like, inside a message our own mail server sends under our own reputation. Pointing it at
+a developer machine means every confirmation link a real customer receives is dead.
+
 ### 4. Run the eleven validation scenarios
 *Was T148. See [quickstart.md](../specs/001-mvp-ticket-desk/quickstart.md).*
 
@@ -118,6 +138,31 @@ here as a decision to take rather than applied quietly as part of a bug fix.
 
 Until then: a deployment that changes a script or a stylesheet needs users told to reload, and
 "it did not work" reports after a release should be checked against a hard refresh first.
+
+### 8. The portal is a public sign-in, which this product did not have before
+*Spec 004.*
+
+Until now every screen was behind an administrator-created account. The portal adds three
+things that face the open internet and are worth naming to whoever operates this:
+
+- **A registration form that creates accounts.** Rate limited per address and per source from
+  settings (`PORTAL_REGISTER_RATE_*`), so the numbers can be tuned during an incident without
+  a release.
+- **A sign-in that locks accounts.** Ten consecutive failures locks an account for fifteen
+  minutes (`PORTAL_LOCKOUT_*`). The lock is stored on the account rather than in the cache, on
+  purpose: the rate limiter fails OPEN so a Redis outage cannot turn away genuine customers,
+  which means during an outage the limiter is not there at all. The lockout is the defence
+  that still is.
+- **Password reset links in email.** Single use, one hour, stored as a fingerprint so that a
+  database backup or replica is not a list of live account-takeover credentials.
+
+**What to watch after release**: the rate of registrations from one source, and the rate of
+lockouts. A rise in either is somebody working through a list of addresses, and both are
+visible in the audit log, which records every customer account and token event.
+
+**What NOT to do**: there is no administrator screen that unlocks a customer account, and that
+is deliberate — the lock ends by itself and a completed reset clears it. Adding an unlock
+button would create a support path this product has no queue for.
 
 ---
 

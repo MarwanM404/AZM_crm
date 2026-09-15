@@ -64,7 +64,21 @@
       <div class="field">
         <label for="{{ form.body.id_for_label }}">{{ form.body.label }}</label>
         {{ form.body }}
-        {% for error in form.body.errors %}<div class="error">{{ error }}</div>{% endfor %}
+        {% if form.body.errors %}
+          {% comment %}
+            The id Django points `aria-describedby` at. Without it the attribute names an
+            element that is not on the page, and a screen reader announces the box and never
+            the reason it was refused.
+
+            {% comment %}, not {# #}: a Django comment written with {# #} is single-line, so
+            the continuation lines are not comments at all — they render onto the page. This
+            was written the wrong way first and put three lines of English explanation on
+            every portal form, in both languages.
+          {% endcomment %}
+          <div class="error" id="{{ form.body.auto_id }}_error">
+            {% for error in form.body.errors %}<p>{{ error }}</p>{% endfor %}
+          </div>
+        {% endif %}
       </div>
       <button type="submit" class="btn btn--primary">{% trans "Send reply" %}</button>
     </form>

@@ -242,3 +242,86 @@ def test_a_reference_in_the_audit_log_reads_left_to_right(admin_page, live_serve
     )
 
     assert direction == "ltr"
+
+
+# --- the customer portal (spec 004, T089) ---
+#
+# The portal has its own chrome rather than the app shell, so nothing above covers it. It is
+# also the only part of this product read by people outside the organization, which makes a
+# mirrored layout more consequential here than anywhere else: an agent seeing a misplaced
+# panel files a bug, a customer closes the tab.
+
+PORTAL_SIGNED_OUT = ["/portal/sign-in/", "/portal/register/", "/portal/reset/"]
+PORTAL_SIGNED_IN = ["/portal/", "/portal/requests/new/"]
+
+
+@pytest.mark.parametrize("path", PORTAL_SIGNED_OUT)
+def test_portal_screens_are_rtl_before_signing_in(page, live_server, path):
+    """Signed out, which is where an Arabic customer meets this product first — and the set
+    of screens most easily forgotten, because every fixture in this file signs somebody in."""
+    page.goto(f"{live_server.url}{path}")
+    page.click(".lang button[value='ar']")
+    page.wait_for_load_state("networkidle")
+
+    assert page.evaluate("document.documentElement.dir") == "rtl"
+
+
+def assert_signed_in(page, what):
+    """The page being measured is the one intended, not the sign-in screen.
+
+    Without this these tests pass on a redirect: the sign-in page is also Arabic, also RTL,
+    and also carries the portal chrome, so every assertion below is satisfied by a session
+    that silently did not take. It is the same guard test_arabic_sweep uses against its 403
+    page, and it caught a real one here while this was being written.
+    """
+    assert "/sign-in/" not in page.url, (
+        f"{what} redirected to sign-in; the customer session did not take, and every "
+        "assertion after this would have passed on the wrong page."
+    )
+
+
+@pytest.mark.parametrize("path", PORTAL_SIGNED_IN)
+def test_portal_screens_are_rtl_for_an_arabic_customer(portal_page, live_server, path):
+    portal_page.goto(f"{live_server.url}{path}")
+    portal_page.wait_for_load_state("networkidle")
+
+    assert_signed_in(portal_page, path)
+    assert portal_page.evaluate("document.documentElement.dir") == "rtl"
+
+
+def test_the_brand_sits_on_the_right_in_arabic(portal_page, live_server):
+    """The chrome mirrors, not just the text. A header laid out with `left`/`right` rather
+    than logical properties keeps the brand on the left and reads as a broken page."""
+    portal_page.goto(f"{live_server.url}/portal/")
+    portal_page.wait_for_load_state("networkidle")
+
+    assert_signed_in(portal_page, "the request list")
+    brand = _box(portal_page, ".portal__head .brand")
+    switch = _box(portal_page, ".portal__head .lang")
+
+    assert brand.get("left") > switch.get("left"), (
+        "The brand is to the left of the language switch on an Arabic page; the header has "
+        "not mirrored."
+    )
+
+
+def test_the_conversation_edge_is_on_the_reading_side(portal_page, live_server, portal_fixtures):
+    """`.msg--outbound` carries a coloured `border-inline-start`. With a physical `border-left`
+    it would sit on the wrong side in Arabic — which is exactly the defect this file was
+    written for, on the staff side, in the MVP."""
+    reference = portal_fixtures["ticket"].reference
+    portal_page.goto(f"{live_server.url}/portal/requests/{reference}/")
+    portal_page.wait_for_load_state("networkidle")
+
+    assert_signed_in(portal_page, "the request detail")
+    message = _box(portal_page, ".thread .msg--outbound")
+    left = float(message["borderLeftWidth"].rstrip("px"))
+    right = float(message["borderRightWidth"].rstrip("px"))
+
+    # Compared, not checked against zero. Every side carries a 1px outline and the marker is
+    # the side that is THICKER — written as "the left border is 0px" first, which could not
+    # have passed whatever the code did.
+    assert right > left, (
+        "In Arabic the desk's reply should carry its heavier edge on the right; it has "
+        f"{right}px on the right and {left}px on the left."
+    )

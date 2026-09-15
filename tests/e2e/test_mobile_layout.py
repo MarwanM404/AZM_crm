@@ -169,3 +169,72 @@ def test_an_audit_row_does_not_grow_without_limit(admin_page, live_server):
     )
 
     assert tallest <= 220, f"the tallest audit row is {tallest}px"
+
+
+# --- the customer portal (spec 004, T090) ---
+#
+# The portal's reader is the likeliest person in this product to be on a phone: a customer
+# checking whether anything has happened, from wherever they are, not an agent at a desk. It is
+# also the only part of the product whose reader cannot ask an administrator to make it work.
+
+PORTAL_PUBLIC = ["/portal/sign-in/", "/portal/register/", "/portal/reset/"]
+PORTAL_PRIVATE = ["/portal/", "/portal/requests/new/"]
+
+
+@pytest.mark.parametrize("path", PORTAL_PUBLIC)
+def test_no_horizontal_scrolling_on_the_public_portal_screens(page, live_server, path):
+    page.set_viewport_size(PHONE)
+    page.goto(f"{live_server.url}{path}")
+
+    overflow = page.evaluate(
+        "document.documentElement.scrollWidth - document.documentElement.clientWidth"
+    )
+    assert overflow <= 1, f"{path} scrolls sideways by {overflow}px at {PHONE['width']}px wide"
+
+
+@pytest.mark.parametrize("path", PORTAL_PRIVATE)
+def test_no_horizontal_scrolling_for_a_signed_in_customer(portal_page, live_server, path):
+    portal_page.set_viewport_size(PHONE)
+    portal_page.goto(f"{live_server.url}{path}")
+    portal_page.wait_for_load_state("networkidle")
+
+    assert (
+        "/sign-in/" not in portal_page.url
+    ), f"{path} redirected to sign-in; this measured the wrong page."
+    overflow = portal_page.evaluate(
+        "document.documentElement.scrollWidth - document.documentElement.clientWidth"
+    )
+    assert overflow <= 1, f"{path} scrolls sideways by {overflow}px at {PHONE['width']}px wide"
+
+
+def test_the_request_detail_fits_a_phone(portal_page, live_server, portal_fixtures):
+    """The screen a customer actually opens on a phone: a long conversation, on a narrow
+    viewport, in Arabic."""
+    reference = portal_fixtures["ticket"].reference
+    portal_page.set_viewport_size(PHONE)
+    portal_page.goto(f"{live_server.url}/portal/requests/{reference}/")
+    portal_page.wait_for_load_state("networkidle")
+
+    assert "/sign-in/" not in portal_page.url
+    overflow = portal_page.evaluate(
+        "document.documentElement.scrollWidth - document.documentElement.clientWidth"
+    )
+    assert overflow <= 1, f"the request detail scrolls sideways by {overflow}px"
+
+
+def test_the_reply_box_is_reachable_with_a_thumb(portal_page, live_server, portal_fixtures):
+    """A composer narrower than the screen, or a send button below the minimum target, means
+    a customer cannot answer from the device they are holding."""
+    reference = portal_fixtures["ticket"].reference
+    portal_page.set_viewport_size(PHONE)
+    portal_page.goto(f"{live_server.url}/portal/requests/{reference}/")
+    portal_page.wait_for_load_state("networkidle")
+
+    button = portal_page.eval_on_selector(
+        ".reply button[type=submit]",
+        "el => { const r = el.getBoundingClientRect(); return {h: r.height, w: r.width}; }",
+    )
+
+    assert (
+        button["h"] >= MINIMUM_TARGET
+    ), f"the send button is {button['h']}px tall; below {MINIMUM_TARGET}px a thumb misses"
