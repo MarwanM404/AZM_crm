@@ -1,0 +1,15 @@
+{% extends "portal/base.html" %}
+{% load i18n %}
+{% comment %}
+  Shown after every reset request, whatever happened (FR-007). Written to be true in all of
+  those cases, which is why it says "if" — a page promising a message that was never sent
+  would be a lie, and one saying the address has no account would be the disclosure this
+  screen exists to avoid.
+{% endcomment %}
+{% block title %}{% trans "Check your email" %}{% endblock %}
+{% block main %}
+  <h1>{% trans "Check your email" %}</h1>
+  <p>{% trans "If that address has an account, a link to choose a new password is on its way to it." %}</p>
+  <p>{% trans "The link works once and stops working after an hour." %}</p>
+  <p class="portal__foot"><a href="{% url 'portal:sign_in' %}">{% trans "Back to sign in" %}</a></p>
+{% endblock %}

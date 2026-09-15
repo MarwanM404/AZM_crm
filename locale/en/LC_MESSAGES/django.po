@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-15 14:58+0000\n"
+"POT-Creation-Date: 2026-09-15 15:30+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -32,13 +32,13 @@ msgid "Invalid email or password."
 msgstr "Invalid email or password."
 
 #: apps/accounts/models.py:23 apps/accounts/models.py:54
-#: apps/core/templatetags/audit.py:63 apps/customers/models.py:18
+#: apps/core/templatetags/audit.py:65 apps/customers/models.py:18
 #: apps/tickets/models.py:20
 msgid "name"
 msgstr "name"
 
 #: apps/accounts/models.py:24 apps/accounts/models.py:55
-#: apps/core/templatetags/audit.py:102 apps/customers/models.py:19
+#: apps/core/templatetags/audit.py:104 apps/customers/models.py:19
 #: apps/tickets/models.py:21
 msgid "name (Arabic)"
 msgstr "name (Arabic)"
@@ -56,20 +56,20 @@ msgid "Administrator"
 msgstr "Administrator"
 
 #: apps/accounts/models.py:141 apps/customers/models.py:53
-#: apps/portal/models.py:80 templates/customers/contact_edit.html:17
+#: apps/portal/models.py:82 templates/customers/contact_edit.html:17
 msgid "Arabic"
 msgstr "Arabic"
 
 #: apps/accounts/models.py:142 apps/customers/models.py:53
-#: apps/portal/models.py:81 templates/customers/contact_edit.html:18
+#: apps/portal/models.py:83 templates/customers/contact_edit.html:18
 msgid "English"
 msgstr "English"
 
-#: apps/accounts/models.py:144 apps/portal/models.py:83
+#: apps/accounts/models.py:144 apps/portal/models.py:85
 msgid "email address"
 msgstr "email address"
 
-#: apps/accounts/models.py:145 apps/core/templatetags/audit.py:60
+#: apps/accounts/models.py:145 apps/core/templatetags/audit.py:62
 #: apps/customers/models.py:50
 msgid "full name"
 msgstr "full name"
@@ -126,7 +126,7 @@ msgstr ""
 "Your account already has a department and a branch. Ask another "
 "administrator to change them."
 
-#: apps/attachments/models.py:52 apps/core/templatetags/audit.py:105
+#: apps/attachments/models.py:52 apps/core/templatetags/audit.py:107
 msgid "file name"
 msgstr "file name"
 
@@ -269,7 +269,7 @@ msgstr "This conversation will close soon if nobody replies."
 msgid "This conversation cannot be attached to that ticket."
 msgstr "This conversation cannot be attached to that ticket."
 
-#: apps/core/templatetags/audit.py:43 apps/portal/models.py:96
+#: apps/core/templatetags/audit.py:43 apps/portal/models.py:107
 msgid "customer account"
 msgstr "customer account"
 
@@ -290,226 +290,234 @@ msgid "link used"
 msgstr "link used"
 
 #: apps/core/templatetags/audit.py:48
+msgid "failed sign-in attempts"
+msgstr "failed sign-in attempts"
+
+#: apps/core/templatetags/audit.py:49
+msgid "locked until"
+msgstr "locked until"
+
+#: apps/core/templatetags/audit.py:50
 msgid "assigned to"
 msgstr "assigned to"
 
-#: apps/core/templatetags/audit.py:49
+#: apps/core/templatetags/audit.py:51
 msgid "branch"
 msgstr "branch"
 
-#: apps/core/templatetags/audit.py:50
+#: apps/core/templatetags/audit.py:52
 msgid "category"
 msgstr "category"
 
-#: apps/core/templatetags/audit.py:51
+#: apps/core/templatetags/audit.py:53
 msgid "contact"
 msgstr "contact"
 
-#: apps/core/templatetags/audit.py:52 apps/core/templatetags/audit.py:176
+#: apps/core/templatetags/audit.py:54 apps/core/templatetags/audit.py:178
 msgid "created"
 msgstr "created"
 
-#: apps/core/templatetags/audit.py:53 apps/core/templatetags/audit.py:178
+#: apps/core/templatetags/audit.py:55 apps/core/templatetags/audit.py:180
 msgid "deleted"
 msgstr "deleted"
 
-#: apps/core/templatetags/audit.py:54
+#: apps/core/templatetags/audit.py:56
 msgid "deleted by"
 msgstr "deleted by"
 
-#: apps/core/templatetags/audit.py:55
+#: apps/core/templatetags/audit.py:57
 msgid "department"
 msgstr "department"
 
-#: apps/core/templatetags/audit.py:56
+#: apps/core/templatetags/audit.py:58
 msgid "description"
 msgstr "description"
 
-#: apps/core/templatetags/audit.py:57
+#: apps/core/templatetags/audit.py:59
 msgid "email"
 msgstr "email"
 
-#: apps/core/templatetags/audit.py:58
+#: apps/core/templatetags/audit.py:60
 msgid "ended"
 msgstr "ended"
 
-#: apps/core/templatetags/audit.py:59
+#: apps/core/templatetags/audit.py:61
 msgid "reason for ending"
 msgstr "reason for ending"
 
-#: apps/core/templatetags/audit.py:61
+#: apps/core/templatetags/audit.py:63
 msgid "active"
 msgstr "active"
 
-#: apps/core/templatetags/audit.py:62
+#: apps/core/templatetags/audit.py:64
 msgid "language"
 msgstr "language"
 
-#: apps/core/templatetags/audit.py:64
+#: apps/core/templatetags/audit.py:66
 msgid "organization"
 msgstr "organization"
 
-#: apps/core/templatetags/audit.py:65 apps/core/templatetags/audit.py:83
+#: apps/core/templatetags/audit.py:67 apps/core/templatetags/audit.py:85
 msgid "channel"
 msgstr "channel"
 
-#: apps/core/templatetags/audit.py:66
+#: apps/core/templatetags/audit.py:68
 msgid "priority"
 msgstr "priority"
 
-#: apps/core/templatetags/audit.py:67
+#: apps/core/templatetags/audit.py:69
 msgid "reference"
 msgstr "reference"
 
-#: apps/core/templatetags/audit.py:68
+#: apps/core/templatetags/audit.py:70
 msgid "resolved"
 msgstr "resolved"
 
-#: apps/core/templatetags/audit.py:69
+#: apps/core/templatetags/audit.py:71
 msgid "role"
 msgstr "role"
 
-#: apps/core/templatetags/audit.py:70
+#: apps/core/templatetags/audit.py:72
 msgid "state"
 msgstr "state"
 
-#: apps/core/templatetags/audit.py:71
+#: apps/core/templatetags/audit.py:73
 msgid "status"
 msgstr "status"
 
-#: apps/core/templatetags/audit.py:72
+#: apps/core/templatetags/audit.py:74
 msgid "subject"
 msgstr "subject"
 
-#: apps/core/templatetags/audit.py:73
+#: apps/core/templatetags/audit.py:75
 msgid "ticket"
 msgstr "ticket"
 
-#: apps/core/templatetags/audit.py:74
+#: apps/core/templatetags/audit.py:76
 msgid "updated"
 msgstr "updated"
 
-#: apps/core/templatetags/audit.py:75
+#: apps/core/templatetags/audit.py:77
 msgid "visibility"
 msgstr "visibility"
 
-#: apps/core/templatetags/audit.py:80
+#: apps/core/templatetags/audit.py:82
 msgid "assigned"
 msgstr "assigned"
 
-#: apps/core/templatetags/audit.py:81
+#: apps/core/templatetags/audit.py:83
 msgid "author"
 msgstr "author"
 
-#: apps/core/templatetags/audit.py:82 apps/core/templatetags/audit.py:101
+#: apps/core/templatetags/audit.py:84 apps/core/templatetags/audit.py:103
 msgid "message"
 msgstr "message"
 
-#: apps/core/templatetags/audit.py:84
+#: apps/core/templatetags/audit.py:86
 msgid "record type"
 msgstr "record type"
 
-#: apps/core/templatetags/audit.py:85
+#: apps/core/templatetags/audit.py:87
 msgid "conversation"
 msgstr "conversation"
 
-#: apps/core/templatetags/audit.py:86
+#: apps/core/templatetags/audit.py:88
 msgid "delivery error"
 msgstr "delivery error"
 
-#: apps/core/templatetags/audit.py:87
+#: apps/core/templatetags/audit.py:89
 msgid "delivery status"
 msgstr "delivery status"
 
-#: apps/core/templatetags/audit.py:88
+#: apps/core/templatetags/audit.py:90
 msgid "direction"
 msgstr "direction"
 
-#: apps/core/templatetags/audit.py:89
+#: apps/core/templatetags/audit.py:91
 msgid "ended by"
 msgstr "ended by"
 
-#: apps/core/templatetags/audit.py:90
+#: apps/core/templatetags/audit.py:92
 msgid "external identifier"
 msgstr "external identifier"
 
-#: apps/core/templatetags/audit.py:91
+#: apps/core/templatetags/audit.py:93
 msgid "file"
 msgstr "file"
 
-#: apps/core/templatetags/audit.py:92
+#: apps/core/templatetags/audit.py:94
 msgid "first response"
 msgstr "first response"
 
-#: apps/core/templatetags/audit.py:93
+#: apps/core/templatetags/audit.py:95
 msgid "identifier"
 msgstr "identifier"
 
-#: apps/core/templatetags/audit.py:94
+#: apps/core/templatetags/audit.py:96
 msgid "idle warning sent"
 msgstr "idle warning sent"
 
-#: apps/core/templatetags/audit.py:95
+#: apps/core/templatetags/audit.py:97
 msgid "primary"
 msgstr "primary"
 
-#: apps/core/templatetags/audit.py:96
+#: apps/core/templatetags/audit.py:98
 msgid "staff access"
 msgstr "staff access"
 
-#: apps/core/templatetags/audit.py:97
+#: apps/core/templatetags/audit.py:99
 msgid "superuser"
 msgstr "superuser"
 
-#: apps/core/templatetags/audit.py:98
+#: apps/core/templatetags/audit.py:100
 msgid "kind"
 msgstr "kind"
 
-#: apps/core/templatetags/audit.py:99
+#: apps/core/templatetags/audit.py:101
 msgid "last activity"
 msgstr "last activity"
 
-#: apps/core/templatetags/audit.py:100
+#: apps/core/templatetags/audit.py:102
 msgid "last signed in"
 msgstr "last signed in"
 
-#: apps/core/templatetags/audit.py:103
+#: apps/core/templatetags/audit.py:105
 msgid "note"
 msgstr "note"
 
-#: apps/core/templatetags/audit.py:104
+#: apps/core/templatetags/audit.py:106
 msgid "observer"
 msgstr "observer"
 
-#: apps/core/templatetags/audit.py:106
+#: apps/core/templatetags/audit.py:108
 msgid "preferred language"
 msgstr "preferred language"
 
-#: apps/core/templatetags/audit.py:107
+#: apps/core/templatetags/audit.py:109
 msgid "size"
 msgstr "size"
 
-#: apps/core/templatetags/audit.py:108
+#: apps/core/templatetags/audit.py:110
 msgid "started"
 msgstr "started"
 
-#: apps/core/templatetags/audit.py:109
+#: apps/core/templatetags/audit.py:111
 msgid "uploaded by"
 msgstr "uploaded by"
 
-#: apps/core/templatetags/audit.py:110
+#: apps/core/templatetags/audit.py:112
 msgid "value"
 msgstr "value"
 
-#: apps/core/templatetags/audit.py:111
+#: apps/core/templatetags/audit.py:113
 msgid "visitor token"
 msgstr "visitor token"
 
-#: apps/core/templatetags/audit.py:177
+#: apps/core/templatetags/audit.py:179
 msgid "changed"
 msgstr "changed"
 
-#: apps/core/templatetags/audit.py:179
+#: apps/core/templatetags/audit.py:181
 msgid "accessed"
 msgstr "accessed"
 
@@ -595,35 +603,43 @@ msgstr "What has happened?"
 msgid "Describe what has happened."
 msgstr "Describe what has happened."
 
-#: apps/portal/models.py:84
+#: apps/portal/forms.py:171
+msgid "New password"
+msgstr "New password"
+
+#: apps/portal/forms.py:175
+msgid "Choose a new password."
+msgstr "Choose a new password."
+
+#: apps/portal/models.py:86
 msgid "password"
 msgstr "password"
 
-#: apps/portal/models.py:97
+#: apps/portal/models.py:108
 msgid "customer accounts"
 msgstr "customer accounts"
 
-#: apps/portal/models.py:150
+#: apps/portal/models.py:214
 msgid "Confirm an email address"
 msgstr "Confirm an email address"
 
-#: apps/portal/models.py:151
+#: apps/portal/models.py:215
 msgid "Reset a password"
 msgstr "Reset a password"
 
-#: apps/portal/views.py:77
+#: apps/portal/views.py:80
 msgid "Please try again in a minute."
 msgstr "Please try again in a minute."
 
-#: apps/portal/views.py:78
+#: apps/portal/views.py:81
 msgid "Please try again in a few minutes."
 msgstr "Please try again in a few minutes."
 
-#: apps/portal/views.py:79
+#: apps/portal/views.py:82
 msgid "Please try again in an hour."
 msgstr "Please try again in an hour."
 
-#: apps/portal/views.py:80
+#: apps/portal/views.py:83
 msgid "Please try again tomorrow."
 msgstr "Please try again tomorrow."
 
@@ -1281,7 +1297,8 @@ msgid "Ask an administrator to set your department and branch."
 msgstr "Ask an administrator to set your department and branch."
 
 #: templates/portal/confirm_failed.html:3
-#: templates/portal/confirm_failed.html:5
+#: templates/portal/confirm_failed.html:5 templates/portal/reset_failed.html:3
+#: templates/portal/reset_failed.html:5
 msgid "This link no longer works"
 msgstr "This link no longer works"
 
@@ -1320,7 +1337,7 @@ msgid "Send request"
 msgstr "Send request"
 
 #: templates/portal/register.html:3 templates/portal/register.html:5
-#: templates/portal/sign_in.html:34
+#: templates/portal/sign_in.html:36
 msgid "Create an account"
 msgstr "Create an account"
 
@@ -1337,7 +1354,8 @@ msgid "I already have an account"
 msgstr "I already have an account"
 
 #: templates/portal/register_done.html:11
-#: templates/portal/register_done.html:13
+#: templates/portal/register_done.html:13 templates/portal/reset_sent.html:9
+#: templates/portal/reset_sent.html:11
 msgid "Check your email"
 msgstr "Check your email"
 
@@ -1407,9 +1425,58 @@ msgstr ""
 msgid "Send it"
 msgstr "Send it"
 
-#: templates/portal/resend_confirmation.html:18
+#: templates/portal/resend_confirmation.html:18 templates/portal/reset.html:18
+#: templates/portal/reset_failed.html:18 templates/portal/reset_sent.html:14
 msgid "Back to sign in"
 msgstr "Back to sign in"
+
+#: templates/portal/reset.html:3 templates/portal/reset.html:5
+msgid "Reset your password"
+msgstr "Reset your password"
+
+#: templates/portal/reset.html:6
+msgid "Tell us the address you registered with and we will send you a link."
+msgstr "Tell us the address you registered with and we will send you a link."
+
+#: templates/portal/reset.html:16
+msgid "Send the link"
+msgstr "Send the link"
+
+#: templates/portal/reset_confirm.html:3 templates/portal/reset_confirm.html:5
+msgid "Choose a new password"
+msgstr "Choose a new password"
+
+#: templates/portal/reset_confirm.html:15
+msgid "Save it"
+msgstr "Save it"
+
+#: templates/portal/reset_confirm.html:18
+msgid "Signing in anywhere else with the old password will stop working."
+msgstr "Signing in anywhere else with the old password will stop working."
+
+#: templates/portal/reset_failed.html:7
+msgid ""
+"Reset links can be used once, and they stop working after an hour. This one "
+"has already been used or has expired."
+msgstr ""
+"Reset links can be used once, and they stop working after an hour. This one "
+"has already been used or has expired."
+
+#: templates/portal/reset_failed.html:17
+msgid "Send me a new link"
+msgstr "Send me a new link"
+
+#: templates/portal/reset_sent.html:12
+msgid ""
+"If that address has an account, a link to choose a new password is on its "
+"way to it."
+msgstr ""
+"If that address has an account, a link to choose a new password is on its "
+"way to it."
+
+#: templates/portal/reset_sent.html:13
+msgid "The link works once and stops working after an hour."
+msgstr "The link works once and stops working after an hour."
 
 #: templates/portal/sign_in.html:15
 msgid ""
@@ -1422,6 +1489,10 @@ msgstr ""
 #: templates/portal/sign_in.html:19
 msgid "That email address and password do not match."
 msgstr "That email address and password do not match."
+
+#: templates/portal/sign_in.html:34
+msgid "I have forgotten my password"
+msgstr "I have forgotten my password"
 
 #: templates/portal/too_many.html:8 templates/portal/too_many.html:10
 msgid "Too many attempts"
@@ -1540,7 +1611,6 @@ msgstr "Search reference, subject or contact"
 #, python-format
 #~ msgid "Signed in as %(address)s."
 #~ msgstr "Signed in as %(address)s."
-
 #~ msgid ""
 #~ "That department and branch are not yours to administer, and this account "
 #~ "would no longer be visible to you. Nothing has been changed."

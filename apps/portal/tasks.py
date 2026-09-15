@@ -74,3 +74,37 @@ def send_already_registered(self, *, email, language):
         )
     except Exception as exc:
         raise self.retry(exc=exc) from exc
+
+
+@shared_task(bind=True, max_retries=5, default_retry_delay=60)
+def send_reset(self, *, email, token_value, language):
+    try:
+        _send(
+            to=email,
+            subject="Reset your password",
+            template="portal/email/reset.{language}.txt",
+            context={"link": _absolute(reverse("portal:reset_confirm", args=[token_value]))},
+            language=language,
+        )
+    except Exception as exc:
+        raise self.retry(exc=exc) from exc
+
+
+@shared_task(bind=True, max_retries=5, default_retry_delay=60)
+def send_locked_out(self, *, email, language, minutes):
+    """FR-011. Sent once, when an account locks — never on the attempts afterwards.
+
+    Carries no link and no unlock action. Whoever triggered this was guessing a password;
+    anything actionable in the message they caused to be sent would hand them a second route
+    in. The owner's route in is the reset flow, which they can reach on their own.
+    """
+    try:
+        _send(
+            to=email,
+            subject="Your account was locked after repeated sign-in attempts",
+            template="portal/email/locked_out.{language}.txt",
+            context={"minutes": minutes, "reset": _absolute(reverse("portal:reset"))},
+            language=language,
+        )
+    except Exception as exc:
+        raise self.retry(exc=exc) from exc

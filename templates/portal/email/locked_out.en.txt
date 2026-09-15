@@ -1,0 +1,13 @@
+Hello,
+
+There have been several failed attempts to sign in to your AZM Support account, so we have
+locked it for {{ minutes }} minutes.
+
+If that was you, wait and try again, or choose a new password here:
+
+{{ reset }}
+
+If it was not you, somebody is trying passwords against your address. They did not get in,
+and nothing on your account has changed. Choosing a new password is the safest next step.
+
+— AZM Support

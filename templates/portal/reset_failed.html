@@ -1,0 +1,18 @@
+{% extends "portal/base.html" %}
+{% load i18n %}
+{% block title %}{% trans "This link no longer works" %}{% endblock %}
+{% block main %}
+  <h1>{% trans "This link no longer works" %}</h1>
+  <p>
+    {% blocktrans trimmed %}
+      Reset links can be used once, and they stop working after an hour. This one has already
+      been used or has expired.
+    {% endblocktrans %}
+  </p>
+  {% comment %}
+    The way out, on the page reporting the problem. Without it this is a dead end for somebody
+    who cannot sign in and has no other route.
+  {% endcomment %}
+  <p><a class="btn btn--primary" href="{% url 'portal:reset' %}">{% trans "Send me a new link" %}</a></p>
+  <p class="portal__foot"><a href="{% url 'portal:sign_in' %}">{% trans "Back to sign in" %}</a></p>
+{% endblock %}

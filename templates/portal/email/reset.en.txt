@@ -1,0 +1,14 @@
+Hello,
+
+Someone asked to reset the password on your AZM Support account.
+
+To choose a new one, open this link:
+
+{{ link }}
+
+The link works once and stops working after an hour.
+
+If this was not you, you can ignore this message. Your password has not changed, and nothing
+happens unless this link is opened.
+
+— AZM Support

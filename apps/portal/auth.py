@@ -20,11 +20,15 @@ import functools
 
 from django.contrib.auth.hashers import check_password, make_password
 from django.http import Http404
+from django.utils.crypto import constant_time_compare
 
 from apps.portal.models import CustomerAccount, normalize
 
 #: Deliberately not `_auth_user_id`. Two sessions, two keys, no overlap.
 CUSTOMER_SESSION_KEY = "_portal_customer_id"
+
+#: What the session was opened against, so a password change can end it (FR-012).
+CUSTOMER_SESSION_FINGERPRINT = "_portal_session_fingerprint"
 
 #: Hashed once at import and compared against when no account exists, so that a request for
 #: an unknown address costs the same as one for a known address. Without it, sign-in is an
@@ -49,9 +53,15 @@ class Unconfirmed(Exception):
         super().__init__("This address has not been confirmed yet")
 
 
-def authenticate_customer(email, password):
+def authenticate_customer(email, password, locked_out=None):
     """Return the account, raise `Unconfirmed`, or return None. Never raises for a bad
-    password."""
+    password.
+
+    `locked_out` is a list the caller passes in to learn that THIS failure locked the account,
+    so it can send the owner exactly one notice. An out-parameter is uglier than a return
+    value and is the price of the rule above it: every failure must look identical from
+    outside, so the outcome cannot be expressed as a different return.
+    """
     account = CustomerAccount.objects.filter(email=normalize(email)).first()
 
     if account is None:
@@ -60,8 +70,19 @@ def authenticate_customer(email, password):
         check_password(password or "", _ABSENT_ACCOUNT_HASH)
         return None
 
-    if not account.check_password(password or ""):
+    # Checked BEFORE the password, and the correct password does not get past it. A lock that
+    # the right password opens is not a lock — it stops the attacker who is nearly there and
+    # nobody else.
+    if account.is_locked:
+        check_password(password or "", _ABSENT_ACCOUNT_HASH)
         return None
+
+    if not account.check_password(password or ""):
+        if account.record_failed_sign_in() and locked_out is not None:
+            locked_out.append(account)
+        return None
+
+    account.clear_failed_sign_ins()
 
     # Order matters. Deactivation is checked before confirmation so that a deactivated
     # account cannot be told it merely needs to confirm — that would be an invitation to keep
@@ -84,6 +105,9 @@ def sign_in_customer(request, account):
     """
     request.session.cycle_key()
     request.session[CUSTOMER_SESSION_KEY] = account.pk
+    # Stamped so that a password change ends every OTHER session (FR-012) without hunting
+    # through the session table. See CustomerAccount.session_fingerprint.
+    request.session[CUSTOMER_SESSION_FINGERPRINT] = account.session_fingerprint
 
 
 def sign_out_customer(request):
@@ -103,6 +127,16 @@ def customer_from_session(session):
 
     account = CustomerAccount.objects.filter(pk=account_id).first()
     if account is None or not account.may_use_the_portal:
+        return None
+
+    # FR-012. A session opened with the old password carries the old fingerprint and stops
+    # being served the moment the password changes — which is the whole point of a reset,
+    # since the person it is aimed at is usually already signed in somewhere.
+    #
+    # constant_time_compare rather than `!=`: this is a secret being compared, and the
+    # framework provides the comparison for the same reason it provides the hashing.
+    stamped = session.get(CUSTOMER_SESSION_FINGERPRINT, "")
+    if not constant_time_compare(stamped, account.session_fingerprint):
         return None
 
     return account

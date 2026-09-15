@@ -30,6 +30,8 @@
     <button type="submit" class="btn btn--primary btn--block">{% trans "Sign in" %}</button>
   </form>
   <p class="portal__foot">
+    <a href="{% url 'portal:reset' %}">{% trans "I have forgotten my password" %}</a>
+    ·
     <a href="{% url 'portal:register' %}">{% trans "Create an account" %}</a>
   </p>
 {% endblock %}

@@ -1,0 +1,19 @@
+{% extends "portal/base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Reset your password" %}{% endblock %}
+{% block main %}
+  <h1>{% trans "Reset your password" %}</h1>
+  <p class="portal__lede">{% trans "Tell us the address you registered with and we will send you a link." %}</p>
+  <form method="post" class="portal__form" novalidate>
+    {% csrf_token %}
+    {% for field in form %}
+      <div class="field">
+        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+        {{ field }}
+        {% for error in field.errors %}<div class="error">{{ error }}</div>{% endfor %}
+      </div>
+    {% endfor %}
+    <button type="submit" class="btn btn--primary btn--block">{% trans "Send the link" %}</button>
+  </form>
+  <p class="portal__foot"><a href="{% url 'portal:sign_in' %}">{% trans "Back to sign in" %}</a></p>
+{% endblock %}

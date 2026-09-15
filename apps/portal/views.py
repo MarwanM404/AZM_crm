@@ -18,6 +18,7 @@ defence that does not depend on it.
 """
 
 from django.conf import settings
+from django.core.exceptions import ValidationError
 from django.http import Http404, HttpResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
@@ -28,16 +29,18 @@ from django.utils.translation import gettext as _
 from django.views.decorators.http import require_http_methods
 from django_ratelimit.decorators import ratelimit
 
-from apps.portal import auth
+from apps.portal import auth, tasks
 from apps.portal.auth import Unconfirmed, customer_required
 from apps.portal.forms import (
     EmailForm,
+    NewPasswordForm,
     NewRequestForm,
     RegistrationForm,
     ReplyForm,
     SignInForm,
 )
-from apps.portal.services import registration, tickets
+from apps.portal.models import CustomerToken
+from apps.portal.services import passwords, registration, tickets, tokens
 
 #: Limits count POSTs and nothing else.
 #:
@@ -276,9 +279,13 @@ def sign_in(request):
     failed = False
 
     if request.method == "POST" and form.is_valid():
+        # A list rather than a return value, because every failure must look identical from
+        # outside: a locked account is refused exactly as a wrong password is, and the only
+        # difference is a message to the address itself.
+        locked_out = []
         try:
             account = auth.authenticate_customer(
-                form.cleaned_data["email"], form.cleaned_data["password"]
+                form.cleaned_data["email"], form.cleaned_data["password"], locked_out=locked_out
             )
         except Unconfirmed:
             unconfirmed = True
@@ -287,6 +294,13 @@ def sign_in(request):
                 auth.sign_in_customer(request, account)
                 return redirect("portal:home")
             failed = True
+
+        for account in locked_out:
+            tasks.send_locked_out.delay(
+                email=account.email,
+                language=account.language,
+                minutes=settings.PORTAL_LOCKOUT_SECONDS // 60,
+            )
 
     return render(
         request,
@@ -371,3 +385,65 @@ def new_request(request):
         return redirect("portal:request", reference=ticket.reference)
 
     return render(request, "portal/new_request.html", {"form": form})
+
+
+# --- recovering a forgotten password (User Story 5) ---
+
+
+@require_http_methods(["GET", "POST"])
+@ratelimit(key="ip", rate=_rate("PORTAL_RESET_RATE_PER_SOURCE"), method=POST_ONLY, block=False)
+@ratelimit(
+    key="post:email", rate=_rate("PORTAL_RESET_RATE_PER_ADDRESS"), method=POST_ONLY, block=False
+)
+def reset(request):
+    """Ask for a reset link.
+
+    Like registration, this view cannot branch on whether the address is known: `start_reset`
+    returns nothing, so there is no outcome to render differently even by mistake. It always
+    ends at the same page.
+
+    Rate limited because it sends mail to an address on request. Without that it is a way to
+    send somebody a hundred emails using our mail server and our reputation.
+    """
+    if getattr(request, "limited", False):
+        return too_many(request, "PORTAL_RESET_RATE_PER_SOURCE")
+
+    form = EmailForm(request.POST or None)
+
+    if request.method == "POST" and form.is_valid():
+        passwords.start_reset(form.cleaned_data["email"])
+        return redirect("portal:reset_sent")
+
+    return render(request, "portal/reset.html", {"form": form})
+
+
+def reset_sent(request):
+    """ "Check your email." Says nothing about whether an account exists, because the person
+    reading it may not be the person who owns the address."""
+    return render(request, "portal/reset_sent.html", {})
+
+
+@require_http_methods(["GET", "POST"])
+def reset_confirm(request, value):
+    """Choose a new password from a reset link.
+
+    The link is checked on GET so that a dead one says so immediately, rather than after
+    somebody has typed a new password twice. It is only SPENT on a successful POST — burning
+    it on a rejected password would cost the link to somebody who is already locked out.
+    """
+    form = NewPasswordForm(request.POST or None)
+
+    if request.method == "POST" and form.is_valid():
+        try:
+            account = passwords.complete_reset(value, form.cleaned_data["password"])
+        except ValidationError as error:
+            form.add_error("password", error)
+        else:
+            if account is None:
+                return render(request, "portal/reset_failed.html", {})
+            auth.sign_in_customer(request, account)
+            return redirect("portal:home")
+    elif tokens.peek(value, CustomerToken.Purpose.RESET) is None:
+        return render(request, "portal/reset_failed.html", {})
+
+    return render(request, "portal/reset_confirm.html", {"form": form})

@@ -204,10 +204,9 @@ def test_the_reply_limit_is_per_customer_not_per_address_in_the_form(
     The key is the signed-in customer's address instead. This asserts the limit actually
     discriminates: a second customer is unaffected by the first one's spending.
     """
-    from django.conf import settings as django_settings
 
-    from apps.portal.auth import CUSTOMER_SESSION_KEY
     from apps.portal.models import CustomerAccount
+    from apps.portal.tests.sessions import sign_in as start_session
 
     settings.PORTAL_REPLY_RATE_PER_ADDRESS = "2/h"
     settings.PORTAL_REPLY_RATE_PER_SOURCE = "1000/h"
@@ -219,10 +218,7 @@ def test_the_reply_limit_is_per_customer_not_per_address_in_the_form(
         email="someone.else@example.com", password=GOOD_PASSWORD
     )
     other.confirm()
-    session = customer_client.session
-    session[CUSTOMER_SESSION_KEY] = other.pk
-    session.save()
-    customer_client.cookies[django_settings.SESSION_COOKIE_NAME] = session.session_key
+    start_session(customer_client, other)
 
     # Not their request, so 404 — but a 404 means the limiter let them through, which is what
     # is being checked. A shared key would have refused them before the view ran.

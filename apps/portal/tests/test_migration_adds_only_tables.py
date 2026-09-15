@@ -14,19 +14,46 @@ from pathlib import Path
 MIGRATIONS = Path(__file__).resolve().parent.parent / "migrations"
 
 
-def test_it_only_creates_models():
-    forbidden = re.compile(r"migrations\.(AlterField|RemoveField|AddField|DeleteModel|RenameField)")
-    offenders = []
+def test_the_first_migration_only_creates_models():
+    """data-model.md's claim, which is about the migration that INTRODUCED the portal.
 
-    for migration in sorted(MIGRATIONS.glob("[0-9]*.py")):
-        for number, line in enumerate(migration.read_text(encoding="utf-8").splitlines(), 1):
-            if forbidden.search(line):
-                offenders.append(f"{migration.name}:{number}: {line.strip()}")
+    Narrowed from "no portal migration ever alters a field" during User Story 5, which needed
+    two columns on the portal's own table for the sign-in lockout. That wider rule was wrong
+    and would have blocked every future change to this app's own schema — it was never the
+    risk. The risk is the portal reaching into the staff application's tables, and
+    `test_no_portal_migration_touches_another_app` below is the check for that, on every
+    migration rather than only the first.
+    """
+    forbidden = re.compile(r"migrations\.(AlterField|RemoveField|AddField|DeleteModel|RenameField)")
+    initial = MIGRATIONS / "0001_initial.py"
+    offenders = [
+        f"{initial.name}:{number}: {line.strip()}"
+        for number, line in enumerate(initial.read_text(encoding="utf-8").splitlines(), 1)
+        if forbidden.search(line)
+    ]
 
     assert not offenders, (
-        "The portal's migrations change existing schema rather than only adding tables:\n"
-        + "\n".join(offenders)
+        "The portal's first migration changes existing schema rather than only adding "
+        "tables:\n" + "\n".join(offenders)
     )
+
+
+def test_no_portal_migration_creates_a_model_in_another_app():
+    """The real rule, on every migration.
+
+    A portal migration may freely evolve `portal_*` tables. What it must never do is create,
+    alter or drop anything belonging to tickets, customers or accounts — that is the schema
+    the whole staff application depends on, and a change to it from here would be both
+    invisible in review and awkward to walk back once applied.
+    """
+    offenders = []
+    for migration in sorted(MIGRATIONS.glob("[0-9]*.py")):
+        source = migration.read_text(encoding="utf-8")
+        for app in ("tickets", "customers", "accounts", "messaging", "chat", "attachments"):
+            if f"'{app}'," in source.replace('"', "'").split("operations")[-1]:
+                offenders.append(f"{migration.name} names another app in its operations: {app}")
+
+    assert not offenders, "\n".join(offenders)
 
 
 def test_no_portal_migration_touches_another_app():

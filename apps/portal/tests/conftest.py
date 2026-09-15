@@ -34,23 +34,17 @@ def unconfirmed_customer(db):
 def customer_client(client, customer):
     """A test client holding a real portal session.
 
-    Built by writing the session directly rather than by posting the sign-in form, because
-    the form does not exist until User Story 1 and because a fixture that depends on a screen
-    fails for two different reasons once that screen exists.
+    Built by writing the session rather than posting the sign-in form, because most tests
+    using it are not about signing in and a fixture that goes through a screen fails for two
+    reasons once that screen exists.
 
-    It uses apps.portal.auth's own key rather than a literal, so that renaming the key breaks
-    this in one place instead of leaving every refusal test silently signed out — which would
-    make them all pass.
+    It goes through `apps.portal.tests.sessions.sign_in` so that everything the session must
+    carry — the account id AND the fingerprint that a password change invalidates (FR-012) —
+    is written in one place.
     """
-    from django.conf import settings
+    from apps.portal.tests.sessions import sign_in
 
-    from apps.portal.auth import CUSTOMER_SESSION_KEY
-
-    session = client.session
-    session[CUSTOMER_SESSION_KEY] = customer.pk
-    session.save()
-    client.cookies[settings.SESSION_COOKIE_NAME] = session.session_key
-    return client
+    return sign_in(client, customer)
 
 
 @pytest.fixture

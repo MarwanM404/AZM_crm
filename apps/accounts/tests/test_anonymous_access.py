@@ -126,6 +126,19 @@ def test_exempt_list_is_small_and_deliberate():
       ordinary sign-out rather than the STAFF sign-in page, which is what the deny-by-default
       wall would otherwise hand them: a screen they have never seen, for an application they
       have no account in.
+
+    Three more arrive with the password reset (User Story 5), and they share one argument:
+    every person who reaches them cannot sign in, which is the definition of their problem.
+
+    - portal:reset — asks for the address. Answers identically whether or not that address has
+      an account (FR-007), and is limited per address and per source because it sends mail on
+      request: without that it is a way to send somebody a hundred messages from our server.
+    - portal:reset_sent — "check your email", shown identically in every case and saying
+      nothing about whether anything was sent.
+    - portal:reset_confirm — choosing the new password. Authorized by the token in the URL:
+      single use, expiring within the hour, and able to do exactly one thing. Completing it
+      ends every other session for that account (FR-012) and burns every other outstanding
+      link.
     """
     assert settings.LOGIN_EXEMPT_URL_NAMES == {
         "intake:form",
@@ -145,4 +158,7 @@ def test_exempt_list_is_small_and_deliberate():
         "portal:resend_confirmation",
         "portal:sign_in",
         "portal:sign_out",
+        "portal:reset",
+        "portal:reset_sent",
+        "portal:reset_confirm",
     }

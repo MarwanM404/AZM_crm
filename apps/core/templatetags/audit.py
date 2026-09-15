@@ -45,6 +45,8 @@ FIELD_LABELS = {
     "expires_at": _("link expires"),
     "purpose": _("link purpose"),
     "used_at": _("link used"),
+    "failed_sign_ins": _("failed sign-in attempts"),
+    "locked_until": _("locked until"),
     "assigned_to": _("assigned to"),
     "branch": _("branch"),
     "category": _("category"),

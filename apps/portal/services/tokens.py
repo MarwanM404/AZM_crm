@@ -48,6 +48,28 @@ def issue(account, purpose):
     return value, token
 
 
+def peek(value, purpose):
+    """Find a usable token WITHOUT spending it.
+
+    Split out from `consume` for the reset flow, where the link must survive a rejected
+    password: burning it on a typo costs the link to somebody who is already locked out, and
+    their only way forward is to start again from the beginning.
+
+    Confirmation still uses `consume` directly — there is nothing that can fail after it.
+    """
+    if not value:
+        return None
+
+    token = (
+        CustomerToken.objects.filter(
+            value_hash=fingerprint(value), purpose=purpose, used_at__isnull=True
+        )
+        .select_related("account")
+        .first()
+    )
+    return token if token is not None and token.is_usable else None
+
+
 def consume(value, purpose):
     """Return the token if this value is usable for this purpose, else None. Marks it used.
 

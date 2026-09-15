@@ -68,13 +68,10 @@ def test_an_unconfirmed_account_reaches_nothing(client):
 
     from django.conf import settings
 
-    from apps.portal.auth import CUSTOMER_SESSION_KEY
     from apps.portal.tests.routes import portal_routes
+    from apps.portal.tests.sessions import sign_in as start_session
 
-    session = client.session
-    session[CUSTOMER_SESSION_KEY] = account.pk
-    session.save()
-    client.cookies[settings.SESSION_COOKIE_NAME] = session.session_key
+    start_session(client, account)
 
     behind_sign_in = {name: url for name, url in portal_routes().items() if name != "portal:home"}
     for name, url in {**behind_sign_in, "portal:home": reverse("portal:home")}.items():

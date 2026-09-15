@@ -150,17 +150,13 @@ def test_an_unconfirmed_account_cannot_open_a_request(client, customer, customer
     second account being given it: one address is one account, so the scenario is "this
     customer has not confirmed yet", not "two accounts claim the same address".
     """
-    from django.conf import settings
 
-    from apps.portal.auth import CUSTOMER_SESSION_KEY
+    from apps.portal.tests.sessions import sign_in as start_session
 
     customer.email_confirmed_at = None
     customer.save(update_fields=["email_confirmed_at"])
 
-    session = client.session
-    session[CUSTOMER_SESSION_KEY] = customer.pk
-    session.save()
-    client.cookies[settings.SESSION_COOKIE_NAME] = session.session_key
+    start_session(client, customer)
 
     assert detail(client, customer_ticket.reference).status_code != 200
 

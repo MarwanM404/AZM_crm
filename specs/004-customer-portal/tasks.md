@@ -216,20 +216,20 @@ phase is a hybrid because the refusal and the thing refused are the same object.
 
 ### Tests for User Story 5
 
-- [ ] T077 [P] [US5] Write `apps/portal/tests/test_password_reset.py` asserting a single-use message is sent, and that the response is identical for an address with no account (FR-007)
-- [ ] T078 [P] [US5] Extend `test_password_reset.py` asserting a used link and an expired link both stop working, with a way to request another
-- [ ] T079 [P] [US5] Extend `test_password_reset.py` asserting the previous password stops working and other sessions for that account end (FR-012)
-- [ ] T080 [P] [US5] Extend `test_password_reset.py` asserting the new password is held to the same policy as registration
-- [ ] T081 [P] [US5] Write `apps/portal/tests/test_lockout.py` asserting repeated failures lock the account for the configured period and the owner is told (FR-011)
-- [ ] T082 [P] [US5] Extend `test_lockout.py` asserting a lockout does not reveal whether the address has an account
+- [x] T077 [P] [US5] Write `apps/portal/tests/test_password_reset.py` asserting a single-use message is sent, and that the response is identical for an address with no account (FR-007)
+- [x] T078 [P] [US5] Extend `test_password_reset.py` asserting a used link and an expired link both stop working, with a way to request another
+- [x] T079 [P] [US5] Extend `test_password_reset.py` asserting the previous password stops working and other sessions for that account end (FR-012)
+- [x] T080 [P] [US5] Extend `test_password_reset.py` asserting the new password is held to the same policy as registration
+- [x] T081 [P] [US5] Write `apps/portal/tests/test_lockout.py` asserting repeated failures lock the account for the configured period and the owner is told (FR-011)
+- [x] T082 [P] [US5] Extend `test_lockout.py` asserting a lockout does not reveal whether the address has an account
 
 ### Implementation
 
-- [ ] T083 [US5] Implement reset in `apps/portal/services/passwords.py`, including the identical-response rule and ending other sessions
-- [ ] T084 [US5] Implement lockout in `apps/portal/services/passwords.py`
-- [ ] T085 [US5] Implement the reset views in `apps/portal/views.py` and route them
-- [ ] T086 [P] [US5] Create `templates/portal/reset.html` and `reset_confirm.html`, and the reset and lockout emails in both languages
-- [ ] T087 [US5] Extract and translate this phase's strings, then check both domains
+- [x] T083 [US5] Implement reset in `apps/portal/services/passwords.py`, including the identical-response rule and ending other sessions
+- [x] T084 [US5] Implement lockout in `apps/portal/services/passwords.py`
+- [x] T085 [US5] Implement the reset views in `apps/portal/views.py` and route them
+- [x] T086 [P] [US5] Create `templates/portal/reset.html` and `reset_confirm.html`, and the reset and lockout emails in both languages
+- [x] T087 [US5] Extract and translate this phase's strings, then check both domains
 
 **Checkpoint**: a forgotten password is no longer a support request.
 

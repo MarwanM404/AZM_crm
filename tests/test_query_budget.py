@@ -23,9 +23,6 @@ from apps.tickets.models import Message, Ticket
 def customer_client_for_budget(db):
     """A signed-in portal customer. Local to this file so the portal's own conftest fixtures
     do not have to be importable from tests/."""
-    from django.conf import settings
-
-    from apps.portal.auth import CUSTOMER_SESSION_KEY
     from apps.portal.models import CustomerAccount
 
     account = CustomerAccount.objects.create_account(
@@ -33,12 +30,9 @@ def customer_client_for_budget(db):
     )
     account.confirm()
 
-    client = Client()
-    session = client.session
-    session[CUSTOMER_SESSION_KEY] = account.pk
-    session.save()
-    client.cookies[settings.SESSION_COOKIE_NAME] = session.session_key
-    return client, account
+    from apps.portal.tests.sessions import sign_in
+
+    return sign_in(Client(), account), account
 
 
 def _make_tickets(count, *, organization, department, branch, category, agent, start=0):

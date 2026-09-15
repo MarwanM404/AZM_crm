@@ -207,16 +207,11 @@ def test_replying_needs_a_post(customer_client, customer_ticket):
 
 
 def test_an_unconfirmed_account_cannot_reply(client, customer, customer_ticket):
-    from django.conf import settings
-
-    from apps.portal.auth import CUSTOMER_SESSION_KEY
+    from apps.portal.tests.sessions import sign_in as start_session
 
     customer.email_confirmed_at = None
     customer.save(update_fields=["email_confirmed_at"])
-    session = client.session
-    session[CUSTOMER_SESSION_KEY] = customer.pk
-    session.save()
-    client.cookies[settings.SESSION_COOKIE_NAME] = session.session_key
+    start_session(client, customer)
 
     reply(client, customer_ticket)
 

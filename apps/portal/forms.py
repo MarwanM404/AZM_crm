@@ -156,3 +156,21 @@ class NewRequestForm(forms.Form):
 
     def clean_description(self):
         return _within_the_limit(self.cleaned_data.get("description"))
+
+
+class NewPasswordForm(forms.Form):
+    """Choosing a replacement password from a reset link.
+
+    The strength check is NOT here. It runs in `passwords.complete_reset`, after the link has
+    been verified, so that the policy is applied in one place for registration and for reset
+    alike — two forms each carrying their own copy is two policies that agree until one of
+    them is edited.
+    """
+
+    password = forms.CharField(
+        label=_("New password"),
+        widget=forms.PasswordInput(render_value=False),
+        strip=False,
+        max_length=128,
+        error_messages={"required": _("Choose a new password.")},
+    )

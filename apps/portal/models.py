@@ -13,9 +13,11 @@ would raise rather than quietly return `None`. Password hashing and timing-safe 
 still come from the framework, because writing those by hand is how they get written wrong.
 """
 
+from django.conf import settings
 from django.contrib.auth.hashers import check_password, make_password
 from django.db import models
 from django.utils import timezone
+from django.utils.crypto import salted_hmac
 from django.utils.translation import gettext_lazy as _
 
 from apps.core.models import TimeStampedModel
@@ -89,6 +91,15 @@ class CustomerAccount(TimeStampedModel):
     language = models.CharField(max_length=2, choices=Language.choices, default=Language.ARABIC)
     is_active = models.BooleanField(default=True)
 
+    #: Consecutive failed sign-ins, and when the resulting lock ends (FR-011).
+    #:
+    #: On the account rather than in the cache, deliberately. The rate limiter fails OPEN by
+    #: design — a Redis outage must not turn away genuine customers (research.md #6) — so
+    #: while Redis is down the limiter is simply not there. This is the defence that does not
+    #: depend on it, which only works if it is stored somewhere that does not either.
+    failed_sign_ins = models.PositiveIntegerField(default=0)
+    locked_until = models.DateTimeField(null=True, blank=True)
+
     objects = CustomerAccountManager()
 
     class Meta:
@@ -107,6 +118,59 @@ class CustomerAccount(TimeStampedModel):
 
     def set_password(self, raw):
         self.password = make_password(raw)
+
+    @property
+    def session_fingerprint(self):
+        """A value that changes when the password changes, stamped into the session.
+
+        This is how a reset ends OTHER sessions (FR-012) without hunting through the session
+        table: each session carries the fingerprint it was opened with, and one that no longer
+        matches is not served. Django's own `get_session_auth_hash` works the same way and for
+        the same reason.
+
+        Keyed on SECRET_KEY, so the stored value is not the password hash itself — a session
+        record is readable by anything that can read the session table, and a password hash
+        sitting in one is an offline-crackable credential in a place nobody thinks to guard.
+        """
+        return salted_hmac(
+            "apps.portal.auth.session", self.password, algorithm="sha256"
+        ).hexdigest()
+
+    # --- sign-in attempts (FR-011) ---
+
+    @property
+    def is_locked(self):
+        return self.locked_until is not None and self.locked_until > timezone.now()
+
+    def record_failed_sign_in(self):
+        """Returns True if this failure is the one that locked the account.
+
+        The caller uses that to send the owner exactly one notice. Telling them on every
+        subsequent attempt would let whoever is guessing use this product to send them a
+        thousand emails.
+        """
+        if self.is_locked:
+            return False
+
+        self.failed_sign_ins += 1
+        just_locked = self.failed_sign_ins >= settings.PORTAL_LOCKOUT_THRESHOLD
+        if just_locked:
+            self.locked_until = timezone.now() + timezone.timedelta(
+                seconds=settings.PORTAL_LOCKOUT_SECONDS
+            )
+        self.save(update_fields=["failed_sign_ins", "locked_until", "updated_at"])
+        return just_locked
+
+    def clear_failed_sign_ins(self):
+        """Consecutive failures, not failures ever.
+
+        Without this the count accumulates over months and locks somebody out on a Tuesday
+        for typos spread across a year.
+        """
+        if self.failed_sign_ins or self.locked_until:
+            self.failed_sign_ins = 0
+            self.locked_until = None
+            self.save(update_fields=["failed_sign_ins", "locked_until", "updated_at"])
 
     def check_password(self, raw):
         def setter(new_hash):
@@ -169,3 +233,9 @@ class CustomerToken(TimeStampedModel):
     @property
     def is_usable(self):
         return self.used_at is None and self.expires_at > timezone.now()
+
+    def consume(self):
+        """Spend it. Separate from finding it, so a caller can check a link is good, do
+        something that might fail, and only then burn it."""
+        self.used_at = timezone.now()
+        self.save(update_fields=["used_at", "updated_at"])

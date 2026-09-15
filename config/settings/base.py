@@ -258,6 +258,18 @@ LOGIN_EXEMPT_URL_NAMES = {
     # ordinary sign-out rather than a redirect to the STAFF sign-in page — which is what the
     # deny-by-default wall would otherwise give them, on a screen they have never seen.
     "portal:sign_out",
+    # Recovering a forgotten password. All three are reached by somebody who cannot sign in,
+    # which is the definition of their problem, so requiring a session would be a locked door
+    # with the key inside.
+    #
+    # portal:reset answers identically whether or not the address has an account (FR-007) and
+    # is limited per address and per source, because it sends mail on request.
+    # portal:reset_sent is the "check your email" page and says nothing at all.
+    # portal:reset_confirm is authorized by the token in its URL: single use, expiring, and
+    # able to do exactly one thing.
+    "portal:reset",
+    "portal:reset_sent",
+    "portal:reset_confirm",
 }
 LOGIN_URL = "accounts:sign_in"
 

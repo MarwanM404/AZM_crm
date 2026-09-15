@@ -41,4 +41,9 @@ urlpatterns = [
     path("resend/", views.resend_confirmation, name="resend_confirmation"),
     path("sign-in/", views.sign_in, name="sign_in"),
     path("sign-out/", views.sign_out, name="sign_out"),
+    path("reset/", views.reset, name="reset"),
+    path("reset/sent/", views.reset_sent, name="reset_sent"),
+    # NOT under reset/, for the reason recorded on the resend route above: `reset/<value>/`
+    # would match reset/sent/ with value="sent".
+    path("new-password/<str:value>/", views.reset_confirm, name="reset_confirm"),
 ]

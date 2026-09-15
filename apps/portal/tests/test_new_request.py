@@ -139,16 +139,11 @@ def test_an_empty_subject_is_refused(customer_client, customer_contact, category
 
 
 def test_an_unconfirmed_account_cannot_raise_one(client, customer, category):
-    from django.conf import settings
-
-    from apps.portal.auth import CUSTOMER_SESSION_KEY
+    from apps.portal.tests.sessions import sign_in as start_session
 
     customer.email_confirmed_at = None
     customer.save(update_fields=["email_confirmed_at"])
-    session = client.session
-    session[CUSTOMER_SESSION_KEY] = customer.pk
-    session.save()
-    client.cookies[settings.SESSION_COOKIE_NAME] = session.session_key
+    start_session(client, customer)
 
     raise_request(client, category)
 

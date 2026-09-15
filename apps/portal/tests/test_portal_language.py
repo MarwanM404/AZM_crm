@@ -19,17 +19,12 @@ pytestmark = pytest.mark.django_db
 
 
 def test_an_arabic_customer_gets_an_arabic_page(client, customer):
-    from django.conf import settings
-
-    from apps.portal.auth import CUSTOMER_SESSION_KEY
+    from apps.portal.tests.sessions import sign_in as start_session
 
     customer.language = "ar"
     customer.save(update_fields=["language"])
 
-    session = client.session
-    session[CUSTOMER_SESSION_KEY] = customer.pk
-    session.save()
-    client.cookies[settings.SESSION_COOKIE_NAME] = session.session_key
+    start_session(client, customer)
 
     response = client.get(reverse("portal:home"))
     body = response.content.decode()
@@ -41,17 +36,13 @@ def test_an_arabic_customer_gets_an_arabic_page(client, customer):
 
 def test_an_english_customer_gets_an_english_page(client, customer):
     """The other half. A middleware hard-wired to Arabic would pass the test above."""
-    from django.conf import settings
 
-    from apps.portal.auth import CUSTOMER_SESSION_KEY
+    from apps.portal.tests.sessions import sign_in as start_session
 
     customer.language = "en"
     customer.save(update_fields=["language"])
 
-    session = client.session
-    session[CUSTOMER_SESSION_KEY] = customer.pk
-    session.save()
-    client.cookies[settings.SESSION_COOKIE_NAME] = session.session_key
+    start_session(client, customer)
 
     body = client.get(reverse("portal:home")).content.decode()
 
