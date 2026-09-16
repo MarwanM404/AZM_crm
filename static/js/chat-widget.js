@@ -10,6 +10,13 @@ function chatWidget() {
     stage: "form",
     errors: {},
     draft: "",
+    /*
+     * True when the connection has dropped. The customer is told; the draft is kept.
+     *
+     * Their message is the thing that must not disappear quietly — they are mid-problem, and
+     * a Send button that swallows what they wrote is worse than one that refuses it.
+     */
+    connectionLost: false,
     position: null,
     heartbeatTimer: null,
     reference: null,
@@ -64,7 +71,16 @@ function chatWidget() {
 
       this.socket.onclose = () => {
         clearInterval(this.heartbeatTimer);
-        if (this.stage !== "ended") this.stage = "waiting";
+        // Not when the conversation ended normally: that is the socket closing because the
+        // chat is over, and telling somebody the connection dropped would be a lie.
+        if (this.stage !== "ended") {
+          this.stage = "waiting";
+          this.connectionLost = true;
+        }
+      };
+
+      this.socket.onopen = () => {
+        this.connectionLost = false;
       };
 
       this.startHeartbeat();
@@ -112,7 +128,20 @@ function chatWidget() {
 
     send() {
       const text = this.draft.trim();
-      if (!text || !this.socket) return;
+      if (!text) return;
+
+      /*
+       * `readyState`, not just `this.socket`. A socket that has closed is still an object, and
+       * calling `send` on one throws `InvalidStateError` — so a customer pressing Send on a
+       * dropped connection got no reply, no error, and no indication their message had not
+       * been delivered. `signalTyping` below has always checked this; the call carrying the
+       * customer's actual words did not.
+       */
+      if (!this.socket || this.socket.readyState !== WebSocket.OPEN) {
+        this.connectionLost = true;
+        return; // the draft is deliberately kept, so nothing they wrote is lost
+      }
+
       this.socket.send(JSON.stringify({ type: "message", text }));
       this.draft = "";
     },

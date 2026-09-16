@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-15 15:30+0000\n"
+"POT-Creation-Date: 2026-09-16 09:34+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -233,7 +233,7 @@ msgstr "The desk closed while waiting"
 msgid "Live chat"
 msgstr "Live chat"
 
-#: apps/chat/services/lifecycle.py:102 templates/chat/widget.html:63
+#: apps/chat/services/lifecycle.py:102 templates/chat/widget.html:73
 msgid "This conversation has ended."
 msgstr "This conversation has ended."
 
@@ -739,7 +739,7 @@ msgstr "A reply cannot be empty."
 #: templates/accounts/sign_in.html:3 templates/accounts/sign_in.html:24
 #: templates/accounts/sign_in.html:39 templates/portal/confirm_failed.html:18
 #: templates/portal/register_done.html:29 templates/portal/sign_in.html:3
-#: templates/portal/sign_in.html:5 templates/portal/sign_in.html:31
+#: templates/portal/sign_in.html:5 templates/portal/sign_in.html:46
 msgid "Sign in"
 msgstr "Sign in"
 
@@ -812,7 +812,7 @@ msgstr "Department"
 msgid "Branch"
 msgstr "Branch"
 
-#: templates/accounts/user_form.html:61 templates/portal/register.html:21
+#: templates/accounts/user_form.html:61 templates/portal/register.html:36
 msgid "Create account"
 msgstr "Create account"
 
@@ -846,26 +846,26 @@ msgstr "No staff accounts in this department yet."
 msgid "Conversations assigned to you"
 msgstr "Conversations assigned to you"
 
-#: templates/chat/console.html:26
+#: templates/chat/console.html:32
 msgid "Go offline"
 msgstr "Go offline"
 
-#: templates/chat/console.html:26
+#: templates/chat/console.html:32
 msgid "Go online"
 msgstr "Go online"
 
-#: templates/chat/console.html:39
+#: templates/chat/console.html:45
 msgid "Capacity"
 msgstr "Capacity"
 
-#: templates/chat/console.html:46
+#: templates/chat/console.html:52
 #, python-format
 msgid "%(counter)s conversation free"
 msgid_plural "%(counter)s conversations free"
 msgstr[0] "%(counter)s conversation free"
 msgstr[1] "%(counter)s conversations free"
 
-#: templates/chat/console.html:49
+#: templates/chat/console.html:55
 msgid "You stop receiving new conversations when this reaches zero."
 msgstr "You stop receiving new conversations when this reaches zero."
 
@@ -996,27 +996,35 @@ msgstr "Your position"
 msgid "Typing…"
 msgstr "Typing…"
 
-#: templates/chat/widget.html:56
+#: templates/chat/widget.html:62
+msgid ""
+"You have lost connection. What you have typed is still here — reconnect and "
+"send it again."
+msgstr ""
+"You have lost connection. What you have typed is still here — reconnect and "
+"send it again."
+
+#: templates/chat/widget.html:66
 msgid "Your message"
 msgstr "Your message"
 
-#: templates/chat/widget.html:58
+#: templates/chat/widget.html:68
 msgid "Write a message…"
 msgstr "Write a message…"
 
-#: templates/chat/widget.html:59
+#: templates/chat/widget.html:69
 msgid "Send"
 msgstr "Send"
 
-#: templates/chat/widget.html:65
+#: templates/chat/widget.html:75
 msgid "Your reference"
 msgstr "Your reference"
 
-#: templates/chat/widget.html:71
+#: templates/chat/widget.html:81
 msgid "Send us a request"
 msgstr "Send us a request"
 
-#: templates/chat/widget.html:73
+#: templates/chat/widget.html:83
 msgid ""
 "Nobody is available to chat right now. Send a request and we will reply by "
 "email."
@@ -1024,7 +1032,7 @@ msgstr ""
 "Nobody is available to chat right now. Send a request and we will reply by "
 "email."
 
-#: templates/chat/widget.html:75 templates/intake/form.html:3
+#: templates/chat/widget.html:85 templates/intake/form.html:3
 #: templates/intake/form.html:6
 msgid "Submit a request"
 msgstr "Submit a request"
@@ -1332,12 +1340,12 @@ msgstr "New request"
 msgid "We already know who you are, so just tell us what has happened."
 msgstr "We already know who you are, so just tell us what has happened."
 
-#: templates/portal/new_request.html:28
+#: templates/portal/new_request.html:43
 msgid "Send request"
 msgstr "Send request"
 
 #: templates/portal/register.html:3 templates/portal/register.html:5
-#: templates/portal/sign_in.html:36
+#: templates/portal/sign_in.html:51
 msgid "Create an account"
 msgstr "Create an account"
 
@@ -1349,7 +1357,7 @@ msgstr ""
 "Sign up with the email address you use to contact support, and you will be "
 "able to see your requests here."
 
-#: templates/portal/register.html:24
+#: templates/portal/register.html:39
 msgid "I already have an account"
 msgstr "I already have an account"
 
@@ -1397,7 +1405,7 @@ msgstr "Your request"
 msgid "You"
 msgstr "You"
 
-#: templates/portal/request_detail.html:71
+#: templates/portal/request_detail.html:86
 #: templates/tickets/partials/ticket_pane.html:96
 msgid "Send reply"
 msgstr "Send reply"
@@ -1421,11 +1429,11 @@ msgid ""
 msgstr ""
 "Tell us the address you registered with and we will send the link again."
 
-#: templates/portal/resend_confirmation.html:16
+#: templates/portal/resend_confirmation.html:31
 msgid "Send it"
 msgstr "Send it"
 
-#: templates/portal/resend_confirmation.html:18 templates/portal/reset.html:18
+#: templates/portal/resend_confirmation.html:33 templates/portal/reset.html:33
 #: templates/portal/reset_failed.html:18 templates/portal/reset_sent.html:14
 msgid "Back to sign in"
 msgstr "Back to sign in"
@@ -1438,7 +1446,7 @@ msgstr "Reset your password"
 msgid "Tell us the address you registered with and we will send you a link."
 msgstr "Tell us the address you registered with and we will send you a link."
 
-#: templates/portal/reset.html:16
+#: templates/portal/reset.html:31
 msgid "Send the link"
 msgstr "Send the link"
 
@@ -1446,11 +1454,11 @@ msgstr "Send the link"
 msgid "Choose a new password"
 msgstr "Choose a new password"
 
-#: templates/portal/reset_confirm.html:15
+#: templates/portal/reset_confirm.html:30
 msgid "Save it"
 msgstr "Save it"
 
-#: templates/portal/reset_confirm.html:18
+#: templates/portal/reset_confirm.html:33
 msgid "Signing in anywhere else with the old password will stop working."
 msgstr "Signing in anywhere else with the old password will stop working."
 
@@ -1490,7 +1498,7 @@ msgstr ""
 msgid "That email address and password do not match."
 msgstr "That email address and password do not match."
 
-#: templates/portal/sign_in.html:34
+#: templates/portal/sign_in.html:49
 msgid "I have forgotten my password"
 msgstr "I have forgotten my password"
 

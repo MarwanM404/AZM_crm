@@ -85,8 +85,12 @@ second, already-scoped administrator assumes one exists, and on a new installati
 
 ## Running
 
-Three processes. The worker is not optional — outbound email is queued through it, so without
-it confirmation and reply emails are silently never sent.
+**PostgreSQL and Redis both have to be running**, not just installed. Redis is not optional
+for live chat: it carries the channel layer (ADR-007), so without it the agent console's
+WebSocket handshake fails and nobody can go online.
+
+Three processes. The worker is not optional either — outbound email is queued through it, so
+without it confirmation and reply emails are silently never sent.
 
 ```bash
 python manage.py runserver     # ASGI via daphne, so WebSockets work in development
@@ -151,16 +155,20 @@ silently ignores a fuzzy translation and falls back to English, so a fuzzy entry
 untranslated one that looks translated.
 
 ```bash
-python manage.py makemessages -a --ignore=.venv
+python manage.py makemessages -a --ignore=.venv               # the `django` domain
+python manage.py makemessages -a -d djangojs --ignore=.venv   # the `djangojs` domain
 python tools/catalog.py status         # what is missing or guessed, per domain
 python tools/catalog.py placeholders   # translations that add or drop a placeholder
 python tools/catalog.py sync-english   # English msgstr = its own msgid
 python manage.py compilemessages
 ```
 
-Two domains, not one: `django` holds strings from Python and templates, `djangojs` holds the
-ones the browser asks for. Checking only the first is how "Online" and "Offline" stayed English
-on an otherwise Arabic screen.
+**Two domains, and `makemessages` does one at a time.** `django` holds strings from Python and
+templates; `djangojs` holds the ones the browser asks for, and `-d djangojs` is the only way to
+extract them. Running the first command alone silently leaves every new JavaScript string out
+of the catalogs — `tools/catalog.py status` then reports both domains complete, because the
+string it never saw is not missing from anything. That is how "Online" and "Offline" stayed
+English on an otherwise Arabic screen.
 
 **Review every entry `msgmerge` marks fuzzy before clearing the flag.** It guesses from similar
 strings and has been wrong far more often than right here — "Action" became "Active", "Changes"

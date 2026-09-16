@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-13 10:55+0000\n"
+"POT-Creation-Date: 2026-09-16 09:35+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,14 +19,21 @@ msgstr ""
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
 "&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
 
-#: static/js/chat-console.js:25
+#: static/js/chat-console.js:37
 msgid "Online"
 msgstr "متصل"
 
-#: static/js/chat-console.js:25
+#: static/js/chat-console.js:37
 msgid "Offline"
 msgstr "غير متصل"
 
-#: static/js/chat-console.js:63
+#: static/js/chat-console.js:78
+msgid ""
+"Live chat is not connected, so you cannot go online. Reload the page; if it "
+"keeps happening, the chat service is down and an administrator needs to know."
+msgstr "المحادثة المباشرة غير متصلة، لذلك لا يمكنك الاتصال. أعد تحميل الصفحة؛ وإن تكرر ذلك فخدمة المحادثة متوقفة ويجب إبلاغ المسؤول."
+
+#: static/js/chat-console.js:93
+#, javascript-format
 msgid "You still have %s conversation(s) open."
 msgstr "ما زالت لديك %s محادثة مفتوحة."

@@ -22,7 +22,12 @@
     <div class="actions chat-presence">
       {# FR-014: going offline while holding conversations is refused, with the count. #}
       <span class="pill {% if online %}pill--open{% endif %}" x-text="statusLabel"></span>
-      <button class="btn" @click="toggleOnline"
+      {% comment %}
+        Disabled while the realtime connection is down. A control that cannot do its job should
+        not look ready to do it — this button was pressable, did nothing, and said nothing,
+        which is how it came to be reported as broken.
+      {% endcomment %}
+      <button class="btn" @click="toggleOnline" :disabled="!connected"
               x-text="online ? '{% trans "Go offline" %}' : '{% trans "Go online" %}'"></button>
     </div>
   </header>

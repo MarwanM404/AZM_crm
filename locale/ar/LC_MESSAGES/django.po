@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-15 15:30+0000\n"
+"POT-Creation-Date: 2026-09-16 09:34+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -231,7 +231,7 @@ msgstr "أُغلق المكتب أثناء الانتظار"
 msgid "Live chat"
 msgstr "المحادثة المباشرة"
 
-#: apps/chat/services/lifecycle.py:102 templates/chat/widget.html:63
+#: apps/chat/services/lifecycle.py:102 templates/chat/widget.html:73
 msgid "This conversation has ended."
 msgstr "انتهت هذه المحادثة."
 
@@ -745,7 +745,7 @@ msgstr "لا يمكن إرسال رد فارغ."
 #: templates/accounts/sign_in.html:3 templates/accounts/sign_in.html:24
 #: templates/accounts/sign_in.html:39 templates/portal/confirm_failed.html:18
 #: templates/portal/register_done.html:29 templates/portal/sign_in.html:3
-#: templates/portal/sign_in.html:5 templates/portal/sign_in.html:31
+#: templates/portal/sign_in.html:5 templates/portal/sign_in.html:46
 msgid "Sign in"
 msgstr "تسجيل الدخول"
 
@@ -816,7 +816,7 @@ msgstr "القسم"
 msgid "Branch"
 msgstr "الفرع"
 
-#: templates/accounts/user_form.html:61 templates/portal/register.html:21
+#: templates/accounts/user_form.html:61 templates/portal/register.html:36
 msgid "Create account"
 msgstr "إنشاء الحساب"
 
@@ -850,19 +850,19 @@ msgstr "لا توجد حسابات موظفين في هذا القسم بعد."
 msgid "Conversations assigned to you"
 msgstr "المحادثات المُسنَدة إليك"
 
-#: templates/chat/console.html:26
+#: templates/chat/console.html:32
 msgid "Go offline"
 msgstr "الانتقال إلى غير متصل"
 
-#: templates/chat/console.html:26
+#: templates/chat/console.html:32
 msgid "Go online"
 msgstr "الانتقال إلى متصل"
 
-#: templates/chat/console.html:39
+#: templates/chat/console.html:45
 msgid "Capacity"
 msgstr "السعة"
 
-#: templates/chat/console.html:46
+#: templates/chat/console.html:52
 #, python-format
 msgid "%(counter)s conversation free"
 msgid_plural "%(counter)s conversations free"
@@ -873,7 +873,7 @@ msgstr[3] "%(counter)s محادثات متاحة"
 msgstr[4] "%(counter)s محادثة متاحة"
 msgstr[5] "%(counter)s محادثة متاحة"
 
-#: templates/chat/console.html:49
+#: templates/chat/console.html:55
 msgid "You stop receiving new conversations when this reaches zero."
 msgstr "تتوقف عن استقبال محادثات جديدة عندما تصل هذه إلى صفر."
 
@@ -1003,34 +1003,40 @@ msgstr "ترتيبك في الانتظار"
 msgid "Typing…"
 msgstr "يكتب الآن…"
 
-#: templates/chat/widget.html:56
+#: templates/chat/widget.html:62
+msgid ""
+"You have lost connection. What you have typed is still here — reconnect and "
+"send it again."
+msgstr "انقطع الاتصال. ما كتبتَه ما زال موجودًا — أعد الاتصال ثم أرسله مرة أخرى."
+
+#: templates/chat/widget.html:66
 msgid "Your message"
 msgstr "رسالتك"
 
-#: templates/chat/widget.html:58
+#: templates/chat/widget.html:68
 msgid "Write a message…"
 msgstr "اكتب رسالة…"
 
-#: templates/chat/widget.html:59
+#: templates/chat/widget.html:69
 msgid "Send"
 msgstr "إرسال"
 
-#: templates/chat/widget.html:65
+#: templates/chat/widget.html:75
 msgid "Your reference"
 msgstr "رقم طلبك"
 
-#: templates/chat/widget.html:71
+#: templates/chat/widget.html:81
 msgid "Send us a request"
 msgstr "أرسل لنا طلبًا"
 
-#: templates/chat/widget.html:73
+#: templates/chat/widget.html:83
 msgid ""
 "Nobody is available to chat right now. Send a request and we will reply by "
 "email."
 msgstr ""
 "لا يوجد أحد متاح للمحادثة الآن. أرسل طلبًا وسنرد عليك بالبريد الإلكتروني."
 
-#: templates/chat/widget.html:75 templates/intake/form.html:3
+#: templates/chat/widget.html:85 templates/intake/form.html:3
 #: templates/intake/form.html:6
 msgid "Submit a request"
 msgstr "إرسال طلب"
@@ -1332,12 +1338,12 @@ msgstr "طلب جديد"
 msgid "We already know who you are, so just tell us what has happened."
 msgstr "نعرف من أنت بالفعل، فأخبرنا فقط بما حدث."
 
-#: templates/portal/new_request.html:28
+#: templates/portal/new_request.html:43
 msgid "Send request"
 msgstr "إرسال الطلب"
 
 #: templates/portal/register.html:3 templates/portal/register.html:5
-#: templates/portal/sign_in.html:36
+#: templates/portal/sign_in.html:51
 msgid "Create an account"
 msgstr "إنشاء حساب"
 
@@ -1349,7 +1355,7 @@ msgstr ""
 "سجّل باستخدام عنوان البريد الإلكتروني الذي تتواصل به مع الدعم، وستتمكن من "
 "متابعة طلباتك هنا."
 
-#: templates/portal/register.html:24
+#: templates/portal/register.html:39
 msgid "I already have an account"
 msgstr "لديّ حساب بالفعل"
 
@@ -1397,7 +1403,7 @@ msgstr "طلبك"
 msgid "You"
 msgstr "أنت"
 
-#: templates/portal/request_detail.html:71
+#: templates/portal/request_detail.html:86
 #: templates/tickets/partials/ticket_pane.html:96
 msgid "Send reply"
 msgstr "إرسال الرد"
@@ -1420,11 +1426,11 @@ msgid ""
 "Tell us the address you registered with and we will send the link again."
 msgstr "أخبرنا بالعنوان الذي سجّلت به وسنرسل الرابط مرة أخرى."
 
-#: templates/portal/resend_confirmation.html:16
+#: templates/portal/resend_confirmation.html:31
 msgid "Send it"
 msgstr "أرسِلها"
 
-#: templates/portal/resend_confirmation.html:18 templates/portal/reset.html:18
+#: templates/portal/resend_confirmation.html:33 templates/portal/reset.html:33
 #: templates/portal/reset_failed.html:18 templates/portal/reset_sent.html:14
 msgid "Back to sign in"
 msgstr "العودة إلى تسجيل الدخول"
@@ -1437,7 +1443,7 @@ msgstr "إعادة تعيين كلمة المرور"
 msgid "Tell us the address you registered with and we will send you a link."
 msgstr "أخبرنا بالعنوان الذي سجّلت به وسنرسل إليك رابطًا."
 
-#: templates/portal/reset.html:16
+#: templates/portal/reset.html:31
 msgid "Send the link"
 msgstr "إرسال الرابط"
 
@@ -1445,11 +1451,11 @@ msgstr "إرسال الرابط"
 msgid "Choose a new password"
 msgstr "اختر كلمة مرور جديدة"
 
-#: templates/portal/reset_confirm.html:15
+#: templates/portal/reset_confirm.html:30
 msgid "Save it"
 msgstr "حفظها"
 
-#: templates/portal/reset_confirm.html:18
+#: templates/portal/reset_confirm.html:33
 msgid "Signing in anywhere else with the old password will stop working."
 msgstr "سيتوقف تسجيل الدخول بكلمة المرور القديمة في أي مكان آخر."
 
@@ -1487,7 +1493,7 @@ msgstr ""
 msgid "That email address and password do not match."
 msgstr "عنوان البريد الإلكتروني وكلمة المرور غير متطابقين."
 
-#: templates/portal/sign_in.html:34
+#: templates/portal/sign_in.html:49
 msgid "I have forgotten my password"
 msgstr "نسيت كلمة المرور"
 

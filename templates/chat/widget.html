@@ -51,6 +51,15 @@
         {% trans "Typing…" %}
       </p>
 
+      {% comment %}
+        Shown when the connection has dropped. Without it a customer pressed Send, their text
+        stayed in the box, and nothing else happened — no reply, no error, no indication the
+        message had not been delivered.
+      {% endcomment %}
+      <p class="error error--form" x-show="connectionLost" x-cloak>
+        {% trans "You have lost connection. What you have typed is still here — reconnect and send it again." %}
+      </p>
+
       <form class="chat-composer" x-show="stage === 'chatting'" @submit.prevent="send">
         <label class="visually-hidden" for="chat-input">{% trans "Your message" %}</label>
         <textarea id="chat-input" rows="2" x-model="draft" @input="signalTyping"

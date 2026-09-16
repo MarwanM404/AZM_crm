@@ -479,6 +479,10 @@ select:focus-visible, input:focus-visible, textarea:focus-visible {
 .signin__form .field { margin-block-end: 14px; }
 .btn--block { inline-size: 100%; justify-content: center; }
 .error--form { margin-block-end: 12px; }
+/* A control that cannot act should look like it. Alpine's `:disabled` sets the attribute; the
+ * house button style gave no visual difference, so the button looked pressable and did
+ * nothing — which is the defect that produced the report, one layer up. */
+.btn:disabled { opacity: 0.55; cursor: not-allowed; }
 .signin__lang {
   display: flex; gap: 6px; justify-content: center;
   margin-block-start: 18px; padding-block-start: 16px;

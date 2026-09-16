@@ -18,6 +18,16 @@ function chatConsole(initialUnread, initiallyOnline) {
     refusal: "",
     socket: null,
     heartbeatTimer: null,
+    /*
+     * Whether the realtime connection is up. Reported as "the go online button doesn't work":
+     * the handshake failed, `toggleOnline` returned silently because the socket was not OPEN,
+     * and nothing on the page said so. An agent can sit here all morning believing they are
+     * reachable while customers queue on the other side.
+     *
+     * Starts `false` and is set by `onopen`, so the page is honest before the handshake
+     * finishes rather than optimistic.
+     */
+    connected: false,
 
     init() {
       this.connect();
@@ -45,11 +55,29 @@ function chatConsole(initialUnread, initiallyOnline) {
         this.handleControlFrame(JSON.parse(text));
       };
 
-      this.socket.onopen = () => this.startHeartbeat();
-      this.socket.onclose = () => {
-        this.online = false;
-        clearInterval(this.heartbeatTimer);
+      this.socket.onopen = () => {
+        this.connected = true;
+        this.refusal = "";
+        this.startHeartbeat();
       };
+
+      /*
+       * Both handlers, not just `onclose`. A handshake that is refused outright fires `onerror`
+       * and then `onclose`; one that drops later fires only `onclose`. Handling one of the two
+       * covers one of the two ways this fails.
+       */
+      this.socket.onerror = () => this.lostConnection();
+      this.socket.onclose = () => this.lostConnection();
+    },
+
+    lostConnection() {
+      this.connected = false;
+      this.online = false;
+      clearInterval(this.heartbeatTimer);
+      this.refusal = gettext(
+        "Live chat is not connected, so you cannot go online. Reload the page; if it keeps " +
+          "happening, the chat service is down and an administrator needs to know."
+      );
     },
 
     handleControlFrame(frame) {
@@ -77,7 +105,15 @@ function chatConsole(initialUnread, initiallyOnline) {
     },
 
     toggleOnline() {
-      if (!this.socket || this.socket.readyState !== WebSocket.OPEN) return;
+      /*
+       * Says so rather than returning. This used to be a bare `return`, which is what made the
+       * button appear broken: pressing it did nothing, showed nothing, and left the agent with
+       * no way to tell a broken product from a service that is not running.
+       */
+      if (!this.socket || this.socket.readyState !== WebSocket.OPEN) {
+        this.lostConnection();
+        return;
+      }
       this.refusal = "";
       if (this.online) {
         this.socket.send(JSON.stringify({ type: "offline" }));
