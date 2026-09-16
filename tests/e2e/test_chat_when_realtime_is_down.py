@@ -26,13 +26,37 @@ def no_realtime(settings):
     """The channel layer local and production actually use, pointed at nothing.
 
     Not an in-memory layer and not a monkeypatched failure: the test settings use an in-memory
-    layer precisely so the rest of the suite need not care, and that is why every existing
-    test passes while this is broken.
+    layer precisely so the rest of the suite need not care, and that is why every existing test
+    passes while this is broken.
+
+    The port is allocated rather than hard-coded, and this matters more than it looks. Written
+    first as Redis's own 6379, these tests passed on a machine where Redis happened to be
+    stopped and failed the moment it started — and CI runs a Redis service, so they would have
+    been red there from the first push. The environment was doing the asserting, not the code.
+
+    The assertion below is the guard: if anything answers on the port, the test says so instead
+    of reporting a connected socket as a disconnected one.
     """
+    import socket
+
+    with socket.socket() as probe:
+        probe.bind(("127.0.0.1", 0))
+        port = probe.getsockname()[1]
+
+    try:
+        socket.create_connection(("127.0.0.1", port), timeout=0.5).close()
+    except OSError:
+        pass  # nothing there, which is the point
+    else:
+        pytest.fail(
+            f"something is listening on 127.0.0.1:{port}, so this test would be checking a "
+            "working connection against assertions written for a dead one"
+        )
+
     settings.CHANNEL_LAYERS = {
         "default": {
             "BACKEND": "channels_redis.core.RedisChannelLayer",
-            "CONFIG": {"hosts": ["redis://127.0.0.1:6379/0"]},
+            "CONFIG": {"hosts": [f"redis://127.0.0.1:{port}/0"]},
         }
     }
 
