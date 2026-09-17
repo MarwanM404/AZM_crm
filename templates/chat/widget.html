@@ -72,6 +72,15 @@
         <p class="muted" x-show="reference">
           {% trans "Your reference" %}: <span class="ref" x-text="reference"></span>
         </p>
+        {% comment %}
+          Shown only when a reference was issued. A chat that ends with an identifier and no
+          way to look it up leaves the customer holding a number and nothing else.
+
+          Registration, not the request: this is a public screen and the reference is on it.
+        {% endcomment %}
+        <p x-show="reference">
+          <a href="{% url 'portal:register' %}">{% trans "Follow this request in the customer portal" %}</a>
+        </p>
       </div>
     </section>
   {% else %}

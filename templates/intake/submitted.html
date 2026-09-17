@@ -6,5 +6,19 @@
   <h1>{% trans "Request received" %}</h1>
   <p>{% blocktrans %}Your reference number is{% endblocktrans %}: <strong>{{ reference }}</strong></p>
   <p>{% trans "Please quote this reference in any further correspondence." %}</p>
+
+  {% comment %}
+    The portal, offered at the moment somebody most wants to know they can follow this without
+    writing in again. It links to registration rather than to the request: this page's URL gets
+    shared, and a link that opened the ticket would be a way into it for anyone holding the
+    reference.
+  {% endcomment %}
+  <p class="intake-portal">
+    {% trans "You can follow this request online, and see everything you have raised with us." %}
+  </p>
+  <p>
+    <a class="btn btn--primary" href="{% url 'portal:register' %}">{% trans "Create an account" %}</a>
+    <a class="linkish" href="{% url 'portal:sign_in' %}">{% trans "I already have one" %}</a>
+  </p>
 </main>
 {% endblock %}

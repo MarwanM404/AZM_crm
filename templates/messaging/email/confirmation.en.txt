@@ -5,4 +5,9 @@ Your reference number is: {{ reference }}
 Please quote this reference in any further correspondence. An agent will respond as soon as
 possible.
 
+You can follow this request online, and see everything you have raised with us, by creating an
+account with this email address:
+
+{{ portal }}
+
 — AZM Support

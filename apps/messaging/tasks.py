@@ -18,6 +18,19 @@ from django.template.loader import render_to_string
 from django.utils import translation
 
 
+def _portal_url(path_name):
+    """An absolute link to the portal, for a message that will be read in a mail client.
+
+    Absolute because a relative one is meaningless there — there is no page for it to be
+    relative to. Built from `PORTAL_BASE_URL` rather than from the request, because by the time
+    a worker runs this the request is gone, and a link built from a Host header is one an
+    attacker can point wherever they like inside a message our own server sends.
+    """
+    from django.urls import reverse
+
+    return f"{settings.PORTAL_BASE_URL.rstrip('/')}{reverse(path_name)}"
+
+
 def _reply_to_address(reference):
     return f"support+{reference}@{settings.SUPPORT_EMAIL_DOMAIN}"
 
@@ -47,7 +60,14 @@ def send_confirmation_email(self, *, contact_id, ticket_reference, language):
             "reference": ticket_reference
         }
         body = render_to_string(
-            f"messaging/email/confirmation.{language}.txt", {"reference": ticket_reference}
+            f"messaging/email/confirmation.{language}.txt",
+            {
+                "reference": ticket_reference,
+                # The registration screen, deliberately — not the request itself. This message
+                # is forwarded constantly, and a link that opened the ticket would be a way
+                # into somebody's data from a colleague's inbox.
+                "portal": _portal_url("portal:register"),
+            },
         )
 
     try:
@@ -109,7 +129,9 @@ def _deliver_reply(task, message_id):
         # contain an internal message (FR-015).
         body = render_to_string(
             f"messaging/email/reply.{language}.txt",
-            customer_facing_context(message.ticket, body=message.body),
+            customer_facing_context(
+                message.ticket, body=message.body, portal=_portal_url("portal:sign_in")
+            ),
         )
 
     try:

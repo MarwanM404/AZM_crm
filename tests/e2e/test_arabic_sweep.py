@@ -209,3 +209,94 @@ def test_the_internal_note_is_absent_from_the_rendered_page(
     portal_page.wait_for_load_state("networkidle")
 
     assert "INTERNAL-NOTE-THE-CUSTOMER-MUST-NEVER-SEE" not in portal_page.content()
+
+
+# --- the public screens, which were never swept in a browser ---
+#
+# The request form, the page after submitting, and the chat widget. Every SCREENS entry above
+# is behind a staff sign-in, and these three are the only ones an anonymous customer ever sees
+# — so the screens read by the people least able to report a problem were the ones nobody
+# looked at.
+#
+# Noticed while adding portal links to two of them: text was going onto a public page that no
+# browser check covered.
+
+
+@pytest.fixture
+def public_fixtures(arabic_agent):
+    from apps.chat.services import presence
+    from apps.customers.services.matching import find_or_create_contact
+    from apps.tickets.models import Category, Ticket
+
+    department, branch = arabic_agent.department, arabic_agent.branch
+    category = Category.objects.create(
+        name="Logistics", name_ar="الخدمات اللوجستية", department=department
+    )
+    contact, _ = find_or_create_contact(
+        full_name="سارة أحمد", email="sara@example.com", department=department, branch=branch
+    )
+    ticket = Ticket.objects.create(
+        contact=contact,
+        subject="لم تصل الشحنة",
+        description="...",
+        category=category,
+        origin_channel=Ticket.Channel.WEB_FORM,
+        department=department,
+        branch=branch,
+    )
+    # The widget renders its "desk closed" branch otherwise, which is a different screen.
+    presence.go_online(arabic_agent.pk, capacity=3)
+    return {"ticket": ticket, "category": category}
+
+
+def as_arabic_visitor(page, live_server, path):
+    """Arabic set by cookie, not by clicking a switch.
+
+    These three screens have no language switcher — unlike the portal and the staff sign-in
+    page — so `in_arabic` above times out on them. A visitor's language is set by their
+    browser's Accept-Language or by the cookie either way, and the cookie is the same mechanism
+    accounts:anonymous_language writes.
+    """
+    from django.conf import settings
+
+    page.context.add_cookies(
+        [
+            {
+                "name": settings.LANGUAGE_COOKIE_NAME,
+                "value": "ar",
+                "url": live_server.url,
+            }
+        ]
+    )
+    page.goto(f"{live_server.url}{path}")
+    page.wait_for_load_state("networkidle")
+    return page
+
+
+def public_paths(fixtures):
+    return [
+        "/request/",
+        f"/request/submitted/{fixtures['ticket'].reference}/",
+        "/chat/widget/",
+    ]
+
+
+def test_no_placeholder_reaches_an_anonymous_arabic_customer(page, live_server, public_fixtures):
+    for path in public_paths(public_fixtures):
+        as_arabic_visitor(page, live_server, path)
+
+        found = PLACEHOLDER.findall(visible_text(page))
+
+        assert not found, f"{path} shows placeholder codes to the reader: {found}"
+
+
+def test_no_english_reaches_an_anonymous_arabic_customer(page, live_server, public_fixtures):
+    """The reference itself is Latin by design — AZM-2026-000001 — and so is the brand."""
+    for path in public_paths(public_fixtures):
+        as_arabic_visitor(page, live_server, path)
+
+        text = visible_text(page).replace("English", "").replace("AZM", "")
+        text = re.sub(r"\b[A-Z]{2,}-\d{4}-\d+\b", "", text)
+        latin_words = re.findall(r"\b[A-Za-z]{4,}\b", text)
+
+        assert not latin_words, f"{path} shows English to an Arabic reader: {latin_words}"

@@ -2,4 +2,5 @@
 
 --
 Reference: {{ reference }}
+Follow this request in the customer portal: {{ portal }}
 — AZM Support

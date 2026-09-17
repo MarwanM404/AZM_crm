@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-16 09:34+0000\n"
+"POT-Creation-Date: 2026-09-17 06:35+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -558,12 +558,12 @@ msgstr "Description"
 msgid "Submission rejected."
 msgstr "Submission rejected."
 
-#: apps/messaging/tasks.py:46
+#: apps/messaging/tasks.py:59
 #, python-format
 msgid "Your request has been received: %(reference)s"
 msgstr "Your request has been received: %(reference)s"
 
-#: apps/messaging/tasks.py:105
+#: apps/messaging/tasks.py:125
 #, python-format
 msgid "Re: %(reference)s"
 msgstr "Re: %(reference)s"
@@ -1020,11 +1020,15 @@ msgstr "Send"
 msgid "Your reference"
 msgstr "Your reference"
 
-#: templates/chat/widget.html:81
+#: templates/chat/widget.html:85
+msgid "Follow this request in the customer portal"
+msgstr "Follow this request in the customer portal"
+
+#: templates/chat/widget.html:91
 msgid "Send us a request"
 msgstr "Send us a request"
 
-#: templates/chat/widget.html:83
+#: templates/chat/widget.html:93
 msgid ""
 "Nobody is available to chat right now. Send a request and we will reply by "
 "email."
@@ -1032,7 +1036,7 @@ msgstr ""
 "Nobody is available to chat right now. Send a request and we will reply by "
 "email."
 
-#: templates/chat/widget.html:85 templates/intake/form.html:3
+#: templates/chat/widget.html:95 templates/intake/form.html:3
 #: templates/intake/form.html:6
 msgid "Submit a request"
 msgstr "Submit a request"
@@ -1288,6 +1292,23 @@ msgstr "Your reference number is"
 msgid "Please quote this reference in any further correspondence."
 msgstr "Please quote this reference in any further correspondence."
 
+#: templates/intake/submitted.html:18
+msgid ""
+"You can follow this request online, and see everything you have raised with "
+"us."
+msgstr ""
+"You can follow this request online, and see everything you have raised with "
+"us."
+
+#: templates/intake/submitted.html:21 templates/portal/register.html:3
+#: templates/portal/register.html:5 templates/portal/sign_in.html:51
+msgid "Create an account"
+msgstr "Create an account"
+
+#: templates/intake/submitted.html:22
+msgid "I already have one"
+msgstr "I already have one"
+
 #: templates/partials/no_scope.html:20
 msgid ""
 "Choose where you work. You can do this yourself because your account is the "
@@ -1343,11 +1364,6 @@ msgstr "We already know who you are, so just tell us what has happened."
 #: templates/portal/new_request.html:43
 msgid "Send request"
 msgstr "Send request"
-
-#: templates/portal/register.html:3 templates/portal/register.html:5
-#: templates/portal/sign_in.html:51
-msgid "Create an account"
-msgstr "Create an account"
 
 #: templates/portal/register.html:7
 msgid ""

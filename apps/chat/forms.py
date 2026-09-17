@@ -19,3 +19,14 @@ class PreChatForm(forms.Form):
     category = forms.ModelChoiceField(
         label=_("Category"), queryset=Category.objects.filter(is_active=True)
     )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Categories carry an English name and an Arabic one. `Category.__str__` returns the
+        # English one — right for the admin and the audit log, wrong on a form a customer
+        # fills in, where it put "Logistics" among Arabic labels.
+        #
+        # The same fix the intake form and the portal's new-request form already carry. This
+        # one was missed because no browser check covered the widget until the public screens
+        # joined the Arabic sweep, which then failed on its first run.
+        self.fields["category"].label_from_instance = lambda obj: obj.display_name

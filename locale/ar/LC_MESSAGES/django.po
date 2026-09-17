@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-16 09:34+0000\n"
+"POT-Creation-Date: 2026-09-17 06:35+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -560,12 +560,12 @@ msgstr "الوصف"
 msgid "Submission rejected."
 msgstr "تم رفض الطلب."
 
-#: apps/messaging/tasks.py:46
+#: apps/messaging/tasks.py:59
 #, python-format
 msgid "Your request has been received: %(reference)s"
 msgstr "تم استلام طلبك: %(reference)s"
 
-#: apps/messaging/tasks.py:105
+#: apps/messaging/tasks.py:125
 #, python-format
 msgid "Re: %(reference)s"
 msgstr "رد: %(reference)s"
@@ -1025,18 +1025,22 @@ msgstr "إرسال"
 msgid "Your reference"
 msgstr "رقم طلبك"
 
-#: templates/chat/widget.html:81
+#: templates/chat/widget.html:85
+msgid "Follow this request in the customer portal"
+msgstr "تابع هذا الطلب في بوابة العملاء"
+
+#: templates/chat/widget.html:91
 msgid "Send us a request"
 msgstr "أرسل لنا طلبًا"
 
-#: templates/chat/widget.html:83
+#: templates/chat/widget.html:93
 msgid ""
 "Nobody is available to chat right now. Send a request and we will reply by "
 "email."
 msgstr ""
 "لا يوجد أحد متاح للمحادثة الآن. أرسل طلبًا وسنرد عليك بالبريد الإلكتروني."
 
-#: templates/chat/widget.html:85 templates/intake/form.html:3
+#: templates/chat/widget.html:95 templates/intake/form.html:3
 #: templates/intake/form.html:6
 msgid "Submit a request"
 msgstr "إرسال طلب"
@@ -1288,6 +1292,21 @@ msgstr "رقم طلبك هو"
 msgid "Please quote this reference in any further correspondence."
 msgstr "يرجى ذكر هذا الرقم في أي مراسلات لاحقة."
 
+#: templates/intake/submitted.html:18
+msgid ""
+"You can follow this request online, and see everything you have raised with "
+"us."
+msgstr "يمكنك متابعة هذا الطلب عبر الإنترنت، والاطّلاع على كل ما قدّمته إلينا."
+
+#: templates/intake/submitted.html:21 templates/portal/register.html:3
+#: templates/portal/register.html:5 templates/portal/sign_in.html:51
+msgid "Create an account"
+msgstr "إنشاء حساب"
+
+#: templates/intake/submitted.html:22
+msgid "I already have one"
+msgstr "لديّ حساب بالفعل"
+
 #: templates/partials/no_scope.html:20
 msgid ""
 "Choose where you work. You can do this yourself because your account is the "
@@ -1341,11 +1360,6 @@ msgstr "نعرف من أنت بالفعل، فأخبرنا فقط بما حدث.
 #: templates/portal/new_request.html:43
 msgid "Send request"
 msgstr "إرسال الطلب"
-
-#: templates/portal/register.html:3 templates/portal/register.html:5
-#: templates/portal/sign_in.html:51
-msgid "Create an account"
-msgstr "إنشاء حساب"
 
 #: templates/portal/register.html:7
 msgid ""
